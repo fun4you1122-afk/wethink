@@ -194,12 +194,15 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
         <p className="text-text-muted text-sm leading-relaxed">{service.description}</p>
 
         {/* Arrow */}
-        <div className="mt-5 flex items-center gap-2 text-violet-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-[-8px] group-hover:translate-x-0">
+        <button
+          onClick={(e) => { e.stopPropagation(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}
+          className="mt-5 flex items-center gap-2 text-violet-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-[-8px] group-hover:translate-x-0 cursor-pointer"
+        >
           <span>Learn more</span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-        </div>
+        </button>
       </div>
     </motion.div>
   )

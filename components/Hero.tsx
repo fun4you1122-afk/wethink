@@ -234,8 +234,8 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* ── RIGHT — Orbital timeline (dark island for contrast) ── */}
-        <div className="relative w-full h-[500px] lg:flex-1 lg:h-auto rounded-t-3xl lg:rounded-none overflow-hidden" style={{ background: '#060614' }}>
+        {/* ── RIGHT — Orbital timeline ── */}
+        <div className="relative w-full h-[500px] lg:flex-1 lg:h-auto rounded-t-3xl lg:rounded-none overflow-hidden" style={{ background: 'var(--surface-2)' }}>
           <RadialOrbitalTimeline timelineData={timelineData} />
         </div>
 
