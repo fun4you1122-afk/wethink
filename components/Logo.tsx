@@ -6,7 +6,7 @@ interface LogoProps {
 }
 
 export default function Logo({ className = '', size = 'md' }: LogoProps) {
-  const heights = { sm: 72, md: 90, lg: 110 }
+  const heights = { sm: 96, md: 120, lg: 148 }
   const h = heights[size]
 
   return (
