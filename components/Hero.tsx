@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { SplineScene } from '@/components/ui/splite'
-import { Card } from '@/components/ui/card'
 import { Spotlight } from '@/components/ui/spotlight'
 
 const WORDS = ['Digital Transformation', 'Smart Solutions', 'Cloud Architecture', 'Business Growth']
@@ -32,132 +31,131 @@ export default function Hero() {
   }
 
   return (
-    <section id="home" className="relative min-h-screen">
-      <Card className="w-full min-h-screen bg-black/[0.96] relative overflow-hidden rounded-none border-0">
+    <section id="home" className="relative min-h-screen overflow-hidden bg-black">
 
-        {/* Aceternity Spotlight */}
-        <Spotlight
-          className="-top-40 left-0 md:left-60 md:-top-20"
-          fill="white"
+      {/* ── 3D robot as full-screen background ── */}
+      <div className="absolute inset-0 z-0">
+        <SplineScene
+          scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+          className="w-full h-full"
         />
+      </div>
 
-        {/* Subtle grid */}
-        <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
+      {/* Dark gradient overlay so text stays readable */}
+      <div
+        className="absolute inset-0 z-[1] pointer-events-none"
+        style={{
+          background: 'linear-gradient(105deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.65) 45%, rgba(0,0,0,0.15) 100%)',
+        }}
+      />
 
-        {/* Split layout: stacked on mobile, side-by-side on desktop */}
-        <div className="flex flex-col lg:flex-row min-h-screen">
+      {/* Grid pattern */}
+      <div className="absolute inset-0 grid-bg opacity-15 pointer-events-none z-[1]" />
 
-          {/* ── TEXT — full width mobile, half desktop ── */}
-          <div className="flex-1 px-8 pt-28 pb-10 md:px-14 lg:px-20 lg:py-0 relative z-10 flex flex-col justify-center">
+      {/* Spotlight */}
+      <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
+
+      {/* ── Text content — left-aligned, on top of robot ── */}
+      <div className="relative z-10 min-h-screen flex flex-col justify-center px-8 pt-24 pb-16 md:px-14 lg:px-20">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="max-w-xl"
+        >
+          {/* Badge */}
+          <motion.div variants={itemVariants}>
+            <span className="section-label">Abu Dhabi, UAE — Est. 2019</span>
+          </motion.div>
+
+          {/* Headline */}
+          <motion.h1
+            variants={itemVariants}
+            className="mt-6 text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 leading-tight"
+          >
+            We Engineer
+            <br />
+            Your
+          </motion.h1>
+
+          {/* Rotating word — tall container so nothing clips */}
+          <div className="overflow-hidden mt-1" style={{ height: '1.6em' }}>
             <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              className="max-w-lg"
+              key={wordIndex}
+              initial={{ y: '110%', opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: '-110%', opacity: 0 }}
+              transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="text-4xl md:text-5xl lg:text-6xl font-bold gradient-text"
+              style={{ lineHeight: '1.5' }}
             >
-              {/* Badge */}
-              <motion.div variants={itemVariants}>
-                <span className="section-label">Abu Dhabi, UAE — Est. 2019</span>
-              </motion.div>
-
-              {/* Headline */}
-              <motion.h1
-                variants={itemVariants}
-                className="mt-6 text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 leading-tight"
-              >
-                We Engineer
-                <br />
-                Your
-              </motion.h1>
-
-              {/* Rotating word — tall enough to not clip descenders */}
-              <div className="overflow-hidden mt-1" style={{ height: '1.35em' }}>
-                <motion.div
-                  key={wordIndex}
-                  initial={{ y: '100%', opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: '-100%', opacity: 0 }}
-                  transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="text-4xl md:text-5xl lg:text-6xl font-bold gradient-text leading-tight"
-                >
-                  {WORDS[wordIndex]}
-                </motion.div>
-              </div>
-
-              {/* Sub */}
-              <motion.p
-                variants={itemVariants}
-                className="mt-6 text-neutral-300 max-w-md leading-relaxed"
-              >
-                WeThink delivers end-to-end IT consulting, cloud strategy, cybersecurity,
-                and custom software — helping UAE enterprises compete and thrive in the digital age.
-              </motion.p>
-
-              {/* CTAs */}
-              <motion.div variants={itemVariants} className="mt-8 flex flex-wrap gap-4">
-                <button onClick={() => scrollTo('#contact')} className="btn-primary">
-                  Start a Project
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <path d="M3.75 9h10.5M10.5 5.25L14.25 9l-3.75 3.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-                <button onClick={() => scrollTo('#services')} className="btn-outline">
-                  Our Services
-                </button>
-              </motion.div>
-
-              {/* Trust bar */}
-              <motion.div
-                variants={itemVariants}
-                className="mt-10 flex flex-wrap items-center gap-6"
-              >
-                {[
-                  { stat: '5+', label: 'Years' },
-                  { stat: '100+', label: 'Projects' },
-                  { stat: '50+', label: 'Clients' },
-                ].map((item) => (
-                  <div key={item.label} className="flex flex-col">
-                    <span className="text-2xl font-black gradient-text-purple">{item.stat}</span>
-                    <span className="text-xs text-neutral-400 uppercase tracking-wider">{item.label}</span>
-                  </div>
-                ))}
-                <div className="w-px h-10 bg-violet-500/20 hidden sm:block" />
-                <div className="flex items-center gap-2 text-sm text-neutral-400">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Pixel, Al Reem Island
-                </div>
-              </motion.div>
+              {WORDS[wordIndex]}
             </motion.div>
           </div>
 
-          {/* ── 3D SCENE — below text on mobile, right half on desktop ── */}
-          <div className="flex-1 relative w-full" style={{ minHeight: '340px' }}>
-            <SplineScene
-              scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-              className="w-full h-full"
-            />
-          </div>
-
-        </div>
-
-        {/* Scroll indicator — desktop only so it doesn't overlap mobile content */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.8, duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-2 z-10"
-        >
-          <span className="text-xs text-neutral-500 uppercase tracking-widest">Scroll</span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-5 h-8 border border-violet-400/40 rounded-full flex items-start justify-center pt-1.5"
+          {/* Sub */}
+          <motion.p
+            variants={itemVariants}
+            className="mt-6 text-neutral-300 max-w-md leading-relaxed"
           >
-            <div className="w-1 h-2 rounded-full bg-violet-400" />
+            WeThink delivers end-to-end IT consulting, cloud strategy, cybersecurity,
+            and custom software — helping UAE enterprises compete and thrive in the digital age.
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div variants={itemVariants} className="mt-8 flex flex-wrap gap-4">
+            <button onClick={() => scrollTo('#contact')} className="btn-primary">
+              Start a Project
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M3.75 9h10.5M10.5 5.25L14.25 9l-3.75 3.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <button onClick={() => scrollTo('#services')} className="btn-outline">
+              Our Services
+            </button>
+          </motion.div>
+
+          {/* Trust bar */}
+          <motion.div
+            variants={itemVariants}
+            className="mt-10 flex flex-wrap items-center gap-6"
+          >
+            {[
+              { stat: '5+', label: 'Years' },
+              { stat: '100+', label: 'Projects' },
+              { stat: '50+', label: 'Clients' },
+            ].map((item) => (
+              <div key={item.label} className="flex flex-col">
+                <span className="text-2xl font-black gradient-text-purple">{item.stat}</span>
+                <span className="text-xs text-neutral-400 uppercase tracking-wider">{item.label}</span>
+              </div>
+            ))}
+            <div className="w-px h-10 bg-violet-500/20 hidden sm:block" />
+            <div className="flex items-center gap-2 text-sm text-neutral-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              Pixel, Al Reem Island
+            </div>
           </motion.div>
         </motion.div>
+      </div>
 
-      </Card>
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.8, duration: 0.6 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
+      >
+        <span className="text-xs text-neutral-500 uppercase tracking-widest">Scroll</span>
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+          className="w-5 h-8 border border-violet-400/40 rounded-full flex items-start justify-center pt-1.5"
+        >
+          <div className="w-1 h-2 rounded-full bg-violet-400" />
+        </motion.div>
+      </motion.div>
+
     </section>
   )
 }
