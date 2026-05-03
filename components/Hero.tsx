@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Spotlight } from '@/components/ui/spotlight'
 import RadialOrbitalTimeline from '@/components/ui/radial-orbital-timeline'
 import {
@@ -164,19 +164,20 @@ export default function Hero() {
               Your
             </motion.h1>
 
-            {/* Rotating word — generous height so nothing clips */}
-            <div className="overflow-hidden mt-1" style={{ height: '1.7em' }}>
-              <motion.div
-                key={wordIndex}
-                initial={{ y: '115%', opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: '-115%', opacity: 0 }}
-                transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="text-4xl md:text-5xl lg:text-6xl font-bold gradient-text"
-                style={{ lineHeight: '1.6' }}
-              >
-                {WORDS[wordIndex]}
-              </motion.div>
+            {/* Rotating word — absolute positioned inside a spacer div, zero clipping */}
+            <div className="relative mt-1" style={{ height: '1.25em' }}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={wordIndex}
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -24 }}
+                  transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="absolute top-0 left-0 text-4xl md:text-5xl lg:text-6xl font-bold gradient-text whitespace-nowrap"
+                >
+                  {WORDS[wordIndex]}
+                </motion.div>
+              </AnimatePresence>
             </div>
 
             <motion.p
@@ -227,7 +228,7 @@ export default function Hero() {
         </div>
 
         {/* ── RIGHT — Orbital timeline ── */}
-        <div className="flex-1 relative" style={{ minHeight: '480px' }}>
+        <div className="relative w-full h-[500px] lg:flex-1 lg:h-auto">
           <RadialOrbitalTimeline timelineData={timelineData} />
         </div>
 
