@@ -15,7 +15,7 @@ import {
   BarChart3,
 } from 'lucide-react'
 
-const WORDS = ['Digital Transformation', 'Smart Solutions', 'Cloud Architecture', 'Business Growth']
+const WORDS = ['IT Consulting', 'Cloud Strategy', 'Cybersecurity', 'Business Growth']
 
 const timelineData = [
   {

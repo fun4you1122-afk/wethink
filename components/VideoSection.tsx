@@ -7,7 +7,8 @@ const VIDEO_ID = 'J9LK6EtxzgM'
 
 export default function VideoSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const inView = useInView(sectionRef, { once: true, margin: '-100px' })
+  // once:true + no margin so iframe mounts exactly when section enters viewport
+  const inView = useInView(sectionRef, { once: true, margin: '0px' })
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -62,16 +63,18 @@ export default function VideoSection() {
           <div className="absolute inset-0 rounded-3xl border border-violet-500/20 pointer-events-none z-10" />
           <div className="absolute inset-0 rounded-3xl shadow-[0_0_80px_rgba(124,58,237,0.25)] pointer-events-none z-10" />
 
-          {/* 16:9 wrapper */}
+          {/* 16:9 wrapper — iframe only mounts when in view so autoplay fires on scroll */}
           <div className="relative w-full bg-black" style={{ paddingBottom: '56.25%' }}>
-            <iframe
-              className="absolute inset-0 w-full h-full"
-              src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?rel=0&modestbranding=1&iv_load_policy=3&controls=0&autoplay=1&mute=1&loop=1&playlist=${VIDEO_ID}&color=white&showinfo=0&disablekb=1`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              title="WeThink — The Future is Digital"
-              style={{ border: 0 }}
-            />
+            {inView && (
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?rel=0&modestbranding=1&iv_load_policy=3&controls=0&autoplay=1&mute=1&loop=1&playlist=${VIDEO_ID}&color=white&showinfo=0&disablekb=1`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="WeThink — The Future is Digital"
+                style={{ border: 0 }}
+              />
+            )}
           </div>
         </motion.div>
 
