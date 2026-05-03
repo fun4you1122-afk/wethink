@@ -32,8 +32,8 @@ export default function Hero() {
   }
 
   return (
-    <section id="home" className="relative h-screen">
-      <Card className="w-full h-full bg-black/[0.96] relative overflow-hidden rounded-none border-0">
+    <section id="home" className="relative min-h-screen">
+      <Card className="w-full min-h-screen bg-black/[0.96] relative overflow-hidden rounded-none border-0">
 
         {/* Aceternity Spotlight */}
         <Spotlight
@@ -44,11 +44,11 @@ export default function Hero() {
         {/* Subtle grid */}
         <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
 
-        {/* Split layout — exact demo structure */}
-        <div className="flex h-full">
+        {/* Split layout: stacked on mobile, side-by-side on desktop */}
+        <div className="flex flex-col lg:flex-row min-h-screen">
 
-          {/* ── LEFT — text content ── */}
-          <div className="flex-1 p-8 md:p-14 lg:p-20 relative z-10 flex flex-col justify-center">
+          {/* ── TEXT — full width mobile, half desktop ── */}
+          <div className="flex-1 px-8 pt-28 pb-10 md:px-14 lg:px-20 lg:py-0 relative z-10 flex flex-col justify-center">
             <motion.div
               variants={containerVariants}
               initial="hidden"
@@ -60,7 +60,7 @@ export default function Hero() {
                 <span className="section-label">Abu Dhabi, UAE — Est. 2019</span>
               </motion.div>
 
-              {/* Headline — matches demo gradient style */}
+              {/* Headline */}
               <motion.h1
                 variants={itemVariants}
                 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 leading-tight"
@@ -70,8 +70,8 @@ export default function Hero() {
                 Your
               </motion.h1>
 
-              {/* Rotating word */}
-              <div className="h-[1.2em] overflow-hidden mt-1">
+              {/* Rotating word — tall enough to not clip descenders */}
+              <div className="overflow-hidden mt-1" style={{ height: '1.35em' }}>
                 <motion.div
                   key={wordIndex}
                   initial={{ y: '100%', opacity: 0 }}
@@ -84,7 +84,7 @@ export default function Hero() {
                 </motion.div>
               </div>
 
-              {/* Sub — matches demo neutral-300 style */}
+              {/* Sub */}
               <motion.p
                 variants={itemVariants}
                 className="mt-6 text-neutral-300 max-w-md leading-relaxed"
@@ -130,8 +130,8 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* ── RIGHT — Spline 3D scene ── */}
-          <div className="flex-1 relative hidden lg:block">
+          {/* ── 3D SCENE — below text on mobile, right half on desktop ── */}
+          <div className="flex-1 relative w-full" style={{ minHeight: '340px' }}>
             <SplineScene
               scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
               className="w-full h-full"
@@ -140,12 +140,12 @@ export default function Hero() {
 
         </div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator — desktop only so it doesn't overlap mobile content */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.8, duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-2 z-10"
         >
           <span className="text-xs text-neutral-500 uppercase tracking-widest">Scroll</span>
           <motion.div
