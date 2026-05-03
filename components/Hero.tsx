@@ -132,13 +132,17 @@ export default function Hero() {
   }
 
   return (
-    <section id="home" className="relative min-h-screen overflow-hidden bg-black">
+    <section id="home" className="relative min-h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>
+
+      {/* Floating orbs */}
+      <div className="orb w-[600px] h-[600px] bg-violet-200 opacity-40 top-[-200px] left-[-200px] pointer-events-none animate-float" />
+      <div className="orb w-[400px] h-[400px] bg-purple-200 opacity-30 bottom-[-100px] right-[40%] pointer-events-none" style={{ animationDelay: '2s' }} />
 
       {/* Spotlight */}
-      <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
+      <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="purple" />
 
       {/* Grid pattern */}
-      <div className="absolute inset-0 grid-bg opacity-15 pointer-events-none z-[1]" />
+      <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none z-[1]" />
 
       {/* Layout: text left + orbital right */}
       <div className="relative z-10 flex flex-col lg:flex-row min-h-screen">
@@ -157,7 +161,8 @@ export default function Hero() {
 
             <motion.h1
               variants={itemVariants}
-              className="mt-6 text-4xl md:text-5xl lg:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 leading-tight"
+              className="mt-6 text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
+              style={{ color: 'var(--text)' }}
             >
               We Engineer
               <br />
@@ -182,7 +187,8 @@ export default function Hero() {
 
             <motion.p
               variants={itemVariants}
-              className="mt-6 text-neutral-300 max-w-md leading-relaxed"
+              className="mt-6 max-w-md leading-relaxed"
+              style={{ color: 'var(--text-muted)' }}
             >
               WeThink delivers end-to-end IT consulting, cloud strategy, cybersecurity,
               and custom software — helping UAE enterprises compete and thrive in the digital age.
@@ -190,7 +196,8 @@ export default function Hero() {
 
             <motion.p
               variants={itemVariants}
-              className="mt-2 text-neutral-500 text-sm"
+              className="mt-2 text-sm"
+              style={{ color: 'var(--text-muted)' }}
             >
               Tap any orbit node to explore our services →
             </motion.p>
@@ -215,11 +222,11 @@ export default function Hero() {
               ].map((item) => (
                 <div key={item.label} className="flex flex-col">
                   <span className="text-2xl font-black gradient-text-purple">{item.stat}</span>
-                  <span className="text-xs text-neutral-400 uppercase tracking-wider">{item.label}</span>
+                  <span className="text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>{item.label}</span>
                 </div>
               ))}
-              <div className="w-px h-10 bg-violet-500/20 hidden sm:block" />
-              <div className="flex items-center gap-2 text-sm text-neutral-400">
+              <div className="w-px h-10 bg-violet-300/40 hidden sm:block" />
+              <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-muted)' }}>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 Pixel, Al Reem Island
               </div>
@@ -227,8 +234,8 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* ── RIGHT — Orbital timeline ── */}
-        <div className="relative w-full h-[500px] lg:flex-1 lg:h-auto">
+        {/* ── RIGHT — Orbital timeline (dark island for contrast) ── */}
+        <div className="relative w-full h-[500px] lg:flex-1 lg:h-auto rounded-t-3xl lg:rounded-none overflow-hidden" style={{ background: '#060614' }}>
           <RadialOrbitalTimeline timelineData={timelineData} />
         </div>
 

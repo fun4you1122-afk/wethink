@@ -58,7 +58,7 @@ export default function About() {
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black text-white mt-3"
+            className="text-4xl md:text-6xl font-black mt-3" style={{ color: 'var(--text)' } as React.CSSProperties}
           >
             Who We <span className="gradient-text">Are</span>
           </motion.h2>
@@ -75,20 +75,20 @@ export default function About() {
           >
             <div className="divider" />
 
-            <p className="text-lg text-text-muted leading-relaxed mb-6">
-              Founded in <span className="text-accent font-semibold">2019</span> in Abu Dhabi, WeThink was built
+            <p className="text-lg leading-relaxed mb-6" style={{ color: 'var(--text-muted)' }}>
+              Founded in <span className="font-semibold" style={{ color: 'var(--primary)' }}>2019</span> in Abu Dhabi, WeThink was built
               on a simple conviction: businesses deserve technology partners who truly understand both the
               strategic and the technical dimensions of digital change.
             </p>
 
-            <p className="text-lg text-text-muted leading-relaxed mb-6">
+            <p className="text-lg leading-relaxed mb-6" style={{ color: 'var(--text-muted)' }}>
               From our base at <span className="text-white font-medium">Pixel, Al Reem Island</span>, we have
               partnered with organisations across the UAE and the broader Gulf region — from government entities
               and financial institutions to fast-growing startups — delivering tailored solutions that create
               measurable, lasting impact.
             </p>
 
-            <p className="text-lg text-text-muted leading-relaxed mb-10">
+            <p className="text-lg leading-relaxed mb-10" style={{ color: 'var(--text-muted)' }}>
               We don&apos;t believe in one-size-fits-all technology. We believe in asking the right questions,
               listening deeply, and engineering solutions that fit your reality — not someone else&apos;s template.
             </p>
@@ -105,8 +105,8 @@ export default function About() {
                   className="glass-card rounded-xl p-5"
                 >
                   <div className="w-2 h-2 rounded-full bg-violet-400 mb-3" />
-                  <h4 className="text-white font-semibold mb-1 text-sm">{v.title}</h4>
-                  <p className="text-text-muted text-xs leading-relaxed">{v.desc}</p>
+                  <h4 className="font-semibold mb-1 text-sm" style={{ color: 'var(--text)' }}>{v.title}</h4>
+                  <p className="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>{v.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -152,12 +152,12 @@ export default function About() {
             >
               <div className="w-12 h-1 bg-gradient-to-r from-violet-500 to-accent rounded-full mx-auto mb-5" />
 
-              <h3 className="text-2xl font-bold text-white mb-1">Rasha Aljalam</h3>
+              <h3 className="text-2xl font-bold mb-1" style={{ color: 'var(--text)' }}>Rasha Aljalam</h3>
               <p className="text-violet-400 font-semibold text-sm tracking-wide uppercase mb-4">
                 Chief Executive Officer
               </p>
 
-              <p className="text-text-muted text-sm leading-relaxed mb-6">
+              <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--text-muted)' }}>
                 A seasoned technology strategist and digital transformation leader, Rasha founded WeThink with
                 a vision to make world-class IT consulting accessible to businesses across the UAE and the
                 wider MENA region.
@@ -214,7 +214,8 @@ export default function About() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              className="flex items-center gap-2 glass rounded-full px-5 py-2.5 text-sm text-text-muted"
+              className="flex items-center gap-2 glass rounded-full px-5 py-2.5 text-sm"
+              style={{ color: 'var(--text-muted)' }}
             >
               <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-violet-400">
                 <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />

@@ -43,8 +43,7 @@ export default function Stats() {
 
   return (
     <section className="relative py-24 overflow-hidden">
-      {/* Full-width glass strip */}
-      <div className="absolute inset-0 bg-surface" />
+      <div className="absolute inset-0" style={{ background: 'var(--surface)' }} />
       <div className="absolute inset-0 grid-bg opacity-30" />
 
       {/* Glowing line top */}
@@ -76,7 +75,7 @@ export default function Stats() {
               />
 
               {/* Label */}
-              <h3 className="text-white font-bold text-base mb-1">{stat.label}</h3>
+              <h3 className="font-bold text-base mb-1" style={{ color: 'var(--text)' }}>{stat.label}</h3>
               <p className="text-text-muted text-xs">{stat.desc}</p>
             </motion.div>
           ))}

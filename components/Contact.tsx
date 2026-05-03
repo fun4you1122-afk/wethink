@@ -85,7 +85,7 @@ export default function Contact() {
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black text-white mt-3"
+            className="text-4xl md:text-6xl font-black mt-3" style={{ color: 'var(--text)' } as React.CSSProperties}
           >
             Start Your{' '}
             <span className="gradient-text">Journey</span>
@@ -94,7 +94,7 @@ export default function Contact() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-4 text-text-muted text-lg max-w-xl mx-auto"
+            className="mt-4 text-lg max-w-xl mx-auto" style={{ color: 'var(--text-muted)' } as React.CSSProperties}
           >
             Tell us about your challenge. We&apos;ll respond within one business day with how we can help.
           </motion.p>
@@ -109,7 +109,7 @@ export default function Contact() {
             className="lg:col-span-2 flex flex-col gap-6"
           >
             <div className="divider" />
-            <h3 className="text-2xl font-bold text-white">Get in Touch</h3>
+            <h3 className="text-2xl font-bold text-gray-900">Get in Touch</h3>
             <p className="text-text-muted leading-relaxed">
               Whether you&apos;re looking to modernise your infrastructure, secure your digital assets, or build
               a transformation roadmap — WeThink is ready.
@@ -133,7 +133,7 @@ export default function Contact() {
                   </span>
                   <div>
                     <p className="text-xs text-text-muted uppercase tracking-wider mb-0.5">{item.label}</p>
-                    <p className="text-white text-sm font-medium">{item.value}</p>
+                    <p className="text-gray-900 text-sm font-medium">{item.value}</p>
                   </div>
                 </motion.a>
               ))}
@@ -193,7 +193,7 @@ export default function Contact() {
                         <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </motion.div>
-                    <h3 className="text-2xl font-bold text-white mb-3">Message Sent!</h3>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3">Message Sent!</h3>
                     <p className="text-text-muted max-w-sm">
                       Thank you for reaching out. A member of the WeThink team will be in touch within one business day.
                     </p>
@@ -279,7 +279,7 @@ export default function Contact() {
                         >
                           <option value="">Select a service...</option>
                           {services.map((s) => (
-                            <option key={s} value={s} style={{ background: '#0D0D25' }}>{s}</option>
+                            <option key={s} value={s} style={{ background: '#F8F7FF' }}>{s}</option>
                           ))}
                         </select>
                       </div>

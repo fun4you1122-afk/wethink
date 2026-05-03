@@ -55,12 +55,12 @@ export default function Footer() {
   }
 
   return (
-    <footer className="relative overflow-hidden bg-surface border-t border-violet-500/10">
+    <footer className="relative overflow-hidden bg-white border-t border-violet-500/10">
       {/* Top glow line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/40 to-transparent" />
 
       {/* Background orb */}
-      <div className="orb w-[600px] h-[600px] bg-violet-900/10 opacity-30 bottom-[-300px] left-1/2 -translate-x-1/2 pointer-events-none" />
+      <div className="orb w-[600px] h-[600px] bg-violet-100 opacity-30 bottom-[-300px] left-1/2 -translate-x-1/2 pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6 pt-16 pb-8">
         {/* Top row */}
@@ -97,7 +97,7 @@ export default function Footer() {
           {/* Links */}
           {Object.entries(footerLinks).map(([group, links]) => (
             <div key={group}>
-              <h4 className="text-white font-semibold text-sm mb-5 uppercase tracking-wider">{group}</h4>
+              <h4 className="text-gray-900 font-semibold text-sm mb-5 uppercase tracking-wider">{group}</h4>
               <ul className="flex flex-col gap-3">
                 {links.map((link) => (
                   <li key={link.label}>
@@ -123,7 +123,7 @@ export default function Footer() {
           className="glass rounded-2xl p-6 mb-10 flex flex-col sm:flex-row items-center justify-between gap-5"
         >
           <div>
-            <p className="text-white font-semibold mb-1">Ready to transform your business?</p>
+            <p className="text-gray-900 font-semibold mb-1">Ready to transform your business?</p>
             <p className="text-text-muted text-sm">Let&apos;s start the conversation today.</p>
           </div>
           <button

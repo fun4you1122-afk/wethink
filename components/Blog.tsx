@@ -103,7 +103,7 @@ function BlogCard({ post, index }: { post: typeof posts[0]; index: number }) {
         </div>
 
         {/* Title */}
-        <h3 className="text-xl font-bold text-white mb-3 group-hover:text-violet-200 transition-colors leading-snug">
+        <h3 className="text-xl font-bold mb-3 group-hover:text-violet-700 transition-colors leading-snug" style={{ color: 'var(--text)' }}>
           {post.title}
         </h3>
 
@@ -120,7 +120,7 @@ function BlogCard({ post, index }: { post: typeof posts[0]; index: number }) {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center gap-2 mt-5 text-sm font-semibold group-hover:text-violet-300 text-violet-400 transition-colors">
+        <div className="flex items-center gap-2 mt-5 text-sm font-semibold group-hover:text-violet-800 text-violet-600 transition-colors">
           <span>Read Article</span>
           <motion.svg
             width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -142,8 +142,8 @@ export default function Blog() {
 
   return (
     <section id="blog" className="section-padding relative overflow-hidden">
-      <div className="absolute inset-0 bg-surface/40" />
-      <div className="orb w-[400px] h-[400px] bg-purple-900/20 opacity-40 top-0 left-[-100px] pointer-events-none" />
+      <div className="absolute inset-0" style={{ background: 'var(--surface-2)' }} />
+      <div className="orb w-[400px] h-[400px] bg-violet-200 opacity-50 top-0 left-[-100px] pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6">
         {/* Header */}
@@ -159,7 +159,7 @@ export default function Blog() {
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black text-white mt-3"
+            className="text-4xl md:text-6xl font-black mt-3" style={{ color: 'var(--text)' } as React.CSSProperties}
           >
             From Our <span className="gradient-text">Blog</span>
           </motion.h2>
@@ -167,7 +167,7 @@ export default function Blog() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-4 text-text-muted text-lg max-w-2xl mx-auto"
+            className="mt-4 text-lg max-w-2xl mx-auto" style={{ color: 'var(--text-muted)' } as React.CSSProperties}
           >
             Perspectives on technology, strategy, and digital transformation from the WeThink team.
           </motion.p>

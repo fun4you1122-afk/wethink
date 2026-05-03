@@ -156,14 +156,26 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
         ref={cardRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className="glass-card rounded-2xl p-7 h-full relative overflow-hidden group will-change-transform"
+        className="glass-card rounded-2xl p-7 h-full relative overflow-hidden group will-change-transform cursor-none"
         style={{ transformStyle: 'preserve-3d' }}
       >
-        {/* Glow follow effect */}
+        {/* Glow follow */}
         <div className="card-glow absolute inset-0 pointer-events-none transition-all duration-300 rounded-2xl" />
-
-        {/* Top border accent */}
-        <div className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r ${service.gradient} opacity-60`} />
+        {/* Shine sweep */}
+        <div className="card-shine rounded-2xl" />
+        {/* Animated top border */}
+        <div className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${service.gradient} opacity-70 group-hover:opacity-100 transition-opacity`} />
+        {/* Corner sparkle */}
+        <motion.div
+          className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-violet-400 opacity-0 group-hover:opacity-100"
+          animate={{ scale: [1, 1.8, 1], opacity: [0, 1, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
+        />
+        <motion.div
+          className="absolute top-6 right-6 w-1 h-1 rounded-full bg-purple-400 opacity-0 group-hover:opacity-100"
+          animate={{ scale: [1, 2, 1], opacity: [0, 0.8, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, delay: 0.5 }}
+        />
 
         {/* Icon */}
         <div
@@ -174,7 +186,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
         </div>
 
         {/* Title */}
-        <h3 className="text-lg font-bold text-white mb-3 group-hover:text-violet-200 transition-colors">
+        <h3 className="text-lg font-bold mb-3 group-hover:text-violet-700 transition-colors" style={{ color: 'var(--text)' }}>
           {service.title}
         </h3>
 
@@ -182,7 +194,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
         <p className="text-text-muted text-sm leading-relaxed">{service.description}</p>
 
         {/* Arrow */}
-        <div className="mt-5 flex items-center gap-2 text-violet-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-[-8px] group-hover:translate-x-0">
+        <div className="mt-5 flex items-center gap-2 text-violet-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-[-8px] group-hover:translate-x-0">
           <span>Learn more</span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -199,9 +211,9 @@ export default function Services() {
 
   return (
     <section id="services" className="section-padding relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-surface/50" />
-      <div className="orb w-[500px] h-[500px] bg-violet-900/30 opacity-30 top-0 right-[-200px] pointer-events-none" />
+      <div className="absolute inset-0" style={{ background: 'var(--surface-2)' }} />
+      <div className="orb w-[500px] h-[500px] bg-violet-200 opacity-40 top-0 right-[-200px] pointer-events-none" />
+      <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6">
         {/* Header */}
@@ -218,7 +230,8 @@ export default function Services() {
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black text-white mt-3"
+            className="text-4xl md:text-6xl font-black mt-3"
+            style={{ color: 'var(--text)' }}
           >
             Our <span className="gradient-text">Services</span>
           </motion.h2>
@@ -227,7 +240,8 @@ export default function Services() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-4 text-text-muted text-lg max-w-2xl mx-auto"
+            className="mt-4 text-lg max-w-2xl mx-auto"
+            style={{ color: 'var(--text-muted)' }}
           >
             From strategy to execution — we deliver the full spectrum of digital and technology services
             that modern enterprises demand.

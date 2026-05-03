@@ -114,7 +114,7 @@ export default function Projects() {
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black text-white mt-3"
+            className="text-4xl md:text-6xl font-black text-gray-900 mt-3"
           >
             Projects <span className="gradient-text">Achieved</span>
           </motion.h2>
@@ -167,7 +167,7 @@ export default function Projects() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-white font-bold text-lg leading-snug mb-1 group-hover:text-white transition-colors">
+                <h3 className="text-gray-900 font-bold text-lg leading-snug mb-1 group-hover:text-gray-900 transition-colors">
                   {project.title}
                 </h3>
 
