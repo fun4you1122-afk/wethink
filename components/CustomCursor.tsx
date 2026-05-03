@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 
 export default function CustomCursor() {
@@ -16,6 +16,11 @@ export default function CustomCursor() {
   const smoothY = useSpring(cursorY, ringSpringConfig)
   const dotSmoothX = useSpring(dotX, springConfig)
   const dotSmoothY = useSpring(dotY, springConfig)
+
+  const [isTouch, setIsTouch] = useState(false)
+  useEffect(() => {
+    setIsTouch(window.matchMedia('(pointer: coarse)').matches)
+  }, [])
 
   const isHoveringRef = useRef(false)
   const ringRef = useRef<HTMLDivElement>(null)
@@ -65,6 +70,8 @@ export default function CustomCursor() {
       observer.disconnect()
     }
   }, [cursorX, cursorY, dotX, dotY])
+
+  if (isTouch) return null
 
   return (
     <>

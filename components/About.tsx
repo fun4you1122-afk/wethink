@@ -82,7 +82,7 @@ export default function About() {
             </p>
 
             <p className="text-lg leading-relaxed mb-6" style={{ color: 'var(--text-muted)' }}>
-              From our base at <span className="text-white font-medium">Pixel, Al Reem Island</span>, we have
+              From our base at <span className="font-medium" style={{ color: 'var(--text)' }}>Pixel, Al Reem Island</span>, we have
               partnered with organisations across the UAE and the broader Gulf region — from government entities
               and financial institutions to fast-growing startups — delivering tailored solutions that create
               measurable, lasting impact.

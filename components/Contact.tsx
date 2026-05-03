@@ -11,8 +11,8 @@ const contactInfo = [
       </svg>
     ),
     label: 'Email',
-    value: 'contact@wethink.ae',
-    href: 'mailto:contact@wethink.ae',
+    value: 'info@wethink.ae',
+    href: 'mailto:info@wethink.ae',
   },
   {
     icon: (
@@ -21,8 +21,8 @@ const contactInfo = [
       </svg>
     ),
     label: 'Phone',
-    value: '+971 50 312 8823',
-    href: 'tel:+971503128823',
+    value: '+971 50 312 5078',
+    href: 'tel:+971503125078',
   },
   {
     icon: (
