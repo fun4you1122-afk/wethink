@@ -18,7 +18,7 @@ export default function Logo({ className = '', size = 'md' }: LogoProps) {
         height: h,
         width: 'auto',
         objectFit: 'contain',
-        filter: 'drop-shadow(0 1px 3px rgba(255,255,255,0.15))',
+        filter: 'none',
       }}
       className={className}
     />

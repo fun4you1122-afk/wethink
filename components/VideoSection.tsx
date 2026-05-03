@@ -13,7 +13,7 @@ export default function VideoSection() {
     target: sectionRef,
     offset: ['start end', 'end start'],
   })
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.93, 1, 0.93])
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.96, 1, 0.96])
   const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0.4, 1, 1, 0.4])
 
   return (
@@ -50,7 +50,7 @@ export default function VideoSection() {
           </motion.p>
         </div>
 
-        {/* Video — directly embedded, no play button */}
+        {/* Video — autoplay, muted, looping, no controls */}
         <motion.div
           style={{ scale, opacity }}
           initial={{ opacity: 0, y: 40 }}
@@ -60,14 +60,14 @@ export default function VideoSection() {
         >
           {/* Glow border */}
           <div className="absolute inset-0 rounded-3xl border border-violet-500/20 pointer-events-none z-10" />
-          <div className="absolute inset-0 rounded-3xl shadow-[0_0_60px_rgba(124,58,237,0.2)] pointer-events-none z-10" />
+          <div className="absolute inset-0 rounded-3xl shadow-[0_0_80px_rgba(124,58,237,0.25)] pointer-events-none z-10" />
 
           {/* 16:9 wrapper */}
-          <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+          <div className="relative w-full bg-black" style={{ paddingBottom: '56.25%' }}>
             <iframe
               className="absolute inset-0 w-full h-full"
-              src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?rel=0&modestbranding=1&iv_load_policy=3&color=white`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?rel=0&modestbranding=1&iv_load_policy=3&controls=0&autoplay=1&mute=1&loop=1&playlist=${VIDEO_ID}&color=white&showinfo=0&disablekb=1`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               title="WeThink — The Future is Digital"
               style={{ border: 0 }}
