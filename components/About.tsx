@@ -133,36 +133,14 @@ export default function About() {
                 className="absolute inset-[-40px] border border-violet-400/10 rounded-full"
               />
 
-              {/* CEO Avatar */}
+              {/* CEO Photo */}
               <div className="relative w-56 h-56 rounded-full overflow-hidden glow-purple">
-                <div
-                  className="w-full h-full flex items-center justify-center"
-                  style={{
-                    background: 'linear-gradient(135deg, #4C1D95 0%, #7C3AED 50%, #5B21B6 100%)',
-                  }}
-                >
-                  {/* Abstract portrait */}
-                  <svg viewBox="0 0 120 120" fill="none" className="w-36 h-36">
-                    <circle cx="60" cy="45" r="20" fill="rgba(255,255,255,0.2)" />
-                    <path
-                      d="M20 110 Q20 75 60 75 Q100 75 100 110"
-                      fill="rgba(255,255,255,0.15)"
-                    />
-                    <circle cx="60" cy="45" r="20" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" fill="none" />
-                    <circle cx="60" cy="45" r="10" fill="rgba(255,255,255,0.25)" />
-                    <text
-                      x="60"
-                      y="50"
-                      textAnchor="middle"
-                      fill="white"
-                      fontSize="14"
-                      fontFamily="Inter, sans-serif"
-                      fontWeight="700"
-                    >
-                      RJ
-                    </text>
-                  </svg>
-                </div>
+                <img
+                  src="/ceo.jpg"
+                  alt="Rasha Aljalam, CEO of WeThink"
+                  className="w-full h-full object-cover"
+                  style={{ objectPosition: 'center 15%' }}
+                />
               </div>
             </div>
 
