@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "@splinetool/react-spline": "^4.1.0",
+    "@splinetool/runtime": "^1.12.90",
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.8",
     "lenis": "^1.1.9",
     "next": "14.2.5",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
     "@types/node": "^20",
