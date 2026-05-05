@@ -217,8 +217,8 @@ export default function Hero() {
             <motion.div variants={itemVariants} className="mt-10 flex flex-wrap items-center gap-6">
               {[
                 { stat: '5+', label: 'Years' },
-                { stat: '100+', label: 'Projects' },
-                { stat: '50+', label: 'Clients' },
+                { stat: '5000+', label: 'Projects' },
+                { stat: '1000+', label: 'Clients' },
               ].map((item) => (
                 <div key={item.label} className="flex flex-col">
                   <span className="text-2xl font-black gradient-text-purple">{item.stat}</span>
