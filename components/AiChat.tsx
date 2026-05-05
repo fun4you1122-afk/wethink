@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, X, Send, Bot, User, Sparkles, RotateCcw } from 'lucide-react'
+import { X, Send, Bot, User, Sparkles, RotateCcw } from 'lucide-react'
 
 /* ── Mock knowledge base ─────────────────────────────────── */
 const RESPONSES: { patterns: RegExp[]; reply: string }[] = [
@@ -187,7 +187,7 @@ export default function AiChat() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.95 }}
             transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="fixed bottom-24 right-4 md:right-6 z-[998] w-[340px] md:w-[380px] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-violet-500/20"
+            className="fixed bottom-40 right-4 md:right-6 z-[998] w-[340px] md:w-[380px] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-violet-500/20"
             style={{ height: '520px', background: 'var(--surface)', border: '1px solid rgba(167,139,250,0.2)' }}
           >
             {/* Header */}
@@ -336,7 +336,7 @@ export default function AiChat() {
         onClick={() => setOpen((v) => !v)}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed bottom-6 right-4 md:right-6 z-[999] w-14 h-14 rounded-full shadow-xl shadow-violet-500/40 flex items-center justify-center"
+        className="fixed bottom-24 right-4 md:right-6 z-[999] w-14 h-14 rounded-full shadow-xl shadow-violet-500/40 flex items-center justify-center"
         style={{ background: 'linear-gradient(135deg, #6D28D9, #7C3AED)' }}
         title="Chat with WeThink AI"
       >
@@ -346,8 +346,8 @@ export default function AiChat() {
               <X size={22} className="text-white" />
             </motion.div>
           ) : (
-            <motion.div key="chat" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
-              <MessageCircle size={22} className="text-white" />
+            <motion.div key="ai" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
+              <span className="text-white font-black text-lg tracking-tight leading-none">AI</span>
             </motion.div>
           )}
         </AnimatePresence>
