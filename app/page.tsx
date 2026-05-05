@@ -4,6 +4,7 @@ import Services from '@/components/Services'
 import About from '@/components/About'
 import Stats from '@/components/Stats'
 import Projects from '@/components/Projects'
+import CinematicScene from '@/components/CinematicScene'
 import VideoSection from '@/components/VideoSection'
 import AnalyticsDemo from '@/components/AnalyticsDemo'
 import Blog from '@/components/Blog'
@@ -18,6 +19,7 @@ export default function Home() {
       <Stats />
       <Services />
       <About />
+      <CinematicScene />
       <Projects />
       <VideoSection />
       <AnalyticsDemo />
