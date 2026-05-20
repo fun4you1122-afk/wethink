@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, MouseEvent } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 const projects = [
@@ -81,13 +81,46 @@ function ProjectCard({
   index: number
   featured?: boolean
 }) {
+  const cardRef = useRef<HTMLDivElement>(null)
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current
+    if (!card) return
+    const rect = card.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const cx = rect.width / 2
+    const cy = rect.height / 2
+    const rotX = ((y - cy) / cy) * -7
+    const rotY = ((x - cx) / cx) * 7
+    card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.02,1.02,1.02)`
+    card.style.transition = 'transform 0.1s ease'
+    const glare = card.querySelector<HTMLDivElement>('.proj-glare')
+    if (glare) glare.style.background = `radial-gradient(350px circle at ${x}px ${y}px, rgba(255,255,255,0.1), transparent 65%)`
+  }
+
+  const handleMouseLeave = () => {
+    const card = cardRef.current
+    if (!card) return
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)'
+    card.style.transition = 'transform 0.5s ease'
+    const glare = card.querySelector<HTMLDivElement>('.proj-glare')
+    if (glare) glare.style.background = 'transparent'
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.7, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className={`group relative overflow-hidden rounded-2xl ${featured ? 'min-h-[420px]' : 'min-h-[280px]'}`}
+    >
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={`group relative overflow-hidden rounded-2xl will-change-transform ${featured ? 'min-h-[420px]' : 'min-h-[280px]'}`}
+      style={{ transformStyle: 'preserve-3d' }}
     >
       {/* Background image */}
       <img
@@ -160,6 +193,10 @@ function ProjectCard({
           </div>
         </div>
       </div>
+
+      {/* 3D glare layer */}
+      <div className="proj-glare absolute inset-0 pointer-events-none rounded-2xl transition-none" />
+    </div>
     </motion.div>
   )
 }
