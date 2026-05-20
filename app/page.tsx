@@ -3,6 +3,7 @@ import Hero from '@/components/Hero'
 import Services from '@/components/Services'
 import About from '@/components/About'
 import Stats from '@/components/Stats'
+import IdeaToImpact from '@/components/IdeaToImpact'
 import Projects from '@/components/Projects'
 import CinematicScene from '@/components/CinematicScene'
 import VideoSection from '@/components/VideoSection'
@@ -18,6 +19,7 @@ export default function Home() {
       <Hero />
       <Stats />
       <Services />
+      <IdeaToImpact />
       <About />
       <CinematicScene />
       <Projects />
