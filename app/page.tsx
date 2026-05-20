@@ -4,7 +4,6 @@ import Services from '@/components/Services'
 import About from '@/components/About'
 import Stats from '@/components/Stats'
 import Projects from '@/components/Projects'
-import ROICalculator from '@/components/ROICalculator'
 import CinematicScene from '@/components/CinematicScene'
 import VideoSection from '@/components/VideoSection'
 import AnalyticsDemo from '@/components/AnalyticsDemo'
@@ -19,7 +18,6 @@ export default function Home() {
       <Hero />
       <Stats />
       <Services />
-      <ROICalculator />
       <About />
       <CinematicScene />
       <Projects />
