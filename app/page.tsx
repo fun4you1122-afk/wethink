@@ -2,7 +2,6 @@ import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
 import Services from '@/components/Services'
 import About from '@/components/About'
-import StackingCards from '@/components/StackingCards'
 import Stats from '@/components/Stats'
 import Projects from '@/components/Projects'
 import CinematicScene from '@/components/CinematicScene'
@@ -19,7 +18,6 @@ export default function Home() {
       <Hero />
       <Stats />
       <Services />
-      <StackingCards />
       <About />
       <CinematicScene />
       <Projects />
