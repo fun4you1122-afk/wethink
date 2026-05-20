@@ -44,8 +44,9 @@ const FOOTER_Y = 7.18
 // ── Helpers ────────────────────────────────────────────────────────
 
 function darkBg(slide) {
+  // solid near-black — gradients can cause contrast issues in some PowerPoint renderers
   slide.addShape(pptx.ShapeType.rect, { x:0, y:0, w:'100%', h:'100%',
-    fill:{ type:'grad', stops:[{position:0,color:C.purpleDeep},{position:100,color:C.ink}] } })
+    fill:{ color:'0C0818' } })
 }
 
 function lightBg(slide) {
@@ -69,10 +70,10 @@ function lightFooter(slide) {
 
 function darkFooter(slide) {
   slide.addShape(pptx.ShapeType.rect, { x:0, y:FOOTER_Y, w:'100%', h:H-FOOTER_Y,
-    fill:{ color:C.purpleDeep, transparency:40 }, line:{ transparency:100 } })
+    fill:{ color:'1E1040' }, line:{ transparency:100 } })
   slide.addText('WeThink Technology Consulting  ·  Abu Dhabi, UAE  ·  wethink.ae  ·  © 2025', {
     x:0, y:FOOTER_Y, w:'100%', h:H-FOOTER_Y,
-    fontSize:7.5, color:'C4B5FD', align:'center' })
+    fontSize:7.5, color:'E9D5FF', align:'center' })
 }
 
 function slideHeader(slide, label, title, subtitle='') {
@@ -137,32 +138,30 @@ function orb(slide, cx, cy, r, color, t=80) {
     fill:{ type:'grad', stops:[{position:0,color:C.purpleDeep},{position:100,color:C.purpleDark}] },
     line:{ transparency:100 } })
 
-  s.addText('We', { x:0.5, y:1.8, w:5.0, h:1.1, fontSize:72, bold:true, color:TD1 })
-  s.addText('Think', { x:0.5, y:2.82, w:5.0, h:1.1, fontSize:72, bold:true, color:'C4B5FD' })
+  s.addText('We', { x:0.5, y:1.8, w:5.0, h:1.1, fontSize:72, bold:true, color:'FFFFFF' })
+  s.addText('Think', { x:0.5, y:2.82, w:5.0, h:1.1, fontSize:72, bold:true, color:'E9D5FF' })
 
   s.addShape(pptx.ShapeType.rect, { x:0.5, y:4.06, w:2.0, h:0.05,
-    fill:{ color:'D8B4FE' }, line:{ transparency:100 } })
+    fill:{ color:'FFFFFF' }, line:{ transparency:100 } })
 
-  // Tagline — white, clearly readable on dark purple
   s.addText('Engineered for the Digital Age.', { x:0.5, y:4.22, w:5.0, h:0.36,
-    fontSize:12, color:TD2, italic:true })
+    fontSize:12, color:'FFFFFF', italic:true })
   s.addText('Abu Dhabi, UAE  ·  Est. 2019  ·  wethink.ae', { x:0.5, y:4.64, w:5.0, h:0.28,
-    fontSize:9.5, color:'D8B4FE' })
+    fontSize:9.5, color:'E9D5FF' })
 
-  // Services list — bright enough to read on dark purple
   const svcList = ['IT Consulting','Cloud Strategy','Cybersecurity','Custom Software']
   svcList.forEach((sv, i) => {
     s.addShape(pptx.ShapeType.ellipse, { x:0.5, y:5.22+i*0.32+0.06, w:0.08, h:0.08,
-      fill:{ color:'D8B4FE' }, line:{ transparency:100 } })
-    s.addText(sv, { x:0.68, y:5.22+i*0.32, w:4.8, h:0.28, fontSize:9.5, color:TD2 })
+      fill:{ color:'FFFFFF' }, line:{ transparency:100 } })
+    s.addText(sv, { x:0.68, y:5.22+i*0.32, w:4.8, h:0.28, fontSize:9.5, color:'FFFFFF' })
   })
 
   // Right content — white text on dark background
   s.addText('Transforming\nEnterprises\nAcross the Gulf.', { x:6.3, y:1.3, w:6.5, h:3.4,
-    fontSize:42, bold:true, color:TD1, lineSpacingMultiple:1.2 })
+    fontSize:42, bold:true, color:'FFFFFF', lineSpacingMultiple:1.2 })
   s.addText(
     'WeThink delivers end-to-end technology consulting, cloud architecture, cybersecurity, and bespoke software — helping UAE and Gulf enterprises compete and thrive in an accelerating digital world.',
-    { x:6.3, y:4.82, w:6.5, h:1.1, fontSize:11, color:TD2, wrap:true, lineSpacingMultiple:1.6 })
+    { x:6.3, y:4.82, w:6.5, h:1.1, fontSize:11, color:'E2E8F0', wrap:true, lineSpacingMultiple:1.6 })
 
   darkFooter(s)
 }
@@ -514,24 +513,22 @@ caseStudySlide(
   topBar(s)
 
   s.addShape(pptx.ShapeType.rect, { x:MX, y:0.14, w:0.22, h:0.03,
-    fill:{ color:'C4B5FD' }, line:{ transparency:100 } })
+    fill:{ color:'FFFFFF' }, line:{ transparency:100 } })
   s.addText('BY THE NUMBERS', { x:MX+0.3, y:0.08, w:CW, h:0.22,
-    fontSize:7.5, bold:true, color:'C4B5FD', charSpacing:2 })
+    fontSize:7.5, bold:true, color:'FFFFFF', charSpacing:2 })
 
   s.addText('Numbers That', { x:MX, y:0.38, w:CW, h:0.68,
-    fontSize:44, bold:true, color:TD1 })
+    fontSize:44, bold:true, color:'FFFFFF' })
   s.addText('Define Us', { x:MX, y:1.0, w:CW, h:0.68,
-    fontSize:44, bold:true, color:'C4B5FD' })
+    fontSize:44, bold:true, color:'E9D5FF' })
 
   const stats = [
-    { v:'5+',     l:'Years of Excellence', c:'A78BFA' },
-    { v:'5,000+', l:'Projects Delivered',  c:'818CF8' },
-    { v:'1,000+', l:'Clients Served',      c:'38BDF8' },
-    { v:'99.98%', l:'Average Uptime SLA',  c:'34D399' },
-    { v:'8',      l:'Core Service Areas',  c:'FBB F24' },
+    { v:'5+',     l:'Years of Excellence', c:'7C3AED' },
+    { v:'5,000+', l:'Projects Delivered',  c:'4F46E5' },
+    { v:'1,000+', l:'Clients Served',      c:'0EA5E9' },
+    { v:'99.98%', l:'Average Uptime SLA',  c:'059669' },
+    { v:'8',      l:'Core Service Areas',  c:'D97706' },
   ]
-  // correct the amber color
-  stats[4].c = 'FBB124'
 
   const boxW = 2.28
   const totalW = stats.length * boxW + (stats.length-1) * 0.12
@@ -539,25 +536,29 @@ caseStudySlide(
 
   stats.forEach((st, i) => {
     const x = sx + i*(boxW+0.12)
+    // solid darker box so white text is always readable
     s.addShape(pptx.ShapeType.rect, { x, y:2.0, w:boxW, h:1.58,
-      fill:{ color:st.c, transparency:78 }, line:{ color:st.c, transparency:45 }, rectRadius:0.12 })
-    s.addText(st.v, { x, y:2.08, w:boxW, h:0.78,
-      fontSize:34, bold:true, color:TD1, align:'center' })
-    s.addText(st.l, { x, y:2.86, w:boxW, h:0.58,
-      fontSize:9, color:TD3, align:'center', wrap:true })
+      fill:{ color:'1E1040' }, line:{ color:st.c, transparency:20 }, rectRadius:0.12 })
+    // coloured top accent bar on each box
+    s.addShape(pptx.ShapeType.rect, { x, y:2.0, w:boxW, h:0.06,
+      fill:{ color:st.c }, line:{ transparency:100 }, rectRadius:0 })
+    s.addText(st.v, { x, y:2.1, w:boxW, h:0.78,
+      fontSize:34, bold:true, color:'FFFFFF', align:'center' })
+    s.addText(st.l, { x, y:2.88, w:boxW, h:0.58,
+      fontSize:9, color:'E2E8F0', align:'center', wrap:true })
   })
 
   s.addShape(pptx.ShapeType.rect, { x:MX, y:3.78, w:CW, h:0.04,
-    fill:{ color:C.purpleDark, transparency:50 }, line:{ transparency:100 } })
+    fill:{ color:'FFFFFF', transparency:70 }, line:{ transparency:100 } })
 
   s.addText('Key Achievements', { x:MX, y:3.9, w:CW, h:0.38,
-    fontSize:17, bold:true, color:TD1 })
+    fontSize:17, bold:true, color:'FFFFFF' })
 
   const achievements = [
     { t:'ISO 27001 certification programmes completed in under 9 months', c:'A78BFA' },
     { t:'Zero-downtime cloud migrations delivered across financial sector clients', c:'38BDF8' },
     { t:'Trusted technology partner for UAE Federal and Emirate Government entities', c:'34D399' },
-    { t:'Custom platforms serving 18,000+ daily active users across UAE university campuses', c:'FBB124' },
+    { t:'Custom platforms serving 18,000+ daily active users across UAE university campuses', c:'FBBF24' },
     { t:'Real-time BI platforms deployed across 80+ retail locations in the Gulf region', c:'818CF8' },
     { t:'AI-powered SaaS HR platform reaching 5,000 active users within 6 months of launch', c:'F87171' },
   ]
@@ -570,7 +571,7 @@ caseStudySlide(
     s.addShape(pptx.ShapeType.ellipse, { x, y:y+0.07, w:0.1, h:0.1,
       fill:{ color:a.c }, line:{ transparency:100 } })
     s.addText(a.t, { x:x+0.2, y, w:5.8, h:0.46,
-      fontSize:9.5, color:TD2, wrap:true })
+      fontSize:9.5, color:'FFFFFF', wrap:true })
   })
 
   darkFooter(s)
@@ -591,17 +592,17 @@ caseStudySlide(
     line:{ transparency:100 } })
 
   s.addText('Let\'s Build\nSomething\nGreat Together.', { x:0.48, y:1.5, w:4.7, h:3.2,
-    fontSize:36, bold:true, color:TD1, lineSpacingMultiple:1.2 })
+    fontSize:36, bold:true, color:'FFFFFF', lineSpacingMultiple:1.2 })
   s.addText('We\'d love to hear about your next project.', { x:0.48, y:4.78, w:4.7, h:0.38,
-    fontSize:11, color:TD2, italic:true })
+    fontSize:11, color:'E2E8F0', italic:true })
   s.addText('Reach out and let\'s start a conversation.', { x:0.48, y:5.22, w:4.7, h:0.3,
-    fontSize:10, color:'D8B4FE' })
+    fontSize:10, color:'E9D5FF' })
 
   // Right panel
   s.addText('Contact Us', { x:6.0, y:0.55, w:6.8, h:0.65,
-    fontSize:34, bold:true, color:TD1 })
+    fontSize:34, bold:true, color:'FFFFFF' })
   s.addText('WeThink Technology Consulting', { x:6.0, y:1.24, w:6.8, h:0.32,
-    fontSize:13, bold:true, color:'C4B5FD' })
+    fontSize:13, bold:true, color:'E9D5FF' })
 
   const contacts = [
     { label:'Website',     value:'www.wethink.ae' },
@@ -612,21 +613,22 @@ caseStudySlide(
 
   contacts.forEach((c, i) => {
     const y = 1.68 + i * 0.97
+    // solid dark box — transparent white was nearly invisible on dark bg
     s.addShape(pptx.ShapeType.rect, { x:6.0, y, w:6.78, h:0.82,
-      fill:{ color:C.white, transparency:88 }, line:{ color:'A78BFA', transparency:55 }, rectRadius:0.09 })
+      fill:{ color:'1E1040' }, line:{ color:'7C3AED', transparency:30 }, rectRadius:0.09 })
     s.addShape(pptx.ShapeType.rect, { x:6.0, y, w:0.04, h:0.82,
       fill:{ color:'A78BFA' }, line:{ transparency:100 } })
     s.addText(c.label.toUpperCase(), { x:6.16, y:y+0.1, w:6.4, h:0.2,
-      fontSize:7.5, bold:true, color:'D8B4FE', charSpacing:1.5 })
+      fontSize:7.5, bold:true, color:'E9D5FF', charSpacing:1.5 })
     s.addText(c.value, { x:6.16, y:y+0.34, w:6.4, h:0.36,
-      fontSize:11, color:TD1, wrap:true })
+      fontSize:11, color:'FFFFFF', wrap:true })
   })
 
   s.addText('SERVICES', { x:6.0, y:5.72, w:1.0, h:0.22,
-    fontSize:7.5, bold:true, color:'A78BFA', charSpacing:1.5 })
+    fontSize:7.5, bold:true, color:'E9D5FF', charSpacing:1.5 })
   s.addText('IT Consulting  ·  Cloud Strategy  ·  Cybersecurity  ·  Custom Software  ·  Data Analytics  ·  Digital Transformation', {
     x:7.1, y:5.72, w:5.68, h:0.22,
-    fontSize:8.5, color:TD3 })
+    fontSize:8.5, color:'E2E8F0' })
 
   s.addShape(pptx.ShapeType.rect, { x:6.0, y:6.14, w:3.2, h:0.6,
     fill:{ type:'grad', stops:[{position:0,color:C.purple},{position:100,color:C.purpleDark}] },
