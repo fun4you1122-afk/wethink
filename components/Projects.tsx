@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useRef, useEffect, useState } from 'react'
+import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion'
 
 const projects = [
   {
@@ -41,7 +41,7 @@ const projects = [
     title: 'Retail Analytics Dashboard',
     client: 'Retail Group — Gulf Region',
     category: 'Data Analytics',
-    desc: 'Designed and deployed a real-time BI platform aggregating POS, inventory, and customer loyalty data across 80+ stores, enabling same-day executive decision-making.',
+    desc: 'Designed and deployed a real-time BI platform aggregating POS, inventory, and customer loyalty data across 80+ stores, enabling same-day executive decisions.',
     tags: ['Power BI', 'Data Warehouse', 'ML'],
     accent: '#FB923C',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80&fit=crop',
@@ -72,48 +72,51 @@ const projects = [
   },
 ]
 
-function ProjectCard({
-  project,
-  index,
-  featured = false,
-}: {
-  project: typeof projects[0]
-  index: number
-  featured?: boolean
-}) {
+function SplitWords({ text, inView, delay = 0 }: { text: string; inView: boolean; delay?: number }) {
+  return (
+    <>
+      {text.split(' ').map((word, i) => (
+        <span key={i} className="inline-block overflow-hidden align-bottom">
+          <motion.span
+            className="inline-block"
+            initial={{ y: '110%' }}
+            animate={inView ? { y: 0 } : { y: '110%' }}
+            transition={{ duration: 0.6, delay: delay + i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            {word}&nbsp;
+          </motion.span>
+        </span>
+      ))}
+    </>
+  )
+}
+
+function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className={`group relative overflow-hidden rounded-2xl ${featured ? 'min-h-[420px]' : 'min-h-[280px]'}`}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.6, delay: index * 0.05 }}
+      className="group relative overflow-hidden rounded-2xl flex-shrink-0"
+      style={{ width: 'clamp(300px, 36vw, 440px)', minHeight: '460px' }}
     >
-      {/* Background image */}
       <img
         src={project.image}
         alt={project.title}
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
       />
-
-      {/* Base gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
-
-      {/* Hover colour wash */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/45 to-black/10" />
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        style={{ background: `linear-gradient(135deg, ${project.accent}25 0%, rgba(0,0,0,0.6) 100%)` }}
+        style={{ background: `linear-gradient(135deg, ${project.accent}30 0%, rgba(0,0,0,0.55) 100%)` }}
       />
-
-      {/* Accent top line slides in */}
       <div
         className="absolute top-0 left-0 right-0 h-[3px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
         style={{ background: `linear-gradient(90deg, ${project.accent}, transparent)` }}
       />
 
-      {/* Content */}
       <div className="absolute inset-0 p-6 flex flex-col justify-between">
-        {/* Top row */}
         <div className="flex items-start justify-between">
           <span
             className="text-[10px] font-semibold uppercase tracking-widest px-3 py-1 rounded-full backdrop-blur-sm"
@@ -121,30 +124,18 @@ function ProjectCard({
           >
             {project.category}
           </span>
-
-          {/* Stat — appears on hover */}
           <div className="opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-400 text-right">
             <div className="text-2xl font-black text-white leading-none">{project.stat}</div>
             <div className="text-[10px] text-white/60 mt-0.5">{project.statLabel}</div>
           </div>
         </div>
 
-        {/* Bottom content */}
         <div>
-          <p className="text-xs font-medium mb-1.5" style={{ color: project.accent }}>
-            {project.client}
-          </p>
-
-          <h3 className="text-white font-bold text-lg leading-snug">
-            {project.title}
-          </h3>
-
-          {/* Description + tags slide in on hover */}
+          <p className="text-xs font-medium mb-1.5" style={{ color: project.accent }}>{project.client}</p>
+          <h3 className="text-white font-bold text-lg leading-snug">{project.title}</h3>
           <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500">
             <div className="overflow-hidden">
-              <p className="text-white/75 text-sm leading-relaxed pt-2 pb-3">
-                {project.desc}
-              </p>
+              <p className="text-white/75 text-sm leading-relaxed pt-2 pb-3">{project.desc}</p>
               <div className="flex flex-wrap gap-1.5">
                 {project.tags.map((tag) => (
                   <span
@@ -164,80 +155,173 @@ function ProjectCard({
   )
 }
 
-export default function Projects() {
+function HorizontalFilmstrip() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const headingRef = useRef<HTMLDivElement>(null)
+  const [xEnd, setXEnd] = useState(-800)
+  const inView = useInView(headingRef, { once: true })
+
+  useEffect(() => {
+    const measure = () => {
+      if (trackRef.current) {
+        const extra = 64
+        setXEnd(-(trackRef.current.scrollWidth - window.innerWidth + extra))
+      }
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  })
+
+  const rawX = useTransform(scrollYProgress, [0, 1], [48, xEnd])
+  const x = useSpring(rawX, { stiffness: 55, damping: 22, restDelta: 0.001 })
+
+  const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
+
+  return (
+    <div ref={containerRef} style={{ height: '350vh' }} className="relative">
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col">
+        {/* Header */}
+        <div ref={headingRef} className="flex-shrink-0 pt-20 pb-6 px-12 flex items-end justify-between">
+          <div>
+            <span className="section-label">Our Work</span>
+            <h2
+              className="text-5xl font-black mt-2 leading-tight"
+              style={{ color: 'var(--text)' }}
+              aria-label="Projects Achieved"
+            >
+              <SplitWords text="Projects" inView={inView} />
+              {' '}
+              <span className="gradient-text">
+                <SplitWords text="Achieved" inView={inView} delay={0.3} />
+              </span>
+            </h2>
+          </div>
+          <p className="text-sm max-w-xs text-right hidden xl:block" style={{ color: 'var(--text-muted)' }}>
+            Transformative engagements across government, finance, education & enterprise.
+          </p>
+        </div>
+
+        {/* Scroll progress bar */}
+        <div className="flex-shrink-0 h-[2px] mx-12 mb-6 rounded-full overflow-hidden" style={{ background: 'rgba(124,58,237,0.12)' }}>
+          <motion.div className="h-full rounded-full" style={{ width: progressWidth, background: 'linear-gradient(90deg, #7C3AED, #A78BFA)' }} />
+        </div>
+
+        {/* Scrolling track */}
+        <div className="flex-1 flex items-center overflow-visible">
+          <motion.div
+            ref={trackRef}
+            style={{ x }}
+            className="flex gap-6 pl-12 will-change-transform"
+          >
+            {projects.map((project, i) => (
+              <ProjectCard key={project.title} project={project} index={i} />
+            ))}
+            {/* CTA card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="flex-shrink-0 rounded-2xl flex flex-col items-center justify-center gap-6 p-10 text-center"
+              style={{
+                width: 'clamp(260px, 28vw, 360px)',
+                minHeight: '460px',
+                background: 'linear-gradient(135deg, rgba(124,58,237,0.06), rgba(124,58,237,0.02))',
+                border: '1px dashed rgba(124,58,237,0.25)',
+              }}
+            >
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center"
+                style={{ background: 'linear-gradient(135deg, #7C3AED20, #7C3AED40)', border: '1px solid rgba(124,58,237,0.25)' }}
+              >
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                  <path d="M14 5v18M5 14h18" stroke="#7C3AED" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-lg font-bold mb-2" style={{ color: 'var(--text)' }}>Ready to add your project?</p>
+                <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Let's build something remarkable together.</p>
+              </div>
+              <button
+                onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+                className="btn-primary text-sm"
+              >
+                Start a Project
+              </button>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function MobileGrid() {
   const headingRef = useRef<HTMLDivElement>(null)
   const inView = useInView(headingRef, { once: true, margin: '-80px' })
 
   return (
-    <section id="projects" className="section-padding relative overflow-hidden">
-      <div className="orb w-[500px] h-[500px] bg-violet-900/20 opacity-30 top-[-100px] right-[-200px] pointer-events-none" />
-      <div className="orb w-[400px] h-[400px] bg-indigo-900/20 opacity-20 bottom-[-100px] left-[-150px] pointer-events-none" />
+    <div className="section-padding">
+      <div ref={headingRef} className="text-center mb-16">
+        <span className="section-label mx-auto">Our Work</span>
+        <h2 className="text-4xl font-black text-gray-900 mt-3">
+          Projects <span className="gradient-text">Achieved</span>
+        </h2>
+        <p className="mt-4 text-text-muted text-base max-w-xl mx-auto">
+          Transformative engagements across government, finance, education, and enterprise sectors.
+        </p>
+      </div>
 
-      <div className="relative max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div ref={headingRef} className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="section-label mx-auto">Our Work</span>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black text-gray-900 mt-3"
-          >
-            Projects <span className="gradient-text">Achieved</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-4 text-text-muted text-lg max-w-2xl mx-auto"
-          >
-            A selection of transformative engagements across government, finance, education, and enterprise sectors across the UAE and Gulf region.
-          </motion.p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
+        <div className="md:col-span-2">
+          <ProjectCard project={projects[0]} index={0} />
         </div>
-
-        {/* Row 1: featured (2 cols) + 2 stacked (1 col) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
-          <div className="md:col-span-2">
-            <ProjectCard project={projects[0]} index={0} featured />
-          </div>
-          <div className="flex flex-col gap-5">
-            <ProjectCard project={projects[1]} index={1} />
-            <ProjectCard project={projects[2]} index={2} />
-          </div>
+        <div className="flex flex-col gap-5">
+          <ProjectCard project={projects[1]} index={1} />
+          <ProjectCard project={projects[2]} index={2} />
         </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <ProjectCard project={projects[3]} index={3} />
+        <ProjectCard project={projects[4]} index={4} />
+        <ProjectCard project={projects[5]} index={5} />
+      </div>
 
-        {/* Row 2: 3 equal */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <ProjectCard project={projects[3]} index={3} />
-          <ProjectCard project={projects[4]} index={4} />
-          <ProjectCard project={projects[5]} index={5} />
-        </div>
-
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center mt-14"
+      <div className="text-center mt-12">
+        <button
+          onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+          className="btn-primary"
         >
-          <p className="text-text-muted mb-5 text-sm">Ready to add your project to this list?</p>
-          <button
-            onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="btn-primary"
-          >
-            Start Your Project
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M3.75 9h10.5M10.5 5.25L14.25 9l-3.75 3.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </motion.div>
+          Start Your Project
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M3.75 9h10.5M10.5 5.25L14.25 9l-3.75 3.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export default function Projects() {
+  return (
+    <section id="projects" className="relative overflow-hidden">
+      <div className="orb w-[500px] h-[500px] bg-violet-900/20 opacity-20 top-[-100px] right-[-200px] pointer-events-none" />
+
+      {/* Desktop: horizontal filmstrip */}
+      <div className="hidden lg:block">
+        <HorizontalFilmstrip />
+      </div>
+
+      {/* Mobile/tablet: grid */}
+      <div className="lg:hidden">
+        <MobileGrid />
       </div>
     </section>
   )

@@ -6,6 +6,7 @@ import CustomCursor from '@/components/CustomCursor'
 import WhatsAppButton from '@/components/WhatsAppButton'
 import ScrollProgress from '@/components/ScrollProgress'
 import AiChat from '@/components/AiChat'
+import CursorSpotlight from '@/components/CursorSpotlight'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -43,6 +44,7 @@ export default function RootLayout({
       <body>
         <ScrollProgress />
         <CustomCursor />
+        <CursorSpotlight />
         <WhatsAppButton />
         <AiChat />
         <SmoothScroll>{children}</SmoothScroll>

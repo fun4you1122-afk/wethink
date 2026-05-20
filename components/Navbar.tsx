@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Logo from './Logo'
+import MagneticButton from './ui/MagneticButton'
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -91,15 +92,17 @@ export default function Navbar() {
 
           {/* CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <button
-              onClick={() => scrollTo('#contact')}
-              className="btn-primary text-sm py-2.5 px-5"
-            >
-              Get Started
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
+            <MagneticButton>
+              <button
+                onClick={() => scrollTo('#contact')}
+                className="btn-primary text-sm py-2.5 px-5"
+              >
+                Get Started
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </MagneticButton>
           </div>
 
           {/* Mobile menu button */}

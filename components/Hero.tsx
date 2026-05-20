@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useState, useCallback } from 'react'
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion'
 import { Spotlight } from '@/components/ui/spotlight'
 import RadialOrbitalTimeline from '@/components/ui/radial-orbital-timeline'
+import MagneticButton from '@/components/ui/MagneticButton'
 import {
   Globe,
   BrainCircuit,
@@ -111,6 +112,33 @@ const timelineData = [
 export default function Hero() {
   const [wordIndex, setWordIndex] = useState(0)
 
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const orbX = useSpring(mouseX, { stiffness: 40, damping: 20 })
+  const orbY = useSpring(mouseY, { stiffness: 40, damping: 20 })
+  const orbX2 = useSpring(mouseX, { stiffness: 25, damping: 18 })
+  const orbY2 = useSpring(mouseY, { stiffness: 25, damping: 18 })
+  const panelX = useSpring(useMotionValue(0), { stiffness: 20, damping: 20 })
+  const panelY = useSpring(useMotionValue(0), { stiffness: 20, damping: 20 })
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    const { clientX, clientY, currentTarget } = e
+    const { width, height } = (currentTarget as HTMLElement).getBoundingClientRect()
+    const nx = (clientX / width - 0.5) * 2
+    const ny = (clientY / height - 0.5) * 2
+    mouseX.set(nx * 24)
+    mouseY.set(ny * 18)
+    panelX.set(nx * -10)
+    panelY.set(ny * -8)
+  }, [mouseX, mouseY, panelX, panelY])
+
+  const handleMouseLeave = useCallback(() => {
+    mouseX.set(0)
+    mouseY.set(0)
+    panelX.set(0)
+    panelY.set(0)
+  }, [mouseX, mouseY, panelX, panelY])
+
   useEffect(() => {
     const interval = setInterval(() => {
       setWordIndex((i) => (i + 1) % WORDS.length)
@@ -132,11 +160,23 @@ export default function Hero() {
   }
 
   return (
-    <section id="home" className="relative min-h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>
+    <section
+      id="home"
+      className="relative min-h-screen overflow-hidden"
+      style={{ background: 'var(--bg)' }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
 
-      {/* Floating orbs */}
-      <div className="orb w-[600px] h-[600px] bg-violet-200 opacity-40 top-[-200px] left-[-200px] pointer-events-none animate-float" />
-      <div className="orb w-[400px] h-[400px] bg-purple-200 opacity-30 bottom-[-100px] right-[40%] pointer-events-none" style={{ animationDelay: '2s' }} />
+      {/* Floating orbs — mouse parallax */}
+      <motion.div
+        style={{ x: orbX, y: orbY }}
+        className="orb w-[600px] h-[600px] bg-violet-200 opacity-40 top-[-200px] left-[-200px] pointer-events-none animate-float"
+      />
+      <motion.div
+        style={{ x: orbX2, y: orbY2 }}
+        className="orb w-[400px] h-[400px] bg-purple-200 opacity-30 bottom-[-100px] right-[40%] pointer-events-none"
+      />
 
       {/* Spotlight */}
       <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="purple" />
@@ -203,15 +243,19 @@ export default function Hero() {
             </motion.p>
 
             <motion.div variants={itemVariants} className="mt-8 flex flex-wrap gap-4">
-              <button onClick={() => scrollTo('#contact')} className="btn-primary">
-                Start a Project
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                  <path d="M3.75 9h10.5M10.5 5.25L14.25 9l-3.75 3.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-              <button onClick={() => scrollTo('#services')} className="btn-outline">
-                Our Services
-              </button>
+              <MagneticButton>
+                <button onClick={() => scrollTo('#contact')} className="btn-primary">
+                  Start a Project
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M3.75 9h10.5M10.5 5.25L14.25 9l-3.75 3.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              </MagneticButton>
+              <MagneticButton>
+                <button onClick={() => scrollTo('#services')} className="btn-outline">
+                  Our Services
+                </button>
+              </MagneticButton>
             </motion.div>
 
             <motion.div variants={itemVariants} className="mt-10 flex flex-wrap items-center gap-6">
@@ -235,9 +279,12 @@ export default function Hero() {
         </div>
 
         {/* ── RIGHT — Orbital timeline ── */}
-        <div className="relative w-full h-[500px] lg:flex-1 lg:h-auto rounded-t-3xl lg:rounded-none overflow-hidden" style={{ background: 'var(--surface-2)' }}>
+        <motion.div
+          style={{ background: 'var(--surface-2)', x: panelX, y: panelY }}
+          className="relative w-full h-[500px] lg:flex-1 lg:h-auto rounded-t-3xl lg:rounded-none overflow-hidden"
+        >
           <RadialOrbitalTimeline timelineData={timelineData} />
-        </div>
+        </motion.div>
 
       </div>
 
