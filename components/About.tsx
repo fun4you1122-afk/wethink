@@ -56,8 +56,8 @@ export default function About() {
             <span className="section-label mx-auto">Our Story</span>
           </motion.div>
           <h2 className="text-4xl md:text-6xl font-black mt-3" style={{ color: 'var(--text)' }}>
-            <ScrambleText delay={300}>Who We </ScrambleText>
-            <ScrambleText className="gradient-text" delay={300}>Are</ScrambleText>
+            <ScrambleText>Who We </ScrambleText>
+            <ScrambleText className="gradient-text">Are</ScrambleText>
           </h2>
         </div>
 

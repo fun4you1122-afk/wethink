@@ -185,8 +185,8 @@ export default function Projects() {
             <span className="section-label mx-auto">Our Work</span>
           </motion.div>
           <h2 className="text-4xl md:text-6xl font-black text-gray-900 mt-3">
-            <ScrambleText delay={300}>Projects </ScrambleText>
-            <ScrambleText className="gradient-text" delay={300}>Achieved</ScrambleText>
+            <ScrambleText>Projects </ScrambleText>
+            <ScrambleText className="gradient-text">Achieved</ScrambleText>
           </h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

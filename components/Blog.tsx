@@ -240,8 +240,8 @@ export default function Blog() {
             <span className="section-label mx-auto">Insights & Thinking</span>
           </motion.div>
           <h2 className="text-4xl md:text-6xl font-black mt-3" style={{ color: 'var(--text)' }}>
-            <ScrambleText delay={300}>From Our </ScrambleText>
-            <ScrambleText className="gradient-text" delay={300}>Blog</ScrambleText>
+            <ScrambleText>From Our </ScrambleText>
+            <ScrambleText className="gradient-text">Blog</ScrambleText>
           </h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

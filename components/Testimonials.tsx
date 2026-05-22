@@ -83,8 +83,8 @@ export default function Testimonials() {
             <span className="section-label mx-auto">Client Stories</span>
           </motion.div>
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3">
-            <ScrambleText delay={300}>Trusted by </ScrambleText>
-            <ScrambleText className="gradient-text" delay={300}>Leaders</ScrambleText>
+            <ScrambleText>Trusted by </ScrambleText>
+            <ScrambleText className="gradient-text">Leaders</ScrambleText>
           </h2>
         </div>
 

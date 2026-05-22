@@ -5,11 +5,15 @@ import { useInView } from 'framer-motion'
 
 const POOL = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*!?'
 
+function rnd() {
+  return POOL[Math.floor(Math.random() * POOL.length)]
+}
+
 export default function ScrambleText({
   children,
   className,
   delay = 0,
-  speed = 38,
+  speed = 42,
 }: {
   children: string
   className?: string
@@ -17,8 +21,8 @@ export default function ScrambleText({
   speed?: number
 }) {
   const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
-  const [output, setOutput] = useState<string | null>(null)
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const [output, setOutput] = useState(children)
   const done = useRef(false)
 
   useEffect(() => {
@@ -27,36 +31,44 @@ export default function ScrambleText({
 
     const text = children
 
-    const start = () => {
-      let frame = 0
-      const framesPerChar = 5
-      const id = setInterval(() => {
-        const resolved = Math.floor(frame / framesPerChar)
-        setOutput(
-          text.split('').map((ch, i) => {
-            if (ch === ' ') return ' '
-            if (i < resolved) return ch
-            return POOL[Math.floor(Math.random() * POOL.length)]
-          }).join('')
-        )
-        frame++
-        if (resolved >= text.length) {
-          setOutput(text)
-          clearInterval(id)
+    const run = () => {
+      // Phase 1 — scramble everything (8 chaotic frames)
+      let chaos = 0
+      const chaosId = setInterval(() => {
+        setOutput(text.split('').map(ch => (ch === ' ' ? ' ' : rnd())).join(''))
+        chaos++
+        if (chaos >= 8) {
+          clearInterval(chaosId)
+
+          // Phase 2 — resolve each character left-to-right
+          let frame = 0
+          const framesPerChar = 5
+          const resolveId = setInterval(() => {
+            const resolved = Math.floor(frame / framesPerChar)
+            setOutput(
+              text.split('').map((ch, i) => {
+                if (ch === ' ') return ' '
+                if (i < resolved) return ch
+                return rnd()
+              }).join('')
+            )
+            frame++
+            if (resolved >= text.length) {
+              setOutput(text)
+              clearInterval(resolveId)
+            }
+          }, speed)
         }
-      }, speed)
+      }, 35)
     }
 
-    const t = setTimeout(start, delay)
+    const t = setTimeout(run, delay)
     return () => clearTimeout(t)
   }, [inView])
 
   return (
     <span ref={ref} className={className} aria-label={children}>
-      {output !== null
-        ? output
-        : <span aria-hidden style={{ opacity: 0 }}>{children}</span>
-      }
+      {output}
     </span>
   )
 }

@@ -83,8 +83,8 @@ export default function Contact() {
             <span className="section-label mx-auto">Let&apos;s Talk</span>
           </motion.div>
           <h2 className="text-4xl md:text-6xl font-black mt-3" style={{ color: 'var(--text)' }}>
-            <ScrambleText delay={300}>Start Your </ScrambleText>
-            <ScrambleText className="gradient-text" delay={300}>Journey</ScrambleText>
+            <ScrambleText>Start Your </ScrambleText>
+            <ScrambleText className="gradient-text">Journey</ScrambleText>
           </h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

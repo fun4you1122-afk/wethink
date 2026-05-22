@@ -269,8 +269,8 @@ export default function Services() {
           </motion.div>
 
           <h2 className="text-4xl md:text-6xl font-black mt-3" style={{ color: 'var(--text)' }}>
-            <ScrambleText delay={300}>Our </ScrambleText>
-            <ScrambleText className="gradient-text" delay={300}>Services</ScrambleText>
+            <ScrambleText>Our </ScrambleText>
+            <ScrambleText className="gradient-text">Services</ScrambleText>
           </h2>
 
           <motion.p

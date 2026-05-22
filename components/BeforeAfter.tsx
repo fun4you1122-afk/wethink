@@ -54,8 +54,8 @@ export default function BeforeAfter() {
             <span className="section-label mx-auto">The WeThink Effect</span>
           </motion.div>
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3">
-            <ScrambleText delay={300}>See the </ScrambleText>
-            <ScrambleText className="gradient-text" delay={300}>Difference</ScrambleText>
+            <ScrambleText>See the </ScrambleText>
+            <ScrambleText className="gradient-text">Difference</ScrambleText>
           </h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
