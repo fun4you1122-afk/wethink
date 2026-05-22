@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import ScrambleText from '@/components/ScrambleText'
 
@@ -138,80 +138,120 @@ const services = [
 ]
 
 function ServiceCard({ service, index }: { service: typeof services[0]; index: number }) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const [mouse, setMouse] = useState({ x: 0, y: 0 })
+  const [hovered, setHovered] = useState(false)
   const isFeatured = service.featured
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    setMouse({ x: e.clientX - rect.left, y: e.clientY - rect.top })
+  }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      initial={{ opacity: 0, y: 48 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.6, delay: index * 0.07, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className={`group relative rounded-2xl overflow-hidden flex flex-col cursor-none ${
+      transition={{ duration: 0.55, delay: index * 0.07, ease: [0.25, 0.46, 0.45, 0.94] }}
+      whileHover={{ y: -8 }}
+      className={`group relative rounded-3xl overflow-hidden flex flex-col ${
         isFeatured ? 'lg:col-span-2' : ''
       }`}
       style={{
-        background: `${service.color}08`,
-        border: `1px solid ${service.color}20`,
-        transition: 'box-shadow 0.35s ease, transform 0.35s ease',
-      }}
-      whileHover={{
-        y: -6,
-        boxShadow: `0 24px 60px ${service.color}25, 0 4px 16px ${service.color}12`,
+        background: isFeatured
+          ? `linear-gradient(145deg, #1A0A2E 0%, ${service.color}CC 100%)`
+          : '#FFFFFF',
+        border: `1px solid ${isFeatured ? service.color + '60' : service.color + '22'}`,
+        boxShadow: hovered
+          ? `0 24px 64px ${service.color}30, 0 4px 20px rgba(0,0,0,0.08)`
+          : '0 2px 16px rgba(0,0,0,0.05)',
+        transition: 'box-shadow 0.4s ease',
       }}
     >
-      {/* Top accent bar */}
+      {/* Mouse-following spotlight glow */}
       <div
-        className="absolute top-0 left-0 right-0 h-[3px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
-        style={{ background: `linear-gradient(90deg, ${service.color}, ${service.color}50)` }}
+        className="pointer-events-none absolute z-0 rounded-full transition-opacity duration-300"
+        style={{
+          width: 320,
+          height: 320,
+          background: `radial-gradient(circle, ${service.color}35, transparent 70%)`,
+          left: mouse.x - 160,
+          top: mouse.y - 160,
+          filter: 'blur(24px)',
+          opacity: hovered ? 1 : 0,
+        }}
       />
 
-      {/* Faded background number */}
+      {/* Gradient top bar */}
       <div
-        className="absolute top-3 right-4 text-8xl font-black leading-none select-none pointer-events-none"
-        style={{ color: `${service.color}0c`, fontVariantNumeric: 'tabular-nums' }}
+        className="h-[3px] w-full flex-shrink-0"
+        style={{ background: `linear-gradient(90deg, ${service.color}, ${service.color}44)` }}
+      />
+
+      {/* Large faded background number */}
+      <div
+        className="absolute bottom-2 right-3 text-[8rem] font-black leading-none select-none pointer-events-none"
+        style={{
+          color: isFeatured ? 'rgba(255,255,255,0.06)' : `${service.color}0D`,
+          lineHeight: 1,
+        }}
       >
         {service.number}
       </div>
 
-      <div className={`relative z-10 p-6 flex flex-col gap-4 ${isFeatured ? 'lg:p-8' : ''}`}>
-        {/* Icon + stat row */}
-        <div className="flex items-start justify-between">
-          <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
-            style={{
-              background: `${service.color}15`,
-              color: service.color,
-              border: `1.5px solid ${service.color}25`,
-            }}
-          >
-            {service.icon}
-          </div>
-
-          <span
-            className="text-[11px] font-bold px-3 py-1.5 rounded-full leading-none"
-            style={{
-              background: `${service.color}12`,
-              color: service.color,
-              border: `1px solid ${service.color}20`,
-            }}
-          >
-            {service.stat}
-          </span>
+      <div className={`relative z-10 flex flex-col gap-5 p-6 flex-1 ${isFeatured ? 'lg:p-8' : ''}`}>
+        {/* Icon */}
+        <div
+          className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
+          style={{
+            background: isFeatured ? 'rgba(255,255,255,0.12)' : `${service.color}14`,
+            color: isFeatured ? '#fff' : service.color,
+            border: `1.5px solid ${isFeatured ? 'rgba(255,255,255,0.2)' : service.color + '28'}`,
+          }}
+        >
+          {service.icon}
         </div>
 
-        {/* Text */}
+        {/* Title + description */}
         <div>
           <h3
-            className={`font-black mb-2 leading-snug group-hover:opacity-90 transition-opacity ${
-              isFeatured ? 'text-xl lg:text-2xl' : 'text-lg'
-            }`}
-            style={{ color: 'var(--text)' }}
+            className={`font-black leading-tight mb-2 ${isFeatured ? 'text-2xl' : 'text-xl'}`}
+            style={{ color: isFeatured ? '#fff' : 'var(--text)' }}
           >
             {service.title}
           </h3>
-          <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+          <p
+            className="text-sm leading-relaxed"
+            style={{ color: isFeatured ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)' }}
+          >
             {service.description}
           </p>
+        </div>
+
+        {/* Stat pill */}
+        <div
+          className="flex items-center gap-2 px-3 py-2 rounded-xl w-fit"
+          style={{
+            background: isFeatured ? 'rgba(255,255,255,0.1)' : `${service.color}0F`,
+            border: `1px solid ${isFeatured ? 'rgba(255,255,255,0.18)' : service.color + '22'}`,
+          }}
+        >
+          <span
+            className="w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0"
+            style={{ background: isFeatured ? '#fff' : service.color }}
+          />
+          <span
+            className="text-xs font-bold"
+            style={{ color: isFeatured ? '#fff' : service.color }}
+          >
+            {service.stat}
+          </span>
         </div>
 
         {/* Tags */}
@@ -221,9 +261,9 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
               key={tag}
               className="text-[11px] font-medium px-2.5 py-1 rounded-lg"
               style={{
-                background: 'rgba(0,0,0,0.04)',
-                color: 'var(--text-muted)',
-                border: '1px solid rgba(0,0,0,0.07)',
+                background: isFeatured ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.03)',
+                color: isFeatured ? 'rgba(255,255,255,0.65)' : 'var(--text-muted)',
+                border: `1px solid ${isFeatured ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.06)'}`,
               }}
             >
               {tag}
@@ -231,14 +271,17 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
           ))}
         </div>
 
-        {/* CTA row */}
+        {/* CTA */}
         <button
           onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-          className="flex items-center gap-2 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-2 group-hover:translate-x-0 w-fit"
-          style={{ color: service.color }}
+          className="flex items-center gap-1.5 text-sm font-semibold mt-1 w-fit group/cta"
+          style={{ color: isFeatured ? '#fff' : service.color }}
         >
-          Get started
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+          <span>Get started</span>
+          <svg
+            className="transition-transform duration-200 group-hover/cta:translate-x-1"
+            width="15" height="15" viewBox="0 0 15 15" fill="none"
+          >
             <path d="M3 7.5h9M8.5 4l3.5 3.5L8.5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
