@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion'
 import ScrambleText from '@/components/ScrambleText'
 
 const services = [
@@ -137,155 +137,211 @@ const services = [
   },
 ]
 
+const PARTICLES = [
+  { w: 4, h: 4, top: '15%', left: '10%', dur: '4s', delay: '0s' },
+  { w: 3, h: 3, top: '35%', left: '80%', dur: '5.5s', delay: '1s' },
+  { w: 5, h: 5, top: '65%', left: '20%', dur: '3.8s', delay: '0.5s' },
+  { w: 3, h: 3, top: '80%', left: '70%', dur: '6s', delay: '1.8s' },
+  { w: 4, h: 4, top: '50%', left: '50%', dur: '4.5s', delay: '0.3s' },
+  { w: 2, h: 2, top: '25%', left: '60%', dur: '5s', delay: '2s' },
+]
+
 function ServiceCard({ service, index }: { service: typeof services[0]; index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const [mouse, setMouse] = useState({ x: 0, y: 0 })
-  const [hovered, setHovered] = useState(false)
+  const wrapRef = useRef<HTMLDivElement>(null)
   const isFeatured = service.featured
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return
-    const rect = cardRef.current.getBoundingClientRect()
-    setMouse({ x: e.clientX - rect.left, y: e.clientY - rect.top })
+  // 3D tilt via spring-smoothed motion values
+  const rawX = useMotionValue(0)
+  const rawY = useMotionValue(0)
+  const rotX = useSpring(rawX, { stiffness: 180, damping: 22 })
+  const rotY = useSpring(rawY, { stiffness: 180, damping: 22 })
+
+  // Holographic glare position derived from tilt
+  const glareLeft = useTransform(rotY, [-15, 15], ['10%', '90%'])
+  const glareTop  = useTransform(rotX, [-15, 15], ['90%', '10%'])
+  const glareBg   = useMotionTemplate`radial-gradient(circle at ${glareLeft} ${glareTop}, rgba(255,255,255,0.18), transparent 65%)`
+
+  const [hovered, setHovered] = useState(false)
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!wrapRef.current) return
+    const r = wrapRef.current.getBoundingClientRect()
+    const x = (e.clientX - r.left) / r.width  - 0.5  // -0.5 → 0.5
+    const y = (e.clientY - r.top)  / r.height - 0.5
+    rawX.set(-y * 18)
+    rawY.set( x * 18)
   }
+  const onLeave = () => { rawX.set(0); rawY.set(0); setHovered(false) }
 
   return (
     <motion.div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      initial={{ opacity: 0, y: 48 }}
+      initial={{ opacity: 0, y: 56 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.55, delay: index * 0.07, ease: [0.25, 0.46, 0.45, 0.94] }}
-      whileHover={{ y: -8 }}
-      className={`group relative rounded-3xl overflow-hidden flex flex-col ${
-        isFeatured ? 'lg:col-span-2' : ''
-      }`}
-      style={{
-        background: isFeatured
-          ? `linear-gradient(145deg, #1A0A2E 0%, ${service.color}CC 100%)`
-          : '#FFFFFF',
-        border: `1px solid ${isFeatured ? service.color + '60' : service.color + '22'}`,
-        boxShadow: hovered
-          ? `0 24px 64px ${service.color}30, 0 4px 20px rgba(0,0,0,0.08)`
-          : '0 2px 16px rgba(0,0,0,0.05)',
-        transition: 'box-shadow 0.4s ease',
-      }}
+      transition={{ duration: 0.6, delay: index * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
+      style={{ perspective: '1000px' }}
+      className={isFeatured ? 'lg:col-span-2' : ''}
     >
-      {/* Mouse-following spotlight glow */}
-      <div
-        className="pointer-events-none absolute z-0 rounded-full transition-opacity duration-300"
+      <motion.div
+        ref={wrapRef}
+        onMouseMove={onMove}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={onLeave}
         style={{
-          width: 320,
-          height: 320,
-          background: `radial-gradient(circle, ${service.color}35, transparent 70%)`,
-          left: mouse.x - 160,
-          top: mouse.y - 160,
-          filter: 'blur(24px)',
-          opacity: hovered ? 1 : 0,
+          rotateX: rotX,
+          rotateY: rotY,
+          transformStyle: 'preserve-3d',
+          boxShadow: hovered
+            ? `0 30px 70px ${service.color}35, 0 6px 24px rgba(0,0,0,0.10)`
+            : '0 2px 16px rgba(0,0,0,0.05)',
+          transition: 'box-shadow 0.4s ease',
         }}
-      />
-
-      {/* Gradient top bar */}
-      <div
-        className="h-[3px] w-full flex-shrink-0"
-        style={{ background: `linear-gradient(90deg, ${service.color}, ${service.color}44)` }}
-      />
-
-      {/* Large faded background number */}
-      <div
-        className="absolute bottom-2 right-3 text-[8rem] font-black leading-none select-none pointer-events-none"
-        style={{
-          color: isFeatured ? 'rgba(255,255,255,0.06)' : `${service.color}0D`,
-          lineHeight: 1,
-        }}
+        className="relative rounded-3xl overflow-hidden flex flex-col h-full"
       >
-        {service.number}
-      </div>
-
-      <div className={`relative z-10 flex flex-col gap-5 p-6 flex-1 ${isFeatured ? 'lg:p-8' : ''}`}>
-        {/* Icon */}
+        {/* ── Card background ── */}
         <div
-          className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
+          className="absolute inset-0"
           style={{
-            background: isFeatured ? 'rgba(255,255,255,0.12)' : `${service.color}14`,
-            color: isFeatured ? '#fff' : service.color,
-            border: `1.5px solid ${isFeatured ? 'rgba(255,255,255,0.2)' : service.color + '28'}`,
+            background: isFeatured
+              ? `linear-gradient(145deg, #1A0A2E 0%, ${service.color}CC 100%)`
+              : '#FFFFFF',
           }}
-        >
-          {service.icon}
-        </div>
+        />
 
-        {/* Title + description */}
-        <div>
-          <h3
-            className={`font-black leading-tight mb-2 ${isFeatured ? 'text-2xl' : 'text-xl'}`}
-            style={{ color: isFeatured ? '#fff' : 'var(--text)' }}
-          >
-            {service.title}
-          </h3>
-          <p
-            className="text-sm leading-relaxed"
-            style={{ color: isFeatured ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)' }}
-          >
-            {service.description}
-          </p>
-        </div>
-
-        {/* Stat pill */}
-        <div
-          className="flex items-center gap-2 px-3 py-2 rounded-xl w-fit"
-          style={{
-            background: isFeatured ? 'rgba(255,255,255,0.1)' : `${service.color}0F`,
-            border: `1px solid ${isFeatured ? 'rgba(255,255,255,0.18)' : service.color + '22'}`,
-          }}
-        >
-          <span
-            className="w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0"
-            style={{ background: isFeatured ? '#fff' : service.color }}
+        {/* ── Floating particles (featured cards only) ── */}
+        {isFeatured && PARTICLES.map((p, i) => (
+          <div
+            key={i}
+            className="float-dot absolute rounded-full pointer-events-none"
+            style={{
+              width: p.w, height: p.h,
+              top: p.top, left: p.left,
+              background: `${service.color}`,
+              animationDuration: p.dur,
+              animationDelay: p.delay,
+              opacity: 0.35,
+            }}
           />
-          <span
-            className="text-xs font-bold"
+        ))}
+
+        {/* ── Animated border beam ── */}
+        <div
+          className="card-beam z-10"
+          style={{
+            background: `conic-gradient(from var(--beam-angle, 0deg), transparent 75%, ${service.color}BB 85%, ${service.color} 90%, ${service.color}BB 95%, transparent 100%)`,
+            animationDuration: hovered ? '2s' : '5s',
+          }}
+        />
+
+        {/* ── Holographic glare (follows tilt) ── */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none z-20"
+          style={{ background: glareBg, opacity: hovered ? 1 : 0, transition: 'opacity 0.3s' }}
+        />
+
+        {/* ── Gradient top bar ── */}
+        <div
+          className="relative z-10 h-[3px] flex-shrink-0"
+          style={{ background: `linear-gradient(90deg, ${service.color}, ${service.color}44)` }}
+        />
+
+        {/* ── Large faded number ── */}
+        <div
+          className="absolute bottom-1 right-3 font-black leading-none select-none pointer-events-none z-10"
+          style={{
+            fontSize: 'clamp(5rem, 10vw, 8rem)',
+            color: isFeatured ? 'rgba(255,255,255,0.06)' : `${service.color}0D`,
+          }}
+        >
+          {service.number}
+        </div>
+
+        {/* ── Content (lifted in Z for depth) ── */}
+        <div
+          className={`relative z-10 flex flex-col gap-5 p-6 flex-1 ${isFeatured ? 'lg:p-8' : ''}`}
+          style={{ transform: 'translateZ(24px)' }}
+        >
+          {/* Icon */}
+          <motion.div
+            animate={hovered ? { scale: 1.12, rotate: -6 } : { scale: 1, rotate: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+            className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
+            style={{
+              background: isFeatured ? 'rgba(255,255,255,0.12)' : `${service.color}14`,
+              color: isFeatured ? '#fff' : service.color,
+              border: `1.5px solid ${isFeatured ? 'rgba(255,255,255,0.2)' : service.color + '28'}`,
+              boxShadow: hovered ? `0 0 20px ${service.color}60` : 'none',
+              transition: 'box-shadow 0.3s ease',
+            }}
+          >
+            {service.icon}
+          </motion.div>
+
+          {/* Title + description */}
+          <div>
+            <h3
+              className={`font-black leading-tight mb-2 ${isFeatured ? 'text-2xl' : 'text-xl'}`}
+              style={{ color: isFeatured ? '#fff' : 'var(--text)' }}
+            >
+              {service.title}
+            </h3>
+            <p
+              className="text-sm leading-relaxed"
+              style={{ color: isFeatured ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)' }}
+            >
+              {service.description}
+            </p>
+          </div>
+
+          {/* Stat pill */}
+          <div
+            className="flex items-center gap-2 px-3 py-2 rounded-xl w-fit"
+            style={{
+              background: isFeatured ? 'rgba(255,255,255,0.10)' : `${service.color}0F`,
+              border: `1px solid ${isFeatured ? 'rgba(255,255,255,0.18)' : service.color + '22'}`,
+            }}
+          >
+            <span
+              className="w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0"
+              style={{ background: isFeatured ? '#fff' : service.color }}
+            />
+            <span className="text-xs font-bold" style={{ color: isFeatured ? '#fff' : service.color }}>
+              {service.stat}
+            </span>
+          </div>
+
+          {/* Tags */}
+          <div className="flex flex-wrap gap-1.5 mt-auto">
+            {service.tags.map((tag) => (
+              <span
+                key={tag}
+                className="text-[11px] font-medium px-2.5 py-1 rounded-lg"
+                style={{
+                  background: isFeatured ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.03)',
+                  color: isFeatured ? 'rgba(255,255,255,0.65)' : 'var(--text-muted)',
+                  border: `1px solid ${isFeatured ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.06)'}`,
+                }}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <motion.button
+            onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+            animate={hovered ? { x: 4 } : { x: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            className="flex items-center gap-1.5 text-sm font-semibold mt-1 w-fit"
             style={{ color: isFeatured ? '#fff' : service.color }}
           >
-            {service.stat}
-          </span>
+            <span>Get started</span>
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+              <path d="M3 7.5h9M8.5 4l3.5 3.5L8.5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </motion.button>
         </div>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-1.5 mt-auto">
-          {service.tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-[11px] font-medium px-2.5 py-1 rounded-lg"
-              style={{
-                background: isFeatured ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.03)',
-                color: isFeatured ? 'rgba(255,255,255,0.65)' : 'var(--text-muted)',
-                border: `1px solid ${isFeatured ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.06)'}`,
-              }}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* CTA */}
-        <button
-          onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-          className="flex items-center gap-1.5 text-sm font-semibold mt-1 w-fit group/cta"
-          style={{ color: isFeatured ? '#fff' : service.color }}
-        >
-          <span>Get started</span>
-          <svg
-            className="transition-transform duration-200 group-hover/cta:translate-x-1"
-            width="15" height="15" viewBox="0 0 15 15" fill="none"
-          >
-            <path d="M3 7.5h9M8.5 4l3.5 3.5L8.5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-      </div>
+      </motion.div>
     </motion.div>
   )
 }

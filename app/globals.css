@@ -290,3 +290,35 @@ body {
   pointer-events: none;
 }
 .group:hover .card-shine { opacity: 1; animation: shimmer 0.7s ease forwards; }
+
+/* ── Service card border beam ── */
+@property --beam-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes beam-spin {
+  to { --beam-angle: 360deg; }
+}
+
+.card-beam {
+  animation: beam-spin linear infinite;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ── Floating dot particles ── */
+@keyframes float-dot {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.4; }
+  33%       { transform: translateY(-14px) translateX(6px); opacity: 0.8; }
+  66%       { transform: translateY(-6px) translateX(-8px); opacity: 0.5; }
+}
+.float-dot { animation: float-dot ease-in-out infinite; }
