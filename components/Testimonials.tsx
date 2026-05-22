@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
+import ScrambleText from '@/components/ScrambleText'
 
 const TESTIMONIALS = [
   {
@@ -81,14 +82,10 @@ export default function Testimonials() {
           >
             <span className="section-label mx-auto">Client Stories</span>
           </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl md:text-5xl font-black text-gray-900 mt-3"
-          >
-            Trusted by <span className="gradient-text">Leaders</span>
-          </motion.h2>
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3">
+            <ScrambleText delay={300}>Trusted by </ScrambleText>
+            <ScrambleText className="gradient-text" delay={300}>Leaders</ScrambleText>
+          </h2>
         </div>
 
         <motion.div

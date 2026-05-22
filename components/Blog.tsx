@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
+import ScrambleText from '@/components/ScrambleText'
 
 const posts = [
   {
@@ -238,14 +239,10 @@ export default function Blog() {
           >
             <span className="section-label mx-auto">Insights & Thinking</span>
           </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black mt-3" style={{ color: 'var(--text)' } as React.CSSProperties}
-          >
-            From Our <span className="gradient-text">Blog</span>
-          </motion.h2>
+          <h2 className="text-4xl md:text-6xl font-black mt-3" style={{ color: 'var(--text)' }}>
+            <ScrambleText delay={300}>From Our </ScrambleText>
+            <ScrambleText className="gradient-text" delay={300}>Blog</ScrambleText>
+          </h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}

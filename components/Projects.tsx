@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import ScrambleText from '@/components/ScrambleText'
 
 const projects = [
   {
@@ -183,14 +184,10 @@ export default function Projects() {
           >
             <span className="section-label mx-auto">Our Work</span>
           </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black text-gray-900 mt-3"
-          >
-            Projects <span className="gradient-text">Achieved</span>
-          </motion.h2>
+          <h2 className="text-4xl md:text-6xl font-black text-gray-900 mt-3">
+            <ScrambleText delay={300}>Projects </ScrambleText>
+            <ScrambleText className="gradient-text" delay={300}>Achieved</ScrambleText>
+          </h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}

@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
+import ScrambleText from '@/components/ScrambleText'
 
 const values = [
   {
@@ -54,14 +55,10 @@ export default function About() {
           >
             <span className="section-label mx-auto">Our Story</span>
           </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black mt-3" style={{ color: 'var(--text)' } as React.CSSProperties}
-          >
-            Who We <span className="gradient-text">Are</span>
-          </motion.h2>
+          <h2 className="text-4xl md:text-6xl font-black mt-3" style={{ color: 'var(--text)' }}>
+            <ScrambleText delay={300}>Who We </ScrambleText>
+            <ScrambleText className="gradient-text" delay={300}>Are</ScrambleText>
+          </h2>
         </div>
 
         {/* Split layout */}

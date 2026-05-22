@@ -2,6 +2,7 @@
 
 import { useRef, useState, FormEvent } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
+import ScrambleText from '@/components/ScrambleText'
 
 const contactInfo = [
   {
@@ -81,15 +82,10 @@ export default function Contact() {
           >
             <span className="section-label mx-auto">Let&apos;s Talk</span>
           </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black mt-3" style={{ color: 'var(--text)' } as React.CSSProperties}
-          >
-            Start Your{' '}
-            <span className="gradient-text">Journey</span>
-          </motion.h2>
+          <h2 className="text-4xl md:text-6xl font-black mt-3" style={{ color: 'var(--text)' }}>
+            <ScrambleText delay={300}>Start Your </ScrambleText>
+            <ScrambleText className="gradient-text" delay={300}>Journey</ScrambleText>
+          </h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
