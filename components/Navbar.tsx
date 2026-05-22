@@ -16,12 +16,22 @@ const navLinks = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
-
   useEffect(() => {
+    let last = 0
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40)
+      const y = window.scrollY
+      const heroHeight = window.innerHeight
+      setScrolled(y > 40)
+      // Only hide after user has scrolled past the hero section
+      if (y > heroHeight) {
+        setHidden(y > last)
+      } else {
+        setHidden(false)
+      }
+      last = y
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
@@ -54,8 +64,8 @@ export default function Navbar() {
     <>
       <motion.header
         initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+        animate={{ y: hidden ? -100 : 0, opacity: hidden ? 0 : 1 }}
+        transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled ? 'glass py-3 shadow-2xl' : 'py-5 bg-transparent'
         }`}
