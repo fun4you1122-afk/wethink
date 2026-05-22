@@ -6,6 +6,7 @@ import Stats from '@/components/Stats'
 import TechMarquee from '@/components/TechMarquee'
 import BeforeAfter from '@/components/BeforeAfter'
 import IdeaToImpact from '@/components/IdeaToImpact'
+import OurStory from '@/components/OurStory'
 import Projects from '@/components/Projects'
 import Testimonials from '@/components/Testimonials'
 import CinematicScene from '@/components/CinematicScene'
@@ -25,6 +26,7 @@ export default function Home() {
       <Services />
       <BeforeAfter />
       <IdeaToImpact />
+      <OurStory />
       <About />
       <CinematicScene />
       <Projects />
