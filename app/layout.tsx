@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import SmoothScroll from '@/components/SmoothScroll'
-import CustomCursor from '@/components/CustomCursor'
 import WhatsAppButton from '@/components/WhatsAppButton'
 import ScrollProgress from '@/components/ScrollProgress'
 import AiChat from '@/components/AiChat'
@@ -42,7 +41,6 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body>
         <ScrollProgress />
-        <CustomCursor />
         <WhatsAppButton />
         <AiChat />
         <SmoothScroll>{children}</SmoothScroll>
