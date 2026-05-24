@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Spotlight } from '@/components/ui/spotlight'
 import RadialOrbitalTimeline from '@/components/ui/radial-orbital-timeline'
+import HeroRain from '@/components/HeroRain'
 import {
   Globe,
   BrainCircuit,
@@ -133,6 +134,9 @@ export default function Hero() {
 
   return (
     <section id="home" className="relative min-h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>
+
+      {/* Raining characters — behind everything */}
+      <HeroRain />
 
       {/* Floating orbs */}
       <div className="orb w-[600px] h-[600px] bg-violet-200 opacity-40 top-[-200px] left-[-200px] pointer-events-none animate-float" />

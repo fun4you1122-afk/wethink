@@ -291,7 +291,9 @@ body {
 }
 .group:hover .card-shine { opacity: 1; animation: shimmer 0.7s ease forwards; }
 
-/* ── Service card border beam ── */
+/* Scramble dud characters */
+.dud { color: #7C3AED; opacity: 0.75; }
+
 @property --beam-angle {
   syntax: '<angle>';
   inherits: false;
