@@ -1,6 +1,5 @@
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
-import HeroIntro from '@/components/HeroIntro'
 import OrbitalServices from '@/components/OrbitalServices'
 import Services from '@/components/Services'
 import About from '@/components/About'
@@ -24,7 +23,6 @@ export default function Home() {
     <main>
       <Navbar />
       <Hero />
-      <HeroIntro />
       <OrbitalServices />
       <Stats />
       <TechMarquee />
