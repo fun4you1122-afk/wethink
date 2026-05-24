@@ -1,74 +1,60 @@
 "use client"
 
-import { useEffect, useId, useState } from "react"
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { default: Particles, initParticlesEngine } = require("@tsparticles/react")
-import { loadSlim } from "@tsparticles/slim"
-import type { ISourceOptions } from "@tsparticles/engine"
+// Pure CSS sparkles — no external package, no workspace: issues
+import { useEffect, useRef } from "react"
 
 interface SparklesProps {
   className?: string
-  size?: number
-  minSize?: number | null
-  density?: number
-  speed?: number
-  minSpeed?: number | null
-  opacity?: number
-  opacitySpeed?: number
-  minOpacity?: number | null
   color?: string
-  background?: string
-  direction?: string
-  options?: Partial<ISourceOptions>
+  density?: number
 }
 
-export function Sparkles({
-  className,
-  size = 1,
-  minSize = null,
-  density = 800,
-  speed = 1,
-  minSpeed = null,
-  opacity = 1,
-  opacitySpeed = 3,
-  minOpacity = null,
-  color = "#FFFFFF",
-  background = "transparent",
-  options = {},
-}: SparklesProps) {
-  const [isReady, setIsReady] = useState(false)
+export function Sparkles({ className, color = "#9333EA", density = 40 }: SparklesProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    initParticlesEngine(async (engine: any) => {
-      await loadSlim(engine)
-    }).then(() => setIsReady(true))
-  }, [])
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
 
-  const id = useId()
+    let raf = 0
+    const resize = () => {
+      canvas.width = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+    }
+    resize()
+    window.addEventListener("resize", resize)
 
-  const defaultOptions: ISourceOptions = {
-    background: { color: { value: background } },
-    fullScreen: { enable: false, zIndex: 1 },
-    fpsLimit: 120,
-    particles: {
-      color: { value: color },
-      move: {
-        enable: true,
-        direction: "none",
-        speed: { min: minSpeed ?? speed / 10, max: speed },
-        straight: false,
-      },
-      number: { value: density },
-      opacity: {
-        value: { min: minOpacity ?? opacity / 10, max: opacity },
-        animation: { enable: true, sync: false, speed: opacitySpeed },
-      },
-      size: { value: { min: minSize ?? size / 2.5, max: size } },
-    },
-    detectRetina: true,
-  }
+    const particles = Array.from({ length: density }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: 0.5 + Math.random() * 1.5,
+      o: Math.random(),
+      do: (Math.random() - 0.5) * 0.02,
+    }))
 
-  if (!isReady) return null
-  return <Particles id={id} options={{ ...defaultOptions, ...options }} className={className} />
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      for (const p of particles) {
+        p.o += p.do
+        if (p.o <= 0 || p.o >= 1) p.do *= -1
+        ctx.globalAlpha = p.o
+        ctx.fillStyle = color
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+        ctx.fill()
+      }
+      raf = requestAnimationFrame(draw)
+    }
+    draw()
+
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener("resize", raf as unknown as EventListenerOrEventListenerObject)
+      window.removeEventListener("resize", resize)
+    }
+  }, [color, density])
+
+  return <canvas ref={canvasRef} className={className} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
 }

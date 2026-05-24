@@ -1,148 +1,223 @@
-'use client'
+"use client"
 
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Spotlight } from '@/components/ui/spotlight'
-import HeroRain from '@/components/HeroRain'
+import type React from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 
-const WORDS = ['IT Consulting', 'Cloud Strategy', 'Cybersecurity', 'Business Growth']
+interface Character {
+  char: string
+  x: number
+  y: number
+  speed: number
+  size: number
+}
 
-export default function Hero() {
-  const [wordIndex, setWordIndex] = useState(0)
+class TextScramble {
+  el: HTMLElement
+  chars: string
+  queue: Array<{ from: string; to: string; start: number; end: number; char?: string }>
+  frame: number
+  frameRequest: number
+  resolve: (value: void | PromiseLike<void>) => void
+
+  constructor(el: HTMLElement) {
+    this.el = el
+    this.chars = "!<>-_\\/[]{}—=+*^?#"
+    this.queue = []
+    this.frame = 0
+    this.frameRequest = 0
+    this.resolve = () => {}
+    this.update = this.update.bind(this)
+  }
+
+  setText(newText: string) {
+    const oldText = this.el.innerText
+    const length = Math.max(oldText.length, newText.length)
+    const promise = new Promise<void>((resolve) => (this.resolve = resolve))
+    this.queue = []
+    for (let i = 0; i < length; i++) {
+      const from = oldText[i] || ""
+      const to = newText[i] || ""
+      const start = Math.floor(Math.random() * 40)
+      const end = start + Math.floor(Math.random() * 40)
+      this.queue.push({ from, to, start, end })
+    }
+    cancelAnimationFrame(this.frameRequest)
+    this.frame = 0
+    this.update()
+    return promise
+  }
+
+  update() {
+    let output = ""
+    let complete = 0
+    for (let i = 0, n = this.queue.length; i < n; i++) {
+      const { from, to, start, end } = this.queue[i]
+      let { char } = this.queue[i]
+      if (this.frame >= end) {
+        complete++
+        output += to
+      } else if (this.frame >= start) {
+        if (!char || Math.random() < 0.28) {
+          char = this.chars[Math.floor(Math.random() * this.chars.length)]
+          this.queue[i].char = char
+        }
+        output += `<span class="dud">${char}</span>`
+      } else {
+        output += from
+      }
+    }
+    this.el.innerHTML = output
+    if (complete === this.queue.length) {
+      this.resolve()
+    } else {
+      this.frameRequest = requestAnimationFrame(this.update)
+      this.frame++
+    }
+  }
+}
+
+const ScrambledTitle: React.FC = () => {
+  const elementRef = useRef<HTMLHeadingElement>(null)
+  const scramblerRef = useRef<TextScramble | null>(null)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setWordIndex((i) => (i + 1) % WORDS.length)
-    }, 2800)
-    return () => clearInterval(interval)
+    if (elementRef.current && !scramblerRef.current) {
+      scramblerRef.current = new TextScramble(elementRef.current)
+      setMounted(true)
+    }
   }, [])
 
-  const scrollTo = (href: string) => {
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
-  }
-
-  const containerVariants = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.12, delayChildren: 0.3 } },
-  }
-  const itemVariants = {
-    hidden: { opacity: 0, y: 40 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } },
-  }
+  useEffect(() => {
+    if (mounted && scramblerRef.current) {
+      const phrases = [
+        "Hello, wethink.",
+        "It's RAINING",
+        "with letters",
+        "and alphabets",
+        "don't FORGET to bring",
+        "your umbrella today",
+      ]
+      let counter = 0
+      const next = () => {
+        if (scramblerRef.current) {
+          scramblerRef.current.setText(phrases[counter]).then(() => {
+            setTimeout(next, 2000)
+          })
+          counter = (counter + 1) % phrases.length
+        }
+      }
+      next()
+    }
+  }, [mounted])
 
   return (
-    <section id="home" className="relative min-h-screen overflow-hidden flex items-center justify-center" style={{ background: 'var(--bg)' }}>
+    <h1
+      ref={elementRef}
+      className="text-white text-4xl sm:text-6xl font-bold tracking-wider text-center"
+      style={{ fontFamily: "monospace" }}
+    >
+      RAINING LETTERS
+    </h1>
+  )
+}
 
-      {/* Raining characters — behind everything */}
-      <HeroRain />
+export default function Hero() {
+  const [characters, setCharacters] = useState<Character[]>([])
+  const [activeIndices, setActiveIndices] = useState<Set<number>>(new Set())
+  const isMobileRef = useRef(false)
+  const frameRef = useRef(0)
+  const rafRef = useRef(0)
 
-      {/* Floating orbs */}
-      <div className="orb w-[600px] h-[600px] bg-violet-200 opacity-40 top-[-200px] left-[-200px] pointer-events-none animate-float" />
-      <div className="orb w-[400px] h-[400px] bg-purple-200 opacity-30 bottom-[-100px] right-[40%] pointer-events-none" style={{ animationDelay: '2s' }} />
+  const createCharacters = useCallback(() => {
+    const allChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?"
+    const count = isMobileRef.current ? 80 : 300
+    const list: Character[] = []
+    for (let i = 0; i < count; i++) {
+      list.push({
+        char: allChars[Math.floor(Math.random() * allChars.length)],
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        speed: isMobileRef.current ? 0.06 + Math.random() * 0.1 : 0.1 + Math.random() * 0.3,
+        size: 1.2 + Math.random() * 0.8,
+      })
+    }
+    return list
+  }, [])
 
-      {/* Spotlight */}
-      <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="purple" />
+  useEffect(() => {
+    isMobileRef.current = window.innerWidth < 768
+    setCharacters(createCharacters())
+  }, [createCharacters])
 
-      {/* Grid pattern */}
-      <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none z-[1]" />
+  // Flicker
+  useEffect(() => {
+    if (characters.length === 0) return
+    const interval = isMobileRef.current ? 120 : 50
+    const n = isMobileRef.current ? 3 : 6
+    const id = setInterval(() => {
+      const next = new Set<number>()
+      for (let i = 0; i < n; i++) next.add(Math.floor(Math.random() * characters.length))
+      setActiveIndices(next)
+    }, interval)
+    return () => clearInterval(id)
+  }, [characters.length])
 
-      {/* Full-width centred text content */}
-      <div className="relative z-10 w-full px-6 pt-28 pb-28 md:px-16 lg:px-24 flex flex-col items-center text-center">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="w-full"
-        >
-          <motion.div variants={itemVariants}>
-            <span className="section-label" style={{ justifyContent: 'center' }}>Abu Dhabi, UAE — Est. 2019</span>
-          </motion.div>
+  // Fall — skip every other frame on mobile
+  useEffect(() => {
+    if (characters.length === 0) return
+    const allChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?"
+    const tick = () => {
+      frameRef.current++
+      if (!isMobileRef.current || frameRef.current % 2 === 0) {
+        setCharacters((prev) =>
+          prev.map((c) => {
+            const nextY = c.y + c.speed
+            if (nextY >= 102) {
+              return { ...c, y: -4, x: Math.random() * 100, char: allChars[Math.floor(Math.random() * allChars.length)] }
+            }
+            return { ...c, y: nextY }
+          })
+        )
+      }
+      rafRef.current = requestAnimationFrame(tick)
+    }
+    rafRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [characters.length])
 
-          <motion.h1
-            variants={itemVariants}
-            className="mt-6 text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black leading-[0.95] tracking-tight"
-            style={{ color: 'var(--text)' }}
-          >
-            We Engineer
-            <br />
-            <span className="gradient-text">Your Future.</span>
-          </motion.h1>
-
-          {/* Rotating word pill */}
-          <div className="mt-6 flex justify-center">
-            <div className="relative inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-violet-200 bg-white/70 backdrop-blur-sm shadow-sm">
-              <span className="text-sm font-medium text-violet-500 uppercase tracking-widest">Now</span>
-              <div className="w-px h-4 bg-violet-200" />
-              <div className="relative" style={{ minWidth: '160px', height: '1.4em' }}>
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={wordIndex}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-                    className="absolute inset-0 flex items-center justify-start text-sm font-bold gradient-text-purple whitespace-nowrap"
-                  >
-                    {WORDS[wordIndex]}
-                  </motion.span>
-                </AnimatePresence>
-              </div>
-            </div>
-          </div>
-
-          <motion.p
-            variants={itemVariants}
-            className="mt-8 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
-            style={{ color: 'var(--text-muted)' }}
-          >
-            WeThink delivers end-to-end IT consulting, cloud strategy, cybersecurity,
-            and custom software — helping UAE enterprises compete and thrive in the digital age.
-          </motion.p>
-
-          <motion.div variants={itemVariants} className="mt-10 flex flex-wrap justify-center gap-4">
-            <button onClick={() => scrollTo('#contact')} className="btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '1rem' }}>
-              Start a Project
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M3.75 9h10.5M10.5 5.25L14.25 9l-3.75 3.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            <button onClick={() => scrollTo('#services')} className="btn-outline" style={{ padding: '1rem 2.5rem', fontSize: '1rem' }}>
-              Our Services
-            </button>
-          </motion.div>
-
-          {/* Trust badges */}
-          <motion.div variants={itemVariants} className="mt-10 flex flex-wrap justify-center items-center gap-3">
-            {['ISO 27001 Ready', 'AWS Partner', 'Microsoft Azure', 'UAE Gov Compliant'].map((badge) => (
-              <span
-                key={badge}
-                className="px-4 py-1.5 rounded-full text-xs font-semibold border border-violet-200/70 bg-white/60 backdrop-blur-sm"
-                style={{ color: 'var(--text-muted)' }}
-              >
-                {badge}
-              </span>
-            ))}
-          </motion.div>
-        </motion.div>
+  return (
+    <section id="home" className="relative w-full h-screen bg-black overflow-hidden">
+      {/* Scrambled title */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 px-4">
+        <ScrambledTitle />
       </div>
 
-      {/* Scroll indicator — full-width row so centering is always correct */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.8, duration: 0.6 }}
-        className="absolute bottom-8 inset-x-0 flex flex-col items-center gap-2 z-10"
-      >
-        <span className="text-xs text-neutral-500 uppercase tracking-widest">Scroll</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-5 h-8 border border-violet-400/40 rounded-full flex items-start justify-center pt-1.5"
-        >
-          <div className="w-1 h-2 rounded-full bg-violet-400" />
-        </motion.div>
-      </motion.div>
-
+      {/* Raining characters */}
+      {characters.map((c, i) => {
+        const isActive = activeIndices.has(i)
+        return (
+          <span
+            key={i}
+            className="absolute select-none font-mono"
+            style={{
+              left: `${c.x}%`,
+              top: `${c.y}%`,
+              fontSize: `${c.size}rem`,
+              fontWeight: isActive ? 700 : 300,
+              color: isActive ? "#00ff00" : "rgba(0,255,0,0.08)",
+              textShadow: isActive
+                ? "0 0 8px rgba(255,255,255,0.8), 0 0 12px rgba(255,255,255,0.4)"
+                : "none",
+              transform: `translate(-50%,-50%) scale(${isActive ? 1.25 : 1})`,
+              transition: "color 0.1s, text-shadow 0.1s, transform 0.1s",
+              willChange: "top",
+            }}
+          >
+            {c.char}
+          </span>
+        )
+      })}
     </section>
   )
 }

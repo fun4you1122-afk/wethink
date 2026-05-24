@@ -119,8 +119,7 @@ export default function PricingSection() {
     <section className="relative min-h-screen overflow-hidden bg-[#0D0616] py-24">
       {/* Sparkle layer */}
       <Sparkles
-        density={600}
-        speed={0.6}
+        density={60}
         color="#9333EA"
         className="absolute inset-0 h-full w-full [mask-image:radial-gradient(60%_60%,white,transparent_85%)]"
       />
