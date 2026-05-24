@@ -67,7 +67,7 @@ export default function Navbar() {
         animate={{ y: hidden ? -100 : 0, opacity: hidden ? 0 : 1 }}
         transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? 'glass py-3 shadow-2xl' : 'py-5 bg-white/95 backdrop-blur-md border-b border-violet-100/60 shadow-sm'
+          scrolled ? 'glass py-3 shadow-2xl' : 'py-5 bg-white border-b border-violet-100/60 shadow-sm'
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
