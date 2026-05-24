@@ -23,16 +23,22 @@ export default function Navbar() {
     let last = 0
     const handleScroll = () => {
       const y = window.scrollY
-      const heroHeight = window.innerHeight
-      setScrolled(y > 40)
-      // Only hide after user has scrolled past the hero section
-      if (y > heroHeight) {
-        setHidden(y > last)
+      // Hero is 300vh tall; its scroll range ends at 2 × viewport height
+      const heroScrollEnd = window.innerHeight * 2
+
+      if (y < heroScrollEnd) {
+        // Still inside the hero — keep navbar fully hidden
+        setHidden(true)
+        setScrolled(false)
       } else {
-        setHidden(false)
+        // Past the hero — normal hide-on-scroll-down behaviour
+        setScrolled(true)
+        setHidden(y > last)
       }
       last = y
     }
+    // Start hidden until scroll check runs
+    setHidden(true)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
