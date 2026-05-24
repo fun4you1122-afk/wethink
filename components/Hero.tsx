@@ -46,78 +46,87 @@ export default function Hero() {
       {/* Grid pattern */}
       <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none z-[1]" />
 
-      {/* Centred text content */}
-      <div className="relative z-10 w-full px-8 pt-28 pb-24 md:px-14 flex flex-col items-center text-center">
+      {/* Full-width centred text content */}
+      <div className="relative z-10 w-full px-6 pt-28 pb-28 md:px-16 lg:px-24 flex flex-col items-center text-center">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="max-w-3xl"
+          className="w-full"
         >
           <motion.div variants={itemVariants}>
-            <span className="section-label">Abu Dhabi, UAE — Est. 2019</span>
+            <span className="section-label" style={{ justifyContent: 'center' }}>Abu Dhabi, UAE — Est. 2019</span>
           </motion.div>
 
           <motion.h1
             variants={itemVariants}
-            className="mt-6 text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
+            className="mt-6 text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black leading-[0.95] tracking-tight"
             style={{ color: 'var(--text)' }}
           >
             We Engineer
             <br />
-            Your
+            <span className="gradient-text">Your Future.</span>
           </motion.h1>
 
-          {/* Rotating word */}
-          <div className="relative mt-1 flex justify-center" style={{ height: '1.25em' }}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={wordIndex}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -24 }}
-                transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="absolute top-0 text-4xl md:text-5xl lg:text-6xl font-bold gradient-text whitespace-nowrap"
-              >
-                {WORDS[wordIndex]}
-              </motion.div>
-            </AnimatePresence>
+          {/* Rotating word pill */}
+          <div className="mt-6 flex justify-center">
+            <div className="relative inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-violet-200 bg-white/70 backdrop-blur-sm shadow-sm">
+              <span className="text-sm font-medium text-violet-500 uppercase tracking-widest">Now</span>
+              <div className="w-px h-4 bg-violet-200" />
+              <div className="relative" style={{ minWidth: '160px', height: '1.4em' }}>
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={wordIndex}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className="absolute inset-0 flex items-center justify-start text-sm font-bold gradient-text-purple whitespace-nowrap"
+                  >
+                    {WORDS[wordIndex]}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+            </div>
           </div>
 
           <motion.p
             variants={itemVariants}
-            className="mt-8 max-w-xl mx-auto leading-relaxed"
+            className="mt-8 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
             style={{ color: 'var(--text-muted)' }}
           >
             WeThink delivers end-to-end IT consulting, cloud strategy, cybersecurity,
             and custom software — helping UAE enterprises compete and thrive in the digital age.
           </motion.p>
 
-          <motion.div variants={itemVariants} className="mt-8 flex flex-wrap justify-center gap-4">
-            <button onClick={() => scrollTo('#contact')} className="btn-primary">
+          <motion.div variants={itemVariants} className="mt-10 flex flex-wrap justify-center gap-4">
+            <button onClick={() => scrollTo('#contact')} className="btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '1rem' }}>
               Start a Project
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <path d="M3.75 9h10.5M10.5 5.25L14.25 9l-3.75 3.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-            <button onClick={() => scrollTo('#services')} className="btn-outline">
+            <button onClick={() => scrollTo('#services')} className="btn-outline" style={{ padding: '1rem 2.5rem', fontSize: '1rem' }}>
               Our Services
             </button>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="mt-10 flex flex-wrap justify-center items-center gap-6">
+          {/* Stats bar */}
+          <motion.div
+            variants={itemVariants}
+            className="mt-16 inline-flex flex-wrap justify-center items-center gap-0 divide-x divide-violet-200/60 border border-violet-100 rounded-2xl overflow-hidden bg-white/60 backdrop-blur-sm shadow-sm"
+          >
             {[
-              { stat: '5+', label: 'Years' },
-              { stat: '5000+', label: 'Projects' },
-              { stat: '1000+', label: 'Clients' },
+              { stat: '5+', label: 'Years Experience' },
+              { stat: '5,000+', label: 'Projects Delivered' },
+              { stat: '1,000+', label: 'Happy Clients' },
             ].map((item) => (
-              <div key={item.label} className="flex flex-col items-center">
-                <span className="text-2xl font-black gradient-text-purple">{item.stat}</span>
-                <span className="text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>{item.label}</span>
+              <div key={item.label} className="flex flex-col items-center px-8 py-4">
+                <span className="text-2xl md:text-3xl font-black gradient-text-purple">{item.stat}</span>
+                <span className="mt-0.5 text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--text-muted)' }}>{item.label}</span>
               </div>
             ))}
-            <div className="w-px h-10 bg-violet-300/40 hidden sm:block" />
-            <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-muted)' }}>
+            <div className="flex items-center gap-2 px-8 py-4 text-sm" style={{ color: 'var(--text-muted)' }}>
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               Pixel, Al Reem Island
             </div>
