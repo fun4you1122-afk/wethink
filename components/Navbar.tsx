@@ -23,22 +23,16 @@ export default function Navbar() {
     let last = 0
     const handleScroll = () => {
       const y = window.scrollY
-      // Hero is 300vh tall; its scroll range ends at 2 × viewport height
-      const heroScrollEnd = window.innerHeight * 2
-
-      if (y < heroScrollEnd) {
-        // Still inside the hero — keep navbar fully hidden
-        setHidden(true)
-        setScrolled(false)
-      } else {
-        // Past the hero — normal hide-on-scroll-down behaviour
-        setScrolled(true)
+      const heroHeight = window.innerHeight
+      setScrolled(y > 40)
+      // Only hide after user has scrolled past the hero section
+      if (y > heroHeight) {
         setHidden(y > last)
+      } else {
+        setHidden(false)
       }
       last = y
     }
-    // Start hidden until scroll check runs
-    setHidden(true)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -73,7 +67,7 @@ export default function Navbar() {
         animate={{ y: hidden ? -100 : 0, opacity: hidden ? 0 : 1 }}
         transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? 'glass py-3 shadow-2xl' : 'py-5 bg-white border-b border-violet-100/60 shadow-sm'
+          scrolled ? 'glass py-3 shadow-2xl' : 'py-5 bg-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
