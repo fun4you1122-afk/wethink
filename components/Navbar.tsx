@@ -71,8 +71,12 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          {/* Logo */}
-          <button onClick={() => scrollTo('#home')} className="flex-shrink-0">
+          {/* Logo — white pill backdrop so it reads on any background */}
+          <button
+            onClick={() => scrollTo('#home')}
+            className="flex-shrink-0 rounded-xl px-2 py-1"
+            style={{ background: scrolled ? 'transparent' : 'rgba(255,255,255,0.08)', backdropFilter: scrolled ? 'none' : 'blur(8px)' }}
+          >
             <Logo size="sm" />
           </button>
 
@@ -85,7 +89,7 @@ export default function Navbar() {
                   key={link.href}
                   onClick={() => scrollTo(link.href)}
                   className="relative px-4 py-2 text-sm font-medium transition-colors duration-200"
-                  style={{ color: isActive ? '#7C3AED' : 'var(--text-muted)' }}
+                  style={{ color: isActive ? '#A78BFA' : scrolled ? 'var(--text-muted)' : 'rgba(255,255,255,0.75)' }}
                 >
                   {link.label}
                   {isActive && (
@@ -120,15 +124,15 @@ export default function Navbar() {
           >
             <motion.span
               animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 8 : 0 }}
-              className="block w-6 h-0.5 bg-gray-700 origin-center"
+              className={`block w-6 h-0.5 origin-center transition-colors duration-300 ${scrolled ? 'bg-gray-700' : 'bg-white'}`}
             />
             <motion.span
               animate={{ opacity: menuOpen ? 0 : 1 }}
-              className="block w-6 h-0.5 bg-gray-700"
+              className={`block w-6 h-0.5 transition-colors duration-300 ${scrolled ? 'bg-gray-700' : 'bg-white'}`}
             />
             <motion.span
               animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -8 : 0 }}
-              className="block w-6 h-0.5 bg-gray-700 origin-center"
+              className={`block w-6 h-0.5 origin-center transition-colors duration-300 ${scrolled ? 'bg-gray-700' : 'bg-white'}`}
             />
           </button>
         </div>
