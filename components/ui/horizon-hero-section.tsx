@@ -317,25 +317,26 @@ export default function HorizonHero() {
   // ── Scroll handler ──────────────────────────────────────────────────────────
   useEffect(() => {
     const onScroll = () => {
-      const scrollY  = window.scrollY
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-      const prog = Math.min(scrollY / maxScroll, 1)
+      const scrollY = window.scrollY
+      // Hero scroll range = TOTAL_SECTIONS × 100vh
+      const heroScrollRange = TOTAL_SECTIONS * window.innerHeight
+      const prog = Math.min(Math.max(scrollY / heroScrollRange, 0), 1)
       setProgress(prog)
 
       const sec = Math.min(Math.floor(prog * (TOTAL_SECTIONS + 1)), TOTAL_SECTIONS)
       setCurrentSection(sec)
 
       const r = three.current
-      const totalProg  = prog * TOTAL_SECTIONS
-      const secProg    = totalProg % 1
-      const camIdx     = Math.floor(totalProg)
+      const totalProg = prog * TOTAL_SECTIONS
+      const secProg   = totalProg % 1
+      const camIdx    = Math.floor(totalProg)
 
       const CAM = [
         { x: 0, y: 30, z:  300 },
         { x: 0, y: 40, z:  -50 },
         { x: 0, y: 50, z: -700 },
       ]
-      const cur  = CAM[camIdx]  ?? CAM[0]
+      const cur  = CAM[camIdx]   ?? CAM[0]
       const next = CAM[camIdx+1] ?? cur
 
       r.targetX = cur.x + (next.x - cur.x) * secProg
@@ -343,13 +344,9 @@ export default function HorizonHero() {
       r.targetZ = cur.z + (next.z - cur.z) * secProg
 
       r.mountains.forEach((m, i) => {
-        if (prog > 0.7) {
-          m.position.z = 600000
-        } else {
-          m.position.z = r.locations[i]
-        }
+        m.position.z = prog > 0.7 ? 600000 : r.locations[i]
       })
-      if (r.nebula && r.mountains[3]) {
+      if (r.nebula) {
         r.nebula.position.z = prog > 0.7 ? -1050 : r.locations[3] - 100
       }
     }
@@ -362,95 +359,79 @@ export default function HorizonHero() {
   const section = SECTIONS[Math.min(currentSection, SECTIONS.length - 1)]
 
   return (
-    <div
-      ref={containerRef}
-      style={{ position: "relative", height: `${(TOTAL_SECTIONS + 1) * 100}vh` }}
-    >
-      {/* Three.js canvas — fixed full-screen */}
-      <canvas
-        ref={canvasRef}
-        style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100vh", zIndex: 0 }}
-      />
+    /* Outer: sets total scroll height */
+    <div ref={containerRef} style={{ position: "relative", height: `${(TOTAL_SECTIONS + 1) * 100}vh` }}>
 
-      {/* Overlay — fixed, centred */}
-      <div style={{
-        position: "fixed", top: 0, left: 0, width: "100%", height: "100vh",
-        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-        zIndex: 10, pointerEvents: "none",
-      }}>
-        <h1
-          ref={titleRef}
+      {/* Sticky shell — stays at top while scrolling through the hero, then scrolls away naturally */}
+      <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden" }}>
+
+        {/* Three.js canvas */}
+        <canvas
+          ref={canvasRef}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+        />
+
+        {/* Centred title + subtitle */}
+        <div style={{
+          position: "absolute", inset: 0,
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          pointerEvents: "none",
+        }}>
+          <h1
+            ref={titleRef}
+            style={{
+              visibility: "hidden",
+              fontSize: "clamp(2.5rem, 10vw, 9rem)",
+              fontWeight: 900, color: "white",
+              letterSpacing: "0.2em", textAlign: "center",
+              lineHeight: 1, margin: 0,
+            }}
+          >
+            {section.title.split("").map((char, i) => (
+              <span key={`${currentSection}-${i}`} className="title-char" style={{ display: "inline-block" }}>
+                {char}
+              </span>
+            ))}
+          </h1>
+
+          <div ref={subtitleRef} style={{ visibility: "hidden", marginTop: "1.5rem", textAlign: "center" }}>
+            {[section.line1, section.line2].map((line, i) => (
+              <p key={i} className="subtitle-line" style={{
+                fontSize: "clamp(0.8rem, 2vw, 1.1rem)",
+                color: "rgba(255,255,255,0.7)",
+                letterSpacing: "0.06em", margin: 0, lineHeight: 1.7,
+              }}>
+                {line}
+              </p>
+            ))}
+          </div>
+        </div>
+
+        {/* Scroll progress — bottom-centre inside sticky shell */}
+        <div
+          ref={progressRef}
           style={{
             visibility: "hidden",
-            fontSize: "clamp(2.5rem, 10vw, 9rem)",
-            fontWeight: 900,
-            color: "white",
-            letterSpacing: "0.2em",
-            textAlign: "center",
-            lineHeight: 1,
-            margin: 0,
-            fontFamily: "inherit",
+            position: "absolute", bottom: "2rem", left: "50%", transform: "translateX(-50%)",
+            display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem",
+            color: "rgba(255,255,255,0.55)",
           }}
         >
-          {section.title.split("").map((char, i) => (
-            <span key={`${currentSection}-${i}`} className="title-char" style={{ display: "inline-block" }}>
-              {char === " " ? " " : char}
-            </span>
-          ))}
-        </h1>
-
-        <div
-          ref={subtitleRef}
-          style={{ visibility: "hidden", marginTop: "1.5rem", textAlign: "center" }}
-        >
-          <p className="subtitle-line" style={{
-            fontSize: "clamp(0.8rem, 2vw, 1.1rem)",
-            color: "rgba(255,255,255,0.7)",
-            letterSpacing: "0.06em",
-            margin: 0,
-            lineHeight: 1.7,
-          }}>
-            {section.line1}
-          </p>
-          <p className="subtitle-line" style={{
-            fontSize: "clamp(0.8rem, 2vw, 1.1rem)",
-            color: "rgba(255,255,255,0.7)",
-            letterSpacing: "0.06em",
-            margin: 0,
-            lineHeight: 1.7,
-          }}>
-            {section.line2}
-          </p>
+          <span style={{ fontSize: "0.6rem", letterSpacing: "0.35em", textTransform: "uppercase" }}>
+            Scroll
+          </span>
+          <div style={{ width: 100, height: 1, background: "rgba(255,255,255,0.2)", borderRadius: 1, overflow: "hidden" }}>
+            <div style={{
+              height: "100%", background: "rgba(255,255,255,0.75)",
+              width: `${progress * 100}%`, transition: "width 0.1s",
+            }} />
+          </div>
+          <span style={{ fontSize: "0.6rem", letterSpacing: "0.2em" }}>
+            {String(currentSection + 1).padStart(2, "0")} / {String(TOTAL_SECTIONS + 1).padStart(2, "0")}
+          </span>
         </div>
-      </div>
 
-      {/* Scroll progress indicator — fixed, bottom-centre */}
-      <div
-        ref={progressRef}
-        style={{
-          visibility: "hidden",
-          position: "fixed", bottom: "2rem", left: "50%", transform: "translateX(-50%)",
-          zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem",
-          color: "rgba(255,255,255,0.55)",
-        }}
-      >
-        <span style={{ fontSize: "0.6rem", letterSpacing: "0.35em", textTransform: "uppercase" }}>
-          Scroll
-        </span>
-        <div style={{ width: 100, height: 1, background: "rgba(255,255,255,0.2)", borderRadius: 1, overflow: "hidden" }}>
-          <div style={{ height: "100%", background: "rgba(255,255,255,0.75)", width: `${progress * 100}%`, transition: "width 0.1s" }} />
-        </div>
-        <span style={{ fontSize: "0.6rem", letterSpacing: "0.2em" }}>
-          {String(currentSection + 1).padStart(2, "0")} / {String(TOTAL_SECTIONS + 1).padStart(2, "0")}
-        </span>
-      </div>
-
-      {/* Scroll-height spacers — creates the scrollable area */}
-      <div style={{ position: "absolute", top: "100vh", width: "100%" }}>
-        {Array.from({ length: TOTAL_SECTIONS }).map((_, i) => (
-          <div key={i} style={{ height: "100vh" }} />
-        ))}
-      </div>
+      </div>{/* end sticky */}
     </div>
   )
 }
