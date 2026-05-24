@@ -67,16 +67,12 @@ export default function Navbar() {
         animate={{ y: hidden ? -100 : 0, opacity: hidden ? 0 : 1 }}
         transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? 'glass py-3 shadow-2xl' : 'py-5 bg-transparent'
+          scrolled ? 'glass py-3 shadow-2xl' : 'py-5 bg-white/95 backdrop-blur-md border-b border-violet-100/60 shadow-sm'
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          {/* Logo — white pill backdrop so it reads on any background */}
-          <button
-            onClick={() => scrollTo('#home')}
-            className="flex-shrink-0 rounded-xl px-2 py-1"
-            style={{ background: scrolled ? 'transparent' : 'rgba(255,255,255,0.08)', backdropFilter: scrolled ? 'none' : 'blur(8px)' }}
-          >
+          {/* Logo */}
+          <button onClick={() => scrollTo('#home')} className="flex-shrink-0">
             <Logo size="sm" />
           </button>
 
@@ -89,7 +85,7 @@ export default function Navbar() {
                   key={link.href}
                   onClick={() => scrollTo(link.href)}
                   className="relative px-4 py-2 text-sm font-medium transition-colors duration-200"
-                  style={{ color: isActive ? '#A78BFA' : scrolled ? 'var(--text-muted)' : 'rgba(255,255,255,0.75)' }}
+                  style={{ color: isActive ? '#7C3AED' : 'var(--text-muted)' }}
                 >
                   {link.label}
                   {isActive && (
@@ -124,15 +120,15 @@ export default function Navbar() {
           >
             <motion.span
               animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 8 : 0 }}
-              className={`block w-6 h-0.5 origin-center transition-colors duration-300 ${scrolled ? 'bg-gray-700' : 'bg-white'}`}
+              className="block w-6 h-0.5 bg-gray-700 origin-center"
             />
             <motion.span
               animate={{ opacity: menuOpen ? 0 : 1 }}
-              className={`block w-6 h-0.5 transition-colors duration-300 ${scrolled ? 'bg-gray-700' : 'bg-white'}`}
+              className="block w-6 h-0.5 bg-gray-700"
             />
             <motion.span
               animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -8 : 0 }}
-              className={`block w-6 h-0.5 origin-center transition-colors duration-300 ${scrolled ? 'bg-gray-700' : 'bg-white'}`}
+              className="block w-6 h-0.5 bg-gray-700 origin-center"
             />
           </button>
         </div>
