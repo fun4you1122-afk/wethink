@@ -111,35 +111,27 @@ export default function Hero() {
             </button>
           </motion.div>
 
-          {/* Stats bar */}
-          <motion.div
-            variants={itemVariants}
-            className="mt-16 inline-flex flex-wrap justify-center items-center gap-0 divide-x divide-violet-200/60 border border-violet-100 rounded-2xl overflow-hidden bg-white/60 backdrop-blur-sm shadow-sm"
-          >
-            {[
-              { stat: '5+', label: 'Years Experience' },
-              { stat: '5,000+', label: 'Projects Delivered' },
-              { stat: '1,000+', label: 'Happy Clients' },
-            ].map((item) => (
-              <div key={item.label} className="flex flex-col items-center px-8 py-4">
-                <span className="text-2xl md:text-3xl font-black gradient-text-purple">{item.stat}</span>
-                <span className="mt-0.5 text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--text-muted)' }}>{item.label}</span>
-              </div>
+          {/* Trust badges */}
+          <motion.div variants={itemVariants} className="mt-10 flex flex-wrap justify-center items-center gap-3">
+            {['ISO 27001 Ready', 'AWS Partner', 'Microsoft Azure', 'UAE Gov Compliant'].map((badge) => (
+              <span
+                key={badge}
+                className="px-4 py-1.5 rounded-full text-xs font-semibold border border-violet-200/70 bg-white/60 backdrop-blur-sm"
+                style={{ color: 'var(--text-muted)' }}
+              >
+                {badge}
+              </span>
             ))}
-            <div className="flex items-center gap-2 px-8 py-4 text-sm" style={{ color: 'var(--text-muted)' }}>
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              Pixel, Al Reem Island
-            </div>
           </motion.div>
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — full-width row so centering is always correct */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.8, duration: 0.6 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
+        className="absolute bottom-8 inset-x-0 flex flex-col items-center gap-2 z-10"
       >
         <span className="text-xs text-neutral-500 uppercase tracking-widest">Scroll</span>
         <motion.div
