@@ -6,12 +6,12 @@ interface LogoProps {
 }
 
 export default function Logo({ className = '', size = 'md' }: LogoProps) {
-  const heights = { sm: 192, md: 240, lg: 296 }
+  const heights = { sm: 96, md: 120, lg: 148 }
   const h = heights[size]
 
   return (
     <img
-      src="/logo.jpg"
+      src="/logo.png"
       alt="WeThink — Think. Plan. Grow."
       height={h}
       style={{
