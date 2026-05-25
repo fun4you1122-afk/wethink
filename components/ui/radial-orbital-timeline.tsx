@@ -166,10 +166,15 @@ export default function RadialOrbitalTimeline({ timelineData }: RadialOrbitalTim
             <div className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-md shadow-lg" />
           </div>
 
-          {/* Orbit ring */}
+          {/* Orbit ring — translateZ(0) keeps it in 2D plane, avoiding 3D blur */}
           <div
-            className="absolute rounded-full border border-violet-300/50"
-            style={{ width: radiusState * 2, height: radiusState * 2 }}
+            className="absolute rounded-full border border-violet-400/60"
+            style={{
+              width: radiusState * 2,
+              height: radiusState * 2,
+              transform: 'translateZ(0)',
+              imageRendering: 'crisp-edges',
+            }}
           />
 
           {timelineData.map((item, index) => {
