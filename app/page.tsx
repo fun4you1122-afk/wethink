@@ -9,6 +9,7 @@ import BeforeAfter from '@/components/BeforeAfter'
 import IdeaToImpact from '@/components/IdeaToImpact'
 import OurStory from '@/components/OurStory'
 import Projects from '@/components/Projects'
+import CaseStudies from '@/components/CaseStudies'
 import TransformationSplit from '@/components/TransformationSplit'
 import Testimonials from '@/components/Testimonials'
 import CinematicScene from '@/components/CinematicScene'
@@ -34,6 +35,7 @@ export default function Home() {
       <About />
       <CinematicScene />
       <Projects />
+      <CaseStudies />
       <TransformationSplit />
       <Testimonials />
       <VideoSection />
