@@ -31,7 +31,22 @@ export default function Hero() {
   }
 
   return (
-    <section id="home" className="relative min-h-screen overflow-hidden flex items-center justify-center" style={{ background: 'var(--bg)' }}>
+    <section id="home" className="relative min-h-screen overflow-hidden flex items-center justify-center">
+
+      {/* Video background — lowest layer */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
+      >
+        <source src="https://videos.pexels.com/video-files/3129671/3129671-hd_1920_1080_30fps.mp4" type="video/mp4" />
+        <source src="https://videos.pexels.com/video-files/857251/857251-hd_1920_1080_25fps.mp4" type="video/mp4" />
+      </video>
+
+      {/* Light overlay — preserves light-theme look over the video */}
+      <div className="absolute inset-0 z-[1] bg-[#F8F7FF]/80 pointer-events-none" />
 
       {/* Raining characters — behind everything */}
       <HeroRain />
