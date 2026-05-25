@@ -53,7 +53,7 @@ export default function BeforeAfter() {
           >
             <span className="section-label mx-auto">The WeThink Effect</span>
           </motion.div>
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3">
+          <h2 className="text-4xl md:text-5xl font-black text-violet-50 mt-3">
             <ScrambleText>See the </ScrambleText>
             <ScrambleText className="gradient-text">Difference</ScrambleText>
           </h2>
@@ -76,7 +76,7 @@ export default function BeforeAfter() {
         >
           <div
             className="flex items-center p-1 rounded-full"
-            style={{ background: 'rgba(124,58,237,0.07)', border: '1px solid rgba(124,58,237,0.14)' }}
+            style={{ background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.3)' }}
           >
             {[false, true].map((val) => (
               <button
@@ -133,7 +133,7 @@ export default function BeforeAfter() {
                   >
                     {isAfter ? item.after.value : item.before.value}
                   </div>
-                  <div className="text-xs text-gray-500 leading-relaxed">
+                  <div className="text-xs text-violet-300/70 leading-relaxed">
                     {isAfter ? item.after.sub : item.before.sub}
                   </div>
                 </motion.div>

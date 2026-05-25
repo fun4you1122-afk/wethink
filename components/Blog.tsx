@@ -76,7 +76,7 @@ function ArticleModal({ post, onClose }: { post: typeof posts[0]; onClose: () =>
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 40, scale: 0.97 }}
         transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-white rounded-3xl shadow-2xl"
+        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-[#0A0A14] border border-violet-500/20 rounded-3xl shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top gradient bar */}
@@ -113,7 +113,7 @@ function ArticleModal({ post, onClose }: { post: typeof posts[0]; onClose: () =>
           </div>
 
           {/* CTA */}
-          <div className="mt-8 pt-6 border-t border-violet-100 flex items-center justify-between">
+          <div className="mt-8 pt-6 border-t border-violet-500/20 flex items-center justify-between">
             <button
               onClick={() => { onClose(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}
               className="btn-primary text-sm"
@@ -123,7 +123,7 @@ function ArticleModal({ post, onClose }: { post: typeof posts[0]; onClose: () =>
                 <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-            <button onClick={onClose} className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
+            <button onClick={onClose} className="text-sm text-violet-300/60 hover:text-violet-200 transition-colors">
               Close ✕
             </button>
           </div>
@@ -186,7 +186,7 @@ function BlogCard({ post, index, onOpen }: { post: typeof posts[0]; index: numbe
         </div>
 
         {/* Title */}
-        <h3 className="text-xl font-bold mb-3 group-hover:text-violet-700 transition-colors leading-snug" style={{ color: 'var(--text)' }}>
+        <h3 className="text-xl font-bold mb-3 group-hover:text-violet-400 transition-colors leading-snug" style={{ color: 'var(--text)' }}>
           {post.title}
         </h3>
 
@@ -203,7 +203,7 @@ function BlogCard({ post, index, onOpen }: { post: typeof posts[0]; index: numbe
         </div>
 
         {/* Footer */}
-        <div className="flex items-center gap-2 mt-5 text-sm font-semibold group-hover:text-violet-800 text-violet-600 transition-colors">
+        <div className="flex items-center gap-2 mt-5 text-sm font-semibold group-hover:text-violet-300 text-violet-400 transition-colors">
           <span>Read Article</span>
           <motion.svg
             width="16" height="16" viewBox="0 0 16 16" fill="none"

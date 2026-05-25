@@ -203,8 +203,8 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
           className="absolute inset-0"
           style={{
             background: isFeatured
-              ? `linear-gradient(145deg, #1A0A2E 0%, ${service.color}CC 100%)`
-              : '#FFFFFF',
+              ? `linear-gradient(145deg, #0A0015 0%, ${service.color}CC 100%)`
+              : '#0D0D18',
           }}
         />
 
@@ -317,9 +317,9 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
                 key={tag}
                 className="text-[11px] font-medium px-2.5 py-1 rounded-lg"
                 style={{
-                  background: isFeatured ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.03)',
+                  background: isFeatured ? 'rgba(255,255,255,0.08)' : 'rgba(124,58,237,0.1)',
                   color: isFeatured ? 'rgba(255,255,255,0.65)' : 'var(--text-muted)',
-                  border: `1px solid ${isFeatured ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.06)'}`,
+                  border: `1px solid ${isFeatured ? 'rgba(255,255,255,0.12)' : 'rgba(124,58,237,0.2)'}`,
                 }}
               >
                 {tag}
@@ -353,7 +353,7 @@ export default function Services() {
   return (
     <section id="services" className="section-padding relative overflow-hidden">
       <div className="absolute inset-0" style={{ background: 'var(--surface-2)' }} />
-      <div className="orb w-[500px] h-[500px] bg-violet-200 opacity-35 top-0 right-[-200px] pointer-events-none" />
+      <div className="orb w-[500px] h-[500px] bg-violet-900 opacity-25 top-0 right-[-200px] pointer-events-none" />
       <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6">

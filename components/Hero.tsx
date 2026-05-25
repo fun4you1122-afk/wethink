@@ -45,15 +45,15 @@ export default function Hero() {
         <source src="https://videos.pexels.com/video-files/857251/857251-hd_1920_1080_25fps.mp4" type="video/mp4" />
       </video>
 
-      {/* Light overlay — preserves light-theme look over the video */}
-      <div className="absolute inset-0 z-[1] bg-[#F8F7FF]/80 pointer-events-none" />
+      {/* Dark AMOLED overlay over the video */}
+      <div className="absolute inset-0 z-[1] bg-black/75 pointer-events-none" />
 
       {/* Raining characters — behind everything */}
       <HeroRain />
 
       {/* Floating orbs */}
-      <div className="orb w-[600px] h-[600px] bg-violet-200 opacity-40 top-[-200px] left-[-200px] pointer-events-none animate-float" />
-      <div className="orb w-[400px] h-[400px] bg-purple-200 opacity-30 bottom-[-100px] right-[40%] pointer-events-none" style={{ animationDelay: '2s' }} />
+      <div className="orb w-[600px] h-[600px] bg-violet-900 opacity-30 top-[-200px] left-[-200px] pointer-events-none animate-float" />
+      <div className="orb w-[400px] h-[400px] bg-purple-900 opacity-20 bottom-[-100px] right-[40%] pointer-events-none" style={{ animationDelay: '2s' }} />
 
       {/* Spotlight */}
       <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="purple" />
@@ -85,9 +85,9 @@ export default function Hero() {
 
           {/* Rotating word pill */}
           <div className="mt-6 flex justify-center">
-            <div className="relative inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-violet-200 bg-white/70 backdrop-blur-sm shadow-sm">
-              <span className="text-sm font-medium text-violet-500 uppercase tracking-widest">Now</span>
-              <div className="w-px h-4 bg-violet-200" />
+            <div className="relative inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-violet-500/30 bg-black/50 backdrop-blur-sm shadow-sm">
+              <span className="text-sm font-medium text-violet-400 uppercase tracking-widest">Now</span>
+              <div className="w-px h-4 bg-violet-700" />
               <div className="relative" style={{ minWidth: '160px', height: '1.4em' }}>
                 <AnimatePresence mode="wait">
                   <motion.span
@@ -131,7 +131,7 @@ export default function Hero() {
             {['ISO 27001 Ready', 'AWS Partner', 'Microsoft Azure', 'UAE Gov Compliant'].map((badge) => (
               <span
                 key={badge}
-                className="px-4 py-1.5 rounded-full text-xs font-semibold border border-violet-200/70 bg-white/60 backdrop-blur-sm"
+                className="px-4 py-1.5 rounded-full text-xs font-semibold border border-violet-500/30 bg-violet-950/50 backdrop-blur-sm"
                 style={{ color: 'var(--text-muted)' }}
               >
                 {badge}

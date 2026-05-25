@@ -82,7 +82,7 @@ export default function Testimonials() {
           >
             <span className="section-label mx-auto">Client Stories</span>
           </motion.div>
-          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mt-3">
+          <h2 className="text-4xl md:text-5xl font-black text-violet-50 mt-3">
             <ScrambleText>Trusted by </ScrambleText>
             <ScrambleText className="gradient-text">Leaders</ScrambleText>
           </h2>
@@ -125,7 +125,7 @@ export default function Testimonials() {
                 ))}
               </div>
 
-              <p className="text-lg md:text-xl font-medium leading-relaxed text-gray-700 mb-8">
+              <p className="text-lg md:text-xl font-medium leading-relaxed text-violet-100/90 mb-8">
                 "{t.quote}"
               </p>
 
@@ -137,8 +137,8 @@ export default function Testimonials() {
                   {t.initials}
                 </div>
                 <div>
-                  <div className="font-bold text-gray-900">{t.name}</div>
-                  <div className="text-sm text-gray-500">{t.role} · {t.company}</div>
+                  <div className="font-bold text-violet-50">{t.name}</div>
+                  <div className="text-sm text-violet-300/70">{t.role} · {t.company}</div>
                 </div>
               </div>
             </motion.div>

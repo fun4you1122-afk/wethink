@@ -313,8 +313,8 @@ export default function IdeaToImpact() {
 
                   {/* Screen */}
                   <div
-                    className="relative overflow-hidden bg-white"
-                    style={{ height: 450, borderRadius: '2rem' }}
+                    className="relative overflow-hidden"
+                    style={{ height: 450, borderRadius: '2rem', background: '#0A0A14' }}
                   >
                     {/* Notch */}
                     <div
@@ -329,14 +329,14 @@ export default function IdeaToImpact() {
                     >
                       <div
                         className="w-16 h-16 rounded-2xl mb-5 flex items-center justify-center"
-                        style={{ background: '#f0effe' }}
+                        style={{ background: 'rgba(124,58,237,0.15)' }}
                       >
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                          <rect x="3" y="3" width="26" height="26" rx="6" stroke="#CBD5E1" strokeWidth="1.5" strokeDasharray="4 3" />
+                          <rect x="3" y="3" width="26" height="26" rx="6" stroke="#7C3AED" strokeWidth="1.5" strokeDasharray="4 3" />
                         </svg>
                       </div>
-                      <div className="w-24 h-2.5 rounded-full bg-slate-100 mb-2.5" />
-                      <div className="w-16 h-2.5 rounded-full bg-slate-100 mb-5" />
+                      <div className="w-24 h-2.5 rounded-full bg-violet-900/40 mb-2.5" />
+                      <div className="w-16 h-2.5 rounded-full bg-violet-900/40 mb-5" />
                       <p className="text-[11px] text-slate-300 text-center px-10 leading-relaxed">
                         Scroll to begin your journey
                       </p>
@@ -352,7 +352,7 @@ export default function IdeaToImpact() {
                         style={{
                           width: 72,
                           height: 72,
-                          background: 'linear-gradient(135deg, #f5f3ff, #ede9fe)',
+                          background: 'linear-gradient(135deg, #1a0a35, #2d1060)',
                         }}
                       >
                         <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
@@ -373,7 +373,7 @@ export default function IdeaToImpact() {
                         >
                           Your Idea
                         </div>
-                        <div className="text-sm font-semibold text-gray-700 leading-snug">
+                        <div className="text-sm font-semibold text-violet-100 leading-snug">
                           A vision waiting to become real
                         </div>
                       </div>
@@ -381,10 +381,10 @@ export default function IdeaToImpact() {
                         {['💡 Mobile App', '📊 Dashboard', '🛒 Marketplace'].map((t) => (
                           <div
                             key={t}
-                            className="text-xs px-3 py-2.5 rounded-xl text-gray-500 text-center font-medium"
+                            className="text-xs px-3 py-2.5 rounded-xl text-violet-300 text-center font-medium"
                             style={{
-                              background: 'rgba(124,58,237,0.06)',
-                              border: '1px dashed rgba(124,58,237,0.2)',
+                              background: 'rgba(124,58,237,0.12)',
+                              border: '1px dashed rgba(124,58,237,0.35)',
                             }}
                           >
                             {t}
@@ -448,17 +448,17 @@ export default function IdeaToImpact() {
 
                     {/* ─── S4: Success ─── */}
                     <motion.div
-                      style={{ opacity: s4, background: '#F8F7FF' }}
+                      style={{ opacity: s4, background: '#0A0A14' }}
                       className="absolute inset-0 flex flex-col"
                     >
                       <div
-                        className="flex items-center justify-between px-4 pb-2 border-b border-gray-100"
+                        className="flex items-center justify-between px-4 pb-2 border-b border-violet-900/40"
                         style={{ paddingTop: 44 }}
                       >
                         <span className="text-xs font-black" style={{ color: '#7C3AED' }}>WeThink App</span>
                         <div
                           className="w-6 h-6 rounded-full flex items-center justify-center"
-                          style={{ background: '#f0effe' }}
+                          style={{ background: 'rgba(124,58,237,0.2)' }}
                         >
                           <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#7C3AED' }} />
                         </div>
@@ -480,11 +480,11 @@ export default function IdeaToImpact() {
                         {/* Users */}
                         <div
                           className="flex items-center gap-2.5 p-2.5 rounded-xl"
-                          style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}
+                          style={{ background: 'rgba(5,150,105,0.12)', border: '1px solid rgba(52,211,153,0.25)' }}
                         >
                           <div
                             className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
-                            style={{ background: '#dcfce7' }}
+                            style={{ background: 'rgba(5,150,105,0.2)' }}
                           >
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                               <circle cx="5.5" cy="5" r="2.2" stroke="#059669" strokeWidth="1.3" />
@@ -493,15 +493,15 @@ export default function IdeaToImpact() {
                             </svg>
                           </div>
                           <div>
-                            <div className="text-[10px] text-gray-400">Active Users</div>
-                            <div className="text-sm font-black text-gray-800">{users.toLocaleString()}</div>
+                            <div className="text-[10px] text-emerald-400/70">Active Users</div>
+                            <div className="text-sm font-black text-emerald-200">{users.toLocaleString()}</div>
                           </div>
                           <div className="ml-auto text-[10px] font-bold" style={{ color: '#059669' }}>↑ 89%</div>
                         </div>
 
                         {/* Bar chart */}
                         <div className="flex-1 min-h-0">
-                          <div className="text-[10px] text-gray-400 mb-2">Monthly Growth</div>
+                          <div className="text-[10px] text-violet-400/70 mb-2">Monthly Growth</div>
                           <div className="flex items-end gap-2" style={{ height: 70 }}>
                             {bh.map((h, i) => (
                               <motion.div
@@ -518,7 +518,7 @@ export default function IdeaToImpact() {
                           </div>
                           <div className="flex justify-between mt-1.5">
                             {MONTHS.map((m) => (
-                              <span key={m} className="text-[9px] text-gray-300 flex-1 text-center">{m}</span>
+                              <span key={m} className="text-[9px] text-violet-400/50 flex-1 text-center">{m}</span>
                             ))}
                           </div>
                         </div>

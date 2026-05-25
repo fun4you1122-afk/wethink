@@ -93,7 +93,7 @@ export default function HeroRain() {
               top: `${c.y}%`,
               fontSize: `${c.size}rem`,
               fontWeight: isActive ? 700 : 300,
-              color: isActive ? '#7C3AED' : 'rgba(124,58,237,0.12)',
+              color: isActive ? '#A78BFA' : 'rgba(124,58,237,0.18)',
               textShadow: isActive
                 ? '0 0 10px rgba(124,58,237,0.8), 0 0 20px rgba(124,58,237,0.4)'
                 : 'none',

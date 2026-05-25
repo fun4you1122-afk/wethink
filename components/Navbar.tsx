@@ -120,15 +120,15 @@ export default function Navbar() {
           >
             <motion.span
               animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 8 : 0 }}
-              className="block w-6 h-0.5 bg-gray-700 origin-center"
+              className="block w-6 h-0.5 bg-violet-200 origin-center"
             />
             <motion.span
               animate={{ opacity: menuOpen ? 0 : 1 }}
-              className="block w-6 h-0.5 bg-gray-700"
+              className="block w-6 h-0.5 bg-violet-200"
             />
             <motion.span
               animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -8 : 0 }}
-              className="block w-6 h-0.5 bg-gray-700 origin-center"
+              className="block w-6 h-0.5 bg-violet-200 origin-center"
             />
           </button>
         </div>
@@ -151,7 +151,7 @@ export default function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.07 }}
                 onClick={() => scrollTo(link.href)}
-                className="text-3xl font-bold hover:text-violet-600 transition-colors" style={{ color: 'var(--text)' }}
+                className="text-3xl font-bold hover:text-violet-400 transition-colors" style={{ color: 'var(--text)' }}
               >
                 {link.label}
               </motion.button>

@@ -102,10 +102,10 @@ export default function OurStory() {
       {/* 03 — How We Work */}
       <FlowSection
         aria-label="How We Work"
-        style={{ backgroundColor: '#F0EFFE', color: '#1A0A2E' }}
+        style={{ backgroundColor: '#0D0620', color: '#F0EFFF' }}
       >
         <p className="text-xs font-bold uppercase tracking-[0.2em] opacity-60">03 — How We Work</p>
-        <hr className="my-[2vw] border-t border-black/20" />
+        <hr className="my-[2vw] border-t border-white/20" />
         <div>
           <h2 className="text-[clamp(3.5rem,12vw,14rem)] font-bold leading-[0.85] uppercase tracking-tight">
             Your

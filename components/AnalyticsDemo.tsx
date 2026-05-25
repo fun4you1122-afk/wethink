@@ -140,7 +140,7 @@ function MiniBarChart({ data, color }: { data: { label: string; value: number; s
     <div className="flex items-end gap-1.5 h-28 w-full pt-2">
       {data.map((d, i) => (
         <div key={d.label} className="flex-1 flex flex-col items-center gap-1">
-          <span className="text-[9px] text-gray-400 leading-none">{d.sub}</span>
+          <span className="text-[9px] text-violet-300/60 leading-none">{d.sub}</span>
           <div className="w-full flex flex-col justify-end" style={{ height: '72px' }}>
             <motion.div
               initial={{ height: 0 }}
@@ -150,7 +150,7 @@ function MiniBarChart({ data, color }: { data: { label: string; value: number; s
               style={{ background: `linear-gradient(to top, ${color}99, ${color})` }}
             />
           </div>
-          <span className="text-[9px] text-gray-500 leading-none">{d.label}</span>
+          <span className="text-[9px] text-violet-300/50 leading-none">{d.label}</span>
         </div>
       ))}
     </div>
@@ -255,7 +255,7 @@ export default function AnalyticsDemo() {
                     className={`group relative text-left rounded-2xl p-5 border-2 transition-all duration-300 ${
                       isSelected
                         ? 'border-violet-400 shadow-lg shadow-violet-200/40'
-                        : 'border-violet-100 hover:border-violet-300'
+                        : 'border-violet-500/20 hover:border-violet-400'
                     }`}
                     style={{ background: isSelected ? `${ds.accent}08` : 'var(--surface)' }}
                   >
@@ -310,7 +310,7 @@ export default function AnalyticsDemo() {
                     <button
                       key={s}
                       onClick={() => runAnalysis(s)}
-                      className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border border-violet-200 hover:border-violet-400 hover:bg-violet-50 transition-all duration-200 font-medium"
+                      className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border border-violet-200 hover:border-violet-400 hover:bg-violet-500/15 transition-all duration-200 font-medium"
                       style={{ color: 'var(--text-muted)' }}
                     >
                       <ChevronRight size={10} className="text-violet-400" />
@@ -327,7 +327,7 @@ export default function AnalyticsDemo() {
                     onChange={(e) => setQuestion(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && question.trim() && runAnalysis(question)}
                     placeholder="Or type your own question…"
-                    className="flex-1 px-4 py-3 rounded-xl text-sm border border-violet-200 focus:border-violet-400 focus:outline-none bg-white transition-colors"
+                    className="flex-1 px-4 py-3 rounded-xl text-sm border border-violet-500/30 focus:border-violet-400 focus:outline-none bg-[#0A0A14] transition-colors"
                     style={{ color: 'var(--text)' }}
                   />
                   <button
@@ -399,7 +399,7 @@ export default function AnalyticsDemo() {
                 className="glass-card rounded-2xl overflow-hidden"
               >
                 {/* Result header */}
-                <div className="px-6 pt-5 pb-4 border-b border-violet-100 flex items-start justify-between gap-4">
+                <div className="px-6 pt-5 pb-4 border-b border-violet-500/20 flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-widest text-violet-500 mb-1">
                       AI Analysis · {activeDataset.name}
@@ -436,8 +436,8 @@ export default function AnalyticsDemo() {
                   </div>
 
                   {/* Chart */}
-                  <div className="rounded-xl p-4 border border-violet-100" style={{ background: 'var(--surface)' }}>
-                    <p className="text-[11px] font-semibold text-gray-500 mb-3 uppercase tracking-wider">
+                  <div className="rounded-xl p-4 border border-violet-500/20" style={{ background: 'var(--surface)' }}>
+                    <p className="text-[11px] font-semibold text-violet-300/60 mb-3 uppercase tracking-wider">
                       {result.chartTitle}
                     </p>
                     <MiniBarChart data={result.chartData} color={activeDataset.accent} />
@@ -505,7 +505,7 @@ export default function AnalyticsDemo() {
                       />
                       <button
                         type="submit"
-                        className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-violet-700 rounded-xl text-sm font-bold hover:bg-violet-50 transition-colors flex-shrink-0"
+                        className="flex items-center justify-center gap-2 px-6 py-3 bg-violet-600 text-white rounded-xl text-sm font-bold hover:bg-violet-500 transition-colors flex-shrink-0"
                       >
                         Get Early Access
                         <Send size={14} />

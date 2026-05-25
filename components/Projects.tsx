@@ -184,7 +184,7 @@ export default function Projects() {
           >
             <span className="section-label mx-auto">Our Work</span>
           </motion.div>
-          <h2 className="text-4xl md:text-6xl font-black text-gray-900 mt-3">
+          <h2 className="text-4xl md:text-6xl font-black text-violet-50 mt-3">
             <ScrambleText>Projects </ScrambleText>
             <ScrambleText className="gradient-text">Achieved</ScrambleText>
           </h2>

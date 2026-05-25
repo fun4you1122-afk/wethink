@@ -45,7 +45,7 @@ function FlipCard({ src, index, total, phase, target, label }: FlipCardProps) {
       >
         {/* Front Face */}
         <div
-          className="absolute inset-0 h-full w-full overflow-hidden rounded-xl shadow-lg bg-gray-200"
+          className="absolute inset-0 h-full w-full overflow-hidden rounded-xl shadow-lg bg-violet-950/50"
           style={{ backfaceVisibility: "hidden" }}
         >
           <img src={src} alt={label} className="h-full w-full object-cover" />
@@ -210,7 +210,7 @@ export default function ScrollMorphGallery() {
   const contentY = useTransform(smoothMorph, [0.8, 1], [20, 0]);
 
   return (
-    <div ref={containerRef} className="relative w-full h-full bg-[#FAFAFA] overflow-hidden">
+    <div ref={containerRef} className="relative w-full h-full bg-black overflow-hidden">
       <div className="flex h-full w-full flex-col items-center justify-center perspective-1000">
 
         {/* Intro text */}
@@ -223,7 +223,7 @@ export default function ScrollMorphGallery() {
                 : { opacity: 0, filter: "blur(10px)" }
             }
             transition={{ duration: 1 }}
-            className="text-2xl font-medium tracking-tight text-gray-800 md:text-4xl"
+            className="text-2xl font-medium tracking-tight text-violet-100 md:text-4xl"
           >
             Digital transformation,<br />engineered for UAE.
           </motion.h1>
@@ -235,7 +235,7 @@ export default function ScrollMorphGallery() {
                 : { opacity: 0 }
             }
             transition={{ duration: 1, delay: 0.2 }}
-            className="mt-4 text-xs font-bold tracking-[0.2em] text-gray-500"
+            className="mt-4 text-xs font-bold tracking-[0.2em] text-violet-400/60"
           >
             SCROLL TO EXPLORE
           </motion.p>
@@ -246,10 +246,10 @@ export default function ScrollMorphGallery() {
           style={{ opacity: contentOpacity, y: contentY }}
           className="absolute top-[10%] z-10 flex flex-col items-center justify-center text-center pointer-events-none px-4"
         >
-          <h2 className="text-3xl md:text-5xl font-semibold text-gray-900 tracking-tight mb-4">
+          <h2 className="text-3xl md:text-5xl font-semibold text-violet-50 tracking-tight mb-4">
             Our Work in Action
           </h2>
-          <p className="text-sm md:text-base text-gray-600 max-w-lg leading-relaxed">
+          <p className="text-sm md:text-base text-violet-200/70 max-w-lg leading-relaxed">
             From cloud infrastructure to cybersecurity and custom software —<br className="hidden md:block" />
             WeThink delivers end-to-end IT solutions for UAE enterprises.
           </p>
