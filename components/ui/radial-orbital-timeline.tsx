@@ -36,14 +36,19 @@ export default function RadialOrbitalTimeline({ timelineData }: RadialOrbitalTim
   const orbitRef       = useRef<HTMLDivElement>(null);
   const nodeRefs       = useRef<Record<number, HTMLDivElement | null>>({});
 
+  // radiusState drives the ring div so it re-renders when radius changes
+  const [radiusState, setRadiusState] = useState(200);
+
   // Keep autoRotateRef in sync with React state
   useEffect(() => { autoRotateRef.current = autoRotate; }, [autoRotate]);
 
-  // Responsive radius — write to ref only (no re-render)
+  // Responsive radius — write to ref (for rAF) AND state (for ring div)
   useEffect(() => {
     const update = () => {
       const w = window.innerWidth;
-      radiusRef.current = w < 480 ? 120 : w < 768 ? 150 : w < 1024 ? 170 : 200;
+      const r = w < 480 ? 110 : w < 768 ? 140 : w < 1024 ? 170 : 200;
+      radiusRef.current = r;
+      setRadiusState(r);
     };
     update();
     window.addEventListener("resize", update);
@@ -164,7 +169,7 @@ export default function RadialOrbitalTimeline({ timelineData }: RadialOrbitalTim
           {/* Orbit ring */}
           <div
             className="absolute rounded-full border border-violet-300/50"
-            style={{ width: radiusRef.current * 2, height: radiusRef.current * 2 }}
+            style={{ width: radiusState * 2, height: radiusState * 2 }}
           />
 
           {timelineData.map((item, index) => {
