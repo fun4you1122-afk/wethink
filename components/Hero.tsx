@@ -3,9 +3,12 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Spotlight } from '@/components/ui/spotlight'
-import HeroRain from '@/components/HeroRain'
+import HeroParticles from '@/components/HeroParticles'
 
 const WORDS = ['IT Consulting', 'Cloud Strategy', 'Cybersecurity', 'Business Growth']
+
+const LINE1 = ['We', 'Engineer']
+const LINE2 = 'Your Future.'.split('')
 
 export default function Hero() {
   const [wordIndex, setWordIndex] = useState(0)
@@ -26,14 +29,14 @@ export default function Hero() {
     visible: { transition: { staggerChildren: 0.12, delayChildren: 0.3 } },
   }
   const itemVariants = {
-    hidden: { opacity: 0, y: 40 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } },
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] } },
   }
 
   return (
     <section id="home" className="relative min-h-screen overflow-hidden flex items-center justify-center">
 
-      {/* Video background — lowest layer */}
+      {/* Video background */}
       <video
         autoPlay
         muted
@@ -45,11 +48,11 @@ export default function Hero() {
         <source src="https://videos.pexels.com/video-files/857251/857251-hd_1920_1080_25fps.mp4" type="video/mp4" />
       </video>
 
-      {/* Dark AMOLED overlay over the video */}
+      {/* AMOLED overlay */}
       <div className="absolute inset-0 z-[1] bg-black/75 pointer-events-none" />
 
-      {/* Raining characters — behind everything */}
-      <HeroRain />
+      {/* Canvas particle network — replaces HeroRain */}
+      <HeroParticles />
 
       {/* Floating orbs */}
       <div className="orb w-[600px] h-[600px] bg-violet-900 opacity-30 top-[-200px] left-[-200px] pointer-events-none animate-float" />
@@ -58,10 +61,10 @@ export default function Hero() {
       {/* Spotlight */}
       <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="purple" />
 
-      {/* Grid pattern */}
+      {/* Grid */}
       <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none z-[1]" />
 
-      {/* Full-width centred text content */}
+      {/* Content */}
       <div className="relative z-10 w-full px-6 pt-28 pb-28 md:px-16 lg:px-24 flex flex-col items-center text-center">
         <motion.div
           variants={containerVariants}
@@ -69,22 +72,54 @@ export default function Hero() {
           animate="visible"
           className="w-full"
         >
+          {/* Label */}
           <motion.div variants={itemVariants}>
             <span className="section-label" style={{ justifyContent: 'center' }}>Abu Dhabi, UAE — Est. 2019</span>
           </motion.div>
 
-          <motion.h1
-            variants={itemVariants}
-            className="mt-6 text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black leading-[0.95] tracking-tight"
-            style={{ color: 'var(--text)' }}
-          >
-            We Engineer
-            <br />
-            <span className="gradient-text">Your Future.</span>
-          </motion.h1>
+          {/* Headline — word/char stagger slide-up */}
+          <div className="mt-6 text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black leading-[1.0] tracking-tight">
+
+            {/* Line 1: "We Engineer" — word stagger */}
+            <div className="flex flex-wrap justify-center gap-x-[0.25em] overflow-hidden pb-1">
+              {LINE1.map((word, i) => (
+                <motion.span
+                  key={word}
+                  initial={{ y: '105%', opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.7, delay: 0.45 + i * 0.14, ease: [0.22, 1, 0.36, 1] }}
+                  className="inline-block"
+                  style={{ color: 'var(--text)' }}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </div>
+
+            {/* Line 2: "Your Future." — char stagger with gradient */}
+            <div className="flex flex-wrap justify-center overflow-hidden pb-1 mt-1">
+              {LINE2.map((char, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ y: '105%', opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.78 + i * 0.045, ease: [0.22, 1, 0.36, 1] }}
+                  className="inline-block gradient-text hero-char-shine"
+                  style={{ marginRight: char === ' ' ? '0.25em' : undefined }}
+                >
+                  {char === ' ' ? ' ' : char}
+                </motion.span>
+              ))}
+            </div>
+          </div>
 
           {/* Rotating word pill */}
-          <div className="mt-6 flex justify-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 1.6 }}
+            className="mt-6 flex justify-center"
+          >
             <div className="relative inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-violet-500/30 bg-black/50 backdrop-blur-sm shadow-sm">
               <span className="text-sm font-medium text-violet-400 uppercase tracking-widest">Now</span>
               <div className="w-px h-4 bg-violet-700" />
@@ -103,8 +138,9 @@ export default function Hero() {
                 </AnimatePresence>
               </div>
             </div>
-          </div>
+          </motion.div>
 
+          {/* Description */}
           <motion.p
             variants={itemVariants}
             className="mt-8 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
@@ -114,6 +150,7 @@ export default function Hero() {
             and custom software — helping UAE enterprises compete and thrive in the digital age.
           </motion.p>
 
+          {/* Buttons */}
           <motion.div variants={itemVariants} className="mt-10 flex flex-wrap justify-center gap-4">
             <button onClick={() => scrollTo('#contact')} className="btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '1rem' }}>
               Start a Project
@@ -141,7 +178,7 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll indicator — full-width row so centering is always correct */}
+      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
