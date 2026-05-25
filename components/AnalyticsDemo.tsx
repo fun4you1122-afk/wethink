@@ -190,9 +190,9 @@ export default function AnalyticsDemo() {
 
   return (
     <section id="ai-demo" className="section-padding relative overflow-hidden">
-      <div className="absolute inset-0" style={{ background: 'var(--surface-2)' }} />
-      <div className="orb w-[500px] h-[500px] bg-violet-200 opacity-30 top-[-100px] right-[-150px] pointer-events-none" />
-      <div className="orb w-[400px] h-[400px] bg-sky-200 opacity-20 bottom-[-100px] left-[-100px] pointer-events-none" />
+      <div className="absolute inset-0" style={{ background: 'var(--bg)' }} />
+      <div className="orb w-[500px] h-[500px] bg-violet-900 opacity-20 top-[-100px] right-[-150px] pointer-events-none" />
+      <div className="orb w-[400px] h-[400px] bg-sky-900 opacity-15 bottom-[-100px] left-[-100px] pointer-events-none" />
       <div className="absolute inset-0 grid-bg opacity-10 pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6">

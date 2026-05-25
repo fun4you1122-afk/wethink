@@ -226,7 +226,7 @@ export default function Blog() {
 
   return (
     <section id="blog" className="section-padding relative overflow-hidden">
-      <div className="absolute inset-0" style={{ background: 'var(--surface-2)' }} />
+      <div className="absolute inset-0" style={{ background: 'var(--bg)' }} />
       <div className="orb w-[400px] h-[400px] bg-violet-200 opacity-50 top-0 left-[-100px] pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6">

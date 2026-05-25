@@ -112,8 +112,8 @@ export default function OrbitalServices() {
       style={{ background: 'var(--bg)' }}
     >
       {/* Soft background orbs */}
-      <div className="orb w-[500px] h-[500px] bg-violet-100 opacity-50 top-[-120px] right-[-120px] pointer-events-none" />
-      <div className="orb w-[400px] h-[400px] bg-purple-100 opacity-40 bottom-[-100px] left-[-80px] pointer-events-none" style={{ animationDelay: '1.5s' }} />
+      <div className="orb w-[500px] h-[500px] bg-violet-900 opacity-20 top-[-120px] right-[-120px] pointer-events-none" />
+      <div className="orb w-[400px] h-[400px] bg-purple-900 opacity-15 bottom-[-100px] left-[-80px] pointer-events-none" style={{ animationDelay: '1.5s' }} />
 
       {/* Grid */}
       <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
