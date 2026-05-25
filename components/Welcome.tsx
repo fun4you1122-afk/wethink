@@ -55,39 +55,15 @@ export default function Welcome() {
         )}
 
         {/* "WeThink" — spring char explosion */}
-        {inView && (
-          <TextEffect
-            per="char"
-            delay={0.65}
-            as="h2"
-            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-none gradient-text"
-            variants={{
-              container: {
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: { staggerChildren: 0.06 },
-                },
-              },
-              item: {
-                hidden: { opacity: 0, y: 60, scale: 0.5, filter: 'blur(16px)' },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  scale: 1,
-                  filter: 'blur(0px)',
-                  transition: {
-                    type: 'spring',
-                    damping: 14,
-                    stiffness: 180,
-                  },
-                },
-              },
-            }}
-          >
-            WeThink
-          </TextEffect>
-        )}
+        {/* "WeThink" — gradient preserved on single element, spring reveal */}
+        <motion.h2
+          initial={{ opacity: 0, y: 50, scale: 0.88, filter: 'blur(20px)' }}
+          animate={inView ? { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' } : {}}
+          transition={{ type: 'spring', damping: 12, stiffness: 110, delay: 0.65 }}
+          className="gradient-text text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-none"
+        >
+          WeThink
+        </motion.h2>
 
         {/* Tagline — word slide with delay */}
         {inView && (
