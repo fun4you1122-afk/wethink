@@ -17,7 +17,7 @@ const caseStudies = [
     description:
       'Full digital launch for a heritage Damascene restaurant in Abu Dhabi — brand identity refresh, a bilingual reservations website, and a 12-month social media programme with original photography and video in Arabic and English. Result: 4× growth in social following, 3.2M+ monthly impressions, and 28% increase in dine-in reservations.',
     href: '#contact',
-    image: 'https://i.ibb.co/zTgNfs8P/file-00000000fe4872468754315330f516f9.png',
+    image: 'https://i.ibb.co/QjFqR7JC/Chat-GPT-Image-May-25-2026-10-03-08-PM.png',
   },
   {
     id: '04',
