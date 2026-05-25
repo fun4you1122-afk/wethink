@@ -317,6 +317,57 @@ body {
 /* Scramble dud characters */
 .dud { color: #8B5CF6; opacity: 0.75; }
 
+/* ── Glass Testimonial Swiper ─────────────────────────── */
+.testimonials-stack {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  /* tall enough to show all stacked cards */
+  min-height: 360px;
+}
+
+.testimonial-card {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  cursor: grab;
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.45s ease;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.testimonial-card.is-dragging {
+  cursor: grabbing;
+  transition: none;
+}
+
+.pagination-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: rgba(124, 58, 237, 0.25);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination-dot.active {
+  width: 28px;
+  background: #7C3AED;
+}
+/* ─────────────────────────────────────────────────────── */
+
 @property --beam-angle {
   syntax: '<angle>';
   inherits: false;

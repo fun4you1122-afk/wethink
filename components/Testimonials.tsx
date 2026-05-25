@@ -2,136 +2,107 @@
 
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { Users, Calendar, ShieldCheck, Clock, Cloud, BarChart3, Award, CheckCircle } from 'lucide-react'
 import ScrambleText from '@/components/ScrambleText'
-import {
-  ContainerScroll,
-  CardsContainer,
-  CardTransformed,
-  ReviewStars,
-} from '@/components/ui/scroll-cards'
+import { TestimonialStack, Testimonial } from '@/components/ui/glass-testimonial-swiper'
 
-const TESTIMONIALS = [
+const TESTIMONIALS: Testimonial[] = [
   {
-    id: 'ahmed',
-    quote: "WeThink transformed our entire IT infrastructure in under 6 months. The team's depth of knowledge and project discipline is unlike anything we've experienced before.",
-    name: 'Ahmed Al Mansoori',
-    role: 'CTO',
-    company: 'Abu Dhabi National Energy',
+    id: 1,
     initials: 'AM',
-    color: '#7C3AED',
+    name: 'Ahmed Al Mansoori',
+    role: 'CTO · Abu Dhabi National Energy',
+    quote: "WeThink transformed our entire IT infrastructure in under 6 months. The team's depth of knowledge and project discipline is unlike anything we've experienced before.",
+    tags: [{ text: 'FEATURED', type: 'featured' }, { text: 'Infrastructure', type: 'default' }],
+    stats: [{ icon: Users, text: '500+ employees' }, { icon: Calendar, text: '6 month delivery' }],
+    avatarGradient: 'linear-gradient(135deg, #7C3AED, #5B21B6)',
   },
   {
-    id: 'sarah',
-    quote: "From zero to ISO 27001 certified in 9 months. Their cybersecurity team didn't just implement frameworks — they built a genuine security culture across our organisation.",
-    name: 'Sarah Mitchell',
-    role: 'Head of Information Security',
-    company: 'Financial Services — Abu Dhabi',
+    id: 2,
     initials: 'SM',
-    color: '#059669',
+    name: 'Sarah Mitchell',
+    role: 'Head of Information Security · Financial Services',
+    quote: "From zero to ISO 27001 certified in 9 months. Their cybersecurity team didn't just implement frameworks — they built a genuine security culture across our organisation.",
+    tags: [{ text: 'ISO 27001', type: 'featured' }, { text: 'Cybersecurity', type: 'default' }],
+    stats: [{ icon: ShieldCheck, text: 'Certified' }, { icon: Clock, text: '9 months' }],
+    avatarGradient: 'linear-gradient(135deg, #059669, #047857)',
   },
   {
-    id: 'khalid',
-    quote: "Our smart campus platform went live on time, under budget, and our 18,000 daily users love it. WeThink treated our project like it was their own.",
-    name: 'Dr. Khalid Al Rashidi',
-    role: 'VP Operations',
-    company: 'UAE University',
+    id: 3,
     initials: 'KR',
-    color: '#0EA5E9',
+    name: 'Dr. Khalid Al Rashidi',
+    role: 'VP Operations · UAE University',
+    quote: "Our smart campus platform went live on time, under budget, and our 18,000 daily users love it. WeThink treated our project like it was their own.",
+    tags: [{ text: 'Smart Campus', type: 'featured' }, { text: 'Education', type: 'default' }],
+    stats: [{ icon: Users, text: '18K daily users' }, { icon: Award, text: 'On time & budget' }],
+    avatarGradient: 'linear-gradient(135deg, #0EA5E9, #0369A1)',
   },
   {
-    id: 'fatima',
-    quote: "The cloud migration was seamless — zero downtime, 45% cost reduction, and a team that communicated clearly at every single step.",
-    name: 'Fatima Al Zaabi',
-    role: 'Director of Technology',
-    company: 'Emirates Finance Group',
+    id: 4,
     initials: 'FZ',
-    color: '#F59E0B',
+    name: 'Fatima Al Zaabi',
+    role: 'Director of Technology · Emirates Finance Group',
+    quote: "The cloud migration was seamless — zero downtime, 45% cost reduction, and a team that communicated clearly at every single step.",
+    tags: [{ text: 'Cloud Migration', type: 'featured' }, { text: 'Finance', type: 'default' }],
+    stats: [{ icon: Cloud, text: '45% cost saving' }, { icon: CheckCircle, text: 'Zero downtime' }],
+    avatarGradient: 'linear-gradient(135deg, #F59E0B, #D97706)',
+  },
+  {
+    id: 5,
+    initials: 'RA',
+    name: 'Reem Al Ahbabi',
+    role: 'COO · Abu Dhabi Logistics Co.',
+    quote: "The custom ERP WeThink built for us replaced three legacy systems overnight. Our operations team now has real-time visibility they'd been asking for over a decade.",
+    tags: [{ text: 'Custom Software', type: 'featured' }, { text: 'ERP', type: 'default' }],
+    stats: [{ icon: BarChart3, text: 'Real-time data' }, { icon: CheckCircle, text: '3 systems unified' }],
+    avatarGradient: 'linear-gradient(135deg, #EC4899, #9333EA)',
   },
 ]
-
-const CARD_H = 380
 
 export default function Testimonials() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section style={{ background: 'var(--bg)' }}>
-      {/* Header */}
-      <div className="max-w-4xl mx-auto px-6 pt-24 pb-8 text-center" ref={ref}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="section-label mx-auto">Client Stories</span>
-        </motion.div>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.12 }}
-          className="text-4xl md:text-5xl font-black mt-3"
-          style={{ color: 'var(--text)' }}
-        >
-          <ScrambleText>Trusted by </ScrambleText>
-          <ScrambleText className="gradient-text">Leaders</ScrambleText>
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.22 }}
-          className="mt-4 text-sm uppercase tracking-widest"
-          style={{ color: 'var(--text-muted)' }}
-        >
-          Scroll to explore
-        </motion.p>
-      </div>
+    <section className="section-padding relative overflow-hidden" style={{ background: 'var(--bg)' }}>
+      <div className="orb w-[400px] h-[400px] bg-violet-900 opacity-15 top-0 right-[-100px] pointer-events-none" />
 
-      {/* Scroll-driven card stack */}
-      <ContainerScroll className="min-h-[200vh]">
-        <div
-          className="sticky flex justify-center items-start px-6"
-          style={{ top: '15vh' }}
-        >
-          <CardsContainer
-            className="w-full max-w-md mx-auto"
-            style={{ height: CARD_H + (TESTIMONIALS.length - 1) * 10 }}
+      <div className="relative max-w-4xl mx-auto px-6">
+        {/* Header */}
+        <div ref={ref} className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
           >
-            {TESTIMONIALS.map((t, i) => (
-              <CardTransformed
-                key={t.id}
-                arrayLength={TESTIMONIALS.length}
-                index={i}
-                variant="dark"
-                className="bg-[#0D0D1A]/95 border-violet-500/25 text-white"
-                style={{ width: '100%', height: CARD_H }}
-              >
-                {/* Stars */}
-                <ReviewStars rating={5} className="text-violet-400" />
-
-                {/* Quote */}
-                <blockquote className="text-center text-sm md:text-base leading-relaxed font-medium text-violet-100/85 px-2">
-                  "{t.quote}"
-                </blockquote>
-
-                {/* Author */}
-                <div className="flex items-center gap-3 pt-4 border-t border-violet-500/20 w-full">
-                  <div
-                    className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-white font-bold text-xs"
-                    style={{ background: `linear-gradient(135deg, ${t.color}, ${t.color}99)` }}
-                  >
-                    {t.initials}
-                  </div>
-                  <div className="text-left">
-                    <div className="text-sm font-bold text-white">{t.name}</div>
-                    <div className="text-xs text-violet-300/60">{t.role} · {t.company}</div>
-                  </div>
-                </div>
-              </CardTransformed>
-            ))}
-          </CardsContainer>
+            <span className="section-label mx-auto">Client Stories</span>
+          </motion.div>
+          <h2 className="text-4xl md:text-5xl font-black mt-3" style={{ color: 'var(--text)' }}>
+            <ScrambleText>Trusted by </ScrambleText>
+            <ScrambleText className="gradient-text">Leaders</ScrambleText>
+          </h2>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-4 text-sm uppercase tracking-widest"
+            style={{ color: 'var(--text-muted)' }}
+          >
+            Drag or tap dots to explore
+          </motion.p>
         </div>
-      </ContainerScroll>
+
+        {/* Card stack */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+          /* height keeps the section tall enough for all stacked cards + dots */
+          style={{ minHeight: 420 + (TESTIMONIALS.length - 1) * 10 + 32 }}
+        >
+          <TestimonialStack testimonials={TESTIMONIALS} visibleBehind={2} />
+        </motion.div>
+      </div>
     </section>
   )
 }
