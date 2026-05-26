@@ -77,7 +77,7 @@ function WeThinkHero() {
   };
 
   const openEmail = () => {
-    window.location.href = "mailto:hello@wethink.ae";
+    window.location.href = "mailto:info@wethink.ae";
   };
 
   const openWhatsApp = () => {
