@@ -3,7 +3,6 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Users, Calendar, ShieldCheck, Clock, Cloud, BarChart3, Award, CheckCircle } from 'lucide-react'
-import ScrambleText from '@/components/ScrambleText'
 import { TestimonialStack, Testimonial } from '@/components/ui/glass-testimonial-swiper'
 
 const TESTIMONIALS: Testimonial[] = [
@@ -11,7 +10,7 @@ const TESTIMONIALS: Testimonial[] = [
     id: 1,
     initials: 'AM',
     name: 'Ahmed Al Mansoori',
-    role: 'CTO · Abu Dhabi National Energy',
+    role: 'Chief Technology Officer',
     quote: "WeThink transformed our entire IT infrastructure in under 6 months. The team's depth of knowledge and project discipline is unlike anything we've experienced before.",
     tags: [{ text: 'FEATURED', type: 'featured' }, { text: 'Infrastructure', type: 'default' }],
     stats: [{ icon: Users, text: '500+ employees' }, { icon: Calendar, text: '6 month delivery' }],
@@ -21,7 +20,7 @@ const TESTIMONIALS: Testimonial[] = [
     id: 2,
     initials: 'SM',
     name: 'Sarah Mitchell',
-    role: 'Head of Information Security · Financial Services',
+    role: 'Head of Information Security',
     quote: "From zero to ISO 27001 certified in 9 months. Their cybersecurity team didn't just implement frameworks — they built a genuine security culture across our organisation.",
     tags: [{ text: 'ISO 27001', type: 'featured' }, { text: 'Cybersecurity', type: 'default' }],
     stats: [{ icon: ShieldCheck, text: 'Certified' }, { icon: Clock, text: '9 months' }],
@@ -31,7 +30,7 @@ const TESTIMONIALS: Testimonial[] = [
     id: 3,
     initials: 'KR',
     name: 'Dr. Khalid Al Rashidi',
-    role: 'VP Operations · UAE University',
+    role: 'VP Operations',
     quote: "Our smart campus platform went live on time, under budget, and our 18,000 daily users love it. WeThink treated our project like it was their own.",
     tags: [{ text: 'Smart Campus', type: 'featured' }, { text: 'Education', type: 'default' }],
     stats: [{ icon: Users, text: '18K daily users' }, { icon: Award, text: 'On time & budget' }],
@@ -41,7 +40,7 @@ const TESTIMONIALS: Testimonial[] = [
     id: 4,
     initials: 'FZ',
     name: 'Fatima Al Zaabi',
-    role: 'Director of Technology · Emirates Finance Group',
+    role: 'Director of Technology',
     quote: "The cloud migration was seamless — zero downtime, 45% cost reduction, and a team that communicated clearly at every single step.",
     tags: [{ text: 'Cloud Migration', type: 'featured' }, { text: 'Finance', type: 'default' }],
     stats: [{ icon: Cloud, text: '45% cost saving' }, { icon: CheckCircle, text: 'Zero downtime' }],
@@ -51,13 +50,15 @@ const TESTIMONIALS: Testimonial[] = [
     id: 5,
     initials: 'RA',
     name: 'Reem Al Ahbabi',
-    role: 'COO · Abu Dhabi Logistics Co.',
+    role: 'Chief Operating Officer',
     quote: "The custom ERP WeThink built for us replaced three legacy systems overnight. Our operations team now has real-time visibility they'd been asking for over a decade.",
     tags: [{ text: 'Custom Software', type: 'featured' }, { text: 'ERP', type: 'default' }],
     stats: [{ icon: BarChart3, text: 'Real-time data' }, { icon: CheckCircle, text: '3 systems unified' }],
     avatarGradient: 'linear-gradient(135deg, #EC4899, #9333EA)',
   },
 ]
+
+const words = ['Trusted', 'by', 'Leaders']
 
 export default function Testimonials() {
   const ref = useRef<HTMLDivElement>(null)
@@ -77,14 +78,24 @@ export default function Testimonials() {
           >
             <span className="section-label mx-auto">Client Stories</span>
           </motion.div>
-          <h2 className="text-4xl md:text-5xl font-black mt-3" style={{ color: 'var(--text)' }}>
-            <ScrambleText>Trusted by </ScrambleText>
-            <ScrambleText className="gradient-text">Leaders</ScrambleText>
+          <h2 className="text-4xl md:text-5xl font-black mt-3">
+            {words.map((word, i) => (
+              <motion.span
+                key={word}
+                initial={{ opacity: 0, y: 24 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.15 + i * 0.12, ease: 'easeOut' }}
+                className={word === 'Leaders' ? 'gradient-text' : ''}
+                style={word !== 'Leaders' ? { color: 'var(--text)' } : {}}
+              >
+                {word}{i < words.length - 1 ? ' ' : ''}
+              </motion.span>
+            ))}
           </h2>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.55 }}
             className="mt-4 text-sm uppercase tracking-widest"
             style={{ color: 'var(--text-muted)' }}
           >
