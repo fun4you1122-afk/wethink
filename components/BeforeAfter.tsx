@@ -2,7 +2,6 @@
 
 import { useState, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
-import ScrambleText from '@/components/ScrambleText'
 
 const COMPARISONS = [
   {
@@ -53,9 +52,24 @@ export default function BeforeAfter() {
           >
             <span className="section-label mx-auto">The WeThink Effect</span>
           </motion.div>
-          <h2 className="text-4xl md:text-5xl font-black text-violet-50 mt-3">
-            <ScrambleText>See the </ScrambleText>
-            <ScrambleText className="gradient-text">Difference</ScrambleText>
+          <h2 className="text-4xl md:text-5xl font-black mt-3 overflow-hidden flex justify-center flex-wrap gap-x-3">
+            <motion.span
+              initial={{ opacity: 0, x: -60 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+              style={{ color: 'var(--text)', display: 'inline-block' }}
+            >
+              See the
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0, x: 60 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="gradient-text"
+              style={{ display: 'inline-block' }}
+            >
+              Difference
+            </motion.span>
           </h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
