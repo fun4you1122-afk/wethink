@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Spotlight } from '@/components/ui/spotlight'
-import HeroParticles from '@/components/HeroParticles'
+import HeroRainingLetters from '@/components/HeroRainingLetters'
 
 const WORDS = ['IT Consulting', 'Cloud Strategy', 'Cybersecurity', 'Business Growth']
 
@@ -36,23 +36,11 @@ export default function Hero() {
   return (
     <section id="home" className="relative min-h-screen overflow-hidden flex items-center justify-center">
 
-      {/* Video background */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
-      >
-        <source src="https://videos.pexels.com/video-files/3129671/3129671-hd_1920_1080_30fps.mp4" type="video/mp4" />
-        <source src="https://videos.pexels.com/video-files/857251/857251-hd_1920_1080_25fps.mp4" type="video/mp4" />
-      </video>
+      {/* Raining letters background */}
+      <HeroRainingLetters />
 
-      {/* AMOLED overlay */}
-      <div className="absolute inset-0 z-[1] bg-black/75 pointer-events-none" />
-
-      {/* Canvas particle network — replaces HeroRain */}
-      <HeroParticles />
+      {/* AMOLED overlay — keeps text legible */}
+      <div className="absolute inset-0 z-[1] bg-black/60 pointer-events-none" />
 
       {/* Floating orbs */}
       <div className="orb w-[600px] h-[600px] bg-violet-900 opacity-30 top-[-200px] left-[-200px] pointer-events-none animate-float" />
