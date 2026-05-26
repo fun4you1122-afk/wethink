@@ -61,7 +61,7 @@ Button.displayName = "Button";
 function WeThinkHero() {
   const [titleNumber, setTitleNumber] = useState(0);
   const titles = useMemo(
-    () => ["Innovative", "Strategic", "Transformative"],
+    () => ["Innovative", "Strategic", "Impactful"],
     []
   );
 
@@ -76,17 +76,27 @@ function WeThinkHero() {
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const openEmail = () => {
+    window.location.href = "mailto:hello@wethink.ae";
+  };
+
+  const openWhatsApp = () => {
+    window.open("https://wa.me/971503125078", "_blank");
+  };
+
   return (
     <div className="relative w-full min-h-screen font-sans overflow-hidden">
       {/* Background Video */}
       <video
         className="absolute inset-0 w-full h-full object-cover z-0"
-        src="https://videos.pexels.com/video-files/3129671/3129671-hd_1920_1080_30fps.mp4"
         autoPlay
         loop
         muted
         playsInline
-      />
+      >
+        <source src="https://videos.pexels.com/video-files/3129671/3129671-hd_1920_1080_30fps.mp4" type="video/mp4" />
+        <source src="https://videos.pexels.com/video-files/857251/857251-hd_1920_1080_25fps.mp4" type="video/mp4" />
+      </video>
 
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/80 z-10" />
@@ -150,7 +160,7 @@ function WeThinkHero() {
               size="lg"
               variant="default"
               className="gap-3 shadow-md shadow-violet-900/50"
-              onClick={() => scrollTo("#contact")}
+              onClick={openEmail}
             >
               Start a Project <MoveRight className="w-4 h-4" />
             </Button>
@@ -158,7 +168,7 @@ function WeThinkHero() {
               size="lg"
               variant="outline"
               className="gap-3 shadow-md shadow-violet-900/40"
-              onClick={() => scrollTo("#contact")}
+              onClick={openWhatsApp}
             >
               Book a Call <PhoneCall className="w-4 h-4" />
             </Button>
