@@ -97,7 +97,8 @@ export default function VideoSection() {
                 ref={(el) => { videoRefs.current[i] = el }}
                 className="absolute inset-0 w-full h-full object-cover md:hidden"
                 src={`/scroll-frames/${i + 1}.mp4`}
-                muted playsInline loop preload="auto"
+                muted playsInline preload="auto"
+                loop={i !== 0}
                 animate={{ opacity: activeFrame === i ? 1 : 0 }}
                 transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
               />
@@ -105,7 +106,8 @@ export default function VideoSection() {
                 ref={(el) => { desktopVideoRefs.current[i] = el }}
                 className="absolute inset-0 w-full h-full object-cover hidden md:block"
                 src={`/scroll-frames/${i + 1}-desktop.mp4`}
-                muted playsInline loop preload="auto"
+                muted playsInline preload="auto"
+                loop={i !== 0}
                 animate={{ opacity: activeFrame === i ? 1 : 0 }}
                 transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
               />
