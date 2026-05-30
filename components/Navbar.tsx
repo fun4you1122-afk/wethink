@@ -85,9 +85,10 @@ export default function Navbar() {
               {navLinks.map((link) => {
                 const isActive = activeSection === link.href.replace('#', '')
                 return (
-                  <button
+                  <motion.button
                     key={link.href}
                     onClick={() => scrollTo(link.href)}
+                    whileTap={{ scale: 0.94 }}
                     className="relative px-3.5 py-2 text-sm font-medium rounded-xl transition-all duration-300"
                     style={{
                       color: isActive ? '#A78BFA' : 'var(--text-muted)',
@@ -101,7 +102,7 @@ export default function Navbar() {
                         className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-violet-400"
                       />
                     )}
-                  </button>
+                  </motion.button>
                 )
               })}
             </nav>

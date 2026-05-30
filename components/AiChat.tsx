@@ -334,8 +334,8 @@ export default function AiChat() {
       {/* Floating button */}
       <motion.button
         onClick={() => setOpen((v) => !v)}
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.94 }}
         className="fixed bottom-24 right-4 md:right-6 z-[999] w-14 h-14 rounded-full shadow-xl shadow-violet-500/40 flex items-center justify-center"
         style={{ background: 'linear-gradient(135deg, #6D28D9, #7C3AED)' }}
         title="Chat with WeThink AI"
