@@ -19,7 +19,7 @@ import VideoSection from '@/components/VideoSection'
 import AnalyticsDemo from '@/components/AnalyticsDemo'
 import Blog from '@/components/Blog'
 import PricingSection from '@/components/ui/pricing-section'
-import ParallaxLandscape from '@/components/ParallaxLandscape'
+import ParallaxScene from '@/components/ParallaxScene'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 
@@ -48,7 +48,7 @@ export default function Home() {
       <PricingSection />
       <LogoAssembly />
       <Contact />
-      <ParallaxLandscape />
+      <ParallaxScene />
       <Footer />
     </main>
   )
