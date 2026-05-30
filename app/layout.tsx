@@ -5,6 +5,7 @@ import SmoothScroll from '@/components/SmoothScroll'
 import WhatsAppButton from '@/components/WhatsAppButton'
 import ScrollProgress from '@/components/ScrollProgress'
 import AiChat from '@/components/AiChat'
+import GameTab from '@/components/GameTab'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -43,6 +44,7 @@ export default function RootLayout({
         <ScrollProgress />
         <WhatsAppButton />
         <AiChat />
+        <GameTab />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
