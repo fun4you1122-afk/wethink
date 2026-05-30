@@ -1,5 +1,6 @@
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
+import LogoAssembly from '@/components/LogoAssembly'
 import Welcome from '@/components/Welcome'
 import OrbitalServices from '@/components/OrbitalServices'
 import Services from '@/components/Services'
@@ -26,6 +27,7 @@ export default function Home() {
     <main>
       <Navbar />
       <Hero />
+      <LogoAssembly />
       <Welcome />
       <OrbitalServices />
       <Stats />
