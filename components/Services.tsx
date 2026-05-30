@@ -157,8 +157,8 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
   const rotY = useSpring(rawY, { stiffness: 180, damping: 22 })
 
   // Holographic glare position derived from tilt
-  const glareLeft = useTransform(rotY, [-10, 10], ['10%', '90%'])
-  const glareTop  = useTransform(rotX, [-10, 10], ['90%', '10%'])
+  const glareLeft = useTransform(rotY, [-15, 15], ['10%', '90%'])
+  const glareTop  = useTransform(rotX, [-15, 15], ['90%', '10%'])
   const glareBg   = useMotionTemplate`radial-gradient(circle at ${glareLeft} ${glareTop}, rgba(255,255,255,0.18), transparent 65%)`
 
   const [hovered, setHovered] = useState(false)
@@ -168,8 +168,8 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
     const r = wrapRef.current.getBoundingClientRect()
     const x = (e.clientX - r.left) / r.width  - 0.5  // -0.5 → 0.5
     const y = (e.clientY - r.top)  / r.height - 0.5
-    rawX.set(-y * 10)
-    rawY.set( x * 10)
+    rawX.set(-y * 18)
+    rawY.set( x * 18)
   }
   const onLeave = () => { rawX.set(0); rawY.set(0); setHovered(false) }
 

@@ -1,6 +1,5 @@
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
-import LogoAssembly from '@/components/LogoAssembly'
 import Welcome from '@/components/Welcome'
 import OrbitalServices from '@/components/OrbitalServices'
 import Services from '@/components/Services'
@@ -19,7 +18,6 @@ import VideoSection from '@/components/VideoSection'
 import AnalyticsDemo from '@/components/AnalyticsDemo'
 import Blog from '@/components/Blog'
 import PricingSection from '@/components/ui/pricing-section'
-import ParallaxScene from '@/components/ParallaxScene'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 
@@ -46,9 +44,7 @@ export default function Home() {
       <AnalyticsDemo />
       <Blog />
       <PricingSection />
-      <LogoAssembly />
       <Contact />
-      <ParallaxScene />
       <Footer />
     </main>
   )

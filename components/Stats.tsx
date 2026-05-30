@@ -15,7 +15,7 @@ function AnimatedCounter({ value, suffix, active }: { value: number; suffix: str
 
   useEffect(() => {
     if (!active) return
-    const duration = 1000
+    const duration = 1800
     const start = performance.now()
 
     const tick = (now: number) => {

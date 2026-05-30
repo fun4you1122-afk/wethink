@@ -48,12 +48,13 @@
 
 * { box-sizing: border-box; padding: 0; margin: 0; }
 
-html { scroll-behavior: smooth; overflow-x: clip; }
+html { scroll-behavior: smooth; }
 
 body {
   background-color: var(--bg);
   color: var(--text);
   font-family: 'Plus Jakarta Sans', sans-serif;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -169,7 +170,7 @@ p { text-wrap: pretty; }
   border-radius: 50px;
   border: none;
   cursor: pointer;
-  transition: transform 0.2s var(--ease-spring), box-shadow 0.2s ease;
+  transition: transform 0.4s var(--ease-spring), box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
 }
@@ -179,16 +180,16 @@ p { text-wrap: pretty; }
   inset: 0;
   background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 100%);
   opacity: 0;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.2s ease;
 }
 .btn-primary:hover::before { opacity: 1; }
 .btn-primary:hover {
   box-shadow: 0 8px 32px rgba(124, 58, 237, 0.5);
-  transform: scale(1.02);
+  transform: translateY(-2px) scale(1.01);
 }
 .btn-primary:active {
-  transform: scale(0.97);
-  transition-duration: 0.08s;
+  transform: translateY(0) scale(0.98);
+  transition-duration: 0.1s;
 }
 
 .btn-outline {
@@ -204,16 +205,17 @@ p { text-wrap: pretty; }
   border-radius: 50px;
   border: 1.5px solid rgba(124, 58, 237, 0.4);
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s var(--ease-spring);
+  transition: all 0.4s var(--ease-spring);
 }
 .btn-outline:hover {
   background: rgba(124, 58, 237, 0.1);
   border-color: var(--primary-light);
   box-shadow: 0 0 20px rgba(124, 58, 237, 0.18);
+  transform: translateY(-1px);
 }
 .btn-outline:active {
-  transform: scale(0.97);
-  transition-duration: 0.08s;
+  transform: translateY(0) scale(0.98);
+  transition-duration: 0.1s;
 }
 
 /* Section label */
