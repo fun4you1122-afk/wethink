@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useMotionValueEvent, useInView } from 'framer-motion'
 
 const TOTAL_FRAMES = 4
+const VH_PER_FRAME = 200 // scroll distance per frame in vh
 
 export default function VideoSection() {
   const headingRef = useRef<HTMLDivElement>(null)
@@ -72,7 +73,7 @@ export default function VideoSection() {
       </div>
 
       {/* Pinned scroll frames */}
-      <section ref={sectionRef} style={{ height: `${TOTAL_FRAMES * 100}vh` }} className="relative">
+      <section ref={sectionRef} style={{ height: `${TOTAL_FRAMES * VH_PER_FRAME}vh` }} className="relative">
         <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
 
           {/* Video layers */}
