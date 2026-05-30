@@ -1,106 +1,28 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 
-const TOTAL_FRAMES = 4
-const COOLDOWN_MS = 900 // ms between frame advances
+const VIDEO_ID = 'J9LK6EtxzgM'
 
 export default function VideoSection() {
-  const headingRef = useRef<HTMLDivElement>(null)
-  const stickyRef = useRef<HTMLDivElement>(null)
-  const inView = useInView(headingRef, { once: true, margin: '-80px' })
-  const sectionInView = useInView(stickyRef, { once: false, margin: '0px' })
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const inView = useInView(sectionRef, { once: true, margin: '0px' })
 
-  const [activeFrame, setActiveFrame] = useState(0)
-  const activeFrameRef = useRef(0)
-  const lockedRef = useRef(false)
-  const touchStartY = useRef(0)
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
-  const desktopVideoRefs = useRef<(HTMLVideoElement | null)[]>([])
-
-  const advance = (dir: 1 | -1) => {
-    if (lockedRef.current) return
-    const next = activeFrameRef.current + dir
-    if (next < 0 || next >= TOTAL_FRAMES) return
-    lockedRef.current = true
-    activeFrameRef.current = next
-    setActiveFrame(next)
-    setTimeout(() => { lockedRef.current = false }, COOLDOWN_MS)
-  }
-
-  // Wheel: one gesture = one frame
-  useEffect(() => {
-    const onWheel = (e: WheelEvent) => {
-      const el = stickyRef.current
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      const isVisible = rect.top <= 10 && rect.bottom >= window.innerHeight - 10
-      if (!isVisible) return
-
-      const scrollingDown = e.deltaY > 0
-      const scrollingUp = e.deltaY < 0
-
-      // At last frame scrolling down — let page scroll through
-      if (scrollingDown && activeFrameRef.current === TOTAL_FRAMES - 1) return
-      // At first frame scrolling up — let page scroll through
-      if (scrollingUp && activeFrameRef.current === 0) return
-
-      e.preventDefault()
-      advance(scrollingDown ? 1 : -1)
-    }
-
-    window.addEventListener('wheel', onWheel, { passive: false })
-    return () => window.removeEventListener('wheel', onWheel)
-  }, [])
-
-  // Touch: swipe up = next, swipe down = prev
-  useEffect(() => {
-    const onTouchStart = (e: TouchEvent) => {
-      touchStartY.current = e.touches[0].clientY
-    }
-    const onTouchEnd = (e: TouchEvent) => {
-      const el = stickyRef.current
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      const isVisible = rect.top <= 10 && rect.bottom >= window.innerHeight - 10
-      if (!isVisible) return
-
-      const delta = touchStartY.current - e.changedTouches[0].clientY
-      if (Math.abs(delta) < 40) return // ignore tiny swipes
-
-      const scrollingDown = delta > 0
-      if (scrollingDown && activeFrameRef.current === TOTAL_FRAMES - 1) return
-      if (!scrollingDown && activeFrameRef.current === 0) return
-
-      advance(scrollingDown ? 1 : -1)
-    }
-
-    window.addEventListener('touchstart', onTouchStart, { passive: true })
-    window.addEventListener('touchend', onTouchEnd, { passive: true })
-    return () => {
-      window.removeEventListener('touchstart', onTouchStart)
-      window.removeEventListener('touchend', onTouchEnd)
-    }
-  }, [])
-
-  // Play/pause videos
-  useEffect(() => {
-    const play = (vid: HTMLVideoElement | null, shouldPlay: boolean) => {
-      if (!vid) return
-      if (shouldPlay) vid.play().catch(() => {})
-      else { vid.pause(); vid.currentTime = 0 }
-    }
-    videoRefs.current.forEach((vid, i) => play(vid, i === activeFrame && sectionInView))
-    desktopVideoRefs.current.forEach((vid, i) => play(vid, i === activeFrame && sectionInView))
-  }, [activeFrame, sectionInView])
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.96, 1, 0.96])
+  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0.4, 1, 1, 0.4])
 
   return (
-    <div>
-      {/* Heading — normal flow */}
-      <div ref={headingRef} className="section-padding pb-0 relative overflow-hidden">
-        <div className="orb w-[600px] h-[600px] bg-violet-900/20 opacity-40 bottom-[-200px] right-[-200px] pointer-events-none" />
-        <div className="relative max-w-7xl mx-auto px-6 text-center">
+    <section ref={sectionRef} className="section-padding relative overflow-hidden">
+      <div className="orb w-[600px] h-[600px] bg-violet-900/20 opacity-40 bottom-[-200px] right-[-200px] pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <div className="text-center mb-14">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -127,92 +49,40 @@ export default function VideoSection() {
             it&apos;s whether you&apos;ll lead the change or follow it.
           </motion.p>
         </div>
-      </div>
 
-      {/* Full-screen sticky frame player */}
-      <div ref={stickyRef} className="sticky top-0 h-screen w-full overflow-hidden bg-black">
-
-        {/* Video layers */}
-        {Array.from({ length: TOTAL_FRAMES }).map((_, i) => (
-          <div key={i} className="absolute inset-0">
-            <motion.video
-              ref={(el) => { videoRefs.current[i] = el }}
-              className="absolute inset-0 w-full h-full object-cover md:hidden"
-              src={`/scroll-frames/${i + 1}.mp4`}
-              muted playsInline preload="auto"
-              loop={i !== 0}
-              animate={{ opacity: activeFrame === i ? 1 : 0 }}
-              transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-            />
-            <motion.video
-              ref={(el) => { desktopVideoRefs.current[i] = el }}
-              className="absolute inset-0 w-full h-full object-cover hidden md:block"
-              src={`/scroll-frames/${i + 1}-desktop.mp4`}
-              muted playsInline preload="auto"
-              loop={i !== 0}
-              animate={{ opacity: activeFrame === i ? 1 : 0 }}
-              transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-            />
-          </div>
-        ))}
-
-        {/* Progress dots */}
-        <div className="absolute right-5 md:right-8 top-1/2 -translate-y-1/2 flex flex-col gap-2.5 z-20">
-          {Array.from({ length: TOTAL_FRAMES }).map((_, i) => (
-            <motion.div
-              key={i}
-              className="w-1.5 rounded-full"
-              animate={{
-                height: activeFrame === i ? 28 : 6,
-                background: activeFrame === i ? '#A78BFA' : 'rgba(255,255,255,0.25)',
-              }}
-              transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
-            />
-          ))}
-        </div>
-
-        {/* Frame counter */}
-        <div className="absolute bottom-8 left-6 md:left-10 z-20 flex items-center gap-3">
-          <span className="text-xs font-semibold tabular-nums text-white/50 tracking-widest">
-            {String(activeFrame + 1).padStart(2, '0')}
-            <span className="mx-1.5 text-white/20">/</span>
-            {String(TOTAL_FRAMES).padStart(2, '0')}
-          </span>
-          <div className="w-20 md:w-32 h-px bg-white/15 rounded-full overflow-hidden">
-            <motion.div
-              className="h-full rounded-full bg-violet-400"
-              animate={{ width: `${((activeFrame + 1) / TOTAL_FRAMES) * 100}%` }}
-              transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-            />
-          </div>
-        </div>
-
-        {/* Scroll nudge */}
+        {/* Video — autoplay, muted, looping, no controls */}
         <motion.div
-          className="absolute bottom-8 inset-x-0 flex flex-col items-center gap-1.5 z-20"
-          animate={{ opacity: activeFrame === 0 ? 1 : 0 }}
-          transition={{ duration: 0.4 }}
+          style={{ scale, opacity }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.9, delay: 0.3 }}
+          className="relative rounded-3xl overflow-hidden"
         >
-          <span className="text-[10px] uppercase tracking-widest text-white/30">Scroll</span>
-          <motion.div
-            animate={{ y: [0, 7, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-4 h-7 border border-white/20 rounded-full flex items-start justify-center pt-1"
-          >
-            <div className="w-0.5 h-1.5 rounded-full bg-violet-400/60" />
-          </motion.div>
+          {/* Glow border */}
+          <div className="absolute inset-0 rounded-3xl border border-violet-500/20 pointer-events-none z-10" />
+          <div className="absolute inset-0 rounded-3xl shadow-[0_0_80px_rgba(124,58,237,0.25)] pointer-events-none z-10" />
+
+          {/* 16:9 wrapper — iframe only mounts when in view so autoplay fires on scroll */}
+          <div className="relative w-full bg-black" style={{ paddingBottom: '56.25%' }}>
+            {inView && (
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?rel=0&modestbranding=1&iv_load_policy=3&controls=0&autoplay=1&mute=1&loop=1&playlist=${VIDEO_ID}&color=white&showinfo=0&disablekb=1`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="WeThink — The Future is Digital"
+                style={{ border: 0 }}
+              />
+            )}
+          </div>
         </motion.div>
 
-      </div>
-
-      {/* CTA — normal flow */}
-      <div className="section-padding pt-14 relative">
+        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center"
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="text-center mt-10"
         >
           <button
             onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
@@ -225,6 +95,6 @@ export default function VideoSection() {
           </button>
         </motion.div>
       </div>
-    </div>
+    </section>
   )
 }
