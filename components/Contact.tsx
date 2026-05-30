@@ -2,7 +2,6 @@
 
 import { useRef, useState, FormEvent } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
-import ScrambleText from '@/components/ScrambleText'
 
 const contactInfo = [
   {
@@ -82,9 +81,19 @@ export default function Contact() {
           >
             <span className="section-label mx-auto">Let&apos;s Talk</span>
           </motion.div>
-          <h2 className="text-4xl md:text-6xl font-black mt-3" style={{ color: 'var(--text)' }}>
-            <ScrambleText>Start Your </ScrambleText>
-            <ScrambleText className="gradient-text">Journey</ScrambleText>
+          <h2 className="text-4xl md:text-6xl font-black mt-3 overflow-hidden">
+            {[{ text: 'Start Your', gradient: false }, { text: 'Journey', gradient: true }].map((w, i) => (
+              <motion.span
+                key={w.text}
+                initial={{ opacity: 0, y: 40 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.55, delay: 0.1 + i * 0.13, ease: [0.32, 0.72, 0, 1] }}
+                className={w.gradient ? 'gradient-text' : ''}
+                style={!w.gradient ? { color: 'var(--text)', display: 'inline-block', marginRight: '0.25em' } : { display: 'inline-block' }}
+              >
+                {w.text}
+              </motion.span>
+            ))}
           </h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
