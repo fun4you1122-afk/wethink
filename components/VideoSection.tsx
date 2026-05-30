@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useMotionValueEvent, useInView } from 'framer-motion'
 
 const TOTAL_FRAMES = 4
-const VH_PER_FRAME = 300
+const VH_PER_FRAME = 150
 
 export default function VideoSection() {
   const headingRef = useRef<HTMLDivElement>(null)
