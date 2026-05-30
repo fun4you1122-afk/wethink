@@ -62,109 +62,129 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.header
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: hidden ? -100 : 0, opacity: hidden ? 0 : 1 }}
-        transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? 'glass py-3 shadow-2xl' : 'py-5 bg-transparent'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          {/* Logo */}
-          <button onClick={() => scrollTo('#home')} className="flex-shrink-0">
-            <Logo size="sm" />
-          </button>
+      {/* Floating pill navbar */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 pointer-events-none">
+        <motion.header
+          initial={{ y: -80, opacity: 0 }}
+          animate={{ y: hidden ? -80 : 0, opacity: hidden ? 0 : 1 }}
+          transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+          className="w-full max-w-5xl pointer-events-auto"
+        >
+          <div className={`flex items-center justify-between px-5 transition-all duration-500 ${
+            scrolled
+              ? 'rounded-2xl glass py-3 shadow-2xl shadow-black/40'
+              : 'rounded-2xl py-4 bg-transparent'
+          }`}>
+            {/* Logo */}
+            <button onClick={() => scrollTo('#home')} className="flex-shrink-0">
+              <Logo size="sm" />
+            </button>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => {
-              const isActive = activeSection === link.href.replace('#', '')
-              return (
-                <button
-                  key={link.href}
-                  onClick={() => scrollTo(link.href)}
-                  className="relative px-4 py-2 text-sm font-medium transition-colors duration-200"
-                  style={{ color: isActive ? '#7C3AED' : 'var(--text-muted)' }}
-                >
-                  {link.label}
-                  {isActive && (
-                    <motion.span
-                      layoutId="nav-indicator"
-                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-violet-400"
-                    />
-                  )}
-                </button>
-              )
-            })}
-          </nav>
+            {/* Desktop nav */}
+            <nav className="hidden md:flex items-center gap-0.5">
+              {navLinks.map((link) => {
+                const isActive = activeSection === link.href.replace('#', '')
+                return (
+                  <button
+                    key={link.href}
+                    onClick={() => scrollTo(link.href)}
+                    className="relative px-3.5 py-2 text-sm font-medium rounded-xl transition-all duration-300"
+                    style={{
+                      color: isActive ? '#A78BFA' : 'var(--text-muted)',
+                      background: isActive ? 'rgba(124,58,237,0.1)' : 'transparent',
+                    }}
+                  >
+                    {link.label}
+                    {isActive && (
+                      <motion.span
+                        layoutId="nav-indicator"
+                        className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-violet-400"
+                      />
+                    )}
+                  </button>
+                )
+              })}
+            </nav>
 
-          {/* CTA */}
-          <div className="hidden md:flex items-center gap-3">
+            {/* CTA */}
+            <div className="hidden md:flex items-center gap-3">
+              <button
+                onClick={() => scrollTo('#contact')}
+                className="btn-primary text-sm py-2 px-5 group"
+              >
+                Get Started
+                <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-px">
+                  <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </button>
+            </div>
+
+            {/* Mobile menu button — morphs to X */}
             <button
-              onClick={() => scrollTo('#contact')}
-              className="btn-primary text-sm py-2.5 px-5"
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden relative w-8 h-8 flex items-center justify-center"
+              aria-label="Toggle menu"
             >
-              Get Started
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <motion.span
+                animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 0 : -5 }}
+                transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                className="absolute block w-5 h-px bg-violet-200 origin-center"
+              />
+              <motion.span
+                animate={{ opacity: menuOpen ? 0 : 1, scaleX: menuOpen ? 0 : 1 }}
+                transition={{ duration: 0.2 }}
+                className="absolute block w-5 h-px bg-violet-200 origin-center"
+              />
+              <motion.span
+                animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? 0 : 5 }}
+                transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                className="absolute block w-5 h-px bg-violet-200 origin-center"
+              />
             </button>
           </div>
+        </motion.header>
+      </div>
 
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden flex flex-col gap-1.5 p-2"
-            aria-label="Toggle menu"
-          >
-            <motion.span
-              animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 8 : 0 }}
-              className="block w-6 h-0.5 bg-violet-200 origin-center"
-            />
-            <motion.span
-              animate={{ opacity: menuOpen ? 0 : 1 }}
-              className="block w-6 h-0.5 bg-violet-200"
-            />
-            <motion.span
-              animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -8 : 0 }}
-              className="block w-6 h-0.5 bg-violet-200 origin-center"
-            />
-          </button>
-        </div>
-      </motion.header>
-
-      {/* Mobile menu */}
+      {/* Mobile menu — full-screen glass overlay */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="fixed inset-0 z-40 glass flex flex-col items-center justify-center gap-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-6"
+            style={{ background: 'rgba(5,3,12,0.92)', backdropFilter: 'blur(24px)' }}
           >
             {navLinks.map((link, i) => (
-              <motion.button
-                key={link.href}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.07 }}
-                onClick={() => scrollTo(link.href)}
-                className="text-3xl font-bold hover:text-violet-400 transition-colors" style={{ color: 'var(--text)' }}
-              >
-                {link.label}
-              </motion.button>
+              <div key={link.href} style={{ overflow: 'hidden' }}>
+                <motion.button
+                  initial={{ y: 48, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 48, opacity: 0 }}
+                  transition={{ duration: 0.4, delay: i * 0.06, ease: [0.32, 0.72, 0, 1] }}
+                  onClick={() => scrollTo(link.href)}
+                  className="text-3xl font-bold hover:text-violet-400 transition-colors duration-300"
+                  style={{ color: 'var(--text)' }}
+                >
+                  {link.label}
+                </motion.button>
+              </div>
             ))}
-            <motion.button
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: navLinks.length * 0.07 }}
-              onClick={() => scrollTo('#contact')}
-              className="btn-primary mt-4"
-            >
-              Get Started
-            </motion.button>
+            <div style={{ overflow: 'hidden' }}>
+              <motion.button
+                initial={{ y: 48, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 48, opacity: 0 }}
+                transition={{ duration: 0.4, delay: navLinks.length * 0.06, ease: [0.32, 0.72, 0, 1] }}
+                onClick={() => scrollTo('#contact')}
+                className="btn-primary mt-4"
+              >
+                Get Started
+              </motion.button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
