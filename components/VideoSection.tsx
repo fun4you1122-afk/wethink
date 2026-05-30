@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useMotionValueEvent, useInView } from 'framer-motion'
 
 const TOTAL_FRAMES = 4
-const VH_PER_FRAME = 200 // scroll distance per frame in vh
+const VH_PER_FRAME = 300
 
 export default function VideoSection() {
   const headingRef = useRef<HTMLDivElement>(null)
@@ -12,6 +12,7 @@ export default function VideoSection() {
   const inView = useInView(headingRef, { once: true, margin: '-80px' })
 
   const [activeFrame, setActiveFrame] = useState(0)
+  const activeFrameRef = useRef(0)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
   const desktopVideoRefs = useRef<(HTMLVideoElement | null)[]>([])
 
@@ -21,8 +22,21 @@ export default function VideoSection() {
   })
 
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
-    const frame = Math.min(Math.floor(v * TOTAL_FRAMES), TOTAL_FRAMES - 1)
-    setActiveFrame(frame)
+    const segment = 1 / TOTAL_FRAMES
+    const buffer = segment * 0.08 // 8% buffer before advancing
+    const current = activeFrameRef.current
+
+    const nextThreshold = (current + 1) * segment + buffer
+    const prevThreshold = current * segment - buffer
+
+    let next = current
+    if (v >= nextThreshold && current < TOTAL_FRAMES - 1) next = current + 1
+    else if (v < prevThreshold && current > 0) next = current - 1
+
+    if (next !== current) {
+      activeFrameRef.current = next
+      setActiveFrame(next)
+    }
   })
 
   useEffect(() => {
