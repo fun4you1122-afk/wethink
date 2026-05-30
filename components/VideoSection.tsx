@@ -4,12 +4,13 @@ import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useMotionValueEvent, useInView } from 'framer-motion'
 
 const TOTAL_FRAMES = 4
-const VH_PER_FRAME = 150
+const VH_PER_FRAME = 120
 
 export default function VideoSection() {
   const headingRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
   const inView = useInView(headingRef, { once: true, margin: '-80px' })
+  const sectionInView = useInView(sectionRef, { once: false, margin: '0px' })
 
   const [activeFrame, setActiveFrame] = useState(0)
   const activeFrameRef = useRef(0)
@@ -23,7 +24,7 @@ export default function VideoSection() {
 
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     const segment = 1 / TOTAL_FRAMES
-    const buffer = segment * 0.08 // 8% buffer before advancing
+    const buffer = segment * 0.08
     const current = activeFrameRef.current
 
     const nextThreshold = (current + 1) * segment + buffer
@@ -39,18 +40,21 @@ export default function VideoSection() {
     }
   })
 
+  // Play/pause based on active frame AND whether section is visible
   useEffect(() => {
-    videoRefs.current.forEach((vid, i) => {
+    const play = (vid: HTMLVideoElement | null, shouldPlay: boolean) => {
       if (!vid) return
-      if (i === activeFrame) { vid.play().catch(() => {}) }
-      else { vid.pause(); vid.currentTime = 0 }
-    })
-    desktopVideoRefs.current.forEach((vid, i) => {
-      if (!vid) return
-      if (i === activeFrame) { vid.play().catch(() => {}) }
-      else { vid.pause(); vid.currentTime = 0 }
-    })
-  }, [activeFrame])
+      if (shouldPlay) {
+        vid.play().catch(() => {})
+      } else {
+        vid.pause()
+        vid.currentTime = 0
+      }
+    }
+
+    videoRefs.current.forEach((vid, i) => play(vid, i === activeFrame && sectionInView))
+    desktopVideoRefs.current.forEach((vid, i) => play(vid, i === activeFrame && sectionInView))
+  }, [activeFrame, sectionInView])
 
   return (
     <div>
