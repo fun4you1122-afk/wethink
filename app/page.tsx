@@ -27,7 +27,6 @@ export default function Home() {
     <main>
       <Navbar />
       <Hero />
-      <LogoAssembly />
       <Welcome />
       <OrbitalServices />
       <Stats />
@@ -46,6 +45,7 @@ export default function Home() {
       <AnalyticsDemo />
       <Blog />
       <PricingSection />
+      <LogoAssembly />
       <Contact />
       <Footer />
     </main>

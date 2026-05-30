@@ -117,7 +117,7 @@ export default function LogoAssembly() {
             We<span className="gradient-text">Think</span>
           </p>
           <p className="text-sm mt-2 tracking-widest uppercase" style={{ color: 'var(--text-muted)' }}>
-            Abu Dhabi · UAE · Est. 2019
+            Thank You for Visiting Us!
           </p>
         </motion.div>
 
