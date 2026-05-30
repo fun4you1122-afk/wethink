@@ -1,64 +1,103 @@
 'use client'
 
 import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, useMotionValueEvent, useInView } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 
 const TOTAL_FRAMES = 4
-const VH_PER_FRAME = 120
+const COOLDOWN_MS = 900 // ms between frame advances
 
 export default function VideoSection() {
   const headingRef = useRef<HTMLDivElement>(null)
-  const sectionRef = useRef<HTMLDivElement>(null)
+  const stickyRef = useRef<HTMLDivElement>(null)
   const inView = useInView(headingRef, { once: true, margin: '-80px' })
-  const sectionInView = useInView(sectionRef, { once: false, margin: '0px' })
+  const sectionInView = useInView(stickyRef, { once: false, margin: '0px' })
 
   const [activeFrame, setActiveFrame] = useState(0)
   const activeFrameRef = useRef(0)
+  const lockedRef = useRef(false)
+  const touchStartY = useRef(0)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
   const desktopVideoRefs = useRef<(HTMLVideoElement | null)[]>([])
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  })
+  const advance = (dir: 1 | -1) => {
+    if (lockedRef.current) return
+    const next = activeFrameRef.current + dir
+    if (next < 0 || next >= TOTAL_FRAMES) return
+    lockedRef.current = true
+    activeFrameRef.current = next
+    setActiveFrame(next)
+    setTimeout(() => { lockedRef.current = false }, COOLDOWN_MS)
+  }
 
-  useMotionValueEvent(scrollYProgress, 'change', (v) => {
-    const segment = 1 / TOTAL_FRAMES
-    const buffer = segment * 0.08
-    const current = activeFrameRef.current
+  // Wheel: one gesture = one frame
+  useEffect(() => {
+    const onWheel = (e: WheelEvent) => {
+      const el = stickyRef.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const isVisible = rect.top <= 10 && rect.bottom >= window.innerHeight - 10
+      if (!isVisible) return
 
-    const nextThreshold = (current + 1) * segment + buffer
-    const prevThreshold = current * segment - buffer
+      const scrollingDown = e.deltaY > 0
+      const scrollingUp = e.deltaY < 0
 
-    let next = current
-    if (v >= nextThreshold && current < TOTAL_FRAMES - 1) next = current + 1
-    else if (v < prevThreshold && current > 0) next = current - 1
+      // At last frame scrolling down — let page scroll through
+      if (scrollingDown && activeFrameRef.current === TOTAL_FRAMES - 1) return
+      // At first frame scrolling up — let page scroll through
+      if (scrollingUp && activeFrameRef.current === 0) return
 
-    if (next !== current) {
-      activeFrameRef.current = next
-      setActiveFrame(next)
+      e.preventDefault()
+      advance(scrollingDown ? 1 : -1)
     }
-  })
 
-  // Play/pause based on active frame AND whether section is visible
+    window.addEventListener('wheel', onWheel, { passive: false })
+    return () => window.removeEventListener('wheel', onWheel)
+  }, [])
+
+  // Touch: swipe up = next, swipe down = prev
+  useEffect(() => {
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartY.current = e.touches[0].clientY
+    }
+    const onTouchEnd = (e: TouchEvent) => {
+      const el = stickyRef.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const isVisible = rect.top <= 10 && rect.bottom >= window.innerHeight - 10
+      if (!isVisible) return
+
+      const delta = touchStartY.current - e.changedTouches[0].clientY
+      if (Math.abs(delta) < 40) return // ignore tiny swipes
+
+      const scrollingDown = delta > 0
+      if (scrollingDown && activeFrameRef.current === TOTAL_FRAMES - 1) return
+      if (!scrollingDown && activeFrameRef.current === 0) return
+
+      advance(scrollingDown ? 1 : -1)
+    }
+
+    window.addEventListener('touchstart', onTouchStart, { passive: true })
+    window.addEventListener('touchend', onTouchEnd, { passive: true })
+    return () => {
+      window.removeEventListener('touchstart', onTouchStart)
+      window.removeEventListener('touchend', onTouchEnd)
+    }
+  }, [])
+
+  // Play/pause videos
   useEffect(() => {
     const play = (vid: HTMLVideoElement | null, shouldPlay: boolean) => {
       if (!vid) return
-      if (shouldPlay) {
-        vid.play().catch(() => {})
-      } else {
-        vid.pause()
-        vid.currentTime = 0
-      }
+      if (shouldPlay) vid.play().catch(() => {})
+      else { vid.pause(); vid.currentTime = 0 }
     }
-
     videoRefs.current.forEach((vid, i) => play(vid, i === activeFrame && sectionInView))
     desktopVideoRefs.current.forEach((vid, i) => play(vid, i === activeFrame && sectionInView))
   }, [activeFrame, sectionInView])
 
   return (
     <div>
-      {/* Section header — normal flow, above the pinned area */}
+      {/* Heading — normal flow */}
       <div ref={headingRef} className="section-padding pb-0 relative overflow-hidden">
         <div className="orb w-[600px] h-[600px] bg-violet-900/20 opacity-40 bottom-[-200px] right-[-200px] pointer-events-none" />
         <div className="relative max-w-7xl mx-auto px-6 text-center">
@@ -90,85 +129,83 @@ export default function VideoSection() {
         </div>
       </div>
 
-      {/* Pinned scroll frames */}
-      <section ref={sectionRef} style={{ height: `${TOTAL_FRAMES * VH_PER_FRAME}vh` }} className="relative">
-        <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
+      {/* Full-screen sticky frame player */}
+      <div ref={stickyRef} className="sticky top-0 h-screen w-full overflow-hidden bg-black">
 
-          {/* Video layers */}
+        {/* Video layers */}
+        {Array.from({ length: TOTAL_FRAMES }).map((_, i) => (
+          <div key={i} className="absolute inset-0">
+            <motion.video
+              ref={(el) => { videoRefs.current[i] = el }}
+              className="absolute inset-0 w-full h-full object-cover md:hidden"
+              src={`/scroll-frames/${i + 1}.mp4`}
+              muted playsInline preload="auto"
+              loop={i !== 0}
+              animate={{ opacity: activeFrame === i ? 1 : 0 }}
+              transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+            />
+            <motion.video
+              ref={(el) => { desktopVideoRefs.current[i] = el }}
+              className="absolute inset-0 w-full h-full object-cover hidden md:block"
+              src={`/scroll-frames/${i + 1}-desktop.mp4`}
+              muted playsInline preload="auto"
+              loop={i !== 0}
+              animate={{ opacity: activeFrame === i ? 1 : 0 }}
+              transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+            />
+          </div>
+        ))}
+
+        {/* Progress dots */}
+        <div className="absolute right-5 md:right-8 top-1/2 -translate-y-1/2 flex flex-col gap-2.5 z-20">
           {Array.from({ length: TOTAL_FRAMES }).map((_, i) => (
-            <div key={i} className="absolute inset-0">
-              <motion.video
-                ref={(el) => { videoRefs.current[i] = el }}
-                className="absolute inset-0 w-full h-full object-cover md:hidden"
-                src={`/scroll-frames/${i + 1}.mp4`}
-                muted playsInline preload="auto"
-                loop={i !== 0}
-                animate={{ opacity: activeFrame === i ? 1 : 0 }}
-                transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-              />
-              <motion.video
-                ref={(el) => { desktopVideoRefs.current[i] = el }}
-                className="absolute inset-0 w-full h-full object-cover hidden md:block"
-                src={`/scroll-frames/${i + 1}-desktop.mp4`}
-                muted playsInline preload="auto"
-                loop={i !== 0}
-                animate={{ opacity: activeFrame === i ? 1 : 0 }}
-                transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-              />
-            </div>
-          ))}
-
-          {/* Progress dots */}
-          <div className="absolute right-5 md:right-8 top-1/2 -translate-y-1/2 flex flex-col gap-2.5 z-20">
-            {Array.from({ length: TOTAL_FRAMES }).map((_, i) => (
-              <motion.div
-                key={i}
-                className="w-1.5 rounded-full"
-                animate={{
-                  height: activeFrame === i ? 28 : 6,
-                  background: activeFrame === i ? '#A78BFA' : 'rgba(255,255,255,0.25)',
-                }}
-                transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
-              />
-            ))}
-          </div>
-
-          {/* Frame counter */}
-          <div className="absolute bottom-8 left-6 md:left-10 z-20 flex items-center gap-3">
-            <span className="text-xs font-semibold tabular-nums text-white/50 tracking-widest">
-              {String(activeFrame + 1).padStart(2, '0')}
-              <span className="mx-1.5 text-white/20">/</span>
-              {String(TOTAL_FRAMES).padStart(2, '0')}
-            </span>
-            <div className="w-20 md:w-32 h-px bg-white/15 rounded-full overflow-hidden">
-              <motion.div
-                className="h-full rounded-full bg-violet-400"
-                animate={{ width: `${((activeFrame + 1) / TOTAL_FRAMES) * 100}%` }}
-                transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-              />
-            </div>
-          </div>
-
-          {/* Scroll nudge */}
-          <motion.div
-            className="absolute bottom-8 inset-x-0 flex flex-col items-center gap-1.5 z-20"
-            animate={{ opacity: activeFrame === 0 ? 1 : 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            <span className="text-[10px] uppercase tracking-widest text-white/30">Scroll</span>
             <motion.div
-              animate={{ y: [0, 7, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-              className="w-4 h-7 border border-white/20 rounded-full flex items-start justify-center pt-1"
-            >
-              <div className="w-0.5 h-1.5 rounded-full bg-violet-400/60" />
-            </motion.div>
-          </motion.div>
-
+              key={i}
+              className="w-1.5 rounded-full"
+              animate={{
+                height: activeFrame === i ? 28 : 6,
+                background: activeFrame === i ? '#A78BFA' : 'rgba(255,255,255,0.25)',
+              }}
+              transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+            />
+          ))}
         </div>
-      </section>
 
-      {/* CTA — normal flow, below the pinned area */}
+        {/* Frame counter */}
+        <div className="absolute bottom-8 left-6 md:left-10 z-20 flex items-center gap-3">
+          <span className="text-xs font-semibold tabular-nums text-white/50 tracking-widest">
+            {String(activeFrame + 1).padStart(2, '0')}
+            <span className="mx-1.5 text-white/20">/</span>
+            {String(TOTAL_FRAMES).padStart(2, '0')}
+          </span>
+          <div className="w-20 md:w-32 h-px bg-white/15 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full rounded-full bg-violet-400"
+              animate={{ width: `${((activeFrame + 1) / TOTAL_FRAMES) * 100}%` }}
+              transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+            />
+          </div>
+        </div>
+
+        {/* Scroll nudge */}
+        <motion.div
+          className="absolute bottom-8 inset-x-0 flex flex-col items-center gap-1.5 z-20"
+          animate={{ opacity: activeFrame === 0 ? 1 : 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <span className="text-[10px] uppercase tracking-widest text-white/30">Scroll</span>
+          <motion.div
+            animate={{ y: [0, 7, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-4 h-7 border border-white/20 rounded-full flex items-start justify-center pt-1"
+          >
+            <div className="w-0.5 h-1.5 rounded-full bg-violet-400/60" />
+          </motion.div>
+        </motion.div>
+
+      </div>
+
+      {/* CTA — normal flow */}
       <div className="section-padding pt-14 relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
