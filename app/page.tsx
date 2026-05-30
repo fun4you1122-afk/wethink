@@ -18,6 +18,7 @@ import VideoSection from '@/components/VideoSection'
 import AnalyticsDemo from '@/components/AnalyticsDemo'
 import Blog from '@/components/Blog'
 import PricingSection from '@/components/ui/pricing-section'
+import LogoAssembly from '@/components/LogoAssembly'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 
@@ -44,6 +45,7 @@ export default function Home() {
       <AnalyticsDemo />
       <Blog />
       <PricingSection />
+      <LogoAssembly />
       <Contact />
       <Footer />
     </main>
