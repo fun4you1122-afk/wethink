@@ -826,128 +826,192 @@ function drawHero(
   x: number, y: number,
   face: 1 | -1, walkPhase: number, onGround: boolean, vy: number
 ) {
+  // Classic plumber-hero archetype: red cap, blue overalls, mustache, gloves, boots.
   ctx.save()
   ctx.translate(x + 18, y + 52) // pivot at feet
   if (face === -1) ctx.scale(-1, 1)
 
-  const legAngle = onGround ? Math.sin(walkPhase * Math.PI * 2) * 22 : 18
+  // Palette
+  const RED = '#E22B22', RED_D = '#A8170F', RED_HL = '#FF5A4A'
+  const BLUE = '#2A52C8', BLUE_D = '#1A3690', BLUE_HL = '#4A78E8'
+  const SKIN = '#F8C088', SKIN_D = '#E09A5A'
+  const BROWN = '#6B3A12', SHOE = '#5A2E10', SHOE_HL = '#8B4A1E'
+  const WHITE = '#FCFCFC'
 
-  // Shadow
+  const legAngle = onGround ? Math.sin(walkPhase * Math.PI * 2) * 22 : 16
+  const armAngle = onGround ? Math.sin(walkPhase * Math.PI * 2) * 16 : 28
+
+  // Ground shadow
   ctx.fillStyle = 'rgba(0,0,0,0.2)'
   ctx.beginPath(); ctx.ellipse(0, 2, 16, 4, 0, 0, Math.PI * 2); ctx.fill()
 
-  // Back leg
+  // ── Back leg (overall + boot) ──
   ctx.save()
-  ctx.translate(-5, -10)
+  ctx.translate(-5, -12)
   ctx.rotate((-legAngle * Math.PI) / 180)
-  ctx.fillStyle = '#3A3A5A'
-  ctx.beginPath(); ctx.roundRect(-5, 0, 10, 20, 3); ctx.fill()
-  ctx.fillStyle = '#7A4A28'  // boot
-  ctx.beginPath(); ctx.roundRect(-6, 17, 13, 7, [0, 0, 3, 3]); ctx.fill()
+  ctx.fillStyle = BLUE_D
+  ctx.beginPath(); ctx.roundRect(-5, 0, 10, 16, 3); ctx.fill()
+  ctx.fillStyle = SHOE
+  ctx.beginPath(); ctx.roundRect(-7, 13, 15, 8, [3, 5, 4, 4]); ctx.fill()
   ctx.restore()
 
-  // Body / jacket
-  const bodyGrad = ctx.createLinearGradient(-14, -46, 14, -46)
-  bodyGrad.addColorStop(0, '#6A9440')
-  bodyGrad.addColorStop(0.5, '#7AAA50')
-  bodyGrad.addColorStop(1, '#5A8030')
-  ctx.fillStyle = bodyGrad
-  ctx.beginPath(); ctx.roundRect(-14, -46, 28, 24, [3, 3, 5, 5]); ctx.fill()
-
-  // Belt
-  ctx.fillStyle = '#5A3A18'
-  ctx.fillRect(-14, -26, 28, 5)
-  ctx.fillStyle = '#C8A840'
-  ctx.fillRect(-4, -27, 8, 7)
-
-  // Arm (back)
+  // ── Back arm (red sleeve + glove) ──
   ctx.save()
-  ctx.translate(-16, -40)
-  ctx.rotate((legAngle * 0.6 * Math.PI) / 180)
-  ctx.fillStyle = '#5A8030'
-  ctx.beginPath(); ctx.roundRect(-5, 0, 9, 18, 3); ctx.fill()
-  ctx.fillStyle = '#F0C090'
-  ctx.beginPath(); ctx.ellipse(0, 18, 5, 4, 0, 0, Math.PI * 2); ctx.fill()
+  ctx.translate(-13, -42)
+  ctx.rotate((armAngle * Math.PI) / 180)
+  ctx.fillStyle = RED_D
+  ctx.beginPath(); ctx.roundRect(-5, 0, 9, 15, 4); ctx.fill()
+  ctx.fillStyle = '#E0E0E0'
+  ctx.beginPath(); ctx.arc(0, 17, 5, 0, Math.PI * 2); ctx.fill()
   ctx.restore()
 
-  // Front leg
+  // ── Torso: red shirt ──
+  const shirtGrad = ctx.createLinearGradient(-15, -48, 15, -48)
+  shirtGrad.addColorStop(0, RED_D)
+  shirtGrad.addColorStop(0.4, RED)
+  shirtGrad.addColorStop(0.5, RED_HL)
+  shirtGrad.addColorStop(0.6, RED)
+  shirtGrad.addColorStop(1, RED_D)
+  ctx.fillStyle = shirtGrad
+  ctx.beginPath(); ctx.roundRect(-15, -50, 30, 30, [8, 8, 4, 4]); ctx.fill()
+
+  // ── Overalls (blue) over the shirt ──
+  ctx.fillStyle = BLUE
+  // lower bib / pants block
+  ctx.beginPath(); ctx.roundRect(-15, -34, 30, 16, [3, 3, 4, 4]); ctx.fill()
+  // bib center going up
+  ctx.beginPath(); ctx.roundRect(-9, -48, 18, 16, 3); ctx.fill()
+  // overall highlight
+  ctx.fillStyle = BLUE_HL
+  ctx.fillRect(-9, -48, 4, 28)
+  ctx.fillStyle = BLUE_D
+  ctx.fillRect(11, -34, 4, 14)
+  // straps
+  ctx.fillStyle = BLUE
+  ctx.fillRect(-12, -50, 5, 16)
+  ctx.fillRect(7, -50, 5, 16)
+  // gold buttons
+  ctx.fillStyle = '#FFD83D'
+  ctx.beginPath(); ctx.arc(-6, -34, 2.6, 0, Math.PI * 2); ctx.fill()
+  ctx.beginPath(); ctx.arc(6, -34, 2.6, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = '#C89000'
+  ctx.beginPath(); ctx.arc(-6, -33, 1, 0, Math.PI * 2); ctx.fill()
+  ctx.beginPath(); ctx.arc(6, -33, 1, 0, Math.PI * 2); ctx.fill()
+
+  // ── Front leg (overall + boot) ──
   ctx.save()
-  ctx.translate(5, -10)
+  ctx.translate(5, -12)
   ctx.rotate((legAngle * Math.PI) / 180)
-  ctx.fillStyle = '#4A4A6A'
-  ctx.beginPath(); ctx.roundRect(-5, 0, 10, 20, 3); ctx.fill()
-  ctx.fillStyle = '#8B5A30'
-  ctx.beginPath(); ctx.roundRect(-6, 17, 14, 7, [0, 0, 3, 3]); ctx.fill()
+  const legGrad = ctx.createLinearGradient(-5, 0, 5, 0)
+  legGrad.addColorStop(0, BLUE)
+  legGrad.addColorStop(1, BLUE_HL)
+  ctx.fillStyle = legGrad
+  ctx.beginPath(); ctx.roundRect(-5, 0, 11, 16, 3); ctx.fill()
+  // boot
+  ctx.fillStyle = BROWN
+  ctx.beginPath(); ctx.roundRect(-7, 13, 16, 8, [3, 6, 4, 4]); ctx.fill()
+  ctx.fillStyle = SHOE_HL
+  ctx.beginPath(); ctx.roundRect(-6, 13, 14, 3, 2); ctx.fill()
   ctx.restore()
 
-  // Arm (front)
+  // ── Front arm (red sleeve + white glove) ──
   ctx.save()
-  ctx.translate(16, -40)
-  ctx.rotate((-legAngle * 0.6 * Math.PI) / 180)
-  ctx.fillStyle = '#6A9440'
-  ctx.beginPath(); ctx.roundRect(-4, 0, 9, 18, 3); ctx.fill()
-  ctx.fillStyle = '#F0C090'
-  ctx.beginPath(); ctx.ellipse(1, 18, 5, 4, 0, 0, Math.PI * 2); ctx.fill()
+  ctx.translate(14, -42)
+  ctx.rotate((-armAngle * Math.PI) / 180)
+  const sleeveGrad = ctx.createLinearGradient(-5, 0, 5, 0)
+  sleeveGrad.addColorStop(0, RED)
+  sleeveGrad.addColorStop(1, RED_HL)
+  ctx.fillStyle = sleeveGrad
+  ctx.beginPath(); ctx.roundRect(-4, 0, 9, 15, 4); ctx.fill()
+  // white glove
+  ctx.fillStyle = WHITE
+  ctx.beginPath(); ctx.arc(1, 17, 5.5, 0, Math.PI * 2); ctx.fill()
+  ctx.strokeStyle = '#C8C8C8'; ctx.lineWidth = 0.8
+  ctx.beginPath(); ctx.arc(1, 17, 5.5, 0, Math.PI * 2); ctx.stroke()
   ctx.restore()
 
-  // Neck
-  ctx.fillStyle = '#F0C090'
-  ctx.fillRect(-5, -54, 10, 10)
+  // ── Head ──
+  ctx.fillStyle = SKIN
+  ctx.fillRect(-4, -56, 9, 8) // neck
 
-  // Head
-  const headGrad = ctx.createRadialGradient(-3, -64, 2, 0, -62, 14)
-  headGrad.addColorStop(0, '#FDD0A0')
-  headGrad.addColorStop(1, '#E8A870')
+  const headGrad = ctx.createRadialGradient(-3, -68, 2, 0, -66, 15)
+  headGrad.addColorStop(0, '#FCD0A0')
+  headGrad.addColorStop(1, SKIN_D)
   ctx.fillStyle = headGrad
-  ctx.beginPath(); ctx.ellipse(0, -62, 13, 14, 0, 0, Math.PI * 2); ctx.fill()
+  ctx.beginPath(); ctx.ellipse(1, -66, 14, 14, 0, 0, Math.PI * 2); ctx.fill()
 
-  // Hair (under hat)
-  ctx.fillStyle = '#3A2000'
-  ctx.beginPath()
-  ctx.arc(0, -62, 13, Math.PI, 0, true)
-  ctx.fill()
+  // Big rounded nose (front of face)
+  ctx.fillStyle = SKIN
+  ctx.beginPath(); ctx.ellipse(11, -63, 6, 5, 0, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = SKIN_D
+  ctx.beginPath(); ctx.ellipse(12, -61, 3, 2.5, 0, 0, Math.PI * 2); ctx.fill()
 
+  // Sideburn / hair at back
+  ctx.fillStyle = BROWN
+  ctx.beginPath(); ctx.ellipse(-11, -62, 5, 8, 0.2, 0, Math.PI * 2); ctx.fill()
+  ctx.fillRect(-13, -66, 6, 10)
   // Ear
-  ctx.fillStyle = '#E8A870'
-  ctx.beginPath(); ctx.ellipse(-13, -62, 4, 5, 0, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = SKIN
+  ctx.beginPath(); ctx.ellipse(-9, -62, 4, 5, 0, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = SKIN_D
+  ctx.beginPath(); ctx.ellipse(-9, -61, 1.5, 2.5, 0, 0, Math.PI * 2); ctx.fill()
 
-  // Eye (white)
-  ctx.fillStyle = '#fff'
-  ctx.beginPath(); ctx.ellipse(6, -62, 4, 5, 0, 0, Math.PI * 2); ctx.fill()
-  // Iris
-  ctx.fillStyle = '#3A5A28'
-  ctx.beginPath(); ctx.ellipse(7, -62, 2.5, 3.5, 0, 0, Math.PI * 2); ctx.fill()
-  // Pupil
-  ctx.fillStyle = '#0A0A0A'
-  ctx.beginPath(); ctx.ellipse(7, -62, 1.2, 1.8, 0, 0, Math.PI * 2); ctx.fill()
-  // Eye glint
-  ctx.fillStyle = '#fff'
-  ctx.beginPath(); ctx.ellipse(8, -63.5, 0.8, 0.8, 0, 0, Math.PI * 2); ctx.fill()
-
+  // Eye (white + pupil)
+  ctx.fillStyle = WHITE
+  ctx.beginPath(); ctx.ellipse(4, -70, 3.5, 5, 0, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = '#1A2A6A'
+  ctx.beginPath(); ctx.ellipse(5.5, -70, 1.6, 3, 0, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = WHITE
+  ctx.beginPath(); ctx.arc(6, -71.5, 0.8, 0, Math.PI * 2); ctx.fill()
   // Eyebrow
-  ctx.strokeStyle = '#2A1400'
-  ctx.lineWidth = 1.5
-  ctx.beginPath(); ctx.moveTo(3, -68); ctx.lineTo(10, -67); ctx.stroke()
+  ctx.fillStyle = BROWN
+  ctx.beginPath(); ctx.roundRect(1, -77, 7, 2.4, 1); ctx.fill()
 
-  // Smile
-  ctx.strokeStyle = '#8A4820'
-  ctx.lineWidth = 1.2
-  ctx.beginPath(); ctx.arc(4, -58, 5, 0.1, Math.PI - 0.1); ctx.stroke()
+  // ── Mustache (signature look) ──
+  ctx.fillStyle = BROWN
+  ctx.beginPath()
+  ctx.moveTo(-2, -58)
+  ctx.quadraticCurveTo(2, -55, 14, -58)   // top edge
+  ctx.quadraticCurveTo(16, -54, 12, -53)  // right wing down
+  ctx.quadraticCurveTo(6, -55, 3, -54)
+  ctx.quadraticCurveTo(0, -53, -3, -55)   // left under
+  ctx.closePath()
+  ctx.fill()
+  // mustache shading
+  ctx.fillStyle = '#4A2608'
+  ctx.beginPath(); ctx.ellipse(8, -55.5, 4, 1.6, -0.1, 0, Math.PI * 2); ctx.fill()
 
-  // Hat brim
-  ctx.fillStyle = '#2A1A08'
-  ctx.beginPath(); ctx.roundRect(-16, -76, 32, 5, 2); ctx.fill()
+  // ── Cap ──
+  // brim (points forward)
+  ctx.fillStyle = RED_D
+  ctx.beginPath()
+  ctx.moveTo(2, -76)
+  ctx.quadraticCurveTo(18, -78, 22, -72)
+  ctx.quadraticCurveTo(16, -71, 4, -73)
+  ctx.closePath()
+  ctx.fill()
+  // crown
+  const capGrad = ctx.createLinearGradient(-14, -90, 10, -76)
+  capGrad.addColorStop(0, RED)
+  capGrad.addColorStop(0.5, RED_HL)
+  capGrad.addColorStop(1, RED_D)
+  ctx.fillStyle = capGrad
+  ctx.beginPath()
+  ctx.ellipse(0, -78, 15, 11, 0, Math.PI, 0, true)
+  ctx.fill()
+  ctx.beginPath(); ctx.roundRect(-15, -80, 30, 6, 3); ctx.fill()
+  // cap shine
+  ctx.fillStyle = 'rgba(255,255,255,0.25)'
+  ctx.beginPath(); ctx.ellipse(-4, -85, 5, 3, -0.4, 0, Math.PI * 2); ctx.fill()
 
-  // Hat crown
-  const hatGrad = ctx.createLinearGradient(-12, -96, 12, -76)
-  hatGrad.addColorStop(0, '#3A2A10')
-  hatGrad.addColorStop(0.5, '#4A3418')
-  hatGrad.addColorStop(1, '#2A1A08')
-  ctx.fillStyle = hatGrad
-  ctx.beginPath(); ctx.roundRect(-11, -96, 22, 22, [6, 6, 2, 2]); ctx.fill()
-  // Hat highlight
-  ctx.fillStyle = 'rgba(180,140,60,0.3)'
-  ctx.beginPath(); ctx.roundRect(-9, -93, 8, 10, 3); ctx.fill()
+  // Cap emblem — white circle with WeThink "W"
+  ctx.fillStyle = WHITE
+  ctx.beginPath(); ctx.arc(2, -82, 6, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = RED
+  ctx.font = 'bold 8px Arial'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillText('W', 2, -81.5)
 
   ctx.restore()
 }
