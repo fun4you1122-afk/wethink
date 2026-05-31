@@ -830,7 +830,7 @@ function drawHero(
   ctx.save()
   ctx.translate(x + 18, y + 52) // pivot at feet
   if (face === -1) ctx.scale(-1, 1)
-  ctx.scale(1.55, 1.55) // make him a proper height
+  ctx.scale(1.15, 0.92) // short and stout like classic Mario
 
   // Palette
   const RED = '#E22B22', RED_D = '#A8170F', RED_HL = '#FF5A4A'
