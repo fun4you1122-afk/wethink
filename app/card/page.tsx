@@ -17,48 +17,16 @@ const INFO = {
   location: 'Makers District, Abu Dhabi, UAE',
 }
 
-/* WeThink Wi logo — SVG recreation of the teal→blue→purple ribbon mark */
+/* WeThink logo — actual brand asset */
 function WeThinkLogo({ size = 56 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 420 440" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        {/* Left V stroke: teal → blue */}
-        <linearGradient id="wl" x1="70" y1="240" x2="250" y2="240" gradientUnits="userSpaceOnUse">
-          <stop offset="0%"   stopColor="#00C9A7"/>
-          <stop offset="100%" stopColor="#3B5BFF" stopOpacity="0.9"/>
-        </linearGradient>
-        {/* Right V+i stroke: blue → purple */}
-        <linearGradient id="wr" x1="230" y1="240" x2="420" y2="240" gradientUnits="userSpaceOnUse">
-          <stop offset="0%"   stopColor="#3B5BFF" stopOpacity="0.9"/>
-          <stop offset="100%" stopColor="#8B30D4"/>
-        </linearGradient>
-        {/* i dot */}
-        <linearGradient id="wd" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%"   stopColor="#8B30D4"/>
-          <stop offset="100%" stopColor="#6B22B0"/>
-        </linearGradient>
-      </defs>
-      {/* Left V of W */}
-      <path
-        d="M 72,108 L 138,368 L 244,148"
-        stroke="url(#wl)"
-        strokeWidth="68"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      {/* Right V of W + i stem */}
-      <path
-        d="M 244,148 L 348,368 L 392,108 L 392,78"
-        stroke="url(#wr)"
-        strokeWidth="68"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      {/* i dot */}
-      <circle cx="392" cy="36" r="36" fill="url(#wd)"/>
-    </svg>
+    <img
+      src="/wethink-logo.png"
+      alt="WeThink"
+      width={size}
+      height={size}
+      style={{ objectFit: 'contain', display: 'block' }}
+    />
   )
 }
 
@@ -144,7 +112,7 @@ export default function CardPage() {
             {/* Brand header */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28 }}>
               <div style={{ flexShrink: 0 }}>
-                <WeThinkLogo size={48} />
+                <WeThinkLogo size={52} />
               </div>
               <div>
                 <div style={{ color: '#fff', fontWeight: 800, fontSize: 15, letterSpacing: '0.02em' }}>WeThink</div>
