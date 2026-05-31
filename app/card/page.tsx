@@ -101,7 +101,7 @@ function AIBanner() {
   }, [])
 
   return (
-    <canvas ref={ref} width={480} height={180}
+    <canvas ref={ref} width={480} height={110}
       style={{ width: '100%', height: '100%', display: 'block' }} />
   )
 }
@@ -136,12 +136,12 @@ function IconBtn({ icon, label, href, onClick }: { icon: React.ReactNode; label:
   const circle = (
     <>
       <div style={{
-        width: 50, height: 50, borderRadius: '50%',
+        width: 44, height: 44, borderRadius: '50%',
         background: 'rgba(124,58,237,0.1)', border: '1.5px solid rgba(124,58,237,0.3)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: '#A78BFA', fontSize: 19,
+        color: '#A78BFA', fontSize: 17,
       }}>{icon}</div>
-      <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', fontFamily: BODY, letterSpacing: '0.02em' }}>{label}</span>
+      <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', fontFamily: BODY, letterSpacing: '0.02em' }}>{label}</span>
     </>
   )
   return href
@@ -154,9 +154,9 @@ function SocialBtn({ href, color, icon }: { href: string; color: string; icon: R
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
       <motion.div whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.95 }}
-        style={{ width: 50, height: 50, borderRadius: '50%', background: color,
+        style={{ width: 44, height: 44, borderRadius: '50%', background: color,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: '#fff', fontSize: 22, boxShadow: `0 4px 14px ${color}55` }}
+          color: '#fff', fontSize: 19, boxShadow: `0 4px 14px ${color}55` }}
       >{icon}</motion.div>
     </a>
   )
@@ -166,8 +166,8 @@ function SocialBtn({ href, color, icon }: { href: string; color: string; icon: R
 function ActionLink({ icon, label, href, onClick }: { icon: React.ReactNode; label: string; href?: string; onClick?: () => void }) {
   const inner = (
     <motion.div whileHover={{ x: 3 }}
-      style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px',
-        borderRadius: 14, background: 'rgba(255,255,255,0.03)',
+      style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px',
+        borderRadius: 12, background: 'rgba(255,255,255,0.03)',
         border: '1px solid rgba(255,255,255,0.07)', cursor: 'pointer', textDecoration: 'none' }}
     >
       <span style={{ fontSize: 19, width: 26, textAlign: 'center' }}>{icon}</span>
@@ -221,30 +221,30 @@ export default function CardPage() {
       <div style={{ width: '100%', maxWidth: 480 }}>
 
         {/* ── AI Banner ── */}
-        <div style={{ position: 'relative', height: 180, overflow: 'hidden' }}>
+        <div style={{ position: 'relative', height: 110, overflow: 'hidden' }}>
           <AIBanner />
 
           {/* Company name overlay on banner */}
           <div style={{ position: 'absolute', inset: 0, display: 'flex',
             flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            gap: 6, pointerEvents: 'none' }}>
+            gap: 4, pointerEvents: 'none' }}>
             <span style={{
-              fontFamily: SERIF_B, fontWeight: 800, fontSize: 28,
+              fontFamily: SERIF_B, fontWeight: 800, fontSize: 22,
               color: '#fff', letterSpacing: '0.04em',
               textShadow: '0 0 30px rgba(59,139,255,0.6), 0 2px 12px rgba(0,0,0,0.8)',
             }}>WeThink</span>
             <span style={{
-              fontFamily: BODY, fontStyle: 'italic', fontSize: 12,
+              fontFamily: BODY, fontStyle: 'italic', fontSize: 11,
               color: 'rgba(255,255,255,0.6)', letterSpacing: '0.1em',
             }}>Digital Smart Solutions</span>
           </div>
         </div>
 
         {/* ── Profile ── */}
-        <div style={{ padding: '0 24px 28px' }}>
+        <div style={{ padding: '0 20px 10px' }}>
 
           {/* Avatar row */}
-          <div style={{ marginTop: -50, marginBottom: 16, display: 'flex', alignItems: 'flex-end', gap: 12 }}>
+          <div style={{ marginTop: -38, marginBottom: 10, display: 'flex', alignItems: 'flex-end', gap: 12 }}>
 
             {/* Circular logo with badge ON the frame */}
             <div style={{ position: 'relative', width: 100, height: 100, flexShrink: 0 }}>
@@ -278,9 +278,9 @@ export default function CardPage() {
           </div>
 
           {/* Name & info */}
-          <div style={{ marginBottom: 22 }}>
-            <h1 style={{ margin: '0 0 5px', fontFamily: SERIF_B, fontWeight: 800,
-              fontSize: 27, color: '#fff', letterSpacing: '-0.01em', lineHeight: 1.2,
+          <div style={{ marginBottom: 12 }}>
+            <h1 style={{ margin: '0 0 3px', fontFamily: SERIF_B, fontWeight: 800,
+              fontSize: 24, color: '#fff', letterSpacing: '-0.01em', lineHeight: 1.2,
               textShadow: '0 2px 20px rgba(167,139,250,0.25)' }}>
               {INFO.name}
             </h1>
@@ -295,7 +295,7 @@ export default function CardPage() {
           </div>
 
           {/* Quick-action icons */}
-          <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: 22 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: 14 }}>
             <IconBtn label="Call" href={`tel:${INFO.phone}`} icon={
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.64 3.5 2 2 0 0 1 3.62 1.5h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.08a16 16 0 0 0 6.01 6.01l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
@@ -320,9 +320,9 @@ export default function CardPage() {
           </div>
 
           {/* Save / QR buttons */}
-          <div style={{ display: 'flex', gap: 10, marginBottom: 28 }}>
+          <div style={{ display: 'flex', gap: 10, marginBottom: 14 }}>
             <motion.button whileTap={{ scale: 0.97 }} onClick={saveContact}
-              style={{ flex: 1, height: 48, borderRadius: 50,
+              style={{ flex: 1, height: 42, borderRadius: 50,
                 background: 'linear-gradient(135deg, #7C3AED, #5B21B6)',
                 border: 'none', cursor: 'pointer', color: '#fff',
                 fontWeight: 700, fontSize: 13.5, fontFamily: SERIF_B,
@@ -336,7 +336,7 @@ export default function CardPage() {
               Save Contact
             </motion.button>
             <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowQR(true)}
-              style={{ flex: 1, height: 48, borderRadius: 50,
+              style={{ flex: 1, height: 42, borderRadius: 50,
                 background: 'transparent', border: '1.5px solid rgba(124,58,237,0.45)',
                 cursor: 'pointer', color: '#A78BFA',
                 fontWeight: 700, fontSize: 13.5, fontFamily: SERIF_B,
@@ -352,10 +352,10 @@ export default function CardPage() {
           </div>
 
           {/* Divider */}
-          <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: 22 }} />
+          <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: 12 }} />
 
           {/* Socials */}
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginBottom: 28 }}>
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginBottom: 12 }}>
             <SocialBtn href={INFO.instagram} color="#E1306C" icon={
               <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
@@ -374,10 +374,10 @@ export default function CardPage() {
           </div>
 
           {/* Divider */}
-          <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: 20 }} />
+          <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: 10 }} />
 
           {/* Action links */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 28 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 10 }}>
             <ActionLink href={INFO.website} label="Visit Website" icon={
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>
@@ -400,7 +400,7 @@ export default function CardPage() {
             } />
           </div>
 
-          <div style={{ textAlign: 'center', paddingBottom: 16 }}>
+          <div style={{ textAlign: 'center', paddingBottom: 8 }}>
             <p style={{ color: 'rgba(255,255,255,0.15)', fontSize: 11, margin: 0,
               fontFamily: BODY, letterSpacing: '0.05em', fontStyle: 'italic' }}>
               wethink.ae/card
