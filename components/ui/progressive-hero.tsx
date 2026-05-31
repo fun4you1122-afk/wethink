@@ -98,7 +98,7 @@ function WeThinkHero() {
       </video>
 
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/80 z-10" />
+      <div className="absolute inset-0 bg-black/60 z-10" />
 
       {/* Content */}
       <div className="relative z-20 flex flex-col items-center justify-center w-full min-h-screen px-6">
