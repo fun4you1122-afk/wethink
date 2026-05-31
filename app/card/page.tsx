@@ -4,6 +4,53 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { QRCodeSVG } from 'qrcode.react'
 
+/* ── Unicode font converters ── */
+function toScript(s: string) {
+  // Bold Script: 𝓐–𝓩 / 𝓪–𝔃
+  return s.split('').map(c => {
+    const u = c.charCodeAt(0)
+    if (u >= 65 && u <= 90) return String.fromCodePoint(0x1D4D0 + u - 65)
+    if (u >= 97 && u <= 122) return String.fromCodePoint(0x1D4EA + u - 97)
+    return c
+  }).join('')
+}
+
+function toFraktur(s: string) {
+  // Fraktur: 𝔄–𝔜 / 𝔞–𝔷  (a few letters use reserved codepoints)
+  const su: Record<string,number> = { C:0x212D, H:0x210C, I:0x2111, R:0x211C, Z:0x2128 }
+  return s.split('').map(c => {
+    if (su[c]) return String.fromCodePoint(su[c])
+    const u = c.charCodeAt(0)
+    if (u >= 65 && u <= 90) return String.fromCodePoint(0x1D504 + u - 65)
+    if (u >= 97 && u <= 122) return String.fromCodePoint(0x1D51E + u - 97)
+    return c
+  }).join('')
+}
+
+function toMono(s: string) {
+  // Monospace: 𝙰–𝚉 / 𝚊–𝚣 / 𝟶–𝟿
+  return s.split('').map(c => {
+    const u = c.charCodeAt(0)
+    if (u >= 65 && u <= 90)  return String.fromCodePoint(0x1D670 + u - 65)
+    if (u >= 97 && u <= 122) return String.fromCodePoint(0x1D68A + u - 97)
+    if (u >= 48 && u <= 57)  return String.fromCodePoint(0x1D7F6 + u - 48)
+    return c
+  }).join('')
+}
+
+function toDoubleStruck(s: string) {
+  // Double-Struck: 𝔸–𝕐 / 𝕒–𝕫  (a few letters use reserved codepoints)
+  const su: Record<string,number> = { C:0x2102, H:0x210D, N:0x2115, P:0x2119, Q:0x211A, R:0x211D, Z:0x2124 }
+  return s.split('').map(c => {
+    if (su[c]) return String.fromCodePoint(su[c])
+    const u = c.charCodeAt(0)
+    if (u >= 65 && u <= 90)  return String.fromCodePoint(0x1D538 + u - 65)
+    if (u >= 97 && u <= 122) return String.fromCodePoint(0x1D552 + u - 97)
+    if (u >= 48 && u <= 57)  return String.fromCodePoint(0x1D7D8 + u - 48)
+    return c
+  }).join('')
+}
+
 const INFO = {
   name: 'Rasha Aljalam',
   company: 'WeThink',
@@ -176,11 +223,13 @@ export default function CardPage() {
             position: 'absolute', top: 22, left: 0, right: 0,
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
           }}>
-            <span style={{ color: 'rgba(255,255,255,0.9)', fontWeight: 800, fontSize: 20, letterSpacing: '0.04em', textShadow: '0 1px 8px rgba(0,0,0,0.3)' }}>
-              WeThink
+            {/* Double-Struck for the brand name on the banner */}
+            <span style={{ color: 'rgba(255,255,255,0.95)', fontWeight: 800, fontSize: 22, textShadow: '0 1px 10px rgba(0,0,0,0.3)', letterSpacing: '0.02em' }}>
+              {toDoubleStruck('WeThink')}
             </span>
-            <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-              Digital Smart Solutions
+            {/* Monospace for the tagline */}
+            <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: 11, letterSpacing: '0.04em' }}>
+              {toMono('Digital Smart Solutions')}
             </span>
           </div>
         </div>
@@ -223,12 +272,14 @@ export default function CardPage() {
           {/* Name + info */}
           <div style={{ marginBottom: 20 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-              <h1 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: '#fff', letterSpacing: '-0.01em' }}>
-                {INFO.name}
+              {/* Script / cursive for the person's name */}
+              <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, color: '#fff', letterSpacing: '0.01em', lineHeight: 1.2 }}>
+                {toScript(INFO.name)}
               </h1>
             </div>
-            <p style={{ margin: '0 0 3px', color: 'rgba(167,139,250,0.8)', fontSize: 13.5, fontWeight: 500 }}>
-              {INFO.company}
+            {/* Fraktur / gothic for the company label */}
+            <p style={{ margin: '0 0 3px', color: 'rgba(167,139,250,0.85)', fontSize: 15, fontWeight: 500, letterSpacing: '0.02em' }}>
+              {toFraktur(INFO.company)}
             </p>
             <p style={{ margin: 0, color: 'rgba(255,255,255,0.4)', fontSize: 12.5 }}>
               {INFO.location}
