@@ -1,333 +1,334 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { QRCodeSVG } from 'qrcode.react'
 
-/* ── Unicode font converters ── */
-function toScript(s: string) {
-  // Bold Script: 𝓐–𝓩 / 𝓪–𝔃
-  return s.split('').map(c => {
-    const u = c.charCodeAt(0)
-    if (u >= 65 && u <= 90) return String.fromCodePoint(0x1D4D0 + u - 65)
-    if (u >= 97 && u <= 122) return String.fromCodePoint(0x1D4EA + u - 97)
-    return c
-  }).join('')
-}
-
-function toFraktur(s: string) {
-  // Fraktur: 𝔄–𝔜 / 𝔞–𝔷  (a few letters use reserved codepoints)
-  const su: Record<string,number> = { C:0x212D, H:0x210C, I:0x2111, R:0x211C, Z:0x2128 }
-  return s.split('').map(c => {
-    if (su[c]) return String.fromCodePoint(su[c])
-    const u = c.charCodeAt(0)
-    if (u >= 65 && u <= 90) return String.fromCodePoint(0x1D504 + u - 65)
-    if (u >= 97 && u <= 122) return String.fromCodePoint(0x1D51E + u - 97)
-    return c
-  }).join('')
-}
-
-function toMono(s: string) {
-  // Monospace: 𝙰–𝚉 / 𝚊–𝚣 / 𝟶–𝟿
-  return s.split('').map(c => {
-    const u = c.charCodeAt(0)
-    if (u >= 65 && u <= 90)  return String.fromCodePoint(0x1D670 + u - 65)
-    if (u >= 97 && u <= 122) return String.fromCodePoint(0x1D68A + u - 97)
-    if (u >= 48 && u <= 57)  return String.fromCodePoint(0x1D7F6 + u - 48)
-    return c
-  }).join('')
-}
-
-function toDoubleStruck(s: string) {
-  // Double-Struck: 𝔸–𝕐 / 𝕒–𝕫  (a few letters use reserved codepoints)
-  const su: Record<string,number> = { C:0x2102, H:0x210D, N:0x2115, P:0x2119, Q:0x211A, R:0x211D, Z:0x2124 }
-  return s.split('').map(c => {
-    if (su[c]) return String.fromCodePoint(su[c])
-    const u = c.charCodeAt(0)
-    if (u >= 65 && u <= 90)  return String.fromCodePoint(0x1D538 + u - 65)
-    if (u >= 97 && u <= 122) return String.fromCodePoint(0x1D552 + u - 97)
-    if (u >= 48 && u <= 57)  return String.fromCodePoint(0x1D7D8 + u - 48)
-    return c
-  }).join('')
-}
+const SERIF   = "'Playfair Display', Georgia, serif"
+const SERIF_B = "'Playfair Display', Georgia, serif"
+const BODY    = "'Lora', Georgia, serif"
 
 const INFO = {
-  name: 'Rasha Aljalam',
-  company: 'WeThink',
-  tagline: 'Digital Smart Solutions',
-  email: 'info@wethink.ae',
-  phone: '+971503125078',
+  name:         'Rasha Aljalam',
+  company:      'WeThink',
+  tagline:      'Digital Smart Solutions',
+  email:        'info@wethink.ae',
+  phone:        '+971503125078',
   phoneDisplay: '+971 50 312 5078',
-  website: 'https://www.wethink.ae',
-  websiteDisplay: 'www.wethink.ae',
-  instagram: 'https://instagram.com/wethink.ae',
+  website:      'https://www.wethink.ae',
+  websiteDisplay:'www.wethink.ae',
+  instagram:    'https://instagram.com/wethink.ae',
   linkedinHref: 'https://ae.linkedin.com/in/rasha-aljalam-74a6b4188',
-  whatsapp: 'https://wa.me/971503125078',
-  location: 'Makers District, Abu Dhabi, UAE',
+  whatsapp:     'https://wa.me/971503125078',
+  location:     'Makers District, Abu Dhabi, UAE',
 }
 
-/* ── Download .vcf contact ── */
+/* ── Animated AI neural-network banner (canvas) ── */
+function AIBanner() {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const canvas = ref.current!
+    const ctx    = canvas.getContext('2d')!
+    const W = canvas.width, H = canvas.height
+    const COLS = ['#00C9A7','#3B8BFF','#8B30D4','#C026D3','#00B4D8']
+
+    const nodes = Array.from({ length: 28 }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.28,
+      vy: (Math.random() - 0.5) * 0.28,
+      r: Math.random() * 2.2 + 1.4,
+      color: COLS[Math.floor(Math.random() * COLS.length)],
+      phase: Math.random() * Math.PI * 2,
+    }))
+
+    let raf: number
+    const tick = () => {
+      // Dark bg
+      ctx.fillStyle = '#04010C'
+      ctx.fillRect(0, 0, W, H)
+
+      // Subtle grid
+      ctx.strokeStyle = 'rgba(80,100,255,0.07)'
+      ctx.lineWidth = 0.5
+      for (let x = 0; x <= W; x += 28) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke() }
+      for (let y = 0; y <= H; y += 28) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke() }
+
+      // Gradient wash
+      const wash = ctx.createLinearGradient(0, 0, W, H)
+      wash.addColorStop(0,   'rgba(0,201,167,0.07)')
+      wash.addColorStop(0.5, 'rgba(59,139,255,0.05)')
+      wash.addColorStop(1,   'rgba(192,38,211,0.08)')
+      ctx.fillStyle = wash; ctx.fillRect(0, 0, W, H)
+
+      // Update
+      for (const n of nodes) {
+        n.x += n.vx; n.y += n.vy; n.phase += 0.035
+        if (n.x < 0 || n.x > W) n.vx *= -1
+        if (n.y < 0 || n.y > H) n.vy *= -1
+      }
+
+      // Edges
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y
+          const d  = Math.sqrt(dx*dx + dy*dy)
+          if (d < 110) {
+            ctx.beginPath(); ctx.moveTo(nodes[i].x, nodes[i].y); ctx.lineTo(nodes[j].x, nodes[j].y)
+            ctx.strokeStyle = nodes[i].color
+            ctx.globalAlpha = (1 - d / 110) * 0.35
+            ctx.lineWidth = 0.7; ctx.stroke()
+          }
+        }
+      }
+
+      // Nodes with glow
+      for (const n of nodes) {
+        const pr = n.r + Math.sin(n.phase) * 0.8
+        const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, pr * 6)
+        glow.addColorStop(0, n.color + '55'); glow.addColorStop(1, 'transparent')
+        ctx.globalAlpha = 0.5; ctx.fillStyle = glow
+        ctx.beginPath(); ctx.arc(n.x, n.y, pr * 6, 0, Math.PI * 2); ctx.fill()
+        ctx.globalAlpha = 0.95; ctx.fillStyle = n.color
+        ctx.beginPath(); ctx.arc(n.x, n.y, pr, 0, Math.PI * 2); ctx.fill()
+      }
+
+      ctx.globalAlpha = 1
+      raf = requestAnimationFrame(tick)
+    }
+    tick()
+    return () => cancelAnimationFrame(raf)
+  }, [])
+
+  return (
+    <canvas ref={ref} width={480} height={180}
+      style={{ width: '100%', height: '100%', display: 'block' }} />
+  )
+}
+
+/* ── Save .vcf contact ── */
 function saveContact() {
   const vcf = [
-    'BEGIN:VCARD',
-    'VERSION:3.0',
-    `FN:${INFO.name}`,
-    `ORG:${INFO.company}`,
-    `TITLE:${INFO.tagline}`,
-    `TEL;TYPE=CELL:${INFO.phone}`,
-    `EMAIL:${INFO.email}`,
-    `URL:${INFO.website}`,
-    `ADR:;;Makers District;;Abu Dhabi;;UAE`,
-    `NOTE:WeThink - Digital Smart Solutions`,
+    'BEGIN:VCARD', 'VERSION:3.0',
+    `FN:${INFO.name}`, `ORG:${INFO.company}`, `TITLE:${INFO.tagline}`,
+    `TEL;TYPE=CELL:${INFO.phone}`, `EMAIL:${INFO.email}`, `URL:${INFO.website}`,
+    'ADR:;;Makers District;;Abu Dhabi;;UAE',
     'END:VCARD',
   ].join('\n')
-  const blob = new Blob([vcf], { type: 'text/vcard' })
-  const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
-  a.href = url; a.download = 'Rasha-Aljalam-WeThink.vcf'; a.click()
-  URL.revokeObjectURL(url)
+  a.href = URL.createObjectURL(new Blob([vcf], { type: 'text/vcard' }))
+  a.download = 'Rasha-Aljalam-WeThink.vcf'; a.click()
 }
 
-/* ── Share card URL ── */
+/* ── Share ── */
 async function shareCard(setCopied: (v: boolean) => void) {
   const url = 'https://www.wethink.ae/card'
-  if (navigator.share) {
-    try { await navigator.share({ title: 'Rasha Aljalam — WeThink', url }) } catch {}
-  } else {
-    await navigator.clipboard.writeText(url)
-    setCopied(true); setTimeout(() => setCopied(false), 2000)
-  }
+  if (navigator.share) { try { await navigator.share({ title: 'Rasha Aljalam — WeThink', url }) } catch {} }
+  else { await navigator.clipboard.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 2000) }
 }
 
 /* ── Icon button ── */
 function IconBtn({ icon, label, href, onClick }: { icon: React.ReactNode; label: string; href?: string; onClick?: () => void }) {
-  const style: React.CSSProperties = {
+  const wrap: React.CSSProperties = {
     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-    textDecoration: 'none', cursor: 'pointer', background: 'none', border: 'none', padding: 0,
+    textDecoration: 'none', background: 'none', border: 'none', padding: 0, cursor: 'pointer',
   }
-  const inner = (
+  const circle = (
     <>
       <div style={{
-        width: 48, height: 48, borderRadius: '50%',
-        background: 'rgba(124,58,237,0.1)',
-        border: '1px solid rgba(124,58,237,0.25)',
+        width: 50, height: 50, borderRadius: '50%',
+        background: 'rgba(124,58,237,0.1)', border: '1.5px solid rgba(124,58,237,0.3)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: '#7C3AED', fontSize: 20,
+        color: '#A78BFA', fontSize: 19,
       }}>{icon}</div>
-      <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.03em' }}>{label}</span>
+      <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', fontFamily: BODY, letterSpacing: '0.02em' }}>{label}</span>
     </>
   )
-  if (href) return <a href={href} target="_blank" rel="noopener noreferrer" style={style}>{inner}</a>
-  return <button onClick={onClick} style={style}>{inner}</button>
+  return href
+    ? <a href={href} target="_blank" rel="noopener noreferrer" style={wrap}>{circle}</a>
+    : <button style={wrap} onClick={onClick}>{circle}</button>
 }
 
-/* ── Social circle button ── */
+/* ── Social button ── */
 function SocialBtn({ href, color, icon }: { href: string; color: string; icon: React.ReactNode }) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-      <motion.div whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.95 }} style={{
-        width: 50, height: 50, borderRadius: '50%',
-        background: color,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: '#fff', fontSize: 22,
-        boxShadow: `0 4px 14px ${color}55`,
-      }}>{icon}</motion.div>
+      <motion.div whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.95 }}
+        style={{ width: 50, height: 50, borderRadius: '50%', background: color,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: '#fff', fontSize: 22, boxShadow: `0 4px 14px ${color}55` }}
+      >{icon}</motion.div>
     </a>
   )
 }
 
-/* ── Action link row ── */
+/* ── Action link ── */
 function ActionLink({ icon, label, href, onClick }: { icon: React.ReactNode; label: string; href?: string; onClick?: () => void }) {
   const inner = (
-    <motion.div whileHover={{ x: 3 }} style={{
-      display: 'flex', alignItems: 'center', gap: 14,
-      padding: '15px 18px', borderRadius: 14,
-      background: 'rgba(255,255,255,0.04)',
-      border: '1px solid rgba(255,255,255,0.07)',
-      textDecoration: 'none', cursor: 'pointer',
-    }}>
-      <span style={{ fontSize: 20, width: 26, textAlign: 'center' }}>{icon}</span>
-      <span style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 500, fontSize: 14, flex: 1 }}>{label}</span>
-      <span style={{ color: 'rgba(124,58,237,0.6)', fontSize: 16 }}>↗</span>
+    <motion.div whileHover={{ x: 3 }}
+      style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px',
+        borderRadius: 14, background: 'rgba(255,255,255,0.03)',
+        border: '1px solid rgba(255,255,255,0.07)', cursor: 'pointer', textDecoration: 'none' }}
+    >
+      <span style={{ fontSize: 19, width: 26, textAlign: 'center' }}>{icon}</span>
+      <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 500, fontSize: 14,
+        flex: 1, fontFamily: BODY }}>{label}</span>
+      <span style={{ color: 'rgba(124,58,237,0.55)', fontSize: 16 }}>↗</span>
     </motion.div>
   )
-  if (href) return <a href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{inner}</a>
-  return <div onClick={onClick} style={{ cursor: 'pointer' }}>{inner}</div>
+  return href
+    ? <a href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>{inner}</a>
+    : <div onClick={onClick} style={{ cursor: 'pointer' }}>{inner}</div>
 }
 
 /* ── QR Modal ── */
 function QRModal({ onClose }: { onClose: () => void }) {
   return (
-    <motion.div
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       onClick={onClose}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 100,
-        background: 'rgba(4,2,14,0.88)', backdropFilter: 'blur(12px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
-      }}
+      style={{ position: 'fixed', inset: 0, zIndex: 100,
+        background: 'rgba(4,1,14,0.9)', backdropFilter: 'blur(14px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
     >
-      <motion.div
-        initial={{ scale: 0.88, y: 20 }} animate={{ scale: 1, y: 0 }}
+      <motion.div initial={{ scale: 0.88, y: 20 }} animate={{ scale: 1, y: 0 }}
         onClick={e => e.stopPropagation()}
-        style={{
-          background: '#0D0820', borderRadius: 24, padding: 32,
-          border: '1px solid rgba(124,58,237,0.3)',
-          boxShadow: '0 24px 60px rgba(0,0,0,0.6)',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16,
-        }}
+        style={{ background: '#0D0820', borderRadius: 24, padding: 32,
+          border: '1px solid rgba(124,58,237,0.3)', boxShadow: '0 24px 60px rgba(0,0,0,0.6)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}
       >
-        <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, margin: 0, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Scan to open card</p>
+        <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, margin: 0,
+          letterSpacing: '0.07em', textTransform: 'uppercase', fontFamily: BODY }}>Scan to open card</p>
         <div style={{ padding: 14, background: '#fff', borderRadius: 16 }}>
-          <QRCodeSVG value="https://www.wethink.ae/card" size={180} bgColor="#fff" fgColor="#04020e" level="M" />
+          <QRCodeSVG value="https://www.wethink.ae/card" size={180} bgColor="#fff" fgColor="#04010c" level="M" />
         </div>
-        <p style={{ color: '#7C3AED', fontWeight: 700, fontSize: 14, margin: 0 }}>wethink.ae/card</p>
-        <button onClick={onClose} style={{
-          padding: '10px 28px', borderRadius: 50, border: 'none',
+        <p style={{ color: '#7C3AED', fontWeight: 700, fontSize: 15, margin: 0, fontFamily: SERIF }}>wethink.ae/card</p>
+        <button onClick={onClose} style={{ padding: '10px 28px', borderRadius: 50, border: 'none',
           background: 'rgba(124,58,237,0.15)', color: '#A78BFA',
-          fontWeight: 600, fontSize: 13, cursor: 'pointer',
-        }}>Close</button>
+          fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: BODY }}>Close</button>
       </motion.div>
     </motion.div>
   )
 }
 
-/* ══════════════ MAIN PAGE ══════════════ */
+/* ══════════════ PAGE ══════════════ */
 export default function CardPage() {
   const [copied, setCopied] = useState(false)
-  const [showQR, setShowQR] = useState(false)
+  const [showQR, setShowQR]  = useState(false)
 
   return (
-    <div style={{
-      minHeight: '100dvh',
-      background: '#07040F',
-      fontFamily: "'Inter', -apple-system, sans-serif",
-      display: 'flex', flexDirection: 'column', alignItems: 'center',
-    }}>
+    <div style={{ minHeight: '100dvh', background: '#06010F',
+      fontFamily: BODY, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <div style={{ width: '100%', maxWidth: 480 }}>
 
-        {/* ── Header banner ── */}
-        <div style={{ position: 'relative', height: 180 }}>
-          {/* Gradient banner */}
-          <div style={{
-            position: 'absolute', inset: 0,
-            background: 'linear-gradient(135deg, #00C9A7 0%, #3B5BFF 45%, #8B30D4 80%, #C026D3 100%)',
-          }} />
-          {/* Subtle mesh overlay */}
-          <div style={{
-            position: 'absolute', inset: 0,
-            backgroundImage: 'radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.12) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%)',
-          }} />
-          {/* Company name on banner */}
-          <div style={{
-            position: 'absolute', top: 22, left: 0, right: 0,
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-          }}>
-            {/* Double-Struck for the brand name on the banner */}
-            <span style={{ color: 'rgba(255,255,255,0.95)', fontWeight: 800, fontSize: 22, textShadow: '0 1px 10px rgba(0,0,0,0.3)', letterSpacing: '0.02em' }}>
-              {toDoubleStruck('WeThink')}
-            </span>
-            {/* Monospace for the tagline */}
-            <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: 11, letterSpacing: '0.04em' }}>
-              {toMono('Digital Smart Solutions')}
-            </span>
+        {/* ── AI Banner ── */}
+        <div style={{ position: 'relative', height: 180, overflow: 'hidden' }}>
+          <AIBanner />
+
+          {/* Company name overlay on banner */}
+          <div style={{ position: 'absolute', inset: 0, display: 'flex',
+            flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            gap: 6, pointerEvents: 'none' }}>
+            <span style={{
+              fontFamily: SERIF_B, fontWeight: 800, fontSize: 28,
+              color: '#fff', letterSpacing: '0.04em',
+              textShadow: '0 0 30px rgba(59,139,255,0.6), 0 2px 12px rgba(0,0,0,0.8)',
+            }}>WeThink</span>
+            <span style={{
+              fontFamily: BODY, fontStyle: 'italic', fontSize: 12,
+              color: 'rgba(255,255,255,0.6)', letterSpacing: '0.1em',
+            }}>Digital Smart Solutions</span>
           </div>
         </div>
 
-        {/* ── Profile section ── */}
-        <div style={{ padding: '0 24px 28px', position: 'relative' }}>
+        {/* ── Profile ── */}
+        <div style={{ padding: '0 24px 28px' }}>
 
-          {/* Circular logo — overlaps banner */}
-          <div style={{ marginTop: -52, marginBottom: 14, display: 'flex', alignItems: 'flex-end', gap: 12 }}>
-            <div style={{
-              width: 100, height: 100, borderRadius: '50%',
-              border: '4px solid #07040F',
-              background: '#fff',
-              overflow: 'hidden',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-              flexShrink: 0,
-            }}>
-              <img src="/wethink-logo.png" alt="WeThink" width={72} height={72} style={{ objectFit: 'contain' }} />
-            </div>
-            {/* Verified badge area */}
-            <div style={{ paddingBottom: 10 }}>
+          {/* Avatar row */}
+          <div style={{ marginTop: -50, marginBottom: 16, display: 'flex', alignItems: 'flex-end', gap: 12 }}>
+
+            {/* Circular logo with badge ON the frame */}
+            <div style={{ position: 'relative', width: 100, height: 100, flexShrink: 0 }}>
+              <div style={{ width: 100, height: 100, borderRadius: '50%',
+                border: '4px solid #06010F', background: '#fff',
+                overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 0 0 2px rgba(124,58,237,0.25)',
+              }}>
+                <img src="/wethink-logo.png" alt="WeThink" width={72} height={72}
+                  style={{ objectFit: 'contain' }} />
+              </div>
+
+              {/* ✓ Blue verified badge on frame — bottom-right */}
               <motion.div
-                animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2.5, repeat: Infinity }}
+                animate={{ scale: [1, 1.08, 1] }}
+                transition={{ duration: 2.5, repeat: Infinity }}
                 style={{
-                  width: 28, height: 28, borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #3B5BFF, #8B30D4)',
+                  position: 'absolute', bottom: 3, right: 3,
+                  width: 26, height: 26, borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #1D9BF0, #1A7AC7)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: '0 0 12px rgba(124,58,237,0.5)',
-                  border: '2px solid #07040F',
+                  border: '2.5px solid #06010F',
+                  boxShadow: '0 2px 10px rgba(29,155,240,0.6)',
                 }}
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-                  <path d="M20 6L9 17l-5-5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <path d="M20 6L9 17l-5-5" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </motion.div>
             </div>
           </div>
 
-          {/* Name + info */}
-          <div style={{ marginBottom: 20 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-              {/* Script / cursive for the person's name */}
-              <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, color: '#fff', letterSpacing: '0.01em', lineHeight: 1.2 }}>
-                {toScript(INFO.name)}
-              </h1>
-            </div>
-            {/* Fraktur / gothic for the company label */}
-            <p style={{ margin: '0 0 3px', color: 'rgba(167,139,250,0.85)', fontSize: 15, fontWeight: 500, letterSpacing: '0.02em' }}>
-              {toFraktur(INFO.company)}
+          {/* Name & info */}
+          <div style={{ marginBottom: 22 }}>
+            <h1 style={{ margin: '0 0 5px', fontFamily: SERIF_B, fontWeight: 800,
+              fontSize: 27, color: '#fff', letterSpacing: '-0.01em', lineHeight: 1.2,
+              textShadow: '0 2px 20px rgba(167,139,250,0.25)' }}>
+              {INFO.name}
+            </h1>
+            <p style={{ margin: '0 0 3px', fontFamily: SERIF_B, fontWeight: 600,
+              fontStyle: 'italic', color: 'rgba(167,139,250,0.9)', fontSize: 14 }}>
+              {INFO.company}
             </p>
-            <p style={{ margin: 0, color: 'rgba(255,255,255,0.4)', fontSize: 12.5 }}>
+            <p style={{ margin: 0, fontFamily: BODY, color: 'rgba(255,255,255,0.38)',
+              fontSize: 12.5 }}>
               {INFO.location}
             </p>
           </div>
 
-          {/* ── Quick-action icon row ── */}
+          {/* Quick-action icons */}
           <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: 22 }}>
-            <IconBtn icon="📞" label="Call" href={`tel:${INFO.phone}`} />
-            <IconBtn icon="✉️" label="Email" href={`mailto:${INFO.email}`} />
+            <IconBtn icon="📞" label="Call"    href={`tel:${INFO.phone}`} />
+            <IconBtn icon="✉️" label="Email"   href={`mailto:${INFO.email}`} />
             <IconBtn icon="🌐" label="Website" href={INFO.website} />
-            <IconBtn icon="↗" label="Share" onClick={() => shareCard(setCopied)} />
+            <IconBtn icon="↗"  label="Share"   onClick={() => shareCard(setCopied)} />
           </div>
 
-          {/* ── Save / Exchange buttons ── */}
+          {/* Save / QR buttons */}
           <div style={{ display: 'flex', gap: 10, marginBottom: 28 }}>
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={saveContact}
-              style={{
-                flex: 1, height: 46, borderRadius: 50,
+            <motion.button whileTap={{ scale: 0.97 }} onClick={saveContact}
+              style={{ flex: 1, height: 48, borderRadius: 50,
                 background: 'linear-gradient(135deg, #7C3AED, #5B21B6)',
-                border: 'none', cursor: 'pointer',
-                color: '#fff', fontWeight: 700, fontSize: 13.5,
+                border: 'none', cursor: 'pointer', color: '#fff',
+                fontWeight: 700, fontSize: 13.5, fontFamily: SERIF_B,
                 boxShadow: '0 6px 20px rgba(124,58,237,0.35)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-              }}
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}
             >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
               Save Contact
             </motion.button>
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setShowQR(true)}
-              style={{
-                flex: 1, height: 46, borderRadius: 50,
-                background: 'transparent',
-                border: '1.5px solid rgba(124,58,237,0.5)',
-                cursor: 'pointer',
-                color: '#A78BFA', fontWeight: 700, fontSize: 13.5,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-              }}
+            <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowQR(true)}
+              style={{ flex: 1, height: 48, borderRadius: 50,
+                background: 'transparent', border: '1.5px solid rgba(124,58,237,0.45)',
+                cursor: 'pointer', color: '#A78BFA',
+                fontWeight: 700, fontSize: 13.5, fontFamily: SERIF_B,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}
             >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-                <path d="M14 14h3v3m0 4h4v-4m-4 0h-3"/>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3m0 4h4v-4m-4 0h-3"/>
               </svg>
               My QR Code
             </motion.button>
@@ -336,8 +337,8 @@ export default function CardPage() {
           {/* Divider */}
           <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: 22 }} />
 
-          {/* ── Social icons ── */}
-          <div style={{ display: 'flex', gap: 12, marginBottom: 28, justifyContent: 'center' }}>
+          {/* Socials */}
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginBottom: 28 }}>
             <SocialBtn href={INFO.instagram} color="#E1306C" icon={
               <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
@@ -358,38 +359,31 @@ export default function CardPage() {
           {/* Divider */}
           <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: 20 }} />
 
-          {/* ── Action links ── */}
+          {/* Action links */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 28 }}>
-            <ActionLink icon="🌐" label="Visit Website" href={INFO.website} />
-            <ActionLink icon="🛠️" label="Our Services" href="https://www.wethink.ae/#services" />
-            <ActionLink icon="💬" label="Book a Call" href={INFO.whatsapp} />
-            <ActionLink icon="✉️" label="Send us an Email" href={`mailto:${INFO.email}`} />
+            <ActionLink icon="🌐" label="Visit Website"       href={INFO.website} />
+            <ActionLink icon="🛠️" label="Our Services"        href="https://www.wethink.ae/#services" />
+            <ActionLink icon="💬" label="Book a Call"         href={INFO.whatsapp} />
+            <ActionLink icon="✉️" label="Send us an Email"    href={`mailto:${INFO.email}`} />
           </div>
 
-          {/* ── Footer ── */}
-          <div style={{ textAlign: 'center', paddingBottom: 12 }}>
-            <p style={{ color: 'rgba(255,255,255,0.18)', fontSize: 11, margin: 0, letterSpacing: '0.04em' }}>
+          <div style={{ textAlign: 'center', paddingBottom: 16 }}>
+            <p style={{ color: 'rgba(255,255,255,0.15)', fontSize: 11, margin: 0,
+              fontFamily: BODY, letterSpacing: '0.05em', fontStyle: 'italic' }}>
               wethink.ae/card
             </p>
           </div>
-
         </div>
       </div>
 
-      {/* ── QR Modal ── */}
       {showQR && <QRModal onClose={() => setShowQR(false)} />}
 
-      {/* ── Copied toast ── */}
       {copied && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          style={{
-            position: 'fixed', bottom: 28, left: '50%', transform: 'translateX(-50%)',
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+          style={{ position: 'fixed', bottom: 28, left: '50%', transform: 'translateX(-50%)',
             background: '#7C3AED', color: '#fff', fontWeight: 700, fontSize: 13,
-            padding: '10px 24px', borderRadius: 50,
-            boxShadow: '0 8px 24px rgba(124,58,237,0.4)', zIndex: 200,
-          }}
-        >
+            padding: '10px 24px', borderRadius: 50, fontFamily: SERIF_B,
+            boxShadow: '0 8px 24px rgba(124,58,237,0.4)', zIndex: 200 }}>
           ✓ Link copied!
         </motion.div>
       )}
