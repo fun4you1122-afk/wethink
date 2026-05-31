@@ -4,16 +4,62 @@ import { useRef, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 
 const INFO = {
-  name: 'Ahmad Saeed',
-  role: 'Founder',
+  name: 'Rasha Aljalam',
+  role: '',
   company: 'WeThink',
   tagline: 'Digital Smart Solutions',
   email: 'info@wethink.ae',
   phone: '+971 50 312 5078',
   website: 'www.wethink.ae',
   instagram: '@wethink.ae',
-  linkedin: 'linkedin.com/company/wethink',
+  linkedin: 'ae.linkedin.com/in/rasha-aljalam-74a6b4188',
+  linkedinHref: 'https://ae.linkedin.com/in/rasha-aljalam-74a6b4188',
   location: 'Makers District, Abu Dhabi, UAE',
+}
+
+/* WeThink Wi logo — SVG recreation of the teal→blue→purple ribbon mark */
+function WeThinkLogo({ size = 56 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 420 440" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        {/* Left V stroke: teal → blue */}
+        <linearGradient id="wl" x1="70" y1="240" x2="250" y2="240" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stopColor="#00C9A7"/>
+          <stop offset="100%" stopColor="#3B5BFF" stopOpacity="0.9"/>
+        </linearGradient>
+        {/* Right V+i stroke: blue → purple */}
+        <linearGradient id="wr" x1="230" y1="240" x2="420" y2="240" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stopColor="#3B5BFF" stopOpacity="0.9"/>
+          <stop offset="100%" stopColor="#8B30D4"/>
+        </linearGradient>
+        {/* i dot */}
+        <linearGradient id="wd" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"   stopColor="#8B30D4"/>
+          <stop offset="100%" stopColor="#6B22B0"/>
+        </linearGradient>
+      </defs>
+      {/* Left V of W */}
+      <path
+        d="M 72,108 L 138,368 L 244,148"
+        stroke="url(#wl)"
+        strokeWidth="68"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      {/* Right V of W + i stem */}
+      <path
+        d="M 244,148 L 348,368 L 392,108 L 392,78"
+        stroke="url(#wr)"
+        strokeWidth="68"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      {/* i dot */}
+      <circle cx="392" cy="36" r="36" fill="url(#wd)"/>
+    </svg>
+  )
 }
 
 export default function CardPage() {
@@ -97,14 +143,8 @@ export default function CardPage() {
 
             {/* Brand header */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28 }}>
-              <div style={{
-                width: 40, height: 40, borderRadius: 12,
-                background: 'linear-gradient(135deg, #7C3AED, #C026D3)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 4px 16px rgba(124,58,237,0.4)',
-                flexShrink: 0,
-              }}>
-                <span style={{ color: '#fff', fontWeight: 900, fontSize: 16, letterSpacing: '-1px' }}>W</span>
+              <div style={{ flexShrink: 0 }}>
+                <WeThinkLogo size={48} />
               </div>
               <div>
                 <div style={{ color: '#fff', fontWeight: 800, fontSize: 15, letterSpacing: '0.02em' }}>WeThink</div>
@@ -136,15 +176,15 @@ export default function CardPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8 }}>
                 <span style={{
                   color: 'transparent',
-                  background: 'linear-gradient(90deg, #A78BFA, #C026D3)',
+                  background: 'linear-gradient(90deg, #00C9A7, #3B5BFF, #8B30D4)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   fontWeight: 700, fontSize: 15, letterSpacing: '0.01em',
                 }}>
-                  {INFO.role}
+                  {INFO.company}
                 </span>
                 <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: 13 }}>·</span>
-                <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>{INFO.company}</span>
+                <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13 }}>{INFO.tagline}</span>
               </div>
             </div>
 
@@ -154,7 +194,7 @@ export default function CardPage() {
               <ContactRow icon="✉️" label={INFO.email} href={`mailto:${INFO.email}`} />
               <ContactRow icon="🌐" label={INFO.website} href="https://www.wethink.ae" />
               <ContactRow icon="📸" label={INFO.instagram} href="https://instagram.com/wethink.ae" />
-              <ContactRow icon="💼" label="LinkedIn · WeThink" href="https://linkedin.com/company/wethink" />
+              <ContactRow icon="💼" label="LinkedIn · Rasha Aljalam" href={INFO.linkedinHref} />
               <ContactRow icon="📍" label={INFO.location} />
             </div>
 
@@ -219,7 +259,7 @@ export default function CardPage() {
         </button>
 
         <a
-          href="https://wa.me/971503125078?text=Hi%20Ahmad%2C%20I%20got%20your%20card%20from%20WeThink!"
+          href="https://wa.me/971503125078?text=Hi%20Rasha%2C%20I%20got%20your%20card%20from%20WeThink!"
           target="_blank"
           rel="noopener noreferrer"
           style={{
