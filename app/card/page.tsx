@@ -286,7 +286,7 @@ export default function CardPage() {
             </h1>
             <p style={{ margin: '0 0 3px', fontFamily: SERIF_B, fontWeight: 600,
               fontStyle: 'italic', color: 'rgba(167,139,250,0.9)', fontSize: 14 }}>
-              {INFO.company}
+              CEO &amp; Founder
             </p>
             <p style={{ margin: 0, fontFamily: BODY, color: 'rgba(255,255,255,0.38)',
               fontSize: 12.5 }}>
@@ -296,10 +296,27 @@ export default function CardPage() {
 
           {/* Quick-action icons */}
           <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: 22 }}>
-            <IconBtn icon="📞" label="Call"    href={`tel:${INFO.phone}`} />
-            <IconBtn icon="✉️" label="Email"   href={`mailto:${INFO.email}`} />
-            <IconBtn icon="🌐" label="Website" href={INFO.website} />
-            <IconBtn icon="↗"  label="Share"   onClick={() => shareCard(setCopied)} />
+            <IconBtn label="Call" href={`tel:${INFO.phone}`} icon={
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.64 3.5 2 2 0 0 1 3.62 1.5h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.08a16 16 0 0 0 6.01 6.01l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            } />
+            <IconBtn label="Email" href={`mailto:${INFO.email}`} icon={
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+            } />
+            <IconBtn label="Website" href={INFO.website} icon={
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>
+              </svg>
+            } />
+            <IconBtn label="Share" onClick={() => shareCard(setCopied)} icon={
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                <path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/>
+              </svg>
+            } />
           </div>
 
           {/* Save / QR buttons */}
@@ -361,10 +378,26 @@ export default function CardPage() {
 
           {/* Action links */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 28 }}>
-            <ActionLink icon="🌐" label="Visit Website"       href={INFO.website} />
-            <ActionLink icon="🛠️" label="Our Services"        href="https://www.wethink.ae/#services" />
-            <ActionLink icon="💬" label="Book a Call"         href={INFO.whatsapp} />
-            <ActionLink icon="✉️" label="Send us an Email"    href={`mailto:${INFO.email}`} />
+            <ActionLink href={INFO.website} label="Visit Website" icon={
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>
+              </svg>
+            } />
+            <ActionLink href="https://www.wethink.ae/#services" label="Our Services" icon={
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+              </svg>
+            } />
+            <ActionLink href={INFO.whatsapp} label="Book a Call" icon={
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.64 3.5 2 2 0 0 1 3.62 1.5h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.08a16 16 0 0 0 6.01 6.01l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            } />
+            <ActionLink href={`mailto:${INFO.email}`} label="Send us an Email" icon={
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+            } />
           </div>
 
           <div style={{ textAlign: 'center', paddingBottom: 16 }}>
