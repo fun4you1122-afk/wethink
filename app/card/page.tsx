@@ -383,11 +383,11 @@ export default function CardPage() {
                 <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
               </svg>
             } />
-            <ActionLink href="https://www.wethink.ae/#cases" label="Our Latest Clients" icon={
+            <ActionLink href="https://www.wethink.ae/#projects" label="Our Projects" icon={
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                <circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                <rect x="2" y="3" width="6" height="6" rx="1"/><rect x="16" y="3" width="6" height="6" rx="1"/>
+                <rect x="2" y="15" width="6" height="6" rx="1"/><rect x="16" y="15" width="6" height="6" rx="1"/>
+                <path d="M8 6h8M6 8v7M18 8v7M8 18h8"/>
               </svg>
             } />
             <ActionLink href="https://www.wethink.ae/#about" label="About WeThink" icon={
@@ -395,10 +395,9 @@ export default function CardPage() {
                 <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
               </svg>
             } />
-            <ActionLink href={INFO.linkedinHref} label="Connect on LinkedIn" icon={
+            <ActionLink href="https://www.wethink.ae/#contact" label="Get a Free Quote" icon={
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="4"/>
-                <path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4M11 10v7"/>
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
               </svg>
             } />
           </div>
