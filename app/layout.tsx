@@ -2,10 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import SmoothScroll from '@/components/SmoothScroll'
-import WhatsAppButton from '@/components/WhatsAppButton'
-import ScrollProgress from '@/components/ScrollProgress'
-import AiChat from '@/components/AiChat'
-import GameTab from '@/components/GameTab'
+import GlobalOverlays from '@/components/GlobalOverlays'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -41,10 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body>
-        <ScrollProgress />
-        <WhatsAppButton />
-        <AiChat />
-        <GameTab />
+        <GlobalOverlays />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
