@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 
 const VIDEO_ID = 'J9LK6EtxzgM'
@@ -8,6 +8,8 @@ const VIDEO_ID = 'J9LK6EtxzgM'
 export default function VideoSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const inView = useInView(sectionRef, { once: true, margin: '0px' })
+
+  const [clicked, setClicked] = useState(false)
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -72,6 +74,15 @@ export default function VideoSection() {
                 allowFullScreen
                 title="WeThink — The Future is Digital"
                 style={{ border: 0 }}
+              />
+            )}
+            {/* Scroll-capture fix: transparent overlay blocks iframe pointer events
+                so the page scrolls normally. Removed on click so controls still work. */}
+            {!clicked && (
+              <div
+                className="absolute inset-0 z-10 cursor-pointer"
+                onClick={() => setClicked(true)}
+                title="Click to interact with video"
               />
             )}
           </div>
