@@ -135,12 +135,19 @@ function IconBtn({ icon, label, href, onClick }: { icon: React.ReactNode; label:
   }
   const circle = (
     <>
-      <div style={{
-        width: 44, height: 44, borderRadius: '50%',
-        background: 'rgba(124,58,237,0.1)', border: '1.5px solid rgba(124,58,237,0.3)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: '#A78BFA', fontSize: 17,
-      }}>{icon}</div>
+      <motion.div
+        whileHover={{ scale: 1.18, rotate: -8 }}
+        whileTap={{ scale: 0.92 }}
+        transition={{ type: 'spring', stiffness: 350, damping: 18 }}
+        style={{
+          width: 44, height: 44, borderRadius: '50%',
+          background: 'rgba(255,255,255,0.06)',
+          border: '1px solid rgba(255,255,255,0.18)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: '#C4B5FD', fontSize: 17,
+          boxShadow: '0 2px 12px rgba(167,139,250,0.2)',
+        }}
+      >{icon}</motion.div>
       <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', fontFamily: BODY, letterSpacing: '0.02em' }}>{label}</span>
     </>
   )
