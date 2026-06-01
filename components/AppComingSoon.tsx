@@ -155,18 +155,7 @@ export default function AppComingSoon() {
             {/* Google Play placeholder */}
             <div className="flex items-center gap-2 px-5 py-3 rounded-xl cursor-not-allowed select-none"
               style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <svg width="20" height="20" viewBox="0 0 512 512">
-                <path d="M48 59.49v393a4.33 4.33 0 007.37 3.07L260 256 55.37 56.42A4.33 4.33 0 0048 59.49z" fill="#32BBFF"/>
-                <path d="M345 185l-89.45-49L55.37 56.42A4.33 4.33 0 0048 59.49v.54L258.41 268z" fill="#32BBFF"/>
-                <path d="M345 185l-86.59 71L48 452.51v.54a4.33 4.33 0 007.37 3.07L255.55 376z" fill="#32BBFF"/>
-                <path d="M48 59.49v393a4.33 4.33 0 007.37 3.07L260 256 55.37 56.42A4.33 4.33 0 0048 59.49z" fill="#32BBFF"/>
-                <path d="M256 270.58L345 327l102.08 58.8a4.33 4.33 0 004.92-7L349 256l-93-70.58z" fill="#FFD300"/>
-                <path d="M256 270.58L345 327l102.08 58.8a4.33 4.33 0 004.92-7L349 256l-93-70.58z" fill="#FFD300"/>
-                <path d="M256 241.42L349 185 452 126.2a4.33 4.33 0 00-4.92-7L345 178l-89 57z" fill="#FF3333"/>
-                <path d="M256 241.42L349 185 452 126.2a4.33 4.33 0 00-4.92-7L345 178l-89 57z" fill="#FF3333"/>
-                <path d="M345 327L258.41 268 48 452.51a4.33 4.33 0 005.37 1.06z" fill="#00F076"/>
-                <path d="M345 185L53.37 57.43A4.33 4.33 0 0048 59.49L258.41 244z" fill="#00F076"/>
-              </svg>
+              <img src="/google-play-icon.png" alt="Google Play" width={22} height={22} style={{ objectFit: 'contain' }} />
               <div className="text-left">
                 <div className="text-xs" style={{ color: 'var(--text-muted)' }}>Coming to</div>
                 <div className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Google Play</div>
