@@ -18,54 +18,70 @@ export interface TestimonialStackProps {
 
 export const TestimonialStack = ({ testimonials, visibleBehind = 2 }: TestimonialStackProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState(0);
-  const dragStartRef = useRef(0);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const totalCards = testimonials.length;
+
+  // Drag state tracked in refs — no React re-renders during touch move
+  const isDragging = useRef(false);
+  const dragStart = useRef(0);
+  const dragOffset = useRef(0);
+  const activeIndexRef = useRef(activeIndex);
+  activeIndexRef.current = activeIndex;
 
   const navigate = useCallback((newIndex: number) => {
     setActiveIndex((newIndex + totalCards) % totalCards);
   }, [totalCards]);
 
-  const handleDragStart = (e: React.MouseEvent | React.TouchEvent, index: number) => {
-    if (index !== activeIndex) return;
-    setIsDragging(true);
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    dragStartRef.current = clientX;
-    cardRefs.current[activeIndex]?.classList.add('is-dragging');
+  // Apply inline transform to active card directly (no re-render)
+  const applyDragTransform = (offset: number) => {
+    const el = cardRefs.current[activeIndexRef.current];
+    if (el) el.style.transform = `translate3d(${offset}px, 0, 0)`;
   };
 
-  const handleDragMove = useCallback((e: MouseEvent | TouchEvent) => {
-    if (!isDragging) return;
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    setDragOffset(clientX - dragStartRef.current);
-  }, [isDragging]);
+  const clearDragTransform = () => {
+    const el = cardRefs.current[activeIndexRef.current];
+    if (el) el.style.transform = '';
+  };
 
-  const handleDragEnd = useCallback(() => {
-    if (!isDragging) return;
-    cardRefs.current[activeIndex]?.classList.remove('is-dragging');
-    if (Math.abs(dragOffset) > 50) {
-      navigate(activeIndex + (dragOffset < 0 ? 1 : -1));
-    }
-    setIsDragging(false);
-    setDragOffset(0);
-  }, [isDragging, dragOffset, activeIndex, navigate]);
+  const handleDragStart = (e: React.MouseEvent | React.TouchEvent, index: number) => {
+    if (index !== activeIndexRef.current) return;
+    isDragging.current = true;
+    dragOffset.current = 0;
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    dragStart.current = clientX;
+    cardRefs.current[index]?.classList.add('is-dragging');
+  };
 
   useEffect(() => {
-    if (isDragging) {
-      window.addEventListener('mousemove', handleDragMove);
-      window.addEventListener('touchmove', handleDragMove);
-      window.addEventListener('mouseup', handleDragEnd);
-      window.addEventListener('touchend', handleDragEnd);
-    }
-    return () => {
-      window.removeEventListener('mousemove', handleDragMove);
-      window.removeEventListener('touchmove', handleDragMove);
-      window.removeEventListener('mouseup', handleDragEnd);
-      window.removeEventListener('touchend', handleDragEnd);
+    const onMove = (e: MouseEvent | TouchEvent) => {
+      if (!isDragging.current) return;
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      dragOffset.current = clientX - dragStart.current;
+      applyDragTransform(dragOffset.current);
     };
-  }, [isDragging, handleDragMove, handleDragEnd]);
+
+    const onEnd = () => {
+      if (!isDragging.current) return;
+      isDragging.current = false;
+      cardRefs.current[activeIndexRef.current]?.classList.remove('is-dragging');
+      clearDragTransform();
+      if (Math.abs(dragOffset.current) > 50) {
+        navigate(activeIndexRef.current + (dragOffset.current < 0 ? 1 : -1));
+      }
+      dragOffset.current = 0;
+    };
+
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onMove, { passive: true });
+    window.addEventListener('mouseup', onEnd);
+    window.addEventListener('touchend', onEnd);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('touchmove', onMove);
+      window.removeEventListener('mouseup', onEnd);
+      window.removeEventListener('touchend', onEnd);
+    };
+  }, [navigate]);
 
   if (!testimonials?.length) return null;
 
@@ -76,13 +92,12 @@ export const TestimonialStack = ({ testimonials, visibleBehind = 2 }: Testimonia
 
         const style: CSSProperties = {};
         if (displayOrder === 0) {
-          style.transform = `translateX(${dragOffset}px)`;
           style.opacity = 1;
           style.zIndex = totalCards;
         } else if (displayOrder <= visibleBehind) {
           const scale = 1 - 0.05 * displayOrder;
           const translateY = -2 * displayOrder;
-          style.transform = `scale(${scale}) translateY(${translateY}rem)`;
+          style.transform = `scale(${scale}) translate3d(0, ${translateY}rem, 0)`;
           style.opacity = 1 - 0.2 * displayOrder;
           style.zIndex = totalCards - displayOrder;
         } else {

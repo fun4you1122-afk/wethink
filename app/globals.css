@@ -373,6 +373,15 @@ p { text-wrap: pretty; }
     opacity 0.45s ease;
   user-select: none;
   -webkit-user-select: none;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+@media (max-width: 768px) {
+  .testimonial-card {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
 }
 
 .testimonial-card.is-dragging {
@@ -767,6 +776,15 @@ body {
     opacity 0.45s ease;
   user-select: none;
   -webkit-user-select: none;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+@media (max-width: 768px) {
+  .testimonial-card {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
 }
 
 .testimonial-card.is-dragging {
