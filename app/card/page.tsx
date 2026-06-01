@@ -205,9 +205,17 @@ function SocialBtn({ href, color, icon, delay = 0 }: { href: string; color: stri
 }
 
 /* ── Action link ── */
+const arrowVariants = {
+  rest: { x: 0, y: 0, opacity: 0.5, color: 'rgba(124,58,237,0.55)', scale: 1 },
+  hover: { x: 4, y: -4, opacity: 1, color: '#C4B5FD', scale: 1.2,
+    transition: { type: 'spring' as const, stiffness: 400, damping: 18 } },
+  tap: { x: 2, y: -2, scale: 0.95 },
+}
+
 function ActionLink({ icon, label, href, onClick }: { icon: React.ReactNode; label: string; href?: string; onClick?: () => void }) {
   const inner = (
-    <motion.div whileHover={{ x: 3 }}
+    <motion.div
+      initial="rest" whileHover="hover" whileTap="tap"
       style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px',
         borderRadius: 12, background: 'rgba(255,255,255,0.03)',
         border: '1px solid rgba(255,255,255,0.07)', cursor: 'pointer', textDecoration: 'none' }}
@@ -215,7 +223,7 @@ function ActionLink({ icon, label, href, onClick }: { icon: React.ReactNode; lab
       <span style={{ fontSize: 19, width: 26, textAlign: 'center' }}>{icon}</span>
       <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 500, fontSize: 14,
         flex: 1, fontFamily: BODY }}>{label}</span>
-      <span style={{ color: 'rgba(124,58,237,0.55)', fontSize: 16 }}>↗</span>
+      <motion.span variants={arrowVariants} style={{ fontSize: 16, display: 'inline-block' }}>↗</motion.span>
     </motion.div>
   )
   return href
