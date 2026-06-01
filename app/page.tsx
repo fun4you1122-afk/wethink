@@ -17,6 +17,7 @@ import CinematicScene from '@/components/CinematicScene'
 import VideoSection from '@/components/VideoSection'
 import AnalyticsDemo from '@/components/AnalyticsDemo'
 import Blog from '@/components/Blog'
+import DepthScroll from '@/components/DepthScroll'
 import PricingSection from '@/components/ui/pricing-section'
 import LogoAssembly from '@/components/LogoAssembly'
 import AppComingSoon from '@/components/AppComingSoon'
@@ -45,6 +46,7 @@ export default function Home() {
       <VideoSection />
       <AnalyticsDemo />
       <Blog />
+      <DepthScroll />
       <PricingSection />
       <AppComingSoon />
       <LogoAssembly />
