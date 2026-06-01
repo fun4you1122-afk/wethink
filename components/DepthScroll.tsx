@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -90,21 +90,13 @@ function PanelContent({ s }: { s: typeof SECTIONS[0] }) {
 }
 
 export default function DepthScroll() {
-  const outerRef = useRef<HTMLDivElement>(null)
+  const outerRef  = useRef<HTMLDivElement>(null)
   const panelRefs = useRef<(HTMLDivElement | null)[]>([])
-  const cubeRef = useRef<HTMLDivElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
+  const cubeRef   = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)')
-    setIsMobile(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
-
-  useEffect(() => {
-    if (isMobile) return  // skip on mobile — plain stack instead
+    // Check at runtime — no React state, no re-render, no hydration flash
+    if (window.innerWidth < 768) return
 
     gsap.registerPlugin(ScrollTrigger)
     const outer = outerRef.current
@@ -142,7 +134,7 @@ export default function DepthScroll() {
     }
 
     for (let i = 1; i < SECTIONS.length; i++) {
-      const inAt = i * 0.2
+      const inAt  = i * 0.2
       const outAt = inAt + 0.2
       tl.to(panels[i], { z: 0, opacity: 1, ease: 'power2.out', duration: 0.2 }, inAt)
       if (i < SECTIONS.length - 1) {
@@ -150,7 +142,8 @@ export default function DepthScroll() {
       }
     }
 
-    ScrollTrigger.create({
+    // Store the instance so cleanup only kills THIS trigger, not every trigger on the page
+    const st = ScrollTrigger.create({
       trigger: outer,
       start: 'top top',
       end: 'bottom bottom',
@@ -158,13 +151,13 @@ export default function DepthScroll() {
       scrub: 1,
     })
 
-    return () => { ScrollTrigger.getAll().forEach(t => t.kill()) }
-  }, [isMobile])
+    return () => { st.kill() }
+  }, [])  // run once — no isMobile state dependency
 
-  // ── Mobile: plain vertical stack, no GSAP ──
-  if (isMobile) {
-    return (
-      <div>
+  return (
+    <>
+      {/* ── Mobile: plain vertical stack (CSS-driven, no GSAP) ── */}
+      <div className="md:hidden">
         {SECTIONS.map((s, i) => (
           <div key={i} style={{
             display: 'grid', placeItems: 'center', alignContent: 'center',
@@ -175,40 +168,38 @@ export default function DepthScroll() {
           </div>
         ))}
       </div>
-    )
-  }
 
-  // ── Desktop: full 3D scroll animation ──
-  return (
-    <div ref={outerRef} style={{ position: 'relative', height: '500vh' }}>
-      <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', perspective: '1200px' }}>
+      {/* ── Desktop: full 3D scroll animation ── */}
+      <div ref={outerRef} className="hidden md:block" style={{ position: 'relative', height: '500vh' }}>
+        <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', perspective: '1200px' }}>
 
-        <div ref={cubeRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 6 }}>
-          {([
-            { left: 0, top: 0, width: '100vmin', height: '100%', transform: 'rotateY(-90deg)', transformOrigin: 'left' },
-            { right: 0, top: 0, width: '100vmin', height: '100%', transform: 'rotateY(90deg)', transformOrigin: 'right' },
-            { left: 0, top: 0, width: '100%', height: '100vmin', transform: 'rotateX(90deg)', transformOrigin: 'top' },
-            { left: 0, bottom: 0, width: '100%', height: '100vmin', transform: 'rotateX(-90deg)', transformOrigin: 'bottom' },
-          ] as React.CSSProperties[]).map((style, i) => (
-            <div key={i} style={{ position: 'absolute', background: 'rgba(255,200,255,0.35)', boxShadow: '0 0 50px #000 inset', ...style }} />
+          <div ref={cubeRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 6 }}>
+            {([
+              { left: 0, top: 0, width: '100vmin', height: '100%', transform: 'rotateY(-90deg)', transformOrigin: 'left' },
+              { right: 0, top: 0, width: '100vmin', height: '100%', transform: 'rotateY(90deg)', transformOrigin: 'right' },
+              { left: 0, top: 0, width: '100%', height: '100vmin', transform: 'rotateX(90deg)', transformOrigin: 'top' },
+              { left: 0, bottom: 0, width: '100%', height: '100vmin', transform: 'rotateX(-90deg)', transformOrigin: 'bottom' },
+            ] as React.CSSProperties[]).map((style, i) => (
+              <div key={i} style={{ position: 'absolute', background: 'rgba(255,200,255,0.35)', boxShadow: '0 0 50px #000 inset', ...style }} />
+            ))}
+          </div>
+
+          {SECTIONS.map((s, i) => (
+            <div
+              key={i}
+              ref={el => { panelRefs.current[i] = el }}
+              style={{
+                position: 'absolute', inset: 0,
+                display: 'grid', placeItems: 'center', alignContent: 'center',
+                gap: '1rem', padding: '2em', zIndex: 5 - i,
+                color: '#111', backgroundColor: s.color, backgroundImage: GRID_BG,
+              }}
+            >
+              <PanelContent s={s} />
+            </div>
           ))}
         </div>
-
-        {SECTIONS.map((s, i) => (
-          <div
-            key={i}
-            ref={el => { panelRefs.current[i] = el }}
-            style={{
-              position: 'absolute', inset: 0,
-              display: 'grid', placeItems: 'center', alignContent: 'center',
-              gap: '1rem', padding: '2em', zIndex: 5 - i,
-              color: '#111', backgroundColor: s.color, backgroundImage: GRID_BG,
-            }}
-          >
-            <PanelContent s={s} />
-          </div>
-        ))}
       </div>
-    </div>
+    </>
   )
 }
