@@ -20,6 +20,7 @@ import Blog from '@/components/Blog'
 import DepthScroll from '@/components/DepthScroll'
 import PricingSection from '@/components/ui/pricing-section'
 import LogoAssembly from '@/components/LogoAssembly'
+import AppComingSoon from '@/components/AppComingSoon'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 
@@ -47,6 +48,7 @@ export default function Home() {
       <Blog />
       <DepthScroll />
       <PricingSection />
+      <AppComingSoon />
       <LogoAssembly />
       <Contact />
       <Footer />
