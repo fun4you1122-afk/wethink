@@ -384,6 +384,34 @@ export default function Services() {
           </motion.p>
         </div>
 
+        {/* Services video */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="relative mb-12 rounded-2xl overflow-hidden"
+          style={{
+            border: '1px solid rgba(124,58,237,0.2)',
+            boxShadow: '0 8px 40px rgba(124,58,237,0.15)',
+          }}
+        >
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full"
+            style={{ display: 'block', maxHeight: 420, objectFit: 'cover' }}
+          >
+            <source src="/services-bg.mp4" type="video/mp4" />
+          </video>
+          {/* Subtle gradient fade at bottom to blend into section */}
+          <div
+            className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
+            style={{ background: 'linear-gradient(to bottom, transparent, var(--surface-2))' }}
+          />
+        </motion.div>
+
         {/* Bento grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {services.map((service, i) => (
