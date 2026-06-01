@@ -82,6 +82,26 @@ export default function AppComingSoon() {
           </motion.div>
         </div>
 
+        {/* Coming Soon video */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.35 }}
+          className="relative mb-12 rounded-2xl overflow-hidden"
+          style={{
+            border: '1px solid rgba(124,58,237,0.25)',
+            boxShadow: '0 8px 40px rgba(124,58,237,0.15)',
+          }}
+        >
+          <video
+            autoPlay loop muted playsInline
+            className="w-full"
+            style={{ display: 'block', maxHeight: 480, objectFit: 'cover' }}
+          >
+            <source src="/app-coming-soon.mp4" type="video/mp4" />
+          </video>
+        </motion.div>
+
         {/* Phone screenshots — horizontal scroll */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
