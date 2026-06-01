@@ -92,7 +92,6 @@ function PanelContent({ s }: { s: typeof SECTIONS[0] }) {
 export default function DepthScroll() {
   const outerRef  = useRef<HTMLDivElement>(null)
   const panelRefs = useRef<(HTMLDivElement | null)[]>([])
-  const cubeRef   = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // Check at runtime — no React state, no re-render, no hydration flash
@@ -116,22 +115,10 @@ export default function DepthScroll() {
       })
     })
 
-    if (cubeRef.current) {
-      gsap.set(cubeRef.current, {
-        z: -12000, rotateX: 60, rotateZ: 110,
-        transformOrigin: '50% 50% 50vmin', transformStyle: 'preserve-3d',
-      })
-    }
-
     const tl = gsap.timeline({ defaults: { ease: 'none' } })
 
     tl.to(panels[0], { z: 0, rotateX: 0, rotateZ: 0, ease: 'power2.out', duration: 0.2 }, 0)
     tl.to(panels[0], { z: 1200, opacity: 0, ease: 'power2.in', duration: 0.2 }, 0.2)
-
-    if (cubeRef.current) {
-      tl.to(cubeRef.current, { z: 0, rotateX: 0, rotateZ: 0, ease: 'power2.out', duration: 0.2 }, 0)
-      tl.to(cubeRef.current, { z: 1200, opacity: 0, ease: 'power2.in', duration: 0.2 }, 0.2)
-    }
 
     for (let i = 1; i < SECTIONS.length; i++) {
       const inAt  = i * 0.2
@@ -172,17 +159,6 @@ export default function DepthScroll() {
       {/* ── Desktop: full 3D scroll animation ── */}
       <div ref={outerRef} className="hidden md:block" style={{ position: 'relative', height: '500vh' }}>
         <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', perspective: '1200px' }}>
-
-          <div ref={cubeRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 6 }}>
-            {([
-              { left: 0, top: 0, width: '100vmin', height: '100%', transform: 'rotateY(-90deg)', transformOrigin: 'left' },
-              { right: 0, top: 0, width: '100vmin', height: '100%', transform: 'rotateY(90deg)', transformOrigin: 'right' },
-              { left: 0, top: 0, width: '100%', height: '100vmin', transform: 'rotateX(90deg)', transformOrigin: 'top' },
-              { left: 0, bottom: 0, width: '100%', height: '100vmin', transform: 'rotateX(-90deg)', transformOrigin: 'bottom' },
-            ] as React.CSSProperties[]).map((style, i) => (
-              <div key={i} style={{ position: 'absolute', background: 'rgba(255,200,255,0.35)', boxShadow: '0 0 50px #000 inset', ...style }} />
-            ))}
-          </div>
 
           {SECTIONS.map((s, i) => (
             <div
