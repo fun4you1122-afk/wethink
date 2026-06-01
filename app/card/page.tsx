@@ -128,26 +128,43 @@ async function shareCard(setCopied: (v: boolean) => void) {
 }
 
 /* ── Icon button ── */
-function IconBtn({ icon, label, href, onClick }: { icon: React.ReactNode; label: string; href?: string; onClick?: () => void }) {
+function IconBtn({ icon, label, href, onClick, delay = 0 }: {
+  icon: React.ReactNode; label: string; href?: string; onClick?: () => void; delay?: number
+}) {
   const wrap: React.CSSProperties = {
     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
     textDecoration: 'none', background: 'none', border: 'none', padding: 0, cursor: 'pointer',
   }
   const circle = (
     <>
-      <motion.div
-        whileHover={{ scale: 1.18, rotate: -8 }}
-        whileTap={{ scale: 0.92 }}
-        transition={{ type: 'spring', stiffness: 350, damping: 18 }}
-        style={{
-          width: 44, height: 44, borderRadius: '50%',
-          background: 'rgba(255,255,255,0.06)',
-          border: '1px solid rgba(255,255,255,0.18)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: '#C4B5FD', fontSize: 17,
-          boxShadow: '0 2px 12px rgba(167,139,250,0.2)',
-        }}
-      >{icon}</motion.div>
+      {/* Outer pulse ring */}
+      <div style={{ position: 'relative', width: 44, height: 44 }}>
+        <motion.div
+          animate={{ scale: [1, 1.45, 1], opacity: [0.35, 0, 0.35] }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut', delay }}
+          style={{
+            position: 'absolute', inset: 0, borderRadius: '50%',
+            border: '1.5px solid rgba(167,139,250,0.6)',
+            pointerEvents: 'none',
+          }}
+        />
+        <motion.div
+          animate={{ boxShadow: [
+            '0 0 0px rgba(167,139,250,0)',
+            '0 0 14px rgba(167,139,250,0.55)',
+            '0 0 0px rgba(167,139,250,0)',
+          ]}}
+          transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut', delay }}
+          whileTap={{ scale: 0.78, rotate: 10, transition: { type: 'spring', stiffness: 400, damping: 12 } }}
+          style={{
+            width: 44, height: 44, borderRadius: '50%',
+            background: 'rgba(255,255,255,0.06)',
+            border: '1px solid rgba(255,255,255,0.18)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: '#C4B5FD', fontSize: 17,
+          }}
+        >{icon}</motion.div>
+      </div>
       <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', fontFamily: BODY, letterSpacing: '0.02em' }}>{label}</span>
     </>
   )
@@ -303,22 +320,22 @@ export default function CardPage() {
 
           {/* Quick-action icons */}
           <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: 14 }}>
-            <IconBtn label="Call" href={`tel:${INFO.phone}`} icon={
+            <IconBtn delay={0} label="Call" href={`tel:${INFO.phone}`} icon={
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.64 3.5 2 2 0 0 1 3.62 1.5h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.08a16 16 0 0 0 6.01 6.01l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
               </svg>
             } />
-            <IconBtn label="Email" href={`mailto:${INFO.email}`} icon={
+            <IconBtn delay={0.6} label="Email" href={`mailto:${INFO.email}`} icon={
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
               </svg>
             } />
-            <IconBtn label="Website" href={INFO.website} icon={
+            <IconBtn delay={1.2} label="Website" href={INFO.website} icon={
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>
               </svg>
             } />
-            <IconBtn label="Share" onClick={() => shareCard(setCopied)} icon={
+            <IconBtn delay={1.8} label="Share" onClick={() => shareCard(setCopied)} icon={
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
                 <path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/>
