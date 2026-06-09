@@ -2,1137 +2,508 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 
-/* ── World constants ── */
 const W = 800
 const H = 450
-const GRAVITY = 0.7
-const MOVE = 4.4
-const JUMP = -13.2
-const GROUND_TOP = 380
-const FLAG_X = 3120
-const WORLD_W = 3300
+const PW = 44
+const PH = 34
+const PLAYER_SPEED = 5
+const BULLET_SPEED = 9
+const COLS = 10
+const ROWS = 4
+const EX_GAP = 62
+const EY_GAP = 42
+const ENEMY_W = 36
+const ENEMY_H = 36
+const MAX_WAVES = 5
 
-type Rect = { x: number; y: number; w: number; h: number }
-type Enemy = {
-  x: number; y: number; w: number; h: number
-  vx: number; min: number; max: number
-  alive: boolean; flat: boolean; flatTimer: number
-}
-type Coin = { x: number; y: number; got: boolean }
+type Bullet = { x: number; y: number; vy: number; fromPlayer: boolean }
+type Enemy = { x: number; y: number; type: 0|1|2; alive: boolean; hp: number; shootTimer: number; shootInterval: number; col: number }
+type Particle = { x: number; y: number; vx: number; vy: number; life: number; maxLife: number; r: number; color: string }
+type Star = { x: number; y: number; brightness: number; speed: number; size: number }
+type PowerUp = { x: number; y: number; vy: number; type: 'rapid'|'shield'|'triple'; spin: number }
 type GameState = {
-  px: number; py: number; vx: number; vy: number
-  onGround: boolean; face: 1 | -1; walkPhase: number
-  cam: number; score: number; lives: number
-  status: 'play' | 'won' | 'dead'
-  t: number; timeLeft: number
-  grounds: Rect[]; platforms: Rect[]; bricks: Rect[]
-  enemies: Enemy[]; coins: Coin[]
-  spawnX: number; spawnY: number
+  px: number
+  bullets: Bullet[]; enemies: Enemy[]; particles: Particle[]; stars: Star[]; powerUps: PowerUp[]
+  score: number; lives: number; wave: number
+  status: 'play'|'won'|'dead'
+  t: number; shootCooldown: number; shieldTimer: number; rapidTimer: number; tripleShotTimer: number
+  waveClearing: boolean; nextWaveTimer: number; enemyDir: 1|-1
+}
+
+function buildEnemies(wave: number): Enemy[] {
+  const out: Enemy[] = []
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const type = (r === 0 ? 2 : r === 1 ? 1 : 0) as 0|1|2
+      out.push({
+        x: 40 + c * EX_GAP, y: 52 + r * EY_GAP,
+        type, alive: true, hp: type === 2 ? 2 : 1,
+        shootTimer: 60 + Math.random() * 120,
+        shootInterval: Math.max(40, 110 - wave * 8) + Math.random() * 40,
+        col: c,
+      })
+    }
+  }
+  return out
+}
+
+function buildStars(): Star[] {
+  return Array.from({ length: 160 }, () => ({
+    x: Math.random() * W, y: Math.random() * H,
+    brightness: 0.3 + Math.random() * 0.7,
+    speed: 0.15 + Math.random() * 0.5,
+    size: Math.random() < 0.08 ? 2 : 1,
+  }))
 }
 
 function buildState(): GameState {
-  const groundH = H - GROUND_TOP + 40
-  const grounds: Rect[] = [
-    { x: -40,  y: GROUND_TOP, w: 760,  h: groundH },
-    { x: 840,  y: GROUND_TOP, w: 760,  h: groundH },
-    { x: 1720, y: GROUND_TOP, w: 1620, h: groundH },
-  ]
-  const platforms: Rect[] = [
-    { x: 300,  y: 300, w: 120, h: 20 },
-    { x: 520,  y: 232, w: 120, h: 20 },
-    { x: 940,  y: 300, w: 110, h: 20 },
-    { x: 1130, y: 244, w: 110, h: 20 },
-    { x: 1340, y: 300, w: 120, h: 20 },
-    { x: 1880, y: 300, w: 120, h: 20 },
-    { x: 2120, y: 244, w: 110, h: 20 },
-    { x: 2430, y: 300, w: 150, h: 20 },
-    { x: 2720, y: 250, w: 120, h: 20 },
-  ]
-  const bricks: Rect[] = [
-    { x: 600,  y: 250, w: 40, h: 40 },
-    { x: 640,  y: 250, w: 40, h: 40 },
-    { x: 1450, y: 248, w: 40, h: 40 },
-    { x: 2300, y: 250, w: 40, h: 40 },
-    { x: 2340, y: 250, w: 40, h: 40 },
-  ]
-  const enemies: Enemy[] = [
-    { x: 470,  y: GROUND_TOP - 42, w: 42, h: 42, vx: 1.1,  min: 430,  max: 690,  alive: true, flat: false, flatTimer: 0 },
-    { x: 1050, y: GROUND_TOP - 42, w: 42, h: 42, vx: 1.2,  min: 860,  max: 1560, alive: true, flat: false, flatTimer: 0 },
-    { x: 1300, y: GROUND_TOP - 42, w: 42, h: 42, vx: -1.2, min: 860,  max: 1560, alive: true, flat: false, flatTimer: 0 },
-    { x: 1950, y: GROUND_TOP - 42, w: 42, h: 42, vx: 1.3,  min: 1740, max: 2280, alive: true, flat: false, flatTimer: 0 },
-    { x: 2600, y: GROUND_TOP - 42, w: 42, h: 42, vx: 1.2,  min: 2400, max: 2980, alive: true, flat: false, flatTimer: 0 },
-  ]
-  const coins: Coin[] = []
-  const add = (x: number, y: number) => coins.push({ x, y, got: false })
-  ;[330, 360, 390].forEach((x) => add(x, 260))
-  ;[545, 575, 605].forEach((x) => add(x, 192))
-  ;[600, 640].forEach((x) => add(x, 210))
-  ;[760, 800].forEach((x) => add(x, 320))
-  ;[965, 995].forEach((x) => add(x, 260))
-  ;[1150, 1180].forEach((x) => add(x, 204))
-  ;[1360, 1400].forEach((x) => add(x, 260))
-  ;[1650, 1690].forEach((x) => add(x, 320))
-  ;[1900, 1940].forEach((x) => add(x, 260))
-  ;[2140, 2170].forEach((x) => add(x, 204))
-  ;[2460, 2500, 2540].forEach((x) => add(x, 260))
-  ;[2740, 2780].forEach((x) => add(x, 210))
-
   return {
-    px: 60, py: 300, vx: 0, vy: 0,
-    onGround: false, face: 1, walkPhase: 0,
-    cam: 0, score: 0, lives: 3,
-    status: 'play', t: 0, timeLeft: 300,
-    grounds, platforms, bricks, enemies, coins,
-    spawnX: 60, spawnY: 300,
+    px: W / 2 - PW / 2,
+    bullets: [], enemies: buildEnemies(1), particles: [], stars: buildStars(), powerUps: [],
+    score: 0, lives: 3, wave: 1, status: 'play',
+    t: 0, shootCooldown: 0, shieldTimer: 0, rapidTimer: 0, tripleShotTimer: 0,
+    waveClearing: false, nextWaveTimer: 0, enemyDir: 1,
   }
-}
-
-function aabb(a: Rect, b: Rect) {
-  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y
 }
 
 export default function SonicGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const stateRef = useRef<GameState>(buildState())
-  const keysRef = useRef({ left: false, right: false, jump: false, jumpLatch: false })
-  const [status, setStatus] = useState<'play' | 'won' | 'dead'>('play')
-  const [hud, setHud] = useState({ score: 0, lives: 3, coins: 0, time: 300 })
+  const keysRef = useRef({ left: false, right: false, shoot: false })
+  const [status, setStatus] = useState<'play'|'won'|'dead'>('play')
+  const [hud, setHud] = useState({ score: 0, lives: 3, wave: 1 })
 
   const restart = useCallback(() => {
     stateRef.current = buildState()
     setStatus('play')
-    setHud({ score: 0, lives: 3, coins: 0, time: 300 })
+    setHud({ score: 0, lives: 3, wave: 1 })
   }, [])
 
   useEffect(() => {
-    const down = (e: KeyboardEvent) => {
+    const dn = (e: KeyboardEvent) => {
       const k = e.key.toLowerCase()
-      if (['arrowleft', 'a'].includes(k)) keysRef.current.left = true
-      if (['arrowright', 'd'].includes(k)) keysRef.current.right = true
-      if (['arrowup', 'w', ' ', 'spacebar'].includes(k)) keysRef.current.jump = true
+      if (['arrowleft','a'].includes(k)) keysRef.current.left = true
+      if (['arrowright','d'].includes(k)) keysRef.current.right = true
+      if (['arrowup','w',' ','spacebar'].includes(k)) keysRef.current.shoot = true
       if (['arrowleft','arrowright','arrowup','arrowdown',' ','spacebar'].includes(k)) e.preventDefault()
     }
     const up = (e: KeyboardEvent) => {
       const k = e.key.toLowerCase()
-      if (['arrowleft', 'a'].includes(k)) keysRef.current.left = false
-      if (['arrowright', 'd'].includes(k)) keysRef.current.right = false
-      if (['arrowup', 'w', ' ', 'spacebar'].includes(k)) {
-        keysRef.current.jump = false
-        keysRef.current.jumpLatch = false
-      }
+      if (['arrowleft','a'].includes(k)) keysRef.current.left = false
+      if (['arrowright','d'].includes(k)) keysRef.current.right = false
+      if (['arrowup','w',' ','spacebar'].includes(k)) keysRef.current.shoot = false
     }
-    window.addEventListener('keydown', down, { passive: false })
+    window.addEventListener('keydown', dn, { passive: false })
     window.addEventListener('keyup', up)
-    return () => { window.removeEventListener('keydown', down); window.removeEventListener('keyup', up) }
+    return () => { window.removeEventListener('keydown', dn); window.removeEventListener('keyup', up) }
   }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')!
-    ctx.imageSmoothingEnabled = true
-    ctx.imageSmoothingQuality = 'high'
-    let raf = 0
-    let running = true
+    let raf = 0, running = true
 
-    const solids = (s: GameState) => [...s.grounds, ...s.platforms, ...s.bricks]
+    function burst(x: number, y: number, n: number, colors: string[], spd = 3) {
+      const s = stateRef.current
+      for (let i = 0; i < n; i++) {
+        const a = (Math.PI * 2 * i) / n + Math.random() * 0.6
+        const v = spd * (0.4 + Math.random() * 0.8)
+        s.particles.push({ x, y, vx: Math.cos(a)*v, vy: Math.sin(a)*v, life: 35 + Math.random()*25, maxLife: 60, r: 1.5 + Math.random()*3, color: colors[Math.floor(Math.random()*colors.length)] })
+      }
+    }
 
     function update() {
       const s = stateRef.current
+      const keys = keysRef.current
       s.t++
       if (s.status !== 'play') return
-      // Time countdown every 60 frames
-      if (s.t % 60 === 0 && s.timeLeft > 0) {
-        s.timeLeft--
-        if (s.timeLeft <= 0) { loseLife(s); return }
-      }
 
-      const keys = keysRef.current
-      s.vx = 0
-      if (keys.left)  { s.vx = -MOVE; s.face = -1 }
-      if (keys.right) { s.vx = MOVE;  s.face = 1  }
-      if (keys.jump && s.onGround && !keys.jumpLatch) {
-        s.vy = JUMP; s.onGround = false; keys.jumpLatch = true
-      }
-      s.vy = Math.min(s.vy + GRAVITY, 16)
+      for (const st of s.stars) { st.y += st.speed; if (st.y > H) { st.y = 0; st.x = Math.random()*W } }
 
-      const all = solids(s)
-      const pw = 36, ph = 52
+      if (keys.left) s.px = Math.max(0, s.px - PLAYER_SPEED)
+      if (keys.right) s.px = Math.min(W - PW, s.px + PLAYER_SPEED)
 
-      s.px += s.vx
-      for (const b of all) {
-        if (aabb({ x: s.px, y: s.py, w: pw, h: ph }, b)) {
-          if (s.vx > 0) s.px = b.x - pw
-          else if (s.vx < 0) s.px = b.x + b.w
-          s.vx = 0
-        }
-      }
-      s.px = Math.max(0, Math.min(s.px, WORLD_W - pw))
-
-      s.py += s.vy
-      s.onGround = false
-      for (const b of all) {
-        if (aabb({ x: s.px, y: s.py, w: pw, h: ph }, b)) {
-          if (s.vy > 0) { s.py = b.y - ph; s.onGround = true; s.vy = 0 }
-          else if (s.vy < 0) { s.py = b.y + b.h; s.vy = 0 }
+      if (s.shootCooldown > 0) s.shootCooldown--
+      if (keys.shoot && s.shootCooldown <= 0) {
+        s.shootCooldown = s.rapidTimer > 0 ? 5 : 14
+        const bx = s.px + PW / 2
+        s.bullets.push({ x: bx, y: H-66, vy: -BULLET_SPEED, fromPlayer: true })
+        if (s.tripleShotTimer > 0) {
+          s.bullets.push({ x: bx-14, y: H-58, vy: -BULLET_SPEED, fromPlayer: true })
+          s.bullets.push({ x: bx+14, y: H-58, vy: -BULLET_SPEED, fromPlayer: true })
         }
       }
 
-      if (s.onGround && Math.abs(s.vx) > 0.1) s.walkPhase += 0.15
-      else if (s.onGround) s.walkPhase = 0
+      if (s.shieldTimer > 0) s.shieldTimer--
+      if (s.rapidTimer > 0) s.rapidTimer--
+      if (s.tripleShotTimer > 0) s.tripleShotTimer--
 
-      if (s.py > H + 80) { loseLife(s); return }
+      const alive = s.enemies.filter(e => e.alive)
+      if (alive.length === 0 && !s.waveClearing) { s.waveClearing = true; s.nextWaveTimer = 150 }
+      if (s.waveClearing) {
+        if (s.nextWaveTimer > 0) { s.nextWaveTimer--; goto_particles(s); return }
+        const nw = s.wave + 1
+        if (nw > MAX_WAVES) { s.status = 'won'; setStatus('won') }
+        else {
+          s.enemies = buildEnemies(nw); s.wave = nw; s.enemyDir = 1
+          s.bullets = s.bullets.filter(b => b.fromPlayer); s.waveClearing = false
+          setHud(h => ({ ...h, wave: nw }))
+        }
+        return
+      }
 
-      for (const e of s.enemies) {
-        if (!e.alive) continue
-        if (e.flat) { if (--e.flatTimer <= 0) e.alive = false; continue }
-        e.x += e.vx
-        if (e.x < e.min || e.x > e.max) e.vx *= -1
-        const pr: Rect = { x: s.px, y: s.py, w: pw, h: ph }
-        const er: Rect = { x: e.x, y: e.y, w: e.w, h: e.h }
-        if (aabb(pr, er)) {
-          if (s.vy > 0 && s.py + ph - s.vy <= e.y + 12) {
-            e.flat = true; e.flatTimer = 45
-            s.vy = JUMP * 0.55
-            s.score += 100
-            setHud(h => ({ ...h, score: s.score }))
-          } else {
-            loseLife(s); return
+      const speed = Math.min(0.8 + (s.wave-1)*0.18 + (ROWS*COLS - alive.length)*0.012, 2.8)
+      const minX = Math.min(...alive.map(e => e.x))
+      const maxX = Math.max(...alive.map(e => e.x + ENEMY_W))
+      if (s.enemyDir === 1 && maxX >= W-14) { s.enemyDir = -1; for (const e of alive) e.y += 18 }
+      else if (s.enemyDir === -1 && minX <= 14) { s.enemyDir = 1; for (const e of alive) e.y += 18 }
+      for (const e of alive) e.x += speed * s.enemyDir
+
+      if (Math.max(...alive.map(e => e.y + ENEMY_H)) >= H - 80) {
+        s.status = 'dead'; setStatus('dead'); return
+      }
+
+      for (let c = 0; c < COLS; c++) {
+        const col = alive.filter(e => e.col === c).sort((a,b) => b.y - a.y)
+        if (!col.length) continue
+        const sh = col[0]; sh.shootTimer--
+        if (sh.shootTimer <= 0) {
+          sh.shootTimer = sh.shootInterval
+          s.bullets.push({ x: sh.x + ENEMY_W/2, y: sh.y + ENEMY_H, vy: 3 + (s.wave-1)*0.2, fromPlayer: false })
+        }
+      }
+
+      const PCY = H - 60
+      for (let i = s.bullets.length - 1; i >= 0; i--) {
+        const b = s.bullets[i]
+        b.y += b.vy
+        if (b.y < -20 || b.y > H+20) { s.bullets.splice(i,1); continue }
+
+        if (b.fromPlayer) {
+          let hit = false
+          for (const e of s.enemies) {
+            if (!e.alive) continue
+            if (b.x >= e.x-3 && b.x <= e.x+ENEMY_W+3 && b.y >= e.y-3 && b.y <= e.y+ENEMY_H+3) {
+              e.hp--
+              if (e.hp <= 0) {
+                e.alive = false
+                s.score += (e.type===2 ? 30 : e.type===1 ? 20 : 10) * s.wave
+                burst(e.x+ENEMY_W/2, e.y+ENEMY_H/2, 14,
+                  e.type===2 ? ['#FF8040','#FFB060','#FFE090'] :
+                  e.type===1 ? ['#40FF80','#80FFB0','#C0FFC0'] :
+                  ['#8080FF','#B0A0FF','#D0C0FF'])
+                if (Math.random() < 0.13) {
+                  const types: Array<'rapid'|'shield'|'triple'> = ['rapid','shield','triple']
+                  s.powerUps.push({ x: e.x+8, y: e.y, vy: 1.3, type: types[Math.floor(Math.random()*3)], spin: 0 })
+                }
+              } else { burst(e.x+ENEMY_W/2, e.y+ENEMY_H/2, 5, ['#FFC080','#FFE0A0'], 1.5) }
+              hit = true; setHud(h => ({ ...h, score: s.score })); break
+            }
+          }
+          if (hit) { s.bullets.splice(i,1); continue }
+        } else {
+          if (b.x >= s.px-2 && b.x <= s.px+PW+2 && b.y >= PCY-PH/2-2 && b.y <= PCY+PH/2+2) {
+            if (s.shieldTimer > 0) { burst(s.px+PW/2, PCY, 10, ['#60C0FF','#A0E0FF'], 2); s.shieldTimer = 0 }
+            else {
+              s.lives--; burst(s.px+PW/2, PCY, 20, ['#FF6060','#FFAA60','#ffffff'])
+              if (s.lives <= 0) { s.status = 'dead'; setStatus('dead') }
+              setHud(h => ({ ...h, lives: s.lives }))
+            }
+            s.bullets.splice(i,1); continue
           }
         }
       }
 
-      for (const c of s.coins) {
-        if (c.got) continue
-        if (Math.abs(c.x - (s.px + pw / 2)) < 24 && Math.abs(c.y - (s.py + ph / 2)) < 28) {
-          c.got = true; s.score += 25
-          setHud({ score: s.score, lives: s.lives, coins: s.coins.filter(x => x.got).length, time: s.timeLeft })
+      for (let i = s.powerUps.length-1; i >= 0; i--) {
+        const p = s.powerUps[i]; p.y += p.vy; p.spin += 0.06
+        if (p.y > H+40) { s.powerUps.splice(i,1); continue }
+        if (p.x+20 >= s.px && p.x <= s.px+PW && p.y+16 >= PCY-PH/2-10 && p.y <= PCY+PH/2+10) {
+          if (p.type==='rapid') s.rapidTimer = 360
+          else if (p.type==='shield') s.shieldTimer = 480
+          else s.tripleShotTimer = 360
+          burst(p.x+10, p.y, 16,
+            p.type==='rapid' ? ['#FFE060','#FFD020','#FFF080'] :
+            p.type==='shield' ? ['#60C0FF','#A0E0FF','#E0F8FF'] :
+            ['#FF80C0','#FFB0E0','#FFC0FF'], 2)
+          s.powerUps.splice(i,1)
         }
       }
 
-      if (s.px + pw >= FLAG_X) { s.status = 'won'; setStatus('won') }
-      s.cam = Math.max(0, Math.min(s.px - W / 2 + 18, WORLD_W - W))
+      for (let i = s.particles.length-1; i >= 0; i--) {
+        const p = s.particles[i]; p.x += p.vx; p.y += p.vy; p.vy += 0.06; p.vx *= 0.97; p.life--
+        if (p.life <= 0) s.particles.splice(i,1)
+      }
     }
 
-    function loseLife(s: GameState) {
-      s.lives--
-      if (s.lives <= 0) { s.status = 'dead'; setStatus('dead') }
-      else { s.px = s.spawnX; s.py = s.spawnY; s.vx = 0; s.vy = 0; s.onGround = false; s.timeLeft = 300 }
-      setHud({ score: s.score, lives: s.lives, coins: s.coins.filter(x => x.got).length, time: s.timeLeft })
+    function goto_particles(s: GameState) {
+      for (let i = s.particles.length-1; i >= 0; i--) {
+        const p = s.particles[i]; p.x += p.vx; p.y += p.vy; p.vy += 0.06; p.vx *= 0.97; p.life--
+        if (p.life <= 0) s.particles.splice(i,1)
+      }
+      for (const st of s.stars) { st.y += st.speed; if (st.y > H) { st.y = 0; st.x = Math.random()*W } }
     }
 
-    /* ════════════ DRAW ════════════ */
     function draw() {
       const s = stateRef.current
-      const cam = s.cam
-
-      drawSky(ctx, s.t)
-      drawMountains(ctx, cam, s.t)
-      drawClouds(ctx, cam, s.t)
-      drawFloatingIslands(ctx, cam)
-
-      // Ground
-      for (const g of s.grounds) drawGround(ctx, g.x - cam, g.y, g.w, g.h)
-
-      // Platforms (stone)
-      for (const p of s.platforms) drawStonePlatform(ctx, p.x - cam, p.y, p.w, p.h)
-
-      // Crates (? blocks)
-      for (const b of s.bricks) drawCrate(ctx, b.x - cam, b.y, b.w, b.h, s.t)
-
-      // Coins
-      for (const c of s.coins) {
-        if (!c.got) drawCoin(ctx, c.x - cam, c.y, s.t)
+      drawBG(ctx, s); drawPowerUps(ctx, s); drawBullets(ctx, s)
+      drawEnemies(ctx, s); drawPlayer(ctx, s); drawParticles(ctx, s); drawHUD(ctx, s)
+      if (s.waveClearing && s.nextWaveTimer > 80) {
+        ctx.save(); ctx.textAlign='center'; ctx.textBaseline='middle'
+        ctx.font = 'bold 40px "Courier New",monospace'
+        ctx.fillStyle='rgba(100,255,160,0.95)'; ctx.shadowColor='#40FF80'; ctx.shadowBlur=22
+        ctx.fillText(`WAVE ${s.wave} CLEAR!`, W/2, H/2); ctx.restore()
       }
-
-      // Pipes at pits
-      drawPipe(ctx, 820 - cam, GROUND_TOP)
-      drawPipe(ctx, 1680 - cam, GROUND_TOP)
-
-      // Enemies
-      for (const e of s.enemies) {
-        if (!e.alive) continue
-        drawEnemy(ctx, e.x - cam, e.y, e.w, e.h, e.flat, s.t)
-      }
-
-      // Flag
-      drawFlag(ctx, FLAG_X - cam)
-
-      // Player
-      const pw = 36, ph = 52
-      drawHero(ctx, s.px - cam, s.py, s.face, s.walkPhase, s.onGround, s.vy)
-
-      // HUD
-      drawHUD(ctx, s)
     }
 
-    function loop() {
-      if (!running) return
-      update(); draw()
-      raf = requestAnimationFrame(loop)
-    }
+    function loop() { if (!running) return; update(); draw(); raf = requestAnimationFrame(loop) }
     raf = requestAnimationFrame(loop)
     return () => { running = false; cancelAnimationFrame(raf) }
   }, [])
 
-  const press = (key: 'left' | 'right' | 'jump', v: boolean) => {
-    keysRef.current[key] = v
-    if (key === 'jump' && !v) keysRef.current.jumpLatch = false
-  }
+  const press = (k: 'left'|'right'|'shoot', v: boolean) => { keysRef.current[k] = v }
 
   return (
-    <div style={{ position: 'relative', width: '100%', maxWidth: W, margin: '0 auto' }}>
-      <canvas
-        ref={canvasRef}
-        width={W} height={H}
-        style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12, background: '#87CEEB', touchAction: 'none' }}
-      />
+    <div style={{ position:'relative', width:'100%', maxWidth:W, margin:'0 auto' }}>
+      <canvas ref={canvasRef} width={W} height={H}
+        style={{ width:'100%', height:'auto', display:'block', borderRadius:12, background:'#060614', touchAction:'none' }} />
 
       {status !== 'play' && (
-        <div style={{
-          position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center', gap: 16,
-          background: 'rgba(5,3,12,0.82)', borderRadius: 12, color: '#fff', textAlign: 'center', padding: 20,
-        }}>
-          <h3 style={{ fontSize: 30, fontWeight: 900, margin: 0 }}>
-            {status === 'won' ? '🏁 You Win!' : '💀 Game Over'}
+        <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:16, background:'rgba(5,3,12,0.86)', borderRadius:12, color:'#fff', textAlign:'center', padding:20 }}>
+          <h3 style={{ fontSize:30, fontWeight:900, margin:0 }}>
+            {status==='won' ? '🏆 Sector Cleared!' : '💀 Ship Destroyed'}
           </h3>
-          <p style={{ color: '#A78BFA', margin: 0 }}>
-            {status === 'won' ? 'You reached the goal at full speed! ' : 'Out of lives. '}
-            Final score: <b style={{ color: '#FFD83D' }}>{hud.score}</b>
+          <p style={{ color:'#A78BFA', margin:0 }}>
+            {status==='won' ? `All ${MAX_WAVES} waves defeated! ` : 'The alien fleet prevailed. '}
+            Final score: <b style={{ color:'#FFD83D' }}>{hud.score}</b>
           </p>
-          <button
-            onClick={restart}
-            style={{
-              padding: '12px 28px', borderRadius: 50, border: 'none', cursor: 'pointer',
-              fontWeight: 800, fontSize: 15, color: '#fff',
-              background: 'linear-gradient(135deg, #7C3AED, #5B21B6)',
-            }}
-          >Play Again</button>
+          <button onClick={restart} style={{ padding:'12px 28px', borderRadius:50, border:'none', cursor:'pointer', fontWeight:800, fontSize:15, color:'#fff', background:'linear-gradient(135deg,#7C3AED,#5B21B6)' }}>
+            Play Again
+          </button>
         </div>
       )}
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 12, userSelect: 'none' }}>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <CtrlBtn label="◀" onDown={() => press('left', true)} onUp={() => press('left', false)} />
-          <CtrlBtn label="▶" onDown={() => press('right', true)} onUp={() => press('right', false)} />
+      <div style={{ display:'flex', justifyContent:'space-between', marginTop:12, userSelect:'none' }}>
+        <div style={{ display:'flex', gap:10 }}>
+          <CtrlBtn label="◀" onDown={() => press('left',true)} onUp={() => press('left',false)} />
+          <CtrlBtn label="▶" onDown={() => press('right',true)} onUp={() => press('right',false)} />
         </div>
-        <CtrlBtn label="JUMP" wide onDown={() => press('jump', true)} onUp={() => press('jump', false)} />
+        <CtrlBtn label="FIRE" wide onDown={() => press('shoot',true)} onUp={() => press('shoot',false)} />
       </div>
-      <p style={{ textAlign: 'center', marginTop: 10, fontSize: 12, color: '#8B8BAA' }}>
-        Arrow keys / A·D · Space / W to jump · Spin-bounce on enemies · Grab rings · Reach the flag 🏁
+      <p style={{ textAlign:'center', marginTop:10, fontSize:12, color:'#8B8BAA' }}>
+        Arrow keys / A·D to move · Space / W to fire · Grab power-ups · Survive {MAX_WAVES} waves
       </p>
     </div>
   )
 }
 
-function CtrlBtn({ label, wide, onDown, onUp }: { label: string; wide?: boolean; onDown: () => void; onUp: () => void }) {
+function CtrlBtn({ label, wide, onDown, onUp }: { label:string; wide?:boolean; onDown:()=>void; onUp:()=>void }) {
   return (
     <button
-      onMouseDown={e => { e.preventDefault(); onDown() }}
-      onMouseUp={e => { e.preventDefault(); onUp() }}
-      onMouseLeave={onUp}
-      onTouchStart={e => { e.preventDefault(); onDown() }}
-      onTouchEnd={e => { e.preventDefault(); onUp() }}
-      style={{
-        minWidth: wide ? 96 : 56, height: 56, borderRadius: 14, cursor: 'pointer',
-        border: '1px solid rgba(124,58,237,0.4)', background: 'rgba(124,58,237,0.18)',
-        color: '#fff', fontSize: 18, fontWeight: 800, touchAction: 'none',
-      }}
+      onMouseDown={e => { e.preventDefault(); onDown() }} onMouseUp={e => { e.preventDefault(); onUp() }}
+      onMouseLeave={onUp} onTouchStart={e => { e.preventDefault(); onDown() }} onTouchEnd={e => { e.preventDefault(); onUp() }}
+      style={{ minWidth:wide?96:56, height:56, borderRadius:14, cursor:'pointer', border:'1px solid rgba(124,58,237,0.4)', background:'rgba(124,58,237,0.18)', color:'#fff', fontSize:18, fontWeight:800, touchAction:'none' }}
     >{label}</button>
   )
 }
 
-/* ════════════════════════════════════════════
-   VISUAL DRAW FUNCTIONS
-════════════════════════════════════════════ */
+/* ── DRAW ── */
 
-function drawSky(ctx: CanvasRenderingContext2D, t: number) {
-  const grad = ctx.createLinearGradient(0, 0, 0, H)
-  grad.addColorStop(0,    '#3A6EA8')
-  grad.addColorStop(0.25, '#5B8EC9')
-  grad.addColorStop(0.55, '#AAD4EE')
-  grad.addColorStop(0.78, '#D8EDCF')
-  grad.addColorStop(0.92, '#EAF3DC')
-  grad.addColorStop(1,    '#C0D8B8')
-  ctx.fillStyle = grad
-  ctx.fillRect(0, 0, W, H)
-
-  // Sun glow near horizon
-  const sunGrad = ctx.createRadialGradient(W * 0.75, H * 0.72, 0, W * 0.75, H * 0.72, 200)
-  sunGrad.addColorStop(0,   'rgba(255,240,180,0.35)')
-  sunGrad.addColorStop(0.5, 'rgba(255,220,120,0.12)')
-  sunGrad.addColorStop(1,   'rgba(255,200,80,0)')
-  ctx.fillStyle = sunGrad
-  ctx.fillRect(0, 0, W, H)
+function drawBG(ctx: CanvasRenderingContext2D, s: GameState) {
+  ctx.fillStyle='#060614'; ctx.fillRect(0,0,W,H)
+  const n1=ctx.createRadialGradient(W*.72,H*.25,0,W*.72,H*.25,280)
+  n1.addColorStop(0,'rgba(60,20,100,0.18)'); n1.addColorStop(1,'rgba(0,0,0,0)')
+  ctx.fillStyle=n1; ctx.fillRect(0,0,W,H)
+  const n2=ctx.createRadialGradient(W*.18,H*.65,0,W*.18,H*.65,180)
+  n2.addColorStop(0,'rgba(20,50,110,0.14)'); n2.addColorStop(1,'rgba(0,0,0,0)')
+  ctx.fillStyle=n2; ctx.fillRect(0,0,W,H)
+  for (const st of s.stars) {
+    const tw = 0.4 + 0.6*Math.sin(s.t*0.05+st.x*0.08)
+    ctx.fillStyle=`rgba(255,255,255,${(st.brightness*tw).toFixed(2)})`
+    if (st.size>1) { ctx.beginPath(); ctx.arc(st.x,st.y,st.size,0,Math.PI*2); ctx.fill() }
+    else ctx.fillRect(~~st.x,~~st.y,1,1)
+  }
 }
 
-function drawMountains(ctx: CanvasRenderingContext2D, cam: number, t: number) {
-  // ── Layer 1: very far, icy grey-blue ──
-  const off1 = (cam * 0.04) % 900
-  for (let i = -1; i < 5; i++) {
-    const mx = i * 340 - off1 + 60
-    ctx.fillStyle = '#C8D8E8'
-    ctx.beginPath()
-    ctx.moveTo(mx - 180, GROUND_TOP + 10)
-    ctx.lineTo(mx - 20, GROUND_TOP - 200)
-    ctx.lineTo(mx + 30, GROUND_TOP - 185)
-    ctx.lineTo(mx + 200, GROUND_TOP + 10)
-    ctx.closePath()
-    ctx.fill()
-    // Snow cap
-    ctx.fillStyle = 'rgba(245,252,255,0.85)'
-    ctx.beginPath()
-    ctx.moveTo(mx - 38, GROUND_TOP - 155)
-    ctx.lineTo(mx - 20, GROUND_TOP - 200)
-    ctx.lineTo(mx + 30, GROUND_TOP - 185)
-    ctx.lineTo(mx + 10, GROUND_TOP - 140)
-    ctx.closePath()
-    ctx.fill()
-  }
-
-  // ── Layer 2: mid distance, blue-green ──
-  const off2 = (cam * 0.09) % 720
-  for (let i = -1; i < 6; i++) {
-    const mx = i * 270 - off2 + 150
-    ctx.fillStyle = '#8AAEC0'
-    ctx.beginPath()
-    ctx.moveTo(mx - 160, GROUND_TOP + 8)
-    ctx.lineTo(mx + 10, GROUND_TOP - 155)
-    ctx.lineTo(mx + 180, GROUND_TOP + 8)
-    ctx.closePath()
-    ctx.fill()
-    // Lighter face
-    ctx.fillStyle = 'rgba(200,220,235,0.5)'
-    ctx.beginPath()
-    ctx.moveTo(mx - 20, GROUND_TOP + 8)
-    ctx.lineTo(mx + 10, GROUND_TOP - 155)
-    ctx.lineTo(mx + 60, GROUND_TOP - 80)
-    ctx.closePath()
-    ctx.fill()
-  }
-
-  // ── Layer 3: closer, forested green ──
-  const off3 = (cam * 0.16) % 580
-  for (let i = -1; i < 7; i++) {
-    const mx = i * 220 - off3 + 100
-    ctx.fillStyle = '#5A8A48'
-    ctx.beginPath()
-    ctx.moveTo(mx - 140, GROUND_TOP + 5)
-    ctx.lineTo(mx, GROUND_TOP - 120)
-    ctx.lineTo(mx + 150, GROUND_TOP + 5)
-    ctx.closePath()
-    ctx.fill()
-    // Tree tips
-    for (let tx = -90; tx < 120; tx += 28) {
-      ctx.fillStyle = '#3A6830'
-      ctx.beginPath()
-      ctx.moveTo(mx + tx - 10, GROUND_TOP - 60 + Math.abs(tx) * 0.5)
-      ctx.lineTo(mx + tx, GROUND_TOP - 85 + Math.abs(tx) * 0.4)
-      ctx.lineTo(mx + tx + 10, GROUND_TOP - 60 + Math.abs(tx) * 0.5)
-      ctx.closePath()
-      ctx.fill()
+function drawBullets(ctx: CanvasRenderingContext2D, s: GameState) {
+  for (const b of s.bullets) {
+    ctx.save()
+    if (b.fromPlayer) {
+      ctx.shadowColor='#A78BFA'; ctx.shadowBlur=14
+      const g=ctx.createLinearGradient(b.x,b.y,b.x,b.y+20)
+      g.addColorStop(0,'#E0D0FF'); g.addColorStop(1,'rgba(167,139,250,0)')
+      ctx.fillStyle=g; ctx.fillRect(b.x-2.5,b.y,5,18)
+      ctx.fillStyle='#fff'; ctx.fillRect(b.x-1.5,b.y,3,5)
+    } else {
+      ctx.shadowColor='#FF6040'; ctx.shadowBlur=10
+      const g=ctx.createLinearGradient(b.x,b.y-14,b.x,b.y)
+      g.addColorStop(0,'rgba(255,80,40,0)'); g.addColorStop(1,'#FF8060')
+      ctx.fillStyle=g; ctx.fillRect(b.x-2,b.y-14,4,14)
+      ctx.fillStyle='#FFC0A0'; ctx.fillRect(b.x-1.5,b.y-3,3,5)
     }
-  }
-}
-
-function drawClouds(ctx: CanvasRenderingContext2D, cam: number, t: number) {
-  const defs = [
-    { seed: 0, scale: 1.4, yBase: 52 },
-    { seed: 200, scale: 1.0, yBase: 72 },
-    { seed: 420, scale: 1.6, yBase: 38 },
-    { seed: 650, scale: 0.9, yBase: 88 },
-    { seed: 880, scale: 1.2, yBase: 60 },
-    { seed: 1100, scale: 0.8, yBase: 45 },
-    { seed: 1300, scale: 1.3, yBase: 75 },
-  ]
-  for (const d of defs) {
-    const cx = ((d.seed - cam * 0.35) % (W + 300) + W + 300) % (W + 300) - 80
-    puffyCloud(ctx, cx, d.yBase, d.scale)
-  }
-}
-
-function puffyCloud(ctx: CanvasRenderingContext2D, x: number, y: number, scale: number) {
-  ctx.save()
-  ctx.translate(x, y)
-  ctx.scale(scale, scale)
-  const blobs = [
-    [0, 0, 36], [-34, 12, 28], [34, 10, 30],
-    [-58, 22, 22], [58, 20, 24],
-    [-18, -18, 22], [20, -15, 24],
-    [0, -30, 18],
-  ] as [number, number, number][]
-
-  // Base white fill
-  ctx.fillStyle = 'rgba(255,255,255,0.92)'
-  ctx.beginPath()
-  for (const [bx, by, r] of blobs) {
-    ctx.moveTo(bx + r, by)
-    ctx.arc(bx, by, r, 0, Math.PI * 2)
-  }
-  ctx.fill()
-
-  // Subtle blue-grey shadow on bottom
-  const shadow = ctx.createLinearGradient(0, -35, 0, 40)
-  shadow.addColorStop(0, 'rgba(180,210,240,0)')
-  shadow.addColorStop(1, 'rgba(160,195,230,0.28)')
-  ctx.fillStyle = shadow
-  ctx.beginPath()
-  for (const [bx, by, r] of blobs) {
-    ctx.moveTo(bx + r, by)
-    ctx.arc(bx, by, r, 0, Math.PI * 2)
-  }
-  ctx.fill()
-  ctx.restore()
-}
-
-function drawFloatingIslands(ctx: CanvasRenderingContext2D, cam: number) {
-  const islands = [
-    { wx: 900, wy: 210, w: 110, trees: [25, 75] },
-    { wx: 1600, wy: 180, w: 90, trees: [20, 60] },
-    { wx: 2200, wy: 195, w: 100, trees: [30] },
-    { wx: 2900, wy: 165, w: 80, trees: [18] },
-  ]
-  for (const isl of islands) {
-    const ix = isl.wx - cam * 0.55
-    if (ix < -200 || ix > W + 200) continue
-    floatingIsland(ctx, ix, isl.wy, isl.w, isl.trees)
-  }
-}
-
-function floatingIsland(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, treesAt: number[]) {
-  // Rocky bottom
-  const rockGrad = ctx.createLinearGradient(0, y + 10, 0, y + 55)
-  rockGrad.addColorStop(0, '#8B6840')
-  rockGrad.addColorStop(1, '#5A3820')
-  ctx.fillStyle = rockGrad
-  ctx.beginPath()
-  ctx.ellipse(x + w / 2, y + 32, w / 2 + 6, 26, 0, 0, Math.PI * 2)
-  ctx.fill()
-  // Stalactites
-  for (let i = 0; i < 4; i++) {
-    const sx = x + 10 + i * (w - 20) / 3
-    ctx.fillStyle = '#6B4820'
-    ctx.beginPath()
-    ctx.moveTo(sx - 6, y + 40)
-    ctx.lineTo(sx, y + 58)
-    ctx.lineTo(sx + 6, y + 40)
-    ctx.fill()
-  }
-  // Grass top
-  const grassGrad = ctx.createLinearGradient(0, y, 0, y + 14)
-  grassGrad.addColorStop(0, '#5AAB3A')
-  grassGrad.addColorStop(1, '#3D8A28')
-  ctx.fillStyle = grassGrad
-  ctx.beginPath()
-  ctx.ellipse(x + w / 2, y + 7, w / 2 + 4, 9, 0, 0, Math.PI * 2)
-  ctx.fill()
-  // Grass blades
-  ctx.fillStyle = '#6CBF48'
-  for (let bx = x + 4; bx < x + w - 4; bx += 10) {
-    ctx.fillRect(bx, y + 1, 2, 8)
-  }
-  // Trees
-  for (const tx of treesAt) {
-    miniTree(ctx, x + tx, y)
-  }
-}
-
-function miniTree(ctx: CanvasRenderingContext2D, x: number, y: number) {
-  ctx.fillStyle = '#6B4820'
-  ctx.fillRect(x - 3, y - 28, 6, 28)
-  // Canopy layers
-  const layers: [number, number, number][] = [[x, y - 44, 18], [x - 4, y - 36, 14], [x + 2, y - 58, 14]]
-  for (const [lx, ly, r] of layers) {
-    ctx.fillStyle = '#2A7020'
-    ctx.beginPath()
-    ctx.arc(lx, ly, r, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.fillStyle = '#3A9030'
-    ctx.beginPath()
-    ctx.arc(lx - 4, ly - 4, r * 0.5, 0, Math.PI * 2)
-    ctx.fill()
-  }
-}
-
-function drawGround(ctx: CanvasRenderingContext2D, gx: number, gy: number, gw: number, gh: number) {
-  const tileS = 38
-  const grassH = 18
-
-  // Dirt tiles first
-  for (let tx = Math.max(0, Math.floor(-gx / tileS)); tx * tileS < gw && gx + tx * tileS < W + tileS; tx++) {
-    const rowsOfDirt = Math.ceil((gh - grassH) / (tileS / 2)) + 2
-    for (let ty = 0; ty < rowsOfDirt; ty++) {
-      const rx = gx + tx * tileS
-      const ry = gy + grassH + ty * (tileS / 2)
-      if (rx + tileS < 0 || rx > W || ry > H + tileS) continue
-      const dirtGrad = ctx.createLinearGradient(rx, ry, rx, ry + tileS / 2)
-      dirtGrad.addColorStop(0, '#9E6535')
-      dirtGrad.addColorStop(1, '#7A4E28')
-      ctx.fillStyle = dirtGrad
-      ctx.fillRect(rx + 1, ry + 1, tileS - 2, tileS / 2 - 2)
-    }
-  }
-  // Grid lines
-  ctx.strokeStyle = 'rgba(80,40,15,0.45)'
-  ctx.lineWidth = 1.5
-  for (let tx = Math.floor(-gx / tileS); tx * tileS < gw; tx++) {
-    const lx = gx + tx * tileS
-    if (lx < 0 || lx > W) continue
-    ctx.beginPath(); ctx.moveTo(lx, gy + grassH); ctx.lineTo(lx, gy + gh); ctx.stroke()
-  }
-  for (let ty = 0; ty * (tileS / 2) < gh - grassH + tileS; ty++) {
-    const ly = gy + grassH + ty * (tileS / 2)
-    if (ly < gy + grassH || ly > H + 4) continue
-    ctx.beginPath(); ctx.moveTo(Math.max(gx, 0), ly); ctx.lineTo(Math.min(gx + gw, W), ly); ctx.stroke()
-  }
-  // Grass strip
-  const grassGrad = ctx.createLinearGradient(0, gy, 0, gy + grassH)
-  grassGrad.addColorStop(0, '#5BBF3C')
-  grassGrad.addColorStop(0.55, '#4AAA30')
-  grassGrad.addColorStop(1, '#3A8A22')
-  ctx.fillStyle = grassGrad
-  ctx.fillRect(Math.max(gx, -2), gy, Math.min(gw, W - gx + 2), grassH)
-  // Grass highlights
-  ctx.fillStyle = 'rgba(120,220,80,0.35)'
-  for (let bx = Math.max(gx, 0); bx < Math.min(gx + gw, W); bx += 16) {
-    ctx.beginPath()
-    ctx.ellipse(bx + 4, gy + 4, 5, 3, -0.3, 0, Math.PI)
-    ctx.fill()
-  }
-  // Grass edge shadow
-  ctx.fillStyle = 'rgba(0,0,0,0.15)'
-  ctx.fillRect(Math.max(gx, 0), gy + grassH, Math.min(gw, W - gx), 4)
-}
-
-function drawStonePlatform(ctx: CanvasRenderingContext2D, px: number, py: number, pw: number, ph: number) {
-  const stoneW = 38
-  const cols = Math.ceil(pw / stoneW) + 1
-  for (let i = 0; i < cols; i++) {
-    const sx = px + i * stoneW
-    if (sx + stoneW < 0 || sx > W) continue
-    const sg = ctx.createLinearGradient(sx, py, sx, py + ph)
-    sg.addColorStop(0, '#9EB0C0')
-    sg.addColorStop(0.4, '#7A8E9C')
-    sg.addColorStop(1, '#5A6C78')
-    ctx.fillStyle = sg
-    ctx.fillRect(sx + 1, py + 1, stoneW - 2, ph - 2)
-    // Highlight top
-    ctx.fillStyle = 'rgba(200,220,235,0.6)'
-    ctx.fillRect(sx + 2, py + 2, stoneW - 4, 3)
-    // Shadow bottom
-    ctx.fillStyle = 'rgba(20,30,40,0.3)'
-    ctx.fillRect(sx + 1, py + ph - 4, stoneW - 2, 3)
-  }
-  // Border
-  ctx.strokeStyle = '#4A5C68'
-  ctx.lineWidth = 1.5
-  ctx.strokeRect(px, py, pw, ph)
-  // Top highlight line
-  ctx.strokeStyle = 'rgba(220,235,245,0.7)'
-  ctx.lineWidth = 1
-  ctx.beginPath(); ctx.moveTo(px + 1, py + 1); ctx.lineTo(px + pw - 1, py + 1); ctx.stroke()
-}
-
-function drawCrate(ctx: CanvasRenderingContext2D, bx: number, by: number, bw: number, bh: number, t: number) {
-  if (bx + bw < 0 || bx > W) return
-  // Slight bob animation
-  const bob = Math.sin(t * 0.05) * 1.5
-  const y = by + bob
-
-  // Main crate body
-  const woodGrad = ctx.createLinearGradient(bx, y, bx, y + bh)
-  woodGrad.addColorStop(0, '#C87840')
-  woodGrad.addColorStop(0.5, '#A85820')
-  woodGrad.addColorStop(1, '#8B4818')
-  ctx.fillStyle = woodGrad
-  ctx.fillRect(bx + 1, y + 1, bw - 2, bh - 2)
-
-  // Wood planks (horizontal grain)
-  ctx.strokeStyle = 'rgba(80,30,10,0.4)'
-  ctx.lineWidth = 1
-  for (let py2 = 10; py2 < bh - 4; py2 += 10) {
-    ctx.beginPath(); ctx.moveTo(bx + 2, y + py2); ctx.lineTo(bx + bw - 2, y + py2); ctx.stroke()
-  }
-
-  // X cross
-  ctx.strokeStyle = '#6B3010'
-  ctx.lineWidth = 2.5
-  ctx.beginPath(); ctx.moveTo(bx + 5, y + 5); ctx.lineTo(bx + bw - 5, y + bh - 5); ctx.stroke()
-  ctx.beginPath(); ctx.moveTo(bx + bw - 5, y + 5); ctx.lineTo(bx + 5, y + bh - 5); ctx.stroke()
-
-  // Corner nails
-  ctx.fillStyle = '#4A2808'
-  const nailPositions = [[bx+5, y+5], [bx+bw-5, y+5], [bx+5, y+bh-5], [bx+bw-5, y+bh-5]]
-  for (const [nx, ny] of nailPositions) {
-    ctx.beginPath(); ctx.arc(nx, ny, 3, 0, Math.PI * 2); ctx.fill()
-  }
-
-  // Outline
-  ctx.strokeStyle = '#3A1808'
-  ctx.lineWidth = 2
-  ctx.strokeRect(bx + 1, y + 1, bw - 2, bh - 2)
-  // Top highlight
-  ctx.fillStyle = 'rgba(255,200,140,0.35)'
-  ctx.fillRect(bx + 3, y + 3, bw - 6, 5)
-}
-
-function drawCoin(ctx: CanvasRenderingContext2D, x: number, y: number, t: number) {
-  // Golden ring — spins on its vertical axis
-  const spin = Math.abs(Math.cos(t * 0.08 + x * 0.01))
-  const r = 11
-  const ringW = Math.max(spin * r, 2.5)
-  ctx.save()
-  ctx.translate(x, y)
-
-  // Shadow
-  ctx.fillStyle = 'rgba(0,0,0,0.2)'
-  ctx.beginPath()
-  ctx.ellipse(0, r + 5, ringW * 0.7, 3, 0, 0, Math.PI * 2)
-  ctx.fill()
-
-  // Outer glow
-  ctx.strokeStyle = 'rgba(255,210,60,0.25)'
-  ctx.lineWidth = 8
-  ctx.beginPath()
-  ctx.ellipse(0, 0, ringW, r, 0, 0, Math.PI * 2)
-  ctx.stroke()
-
-  // Ring band (thick stroke = torus with a hole)
-  const rGrad = ctx.createLinearGradient(0, -r, 0, r)
-  rGrad.addColorStop(0, '#FFE97A')
-  rGrad.addColorStop(0.5, '#FFC107')
-  rGrad.addColorStop(1, '#D08800')
-  ctx.strokeStyle = rGrad
-  ctx.lineWidth = 4.5
-  ctx.beginPath()
-  ctx.ellipse(0, 0, ringW, r, 0, 0, Math.PI * 2)
-  ctx.stroke()
-
-  // Top shine
-  ctx.strokeStyle = 'rgba(255,255,220,0.8)'
-  ctx.lineWidth = 1.6
-  ctx.beginPath()
-  ctx.ellipse(0, 0, ringW, r, 0, -2.3, -0.8)
-  ctx.stroke()
-
-  // Sparkle
-  if (spin > 0.85) {
-    ctx.fillStyle = 'rgba(255,255,240,0.9)'
-    ctx.beginPath()
-    ctx.moveTo(ringW * 0.7, -r * 0.7 - 3); ctx.lineTo(ringW * 0.7 + 2, -r * 0.7)
-    ctx.lineTo(ringW * 0.7, -r * 0.7 + 3); ctx.lineTo(ringW * 0.7 - 2, -r * 0.7)
-    ctx.closePath(); ctx.fill()
-  }
-  ctx.restore()
-}
-
-function drawPipe(ctx: CanvasRenderingContext2D, px: number, groundY: number) {
-  if (px + 70 < 0 || px > W) return
-  const pipeH = 90
-  const pipeW = 64
-  const topH = 20
-
-  // Body
-  const bodyGrad = ctx.createLinearGradient(px, 0, px + pipeW, 0)
-  bodyGrad.addColorStop(0, '#006800')
-  bodyGrad.addColorStop(0.3, '#00B000')
-  bodyGrad.addColorStop(0.7, '#008800')
-  bodyGrad.addColorStop(1, '#004800')
-  ctx.fillStyle = bodyGrad
-  ctx.fillRect(px + 5, groundY - pipeH + topH, pipeW - 10, pipeH)
-
-  // Pipe top cap
-  const topGrad = ctx.createLinearGradient(px, 0, px + pipeW, 0)
-  topGrad.addColorStop(0, '#004A00')
-  topGrad.addColorStop(0.25, '#00D000')
-  topGrad.addColorStop(0.75, '#00A000')
-  topGrad.addColorStop(1, '#003000')
-  ctx.fillStyle = topGrad
-  ctx.fillRect(px, groundY - pipeH, pipeW, topH + 4)
-
-  // Highlight
-  ctx.fillStyle = 'rgba(180,255,180,0.25)'
-  ctx.fillRect(px + 10, groundY - pipeH + 3, 12, pipeH + topH - 6)
-  // Dark right edge
-  ctx.fillStyle = 'rgba(0,0,0,0.25)'
-  ctx.fillRect(px + pipeW - 12, groundY - pipeH, 7, pipeH + topH)
-}
-
-function drawEnemy(ctx: CanvasRenderingContext2D, ex: number, ey: number, ew: number, eh: number, flat: boolean, t: number) {
-  if (ex + ew < 0 || ex > W) return
-  const cx = ex + ew / 2
-  const cy = ey + eh / 2
-
-  if (flat) {
-    // Squished mushroom
-    ctx.fillStyle = '#7A3800'
-    ctx.beginPath()
-    ctx.ellipse(cx, ey + eh - 8, ew / 2, 9, 0, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.fillStyle = '#A05000'
-    ctx.beginPath()
-    ctx.ellipse(cx - 4, ey + eh - 8, 5, 5, 0, 0, Math.PI * 2)
-    ctx.fill()
-    return
-  }
-
-  const legSwing = Math.sin(t * 0.18) * 5
-
-  // Shadow
-  ctx.fillStyle = 'rgba(0,0,0,0.18)'
-  ctx.beginPath()
-  ctx.ellipse(cx, ey + eh + 2, ew * 0.45, 5, 0, 0, Math.PI * 2)
-  ctx.fill()
-
-  // Feet
-  ctx.fillStyle = '#2A1800'
-  ctx.beginPath()
-  ctx.ellipse(cx - 8 + legSwing, ey + eh - 2, 8, 6, 0.3, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.beginPath()
-  ctx.ellipse(cx + 8 - legSwing, ey + eh - 2, 8, 6, -0.3, 0, Math.PI * 2)
-  ctx.fill()
-
-  // Cap (brown mushroom body)
-  const capGrad = ctx.createRadialGradient(cx - 5, ey + 8, 2, cx, ey + 12, ew * 0.5)
-  capGrad.addColorStop(0, '#C87840')
-  capGrad.addColorStop(0.5, '#A05828')
-  capGrad.addColorStop(1, '#6A3010')
-  ctx.fillStyle = capGrad
-  ctx.beginPath()
-  ctx.ellipse(cx, ey + eh * 0.45, ew * 0.5, eh * 0.55, 0, 0, Math.PI * 2)
-  ctx.fill()
-
-  // Dark spots on cap
-  ctx.fillStyle = 'rgba(60,20,0,0.35)'
-  ctx.beginPath(); ctx.ellipse(cx - 8, ey + 12, 6, 5, -0.3, 0, Math.PI * 2); ctx.fill()
-  ctx.beginPath(); ctx.ellipse(cx + 9, ey + 10, 5, 4, 0.3, 0, Math.PI * 2); ctx.fill()
-  ctx.beginPath(); ctx.ellipse(cx, ey + 6, 4, 3, 0, 0, Math.PI * 2); ctx.fill()
-
-  // Face area (cream)
-  ctx.fillStyle = '#F0D8A0'
-  ctx.beginPath()
-  ctx.ellipse(cx, ey + eh * 0.68, ew * 0.38, eh * 0.26, 0, 0, Math.PI * 2)
-  ctx.fill()
-
-  // Angry eyes
-  ctx.fillStyle = '#1A0A00'
-  ctx.beginPath(); ctx.ellipse(cx - 7, ey + eh * 0.58, 4, 5, -0.2, 0, Math.PI * 2); ctx.fill()
-  ctx.beginPath(); ctx.ellipse(cx + 7, ey + eh * 0.58, 4, 5, 0.2, 0, Math.PI * 2); ctx.fill()
-  // White glints
-  ctx.fillStyle = '#fff'
-  ctx.beginPath(); ctx.ellipse(cx - 8, ey + eh * 0.55, 1.5, 2, 0, 0, Math.PI * 2); ctx.fill()
-  ctx.beginPath(); ctx.ellipse(cx + 6, ey + eh * 0.55, 1.5, 2, 0, 0, Math.PI * 2); ctx.fill()
-  // Angry brow
-  ctx.strokeStyle = '#1A0A00'
-  ctx.lineWidth = 2
-  ctx.beginPath(); ctx.moveTo(cx - 12, ey + eh * 0.46); ctx.lineTo(cx - 3, ey + eh * 0.52); ctx.stroke()
-  ctx.beginPath(); ctx.moveTo(cx + 12, ey + eh * 0.46); ctx.lineTo(cx + 3, ey + eh * 0.52); ctx.stroke()
-}
-
-function drawHero(
-  ctx: CanvasRenderingContext2D,
-  x: number, y: number,
-  face: 1 | -1, walkPhase: number, onGround: boolean, vy: number
-) {
-  // Speedy blue hedgehog archetype: cobalt spikes, tan muzzle, red sneakers, white gloves.
-  ctx.save()
-  ctx.translate(x + 18, y + 52) // pivot at feet
-
-  // Palette
-  const BLUE = '#1E5ADB', BLUE_D = '#123A9E', BLUE_HL = '#4A86F0'
-  const SKIN = '#F8C890', SKIN_D = '#E0A060'
-  const SHOE = '#E22B22', SHOE_D = '#A8170F'
-  const WHITE = '#FCFCFC'
-
-  // Ground shadow
-  ctx.fillStyle = 'rgba(0,0,0,0.2)'
-  ctx.beginPath(); ctx.ellipse(0, 2, 16, 4, 0, 0, Math.PI * 2); ctx.fill()
-
-  /* ── Airborne: classic spin-ball ── */
-  if (!onGround) {
-    const spin = (Date.now() * 0.025) % (Math.PI * 2)
-    ctx.translate(0, -26)
-    ctx.rotate(face * spin)
-    // Ball body
-    const ballGrad = ctx.createRadialGradient(-6, -6, 3, 0, 0, 23)
-    ballGrad.addColorStop(0, BLUE_HL)
-    ballGrad.addColorStop(0.6, BLUE)
-    ballGrad.addColorStop(1, BLUE_D)
-    ctx.fillStyle = ballGrad
-    ctx.beginPath(); ctx.arc(0, 0, 21, 0, Math.PI * 2); ctx.fill()
-    // Curled spike ridges
-    ctx.strokeStyle = BLUE_D
-    ctx.lineWidth = 3
-    for (let i = 0; i < 3; i++) {
-      ctx.beginPath()
-      ctx.arc(0, 0, 7 + i * 5.5, 0.4 + i * 0.5, 3.2 + i * 0.5)
-      ctx.stroke()
-    }
-    // Motion blur streaks
-    ctx.strokeStyle = 'rgba(120,180,255,0.45)'
-    ctx.lineWidth = 2
-    ctx.beginPath(); ctx.arc(0, 0, 23, 1.2, 2.4); ctx.stroke()
-    ctx.beginPath(); ctx.arc(0, 0, 23, 4.3, 5.5); ctx.stroke()
     ctx.restore()
-    return
   }
+}
 
-  if (face === -1) ctx.scale(-1, 1)
-
-  const legAngle = Math.abs(Math.sin(walkPhase * Math.PI * 2)) > 0 ? Math.sin(walkPhase * Math.PI * 2) * 28 : 0
-  const armAngle = Math.sin(walkPhase * Math.PI * 2) * 18
-
-  // ── Back leg (blue leg + red sneaker) ──
-  ctx.save()
-  ctx.translate(-4, -16)
-  ctx.rotate((-legAngle * Math.PI) / 180)
-  ctx.fillStyle = BLUE_D
-  ctx.beginPath(); ctx.roundRect(-3.5, 0, 7, 14, 3); ctx.fill()
-  ctx.fillStyle = SHOE_D
-  ctx.beginPath(); ctx.roundRect(-6, 11, 17, 9, [4, 7, 4, 4]); ctx.fill()
-  ctx.fillStyle = '#D8D8D8'
-  ctx.fillRect(-5, 13, 15, 2.5)
-  ctx.restore()
-
-  // ── Back arm (skin + white glove) ──
-  ctx.save()
-  ctx.translate(-11, -40)
-  ctx.rotate((armAngle * Math.PI) / 180)
-  ctx.fillStyle = SKIN_D
-  ctx.beginPath(); ctx.roundRect(-3.5, 0, 7, 14, 3.5); ctx.fill()
-  ctx.fillStyle = '#E0E0E0'
-  ctx.beginPath(); ctx.arc(0, 16, 5, 0, Math.PI * 2); ctx.fill()
-  ctx.restore()
-
-  // ── Body: blue round torso with tan belly ──
-  const bodyGrad = ctx.createRadialGradient(-4, -34, 3, 0, -30, 18)
-  bodyGrad.addColorStop(0, BLUE_HL)
-  bodyGrad.addColorStop(0.65, BLUE)
-  bodyGrad.addColorStop(1, BLUE_D)
-  ctx.fillStyle = bodyGrad
-  ctx.beginPath(); ctx.ellipse(0, -30, 14, 17, 0, 0, Math.PI * 2); ctx.fill()
-  // Tan belly patch
-  ctx.fillStyle = SKIN
-  ctx.beginPath(); ctx.ellipse(3, -27, 8, 11, 0, 0, Math.PI * 2); ctx.fill()
-
-  // ── Front leg (blue leg + red sneaker) ──
-  ctx.save()
-  ctx.translate(5, -16)
-  ctx.rotate((legAngle * Math.PI) / 180)
-  ctx.fillStyle = BLUE
-  ctx.beginPath(); ctx.roundRect(-3.5, 0, 7, 14, 3); ctx.fill()
-  // Signature red sneaker with white strap
-  const shoeGrad = ctx.createLinearGradient(0, 11, 0, 20)
-  shoeGrad.addColorStop(0, '#FF5A4A')
-  shoeGrad.addColorStop(0.5, SHOE)
-  shoeGrad.addColorStop(1, SHOE_D)
-  ctx.fillStyle = shoeGrad
-  ctx.beginPath(); ctx.roundRect(-6, 11, 18, 9, [4, 8, 4, 4]); ctx.fill()
-  ctx.fillStyle = WHITE
-  ctx.fillRect(-5, 13, 16, 3)
-  // sole
-  ctx.fillStyle = '#E8E8E8'
-  ctx.beginPath(); ctx.roundRect(-6, 18.5, 18, 2.5, 2); ctx.fill()
-  ctx.restore()
-
-  // ── Front arm (skin + white glove) ──
-  ctx.save()
-  ctx.translate(11, -40)
-  ctx.rotate((-armAngle * Math.PI) / 180)
-  ctx.fillStyle = SKIN
-  ctx.beginPath(); ctx.roundRect(-3.5, 0, 7, 14, 3.5); ctx.fill()
-  ctx.fillStyle = WHITE
-  ctx.beginPath(); ctx.arc(0, 16, 5.5, 0, Math.PI * 2); ctx.fill()
-  ctx.strokeStyle = '#C8C8C8'; ctx.lineWidth = 0.8
-  ctx.beginPath(); ctx.arc(0, 16, 5.5, 0, Math.PI * 2); ctx.stroke()
-  ctx.restore()
-
-  // ── Head: big blue ball with swept-back spikes ──
-  // Back spikes (three swept quills)
-  ctx.fillStyle = BLUE
-  for (let i = 0; i < 3; i++) {
-    const sy = -72 + i * 9
-    ctx.beginPath()
-    ctx.moveTo(-6, sy)
-    ctx.quadraticCurveTo(-22, sy + 2, -28, sy + 9)
-    ctx.quadraticCurveTo(-18, sy + 10, -8, sy + 10)
-    ctx.closePath()
-    ctx.fill()
+function drawEnemies(ctx: CanvasRenderingContext2D, s: GameState) {
+  for (const e of s.enemies) {
+    if (!e.alive) continue
+    ctx.save()
+    if (e.type===0) drawGrunt(ctx,e.x,e.y,s.t)
+    else if (e.type===1) drawFighter(ctx,e.x,e.y,s.t)
+    else drawElite(ctx,e.x,e.y,s.t,e.hp)
+    ctx.restore()
   }
-  // spike shading
-  ctx.fillStyle = BLUE_D
-  ctx.beginPath()
-  ctx.moveTo(-8, -54)
-  ctx.quadraticCurveTo(-20, -52, -26, -45)
-  ctx.quadraticCurveTo(-16, -45, -8, -46)
-  ctx.closePath()
-  ctx.fill()
+}
 
-  // Head ball
-  const headGrad = ctx.createRadialGradient(-2, -70, 3, 2, -66, 17)
-  headGrad.addColorStop(0, BLUE_HL)
-  headGrad.addColorStop(0.6, BLUE)
-  headGrad.addColorStop(1, BLUE_D)
-  ctx.fillStyle = headGrad
-  ctx.beginPath(); ctx.ellipse(1, -66, 15, 15, 0, 0, Math.PI * 2); ctx.fill()
+function drawGrunt(ctx: CanvasRenderingContext2D, x: number, y: number, t: number) {
+  const bob=Math.sin(t*0.06+x*0.05)*2
+  ctx.translate(x+18,y+18+bob)
+  ctx.shadowColor='#8080FF'; ctx.shadowBlur=10
+  const dg=ctx.createLinearGradient(-18,-4,18,4)
+  dg.addColorStop(0,'#3030B0'); dg.addColorStop(.5,'#5555EE'); dg.addColorStop(1,'#1A1A80')
+  ctx.fillStyle=dg; ctx.beginPath(); ctx.ellipse(0,5,18,8,0,0,Math.PI*2); ctx.fill()
+  const dm=ctx.createRadialGradient(-3,-4,1,0,0,13)
+  dm.addColorStop(0,'#B0B0FF'); dm.addColorStop(.7,'#4444CC'); dm.addColorStop(1,'#2828AA')
+  ctx.fillStyle=dm; ctx.beginPath(); ctx.ellipse(0,0,12,10,0,0,Math.PI*2); ctx.fill()
+  ctx.fillStyle='#FF4444'
+  ctx.beginPath(); ctx.arc(-4,1,2.5,0,Math.PI*2); ctx.fill()
+  ctx.beginPath(); ctx.arc(4,1,2.5,0,Math.PI*2); ctx.fill()
+  ctx.fillStyle='rgba(255,80,80,0.5)'
+  ctx.beginPath(); ctx.arc(-4,1,5,0,Math.PI*2); ctx.fill()
+  ctx.beginPath(); ctx.arc(4,1,5,0,Math.PI*2); ctx.fill()
+  for (let i=-2;i<=2;i++) {
+    const tg=ctx.createLinearGradient(i*6,11,i*6,18)
+    tg.addColorStop(0,'rgba(80,200,255,0.8)'); tg.addColorStop(1,'rgba(80,200,255,0)')
+    ctx.fillStyle=tg; ctx.fillRect(i*6-1.5,11,3,8)
+  }
+}
 
-  // Ear (triangle, top)
-  ctx.fillStyle = BLUE
-  ctx.beginPath()
-  ctx.moveTo(-4, -78); ctx.lineTo(0, -88); ctx.lineTo(4, -78)
-  ctx.closePath(); ctx.fill()
-  ctx.fillStyle = SKIN_D
-  ctx.beginPath()
-  ctx.moveTo(-1.5, -79); ctx.lineTo(0, -84.5); ctx.lineTo(1.5, -79)
-  ctx.closePath(); ctx.fill()
+function drawFighter(ctx: CanvasRenderingContext2D, x: number, y: number, t: number) {
+  const bob=Math.sin(t*0.07+x*0.04)*2.5
+  ctx.translate(x+18,y+18+bob)
+  ctx.shadowColor='#40FF80'; ctx.shadowBlur=12
+  const fg=ctx.createLinearGradient(-18,-14,18,14)
+  fg.addColorStop(0,'#185030'); fg.addColorStop(.5,'#38A858'); fg.addColorStop(1,'#0C3018')
+  ctx.fillStyle=fg
+  ctx.beginPath(); ctx.moveTo(0,-15); ctx.lineTo(18,13); ctx.lineTo(10,9)
+  ctx.lineTo(0,14); ctx.lineTo(-10,9); ctx.lineTo(-18,13); ctx.closePath(); ctx.fill()
+  ctx.fillStyle='rgba(80,240,140,0.28)'
+  ctx.beginPath(); ctx.moveTo(0,-15); ctx.lineTo(18,13); ctx.lineTo(8,7); ctx.closePath(); ctx.fill()
+  ctx.beginPath(); ctx.moveTo(0,-15); ctx.lineTo(-18,13); ctx.lineTo(-8,7); ctx.closePath(); ctx.fill()
+  ctx.fillStyle='#80FFB0'; ctx.beginPath(); ctx.ellipse(0,-2,5,8,0,0,Math.PI*2); ctx.fill()
+  const eg=ctx.createRadialGradient(0,14,0,0,14,7)
+  eg.addColorStop(0,'rgba(120,255,180,0.9)'); eg.addColorStop(1,'rgba(40,200,100,0)')
+  ctx.fillStyle=eg; ctx.beginPath(); ctx.arc(0,14,7,0,Math.PI*2); ctx.fill()
+}
 
-  // Tan muzzle (lower front of face)
-  ctx.fillStyle = SKIN
-  ctx.beginPath(); ctx.ellipse(8, -59, 8.5, 6.5, -0.15, 0, Math.PI * 2); ctx.fill()
+function drawElite(ctx: CanvasRenderingContext2D, x: number, y: number, t: number, hp: number) {
+  const bob=Math.sin(t*0.05+x*0.03)*3
+  ctx.translate(x+18,y+18+bob)
+  const c=hp>1?'#FF8040':'#FF4040', gw=hp>1?'#FF6020':'#FF2020'
+  ctx.shadowColor=gw; ctx.shadowBlur=16
+  ctx.save(); ctx.rotate(t*0.045)
+  ctx.strokeStyle=c; ctx.lineWidth=2.5; ctx.beginPath(); ctx.arc(0,0,17,0,Math.PI*2); ctx.stroke()
+  for (let i=0;i<4;i++) {
+    ctx.save(); ctx.rotate(Math.PI/2*i)
+    ctx.fillStyle=hp>1?'#FF9060':'#FF6060'
+    ctx.beginPath(); ctx.moveTo(0,-17); ctx.lineTo(-4,-12); ctx.lineTo(4,-12); ctx.closePath(); ctx.fill()
+    ctx.restore()
+  }
+  ctx.restore()
+  const cg=ctx.createRadialGradient(-4,-4,2,0,0,14)
+  cg.addColorStop(0,hp>1?'#FFD090':'#FF9090'); cg.addColorStop(.6,hp>1?'#FF5020':'#FF1010'); cg.addColorStop(1,hp>1?'#A02800':'#700000')
+  ctx.fillStyle=cg; ctx.beginPath(); ctx.arc(0,0,14,0,Math.PI*2); ctx.fill()
+  ctx.fillStyle=hp>1?'#FFE0A0':'#FF8080'; ctx.beginPath(); ctx.arc(0,0,5,0,Math.PI*2); ctx.fill()
+  ctx.fillStyle='rgba(255,255,255,0.7)'; ctx.beginPath(); ctx.arc(-1.5,-1.5,2,0,Math.PI*2); ctx.fill()
+}
 
-  // Big joined eye — white with green pupil
-  ctx.fillStyle = WHITE
-  ctx.beginPath(); ctx.ellipse(6, -70, 6.5, 8, 0.12, 0, Math.PI * 2); ctx.fill()
-  ctx.fillStyle = '#1FA048'
-  ctx.beginPath(); ctx.ellipse(9, -69, 2.6, 4.2, 0.1, 0, Math.PI * 2); ctx.fill()
-  ctx.fillStyle = '#0A0A0A'
-  ctx.beginPath(); ctx.ellipse(9.6, -68.6, 1.4, 2.6, 0.1, 0, Math.PI * 2); ctx.fill()
-  ctx.fillStyle = WHITE
-  ctx.beginPath(); ctx.arc(10.2, -71, 1, 0, Math.PI * 2); ctx.fill()
-  // Brow ridge
-  ctx.strokeStyle = BLUE_D
-  ctx.lineWidth = 2
-  ctx.beginPath(); ctx.moveTo(0, -78); ctx.quadraticCurveTo(7, -80, 13, -76); ctx.stroke()
-
-  // Black nose at tip of muzzle
-  ctx.fillStyle = '#0A0A0A'
-  ctx.beginPath(); ctx.ellipse(16.5, -62, 3, 2.3, 0.15, 0, Math.PI * 2); ctx.fill()
-  ctx.fillStyle = 'rgba(255,255,255,0.5)'
-  ctx.beginPath(); ctx.arc(15.6, -63, 0.9, 0, Math.PI * 2); ctx.fill()
-
-  // Smirk
-  ctx.strokeStyle = '#8A5A28'
-  ctx.lineWidth = 1.4
-  ctx.beginPath(); ctx.moveTo(9, -55.5); ctx.quadraticCurveTo(13, -54, 15.5, -56.5); ctx.stroke()
-
+function drawPlayer(ctx: CanvasRenderingContext2D, s: GameState) {
+  const px=s.px, cy=H-60
+  ctx.save()
+  if (s.shieldTimer>0) {
+    const a=Math.min(1,s.shieldTimer/60)*(0.5+0.3*Math.sin(s.t*0.25))
+    ctx.strokeStyle=`rgba(100,200,255,${a.toFixed(2)})`; ctx.lineWidth=2.5
+    ctx.shadowColor='#60C0FF'; ctx.shadowBlur=18
+    ctx.beginPath(); ctx.arc(px+PW/2,cy,34,0,Math.PI*2); ctx.stroke(); ctx.shadowBlur=0
+  }
+  ctx.translate(px+PW/2,cy)
+  const ff=0.7+0.3*Math.sin(s.t*0.35)
+  for (const ex of [-11,0,11]) {
+    const fh=(14+Math.abs(ex))*ff
+    const fg=ctx.createLinearGradient(ex,PH/2,ex,PH/2+fh+5)
+    fg.addColorStop(0,`rgba(255,200,60,${ff.toFixed(2)})`); fg.addColorStop(.5,`rgba(255,90,20,${(ff*.8).toFixed(2)})`); fg.addColorStop(1,'rgba(255,50,0,0)')
+    ctx.fillStyle=fg; ctx.beginPath(); ctx.ellipse(ex,PH/2+fh/2+2,4,fh/2+4,0,0,Math.PI*2); ctx.fill()
+  }
+  ctx.shadowColor='#9060FF'; ctx.shadowBlur=18
+  const hg=ctx.createLinearGradient(-PW/2,PH/2,PW/2,-PH/2)
+  hg.addColorStop(0,'#2810A8'); hg.addColorStop(.4,'#5030D8'); hg.addColorStop(.5,'#7050FF'); hg.addColorStop(.6,'#5030D8'); hg.addColorStop(1,'#180C90')
+  ctx.fillStyle=hg
+  ctx.beginPath(); ctx.moveTo(0,-PH/2+2); ctx.lineTo(-PW/2,PH/2); ctx.lineTo(-PW/2+7,PH/2-9)
+  ctx.lineTo(0,PH/2-5); ctx.lineTo(PW/2-7,PH/2-9); ctx.lineTo(PW/2,PH/2); ctx.closePath(); ctx.fill()
+  ctx.fillStyle='rgba(130,90,255,0.5)'
+  ctx.beginPath(); ctx.moveTo(-PW/2,PH/2); ctx.lineTo(-PW/2-14,PH/2-3); ctx.lineTo(-PW/2,PH/2-16); ctx.closePath(); ctx.fill()
+  ctx.beginPath(); ctx.moveTo(PW/2,PH/2); ctx.lineTo(PW/2+14,PH/2-3); ctx.lineTo(PW/2,PH/2-16); ctx.closePath(); ctx.fill()
+  const cg=ctx.createRadialGradient(-2,-4,1,0,-3,9)
+  cg.addColorStop(0,'rgba(200,240,255,0.9)'); cg.addColorStop(.5,'rgba(100,170,255,0.65)'); cg.addColorStop(1,'rgba(50,90,210,0.3)')
+  ctx.fillStyle=cg; ctx.beginPath(); ctx.ellipse(0,-3,7,10,0,0,Math.PI*2); ctx.fill()
+  ctx.strokeStyle='rgba(190,170,255,0.5)'; ctx.lineWidth=1.5
+  ctx.beginPath(); ctx.moveTo(0,-PH/2+3); ctx.lineTo(-9,PH/2-7); ctx.stroke()
+  if (s.rapidTimer>0) {
+    ctx.fillStyle='#FFE060'; ctx.shadowColor='#FFD020'; ctx.shadowBlur=10
+    ctx.beginPath(); ctx.arc(-PW/2+5,2,3,0,Math.PI*2); ctx.fill()
+    ctx.beginPath(); ctx.arc(PW/2-5,2,3,0,Math.PI*2); ctx.fill()
+  }
+  if (s.tripleShotTimer>0) {
+    ctx.fillStyle='#FF80C0'; ctx.shadowColor='#FF60B0'; ctx.shadowBlur=10
+    ctx.beginPath(); ctx.arc(-PW/2+5,-8,3,0,Math.PI*2); ctx.fill()
+    ctx.beginPath(); ctx.arc(PW/2-5,-8,3,0,Math.PI*2); ctx.fill()
+  }
   ctx.restore()
 }
 
-function drawFlag(ctx: CanvasRenderingContext2D, fx: number) {
-  if (fx + 60 < 0 || fx > W + 60) return
-  // Pole
-  const poleGrad = ctx.createLinearGradient(fx, 0, fx + 8, 0)
-  poleGrad.addColorStop(0, '#AAAAAA')
-  poleGrad.addColorStop(0.5, '#EEEEEE')
-  poleGrad.addColorStop(1, '#888888')
-  ctx.fillStyle = poleGrad
-  ctx.fillRect(fx, 130, 8, GROUND_TOP - 130)
+function drawPowerUps(ctx: CanvasRenderingContext2D, s: GameState) {
+  for (const p of s.powerUps) {
+    ctx.save(); ctx.translate(p.x+10,p.y+10); ctx.rotate(p.spin)
+    const c=p.type==='rapid'?'#FFE060':p.type==='shield'?'#60C0FF':'#FF80C0'
+    ctx.shadowColor=c; ctx.shadowBlur=14; ctx.fillStyle=c
+    ctx.beginPath(); ctx.moveTo(0,-13); ctx.lineTo(9,0); ctx.lineTo(0,13); ctx.lineTo(-9,0); ctx.closePath(); ctx.fill()
+    ctx.fillStyle='rgba(255,255,255,0.4)'
+    ctx.beginPath(); ctx.moveTo(0,-13); ctx.lineTo(9,0); ctx.lineTo(0,-2); ctx.closePath(); ctx.fill()
+    ctx.fillStyle='#fff'; ctx.font='bold 10px Arial'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.shadowBlur=0
+    ctx.fillText(p.type==='rapid'?'R':p.type==='shield'?'S':'T',0,1)
+    ctx.restore()
+  }
+}
 
-  // Flag
-  const flagGrad = ctx.createLinearGradient(fx + 8, 140, fx + 65, 160)
-  flagGrad.addColorStop(0, '#28C850')
-  flagGrad.addColorStop(1, '#1A9438')
-  ctx.fillStyle = flagGrad
-  ctx.beginPath()
-  ctx.moveTo(fx + 8, 140)
-  ctx.lineTo(fx + 65, 158)
-  ctx.lineTo(fx + 8, 176)
-  ctx.closePath()
-  ctx.fill()
-  // Flag shine
-  ctx.fillStyle = 'rgba(255,255,255,0.2)'
-  ctx.beginPath()
-  ctx.moveTo(fx + 8, 140)
-  ctx.lineTo(fx + 65, 158)
-  ctx.lineTo(fx + 8, 155)
-  ctx.closePath()
-  ctx.fill()
-
-  // Ball on top
-  const ballGrad = ctx.createRadialGradient(fx + 4, 127, 1, fx + 4, 130, 10)
-  ballGrad.addColorStop(0, '#FFE878')
-  ballGrad.addColorStop(1, '#C8A000')
-  ctx.fillStyle = ballGrad
-  ctx.beginPath(); ctx.arc(fx + 4, 130, 10, 0, Math.PI * 2); ctx.fill()
+function drawParticles(ctx: CanvasRenderingContext2D, s: GameState) {
+  for (const p of s.particles) {
+    const a=p.life/p.maxLife
+    ctx.save(); ctx.globalAlpha=a; ctx.fillStyle=p.color; ctx.shadowColor=p.color; ctx.shadowBlur=5
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r*a,0,Math.PI*2); ctx.fill(); ctx.restore()
+  }
 }
 
 function drawHUD(ctx: CanvasRenderingContext2D, s: GameState) {
-  // Dark top bar
-  const hudGrad = ctx.createLinearGradient(0, 0, 0, 44)
-  hudGrad.addColorStop(0, 'rgba(15,18,28,0.88)')
-  hudGrad.addColorStop(1, 'rgba(10,14,22,0.76)')
-  ctx.fillStyle = hudGrad
-  ctx.fillRect(0, 0, W, 44)
-
-  // Bottom separator
-  ctx.strokeStyle = 'rgba(100,130,180,0.3)'
-  ctx.lineWidth = 1
-  ctx.beginPath(); ctx.moveTo(0, 44); ctx.lineTo(W, 44); ctx.stroke()
-
-  ctx.textBaseline = 'middle'
-  ctx.font = 'bold 11px "Courier New", monospace'
-
-  // SCORE
-  ctx.fillStyle = '#8AA8CC'
-  ctx.textAlign = 'left'
-  ctx.fillText('SCORE', 18, 13)
-  ctx.font = 'bold 15px "Courier New", monospace'
-  ctx.fillStyle = '#FFFFFF'
-  ctx.fillText(String(s.score).padStart(6, '0'), 18, 32)
-
-  // RINGS (center-left)
-  ctx.font = 'bold 11px "Courier New", monospace'
-  ctx.fillStyle = '#8AA8CC'
-  ctx.textAlign = 'center'
-  ctx.fillText('RINGS', W * 0.35, 13)
-  // Ring icon
-  ctx.strokeStyle = '#FFD020'
-  ctx.lineWidth = 3.5
-  ctx.beginPath(); ctx.arc(W * 0.35 - 22, 32, 6, 0, Math.PI * 2); ctx.stroke()
-  ctx.font = 'bold 15px "Courier New", monospace'
-  ctx.fillStyle = '#FFFFFF'
-  ctx.fillText('×' + String(s.coins.filter(c => c.got).length).padStart(2, '0'), W * 0.35 + 6, 32)
-
-  // TIME (center)
-  ctx.font = 'bold 11px "Courier New", monospace'
-  ctx.fillStyle = s.timeLeft < 60 ? '#FF6060' : '#8AA8CC'
-  ctx.textAlign = 'center'
-  ctx.fillText('TIME', W * 0.62, 13)
-  ctx.font = 'bold 15px "Courier New", monospace'
-  ctx.fillStyle = s.timeLeft < 60 ? '#FF8080' : '#FFFFFF'
-  ctx.fillText(String(Math.max(0, s.timeLeft)).padStart(3, '0'), W * 0.62, 32)
-
-  // LIFE (right)
-  ctx.font = 'bold 11px "Courier New", monospace'
-  ctx.fillStyle = '#8AA8CC'
-  ctx.textAlign = 'right'
-  ctx.fillText('LIFE', W - 70, 13)
-  // Heart icons
-  for (let i = 0; i < Math.max(0, s.lives); i++) {
-    ctx.fillStyle = '#FF4060'
-    ctx.font = '14px serif'
-    ctx.textAlign = 'right'
-    ctx.fillText('♥', W - 16 - i * 18, 32)
+  const hg=ctx.createLinearGradient(0,0,0,44)
+  hg.addColorStop(0,'rgba(8,4,24,0.94)'); hg.addColorStop(1,'rgba(6,3,18,0.82)')
+  ctx.fillStyle=hg; ctx.fillRect(0,0,W,44)
+  ctx.strokeStyle='rgba(124,58,237,0.45)'; ctx.lineWidth=1
+  ctx.beginPath(); ctx.moveTo(0,44); ctx.lineTo(W,44); ctx.stroke()
+  ctx.textBaseline='middle'
+  ctx.font='bold 11px "Courier New",monospace'; ctx.fillStyle='#8AA8CC'; ctx.textAlign='left'; ctx.fillText('SCORE',18,13)
+  ctx.font='bold 15px "Courier New",monospace'; ctx.fillStyle='#fff'; ctx.fillText(String(s.score).padStart(7,'0'),18,32)
+  ctx.font='bold 11px "Courier New",monospace'; ctx.fillStyle='#8AA8CC'; ctx.textAlign='center'; ctx.fillText('WAVE',W*.37,13)
+  ctx.font='bold 15px "Courier New",monospace'; ctx.fillStyle='#A78BFA'; ctx.fillText(`${s.wave} / ${MAX_WAVES}`,W*.37,32)
+  let puX=W*.56
+  if (s.rapidTimer>0) { ctx.font='bold 10px "Courier New",monospace'; ctx.fillStyle='#FFE060'; ctx.textAlign='center'; ctx.fillText(`⚡ ${Math.ceil(s.rapidTimer/60)}s`,puX,22); puX+=60 }
+  if (s.shieldTimer>0) { ctx.font='bold 10px "Courier New",monospace'; ctx.fillStyle='#60C0FF'; ctx.textAlign='center'; ctx.fillText(`🛡 ${Math.ceil(s.shieldTimer/60)}s`,puX,22); puX+=55 }
+  if (s.tripleShotTimer>0) { ctx.font='bold 10px "Courier New",monospace'; ctx.fillStyle='#FF80C0'; ctx.textAlign='center'; ctx.fillText(`✦ ${Math.ceil(s.tripleShotTimer/60)}s`,puX,22) }
+  ctx.font='bold 11px "Courier New",monospace'; ctx.fillStyle='#8AA8CC'; ctx.textAlign='right'; ctx.fillText('LIVES',W-70,13)
+  for (let i=0;i<Math.max(0,s.lives);i++) {
+    ctx.save(); ctx.translate(W-16-i*22,32)
+    ctx.fillStyle='#A78BFA'; ctx.shadowColor='#7C3AED'; ctx.shadowBlur=8
+    ctx.beginPath(); ctx.moveTo(0,-8); ctx.lineTo(-7,7); ctx.lineTo(0,4); ctx.lineTo(7,7); ctx.closePath(); ctx.fill()
+    ctx.restore()
   }
-
-  // Music + Pause buttons (top-right decorative)
-  const btnY = 6, btnR = 14
-  drawHUDBtn(ctx, W - 38, btnY, btnR, '♪')
-  drawHUDBtn(ctx, W - 16, btnY, btnR, '⏸')
-
-  ctx.textBaseline = 'alphabetic'
-}
-
-function drawHUDBtn(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, label: string) {
-  ctx.fillStyle = 'rgba(60,80,130,0.6)'
-  ctx.strokeStyle = 'rgba(100,140,220,0.5)'
-  ctx.lineWidth = 1
-  ctx.beginPath(); ctx.roundRect(x - r, y, r * 2, r * 2, 5); ctx.fill(); ctx.stroke()
-  ctx.fillStyle = 'rgba(200,220,255,0.8)'
-  ctx.font = '12px serif'
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'middle'
-  ctx.fillText(label, x, y + r)
 }

@@ -7,30 +7,30 @@ import { motion, AnimatePresence } from 'framer-motion'
 // Game is heavy + canvas-only — load it only when the user opens it
 const SonicGame = dynamic(() => import('./SonicGame'), { ssr: false })
 
-/* Retro pixel speedster icon (original art — blue hedgehog head) */
+/* Retro pixel spaceship icon */
 function PixelIcon({ size = 26 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true">
-      {/* swept-back spikes */}
-      <rect x="0" y="5" width="3" height="2" fill="#1E5ADB" />
-      <rect x="0" y="9" width="4" height="2" fill="#1E5ADB" />
-      <rect x="1" y="3" width="3" height="2" fill="#1E5ADB" />
-      {/* head */}
-      <rect x="4" y="2" width="7" height="2" fill="#1E5ADB" />
-      <rect x="3" y="4" width="10" height="6" fill="#1E5ADB" />
-      <rect x="4" y="10" width="9" height="2" fill="#1E5ADB" />
-      {/* ear */}
-      <rect x="5" y="1" width="2" height="1" fill="#1E5ADB" />
-      {/* eye */}
-      <rect x="8" y="5" width="3" height="3" fill="#fff" />
-      <rect x="10" y="6" width="1" height="2" fill="#0A0A0A" />
-      {/* muzzle */}
-      <rect x="9" y="9" width="5" height="3" fill="#F8C890" />
+      {/* exhaust flame */}
+      <rect x="6" y="14" width="1" height="2" fill="#FFD020" />
+      <rect x="9" y="14" width="1" height="2" fill="#FFD020" />
+      <rect x="7" y="13" width="2" height="2" fill="#FF8020" />
+      {/* engine base */}
+      <rect x="5" y="11" width="6" height="2" fill="#5030D8" />
+      {/* wings */}
+      <rect x="1" y="9" width="4" height="3" fill="#4020C0" />
+      <rect x="11" y="9" width="4" height="3" fill="#4020C0" />
+      <rect x="2" y="11" width="2" height="1" fill="#7050FF" />
+      <rect x="12" y="11" width="2" height="1" fill="#7050FF" />
+      {/* hull */}
+      <rect x="5" y="4" width="6" height="7" fill="#6040E8" />
+      <rect x="6" y="4" width="4" height="7" fill="#7050FF" />
       {/* nose */}
-      <rect x="14" y="9" width="2" height="1" fill="#0A0A0A" />
-      {/* sneaker flash */}
-      <rect x="6" y="13" width="6" height="2" fill="#E22B22" />
-      <rect x="6" y="14" width="6" height="1" fill="#fff" />
+      <rect x="6" y="2" width="4" height="2" fill="#6040E8" />
+      <rect x="7" y="1" width="2" height="1" fill="#5030D0" />
+      {/* cockpit */}
+      <rect x="7" y="5" width="2" height="3" fill="#A0E8FF" />
+      <rect x="7" y="5" width="1" height="1" fill="#E0F8FF" />
     </svg>
   )
 }
@@ -82,7 +82,7 @@ export default function GameTab() {
           <PixelIcon />
         </motion.span>
         <span className="flex flex-col items-start leading-tight">
-          <span className="text-[10px] uppercase tracking-widest text-violet-300/80 font-semibold">Feeling bored?</span>
+          <span className="text-[10px] uppercase tracking-widest text-violet-300/80 font-semibold">Need a break?</span>
           <span className="text-sm font-extrabold text-white">Let&apos;s Play!</span>
         </span>
       </motion.button>
@@ -117,8 +117,8 @@ export default function GameTab() {
                 <div className="flex items-center gap-2.5">
                   <PixelIcon size={28} />
                   <div className="flex flex-col leading-tight">
-                    <span className="text-white font-extrabold text-lg">WeThink Dash</span>
-                    <span className="text-[11px] text-violet-300/70 uppercase tracking-wider">A little break — gotta go fast, grab those rings</span>
+                    <span className="text-white font-extrabold text-lg">WeThink Space</span>
+                    <span className="text-[11px] text-violet-300/70 uppercase tracking-wider">A little break — defend the sector</span>
                   </div>
                 </div>
                 <button
