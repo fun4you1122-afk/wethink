@@ -8,7 +8,7 @@ import { twMerge } from "tailwind-merge";
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { MoveRight, PhoneCall } from "lucide-react";
-import RainingLettersBg from "@/components/ui/raining-letters-bg";
+import HeroWaveBg from "@/components/ui/hero-wave-bg";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -87,11 +87,11 @@ function WeThinkHero() {
 
   return (
     <div className="relative w-full min-h-screen font-sans overflow-hidden" style={{ background: '#04010E' }}>
-      {/* Raining letters background */}
-      <RainingLettersBg />
+      {/* Wave background */}
+      <HeroWaveBg />
 
       {/* Overlay to keep content readable */}
-      <div className="absolute inset-0 z-[5]" style={{ background: 'rgba(4,1,14,0.6)' }} />
+      <div className="absolute inset-0 z-[5]" style={{ background: 'rgba(4,1,14,0.55)' }} />
 
       {/* Content */}
       <div className="relative z-20 flex flex-col items-center justify-center w-full min-h-screen px-6">
