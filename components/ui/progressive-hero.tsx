@@ -8,7 +8,7 @@ import { twMerge } from "tailwind-merge";
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { MoveRight, PhoneCall } from "lucide-react";
-import HeroWaveBg from "@/components/ui/hero-wave-bg";
+import { DottedSurface } from "@/components/ui/dotted-surface";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -86,12 +86,9 @@ function WeThinkHero() {
   };
 
   return (
-    <div className="relative w-full min-h-screen font-sans overflow-hidden" style={{ background: '#04010E' }}>
-      {/* Wave background */}
-      <HeroWaveBg />
-
-      {/* Overlay to keep content readable */}
-      <div className="absolute inset-0 z-[5]" style={{ background: 'rgba(4,1,14,0.55)' }} />
+    <div className="relative w-full min-h-screen font-sans overflow-hidden" style={{ background: '#050310' }}>
+      {/* Dotted surface background */}
+      <DottedSurface className="z-0" />
 
       {/* Content */}
       <div className="relative z-20 flex flex-col items-center justify-center w-full min-h-screen px-6">
