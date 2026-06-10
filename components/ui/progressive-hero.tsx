@@ -8,6 +8,7 @@ import { twMerge } from "tailwind-merge";
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { MoveRight, PhoneCall } from "lucide-react";
+import RainingLettersBg from "@/components/ui/raining-letters-bg";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -85,20 +86,12 @@ function WeThinkHero() {
   };
 
   return (
-    <div className="relative w-full min-h-screen font-sans overflow-hidden">
-      {/* Background Video */}
-      <video
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        autoPlay
-        loop
-        muted
-        playsInline
-      >
-        <source src="/hero-bg.mp4" type="video/mp4" />
-      </video>
+    <div className="relative w-full min-h-screen font-sans overflow-hidden" style={{ background: '#04010E' }}>
+      {/* Raining letters background */}
+      <RainingLettersBg />
 
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/75 z-10" />
+      {/* Overlay to keep content readable */}
+      <div className="absolute inset-0 z-[5]" style={{ background: 'rgba(4,1,14,0.6)' }} />
 
       {/* Content */}
       <div className="relative z-20 flex flex-col items-center justify-center w-full min-h-screen px-6">
