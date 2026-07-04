@@ -27,7 +27,7 @@ type MediaItem = {
 const ITEMS: MediaItem[] = [
   {
     type: 'video',
-    src: '',
+    src: 'https://assets.mixkit.co/videos/13192/13192-720.mp4',
     title: 'GITEX Global 2025',
     kind: 'Exhibition',
     location: 'Dubai World Trade Centre',
@@ -35,8 +35,8 @@ const ITEMS: MediaItem[] = [
     wide: true,
   },
   {
-    type: 'image',
-    src: '',
+    type: 'video',
+    src: 'https://videos.pexels.com/video-files/3252123/3252123-hd_1920_1080_25fps.mp4',
     title: 'AI in Business Workshop',
     kind: 'Workshop',
     location: 'Abu Dhabi',
@@ -44,7 +44,7 @@ const ITEMS: MediaItem[] = [
   },
   {
     type: 'image',
-    src: '',
+    src: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=75&fit=crop',
     title: 'UAE Digital Economy Forum',
     kind: 'Conference',
     location: 'ADNEC, Abu Dhabi',
@@ -52,7 +52,7 @@ const ITEMS: MediaItem[] = [
   },
   {
     type: 'image',
-    src: '',
+    src: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1200&q=75&fit=crop',
     title: 'Startup Founders Meetup',
     kind: 'Meetup',
     location: 'Hub71, Abu Dhabi',
@@ -60,7 +60,7 @@ const ITEMS: MediaItem[] = [
   },
   {
     type: 'video',
-    src: '',
+    src: 'https://assets.mixkit.co/videos/36817/36817-720.mp4',
     title: 'Cybersecurity Panel Talk',
     kind: 'Panel',
     location: 'Dubai Internet City',
@@ -68,7 +68,7 @@ const ITEMS: MediaItem[] = [
   },
   {
     type: 'image',
-    src: '',
+    src: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1600&q=75&fit=crop',
     title: 'Web Development Bootcamp',
     kind: 'Workshop',
     location: 'Abu Dhabi University',
