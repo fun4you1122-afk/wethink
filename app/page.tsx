@@ -14,6 +14,7 @@ import CaseStudies from '@/components/CaseStudies'
 import ClientLogos from '@/components/ClientLogos'
 import TransformationSplit from '@/components/TransformationSplit'
 import Testimonials from '@/components/Testimonials'
+import Presence from '@/components/Presence'
 import CinematicScene from '@/components/CinematicScene'
 import VideoSection from '@/components/VideoSection'
 import AnalyticsDemo from '@/components/AnalyticsDemo'
@@ -44,6 +45,7 @@ export default function Home() {
       <ClientLogos />
       <TransformationSplit />
       <Testimonials />
+      <Presence />
       <VideoSection />
       <AnalyticsDemo />
       <Blog />
