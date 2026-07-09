@@ -9,24 +9,24 @@ type Logo = {
 // Fill `image` with the generated logo URL once available — falls back to a
 // styled wordmark until then.
 const LOGOS: Logo[] = [
-  { name: 'Nexa Pay', accent: '#A78BFA' },
-  { name: 'Lumora', accent: '#E4C589' },
-  { name: 'CargoFlow', accent: '#FB923C' },
-  { name: 'Pulse Loop', accent: '#34D399' },
-  { name: 'قهوة الأصالة', accent: '#C58B4A' },
-  { name: 'أنماط', accent: '#D4AF37' },
-  { name: 'عبير الديار', accent: '#9B7EBD' },
-  { name: 'مساكن', accent: '#2DD4BF' },
+  { name: 'Nexa Pay', image: '/logos/nexa-pay.png', accent: '#A78BFA' },
+  { name: 'Lumora', image: '/logos/lumora.png', accent: '#E4C589' },
+  { name: 'CargoFlow', image: '/logos/cargoflow.png', accent: '#FB923C' },
+  { name: 'Pulse Loop', image: '/logos/pulse-loop.png', accent: '#34D399' },
+  { name: 'قهوة الأصالة', image: '/logos/qahwat-al-asala.png', accent: '#C58B4A' },
+  { name: 'أنماط', image: '/logos/anmat.png', accent: '#D4AF37' },
+  { name: 'عبير الديار', image: '/logos/abeer-al-diyar.png', accent: '#9B7EBD' },
+  { name: 'مساكن', image: '/logos/masaken.png', accent: '#2DD4BF' },
 ]
 
 function LogoCard({ logo }: { logo: Logo }) {
   return (
     <div
-      className="flex h-24 w-52 shrink-0 items-center justify-center rounded-2xl border grayscale opacity-60 transition-all duration-300 hover:grayscale-0 hover:opacity-100"
+      className="flex h-28 w-48 shrink-0 items-center justify-center overflow-hidden rounded-2xl border grayscale opacity-60 transition-all duration-300 hover:grayscale-0 hover:opacity-100"
       style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(124,58,237,0.18)' }}
     >
       {logo.image ? (
-        <img src={logo.image} alt={logo.name} className="max-h-14 max-w-[80%] object-contain" />
+        <img src={logo.image} alt={logo.name} className="h-full w-full object-cover" />
       ) : (
         <span
           className="text-xl font-extrabold tracking-tight"
