@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
 import Welcome from '@/components/Welcome'
+import BigOnPurpose from '@/components/BigOnPurpose'
 import OrbitalServices from '@/components/OrbitalServices'
 import Services from '@/components/Services'
 import About from '@/components/About'
@@ -31,6 +32,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Welcome />
+      <BigOnPurpose />
       <OrbitalServices />
       <Stats />
       <TechMarquee />
