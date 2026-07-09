@@ -22,11 +22,18 @@ const LOGOS: Logo[] = [
 function LogoCard({ logo }: { logo: Logo }) {
   return (
     <div
-      className="flex h-28 w-48 shrink-0 items-center justify-center overflow-hidden rounded-2xl border grayscale opacity-60 transition-all duration-300 hover:grayscale-0 hover:opacity-100"
-      style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(124,58,237,0.18)' }}
+      className="flex h-28 w-48 shrink-0 items-center justify-center overflow-hidden rounded-2xl border grayscale opacity-60 transition-[filter,opacity] duration-300 hover:grayscale-0 hover:opacity-100"
+      style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(124,58,237,0.18)', willChange: 'filter' }}
     >
       {logo.image ? (
-        <img src={logo.image} alt={logo.name} className="h-full w-full object-cover" />
+        <img
+          src={logo.image}
+          alt={logo.name}
+          width={400}
+          height={240}
+          decoding="async"
+          className="h-full w-full object-cover"
+        />
       ) : (
         <span
           className="text-xl font-extrabold tracking-tight"
@@ -48,6 +55,8 @@ function Row({ reverse = false }: { reverse?: boolean }) {
         style={{
           width: 'max-content',
           animation: `${reverse ? 'logo-marquee-reverse' : 'logo-marquee'} 36s linear infinite`,
+          willChange: 'transform',
+          transform: 'translateZ(0)',
         }}
       >
         {doubled.map((logo, i) => (
@@ -63,12 +72,12 @@ export default function ClientLogos() {
     <section className="section-padding relative overflow-hidden">
       <style>{`
         @keyframes logo-marquee {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
+          from { transform: translate3d(0, 0, 0); }
+          to { transform: translate3d(-50%, 0, 0); }
         }
         @keyframes logo-marquee-reverse {
-          from { transform: translateX(-50%); }
-          to { transform: translateX(0); }
+          from { transform: translate3d(-50%, 0, 0); }
+          to { transform: translate3d(0, 0, 0); }
         }
       `}</style>
 
