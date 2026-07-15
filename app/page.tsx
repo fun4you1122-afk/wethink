@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic'
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
 import Welcome from '@/components/Welcome'
@@ -13,18 +14,21 @@ import OurStory from '@/components/OurStory'
 import Projects from '@/components/Projects'
 import CaseStudies from '@/components/CaseStudies'
 import ClientLogos from '@/components/ClientLogos'
-import TransformationSplit from '@/components/TransformationSplit'
 import Testimonials from '@/components/Testimonials'
 import Presence from '@/components/Presence'
-import CinematicScene from '@/components/CinematicScene'
 import VideoSection from '@/components/VideoSection'
-import AnalyticsDemo from '@/components/AnalyticsDemo'
 import Blog from '@/components/Blog'
-import PricingSection from '@/components/ui/pricing-section'
-import LogoAssembly from '@/components/LogoAssembly'
-import AppComingSoon from '@/components/AppComingSoon'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
+
+// Heavy animation-driven sections load as separate chunks so the initial
+// bundle stays lean; they render server-side as usual.
+const TransformationSplit = dynamic(() => import('@/components/TransformationSplit'))
+const CinematicScene = dynamic(() => import('@/components/CinematicScene'))
+const AnalyticsDemo = dynamic(() => import('@/components/AnalyticsDemo'))
+const PricingSection = dynamic(() => import('@/components/ui/pricing-section'))
+const LogoAssembly = dynamic(() => import('@/components/LogoAssembly'))
+const AppComingSoon = dynamic(() => import('@/components/AppComingSoon'))
 
 export default function Home() {
   return (

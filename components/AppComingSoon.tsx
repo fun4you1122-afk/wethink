@@ -119,6 +119,8 @@ export default function AppComingSoon() {
                   <img
                     src={screen.src}
                     alt={`WeThink App — ${screen.label}`}
+                    loading="lazy"
+                    decoding="async"
                     style={{ width: '100%', display: 'block', aspectRatio: '9/19.5', objectFit: 'cover' }}
                   />
                 </div>

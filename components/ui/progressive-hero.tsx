@@ -8,7 +8,14 @@ import { twMerge } from "tailwind-merge";
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { MoveRight, PhoneCall } from "lucide-react";
-import { DottedSurface } from "@/components/ui/dotted-surface";
+import dynamic from "next/dynamic";
+
+// three.js is heavy — load the animated background after hydration so it
+// stays out of the critical bundle. The hero renders fine without it.
+const DottedSurface = dynamic(
+  () => import("@/components/ui/dotted-surface").then((m) => m.DottedSurface),
+  { ssr: false }
+);
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

@@ -15,6 +15,7 @@ function Row({ items, reverse = false }: { items: string[]; reverse?: boolean })
   return (
     <div style={{ overflow: 'hidden', maskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)' }}>
       <div
+        className="marquee-track"
         style={{
           display: 'flex',
           gap: '0.875rem',

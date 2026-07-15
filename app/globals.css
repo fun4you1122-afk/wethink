@@ -839,3 +839,21 @@ body {
   66%       { transform: translateY(-6px) translateX(-8px); opacity: 0.5; }
 }
 .float-dot { animation: float-dot ease-in-out infinite; }
+
+/* ---- Motion preferences & marquee controls ---- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Let users read marquee content by hovering/focusing it */
+.marquee-track:hover,
+.marquee-track:focus-within {
+  animation-play-state: paused !important;
+}

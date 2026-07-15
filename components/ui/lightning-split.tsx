@@ -115,8 +115,22 @@ function ShaderCanvas({ className = '' }: { className?: string }) {
       gl.drawArrays(gl.TRIANGLES, 0, 6)
       animationFrameRef.current = requestAnimationFrame(render)
     }
-    animationFrameRef.current = requestAnimationFrame(render)
-    return () => cancelAnimationFrame(animationFrameRef.current)
+    // Run the shader only while the canvas is on screen
+    let running = false
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !running) {
+        running = true
+        animationFrameRef.current = requestAnimationFrame(render)
+      } else if (!entry.isIntersecting && running) {
+        running = false
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+    })
+    io.observe(canvas)
+    return () => {
+      io.disconnect()
+      cancelAnimationFrame(animationFrameRef.current)
+    }
   }, [])
 
   return <canvas ref={canvasRef} className={`${className} pointer-events-none bg-transparent`} style={{ display: 'block' }} />
@@ -127,8 +141,19 @@ export function Component({ leftComponent, rightComponent }: DiagonalSliderProps
   const [position, setPosition] = useState(60)
   const [displayPos, setDisplayPos] = useState(60)
   const [time, setTime] = useState(0)
+  const [inView, setInView] = useState(false)
+
+  // Track section visibility so the arc animation only runs on screen
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting))
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
 
   useEffect(() => {
+    if (!inView) return
     let raf = 0, last = performance.now()
     const tick = (now: number) => {
       const dt = Math.min(ELECTRIC_CONFIG.timeClampSec, (now - last) / 1000)
@@ -139,13 +164,24 @@ export function Component({ leftComponent, rightComponent }: DiagonalSliderProps
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
-  }, [position])
+  }, [position, inView])
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const revealFromX = (clientX: number) => {
     if (!containerRef.current) return
     const rect = containerRef.current.getBoundingClientRect()
-    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const x = ((clientX - rect.left) / rect.width) * 100
     setPosition(x < 50 ? 110 : 20)
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => revealFromX(e.clientX)
+
+  // Touch devices have no hover — tap a side to reveal it, tap again to reset
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (position !== 60) {
+      setPosition(60)
+    } else if (e.touches[0]) {
+      revealFromX(e.touches[0].clientX)
+    }
   }
 
   const handleMouseLeave = () => setPosition(60)
@@ -205,6 +241,7 @@ export function Component({ leftComponent, rightComponent }: DiagonalSliderProps
       ref={containerRef}
       className="relative h-screen w-screen overflow-hidden select-none"
       onMouseMove={handleMouseMove}
+      onTouchStart={handleTouchStart}
       onMouseEnter={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       initial={{ opacity: 0 }}

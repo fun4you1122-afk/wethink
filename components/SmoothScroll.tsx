@@ -9,6 +9,9 @@ gsap.registerPlugin(ScrollTrigger)
 
 export default function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
+    // Native scrolling for users who ask for less motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
     const lenis = new Lenis({
       duration: 1.3,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -18,16 +21,18 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     // Wire Lenis into GSAP's ticker so ScrollTrigger reads the correct position
     lenis.on('scroll', ScrollTrigger.update)
 
-    gsap.ticker.add((time) => {
+    const update = (time: number) => {
       lenis.raf(time * 1000)
-    })
+    }
+    gsap.ticker.add(update)
 
     // Prevent GSAP from skipping frames on slow connections
     gsap.ticker.lagSmoothing(0)
 
     return () => {
+      lenis.off('scroll', ScrollTrigger.update)
       lenis.destroy()
-      gsap.ticker.remove((time) => lenis.raf(time * 1000))
+      gsap.ticker.remove(update)
     }
   }, [])
 

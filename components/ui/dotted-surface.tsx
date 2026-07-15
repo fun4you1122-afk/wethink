@@ -59,7 +59,9 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
     scene.add(points)
 
     let count = 0
-    let animationId: number
+    let animationId = 0
+    let running = false
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     const animate = () => {
       animationId = requestAnimationFrame(animate)
@@ -78,7 +80,25 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
       count += 0.08
     }
 
+    // Render one static frame; only loop while the hero is on screen
     animate()
+    if (reducedMotion) {
+      cancelAnimationFrame(animationId)
+    } else {
+      running = true
+    }
+
+    const io = new IntersectionObserver(([entry]) => {
+      if (reducedMotion) return
+      if (entry.isIntersecting && !running) {
+        running = true
+        animate()
+      } else if (!entry.isIntersecting && running) {
+        running = false
+        cancelAnimationFrame(animationId)
+      }
+    })
+    io.observe(container)
 
     const handleResize = () => {
       camera.aspect = container.clientWidth / container.clientHeight
@@ -89,6 +109,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
 
     return () => {
       cancelAnimationFrame(animationId)
+      io.disconnect()
       window.removeEventListener('resize', handleResize)
       scene.traverse(obj => {
         if (obj instanceof THREE.Points) {

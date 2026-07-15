@@ -22,7 +22,7 @@ const LOGOS: Logo[] = [
 function LogoCard({ logo }: { logo: Logo }) {
   return (
     <div
-      className="flex h-28 w-48 shrink-0 items-center justify-center overflow-hidden rounded-2xl border grayscale opacity-60 transition-[filter,opacity] duration-300 hover:grayscale-0 hover:opacity-100"
+      className="flex h-28 w-48 shrink-0 items-center justify-center overflow-hidden rounded-2xl border grayscale opacity-60 transition-[filter,opacity] duration-300 hover:grayscale-0 hover:opacity-100 [@media(hover:none)]:grayscale-0 [@media(hover:none)]:opacity-100"
       style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(124,58,237,0.18)', willChange: 'filter' }}
     >
       {logo.image ? (
@@ -51,7 +51,7 @@ function Row({ reverse = false }: { reverse?: boolean }) {
   return (
     <div style={{ overflow: 'hidden', maskImage: 'linear-gradient(90deg, transparent, black 6%, black 94%, transparent)' }}>
       <div
-        className="flex gap-5"
+        className="marquee-track flex gap-5"
         style={{
           width: 'max-content',
           animation: `${reverse ? 'logo-marquee-reverse' : 'logo-marquee'} 36s linear infinite`,

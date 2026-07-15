@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 /*
@@ -85,24 +85,71 @@ const KIND_COLORS: Record<MediaItem['kind'], string> = {
   Panel: '#F472B6',
 }
 
-function PlayBadge() {
+function PlayPauseButton({ playing, onToggle }: { playing: boolean; onToggle: () => void }) {
   return (
-    <div className="absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 backdrop-blur-sm border border-white/20">
-      <svg width="12" height="14" viewBox="0 0 12 14" fill="none">
-        <path d="M1 1.5v11l10-5.5L1 1.5z" fill="white" />
-      </svg>
-    </div>
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-label={playing ? 'Pause video' : 'Play video'}
+      className="absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 backdrop-blur-sm border border-white/20 transition-colors hover:bg-black/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-violet-400"
+    >
+      {playing ? (
+        <svg width="12" height="14" viewBox="0 0 12 14" fill="none" aria-hidden="true">
+          <path d="M1.5 1h3v12h-3V1zm6 0h3v12h-3V1z" fill="white" />
+        </svg>
+      ) : (
+        <svg width="12" height="14" viewBox="0 0 12 14" fill="none" aria-hidden="true">
+          <path d="M1 1.5v11l10-5.5L1 1.5z" fill="white" />
+        </svg>
+      )}
+    </button>
   )
 }
 
 function MediaCard({ item, index }: { item: MediaItem; index: number }) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
   const [failed, setFailed] = useState(false)
+  const [playing, setPlaying] = useState(false)
+  const userPausedRef = useRef(false)
   const accent = KIND_COLORS[item.kind]
   const hasMedia = item.src !== '' && !failed
 
+  // Play only while the card is on screen (and the user hasn't paused it)
+  useEffect(() => {
+    const card = cardRef.current
+    const video = videoRef.current
+    if (!card || !video || item.type !== 'video' || !hasMedia) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !userPausedRef.current) {
+        video.play().then(() => setPlaying(true)).catch(() => {})
+      } else {
+        video.pause()
+        setPlaying(false)
+      }
+    })
+    io.observe(card)
+    return () => io.disconnect()
+  }, [item.type, hasMedia])
+
+  const togglePlay = () => {
+    const video = videoRef.current
+    if (!video) return
+    if (video.paused) {
+      userPausedRef.current = false
+      video.play().then(() => setPlaying(true)).catch(() => {})
+    } else {
+      userPausedRef.current = true
+      video.pause()
+      setPlaying(false)
+    }
+  }
+
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
@@ -116,11 +163,10 @@ function MediaCard({ item, index }: { item: MediaItem; index: number }) {
           <video
             ref={videoRef}
             src={item.src}
-            autoPlay
             muted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
             onError={() => setFailed(true)}
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
@@ -152,7 +198,7 @@ function MediaCard({ item, index }: { item: MediaItem; index: number }) {
         </div>
       )}
 
-      {item.type === 'video' && hasMedia && <PlayBadge />}
+      {item.type === 'video' && hasMedia && <PlayPauseButton playing={playing} onToggle={togglePlay} />}
 
       {/* Gradient for caption legibility */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
