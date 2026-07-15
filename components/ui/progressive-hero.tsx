@@ -86,7 +86,7 @@ function WeThinkHero() {
   };
 
   return (
-    <div className="relative w-full min-h-screen font-sans overflow-hidden" style={{ background: '#050310' }}>
+    <div id="home" className="relative w-full min-h-screen font-sans overflow-hidden" style={{ background: '#050310' }}>
       {/* Dotted surface background */}
       <DottedSurface className="z-0" />
 

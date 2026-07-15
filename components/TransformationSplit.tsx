@@ -145,7 +145,7 @@ function AfterPanel() {
       <ul className="mt-6 space-y-2 text-left">
         {[
           '24×7 NOC & SOC monitoring',
-          'ISO 27001 + UAE Gov compliant',
+          'ISO 27001-aligned + UAE Gov compliant',
           'Multi-cloud infrastructure',
           'Automated disaster recovery',
         ].map(item => (

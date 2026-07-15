@@ -182,7 +182,7 @@ export default function OurStory() {
         </div>
         <hr className="my-[2vw] border-t border-white/30" />
         <p className="max-w-[50ch] text-[clamp(1rem,2.5vw,2rem)] font-normal leading-relaxed opacity-90">
-          Five years. Thousands of projects. One consistent outcome — businesses that outperform their
+          Since 2019 — thousands of projects. One consistent outcome — businesses that outperform their
           competition because their technology finally works for them.
         </p>
         <hr className="my-[2vw] border-t border-white/30" />

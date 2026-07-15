@@ -24,14 +24,14 @@ export default function WhatsAppButton() {
             className="glass rounded-xl px-4 py-2.5 text-sm font-medium text-white whitespace-nowrap shadow-xl"
           >
             Chat on WhatsApp
-            <span className="text-text-muted ml-1 text-xs">+971 50 312 8823</span>
+            <span className="text-text-muted ml-1 text-xs">+971 50 312 5078</span>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Button */}
       <motion.a
-        href="https://wa.me/971503128823"
+        href="https://wa.me/971503125078"
         target="_blank"
         rel="noreferrer"
         whileHover={{ scale: 1.06 }}

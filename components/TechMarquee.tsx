@@ -2,7 +2,7 @@
 
 const ROW1 = [
   'AWS', 'Microsoft Azure', 'Google Cloud Platform', 'React & Next.js',
-  'Node.js', 'ISO 27001 Certified', 'DevOps & CI/CD', 'Kubernetes',
+  'Node.js', 'ISO 27001 Ready', 'DevOps & CI/CD', 'Kubernetes',
 ]
 
 const ROW2 = [

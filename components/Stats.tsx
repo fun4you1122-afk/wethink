@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 const stats = [
-  { value: 5, suffix: '+', label: 'Years of Excellence', desc: 'Serving clients since 2019' },
+  { value: new Date().getFullYear() - 2019, suffix: '+', label: 'Years of Excellence', desc: 'Serving clients since 2019' },
   { value: 5000, suffix: '+', label: 'Projects Delivered', desc: 'Across UAE & MENA' },
   { value: 1000, suffix: '+', label: 'Happy Clients', desc: 'From startups to enterprise' },
   { value: 8, suffix: '', label: 'Core Services', desc: 'End-to-end digital solutions' },

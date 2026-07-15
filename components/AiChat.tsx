@@ -24,7 +24,7 @@ const RESPONSES: { patterns: RegExp[]; reply: string }[] = [
   {
     patterns: [/about|who are|wethink|founded|history/i],
     reply:
-      "WeThink is an Abu Dhabi-based IT consulting firm founded in **2019** by Rasha Aljalam.\n\nWe've delivered **100+ projects** for **50+ clients** — from government entities and financial institutions to fast-growing startups — across digital transformation, cloud, cybersecurity, and custom software.",
+      "WeThink is an Abu Dhabi-based IT consulting firm founded in **2019** by Rasha Aljalam.\n\nWe've delivered **5,000+ projects** for **1,000+ clients** — from government entities and financial institutions to fast-growing startups — across digital transformation, cloud, cybersecurity, and custom software.",
   },
   {
     patterns: [/price|cost|pricing|quote|budget|fee|rate/i],
