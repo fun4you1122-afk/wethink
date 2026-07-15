@@ -67,6 +67,7 @@ const Gallery4 = ({
             <Button
               size="icon"
               variant="outline"
+              aria-label="Previous case study"
               onClick={() => carouselApi?.scrollPrev()}
               disabled={!canScrollPrev}
               className="h-11 w-11 rounded-full border-violet-500/30 bg-transparent hover:bg-violet-500/10 disabled:opacity-30 text-violet-300"
@@ -76,6 +77,7 @@ const Gallery4 = ({
             <Button
               size="icon"
               variant="outline"
+              aria-label="Next case study"
               onClick={() => carouselApi?.scrollNext()}
               disabled={!canScrollNext}
               className="h-11 w-11 rounded-full border-violet-500/30 bg-transparent hover:bg-violet-500/10 disabled:opacity-30 text-violet-300"
@@ -159,6 +161,7 @@ const Gallery4 = ({
           <Button
             size="icon"
             variant="outline"
+            aria-label="Previous case study"
             onClick={() => carouselApi?.scrollPrev()}
             disabled={!canScrollPrev}
             className="h-10 w-10 rounded-full border-violet-500/30 bg-transparent hover:bg-violet-500/10 disabled:opacity-30 text-violet-300"
@@ -168,6 +171,7 @@ const Gallery4 = ({
           <Button
             size="icon"
             variant="outline"
+            aria-label="Next case study"
             onClick={() => carouselApi?.scrollNext()}
             disabled={!canScrollNext}
             className="h-10 w-10 rounded-full border-violet-500/30 bg-transparent hover:bg-violet-500/10 disabled:opacity-30 text-violet-300"

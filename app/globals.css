@@ -254,7 +254,7 @@ p { text-wrap: pretty; }
   outline: none;
   cursor: text;
 }
-.input-field::placeholder { color: #3A3A5A; }
+.input-field::placeholder { color: #8B8BAA; }
 .input-field:focus {
   border-color: var(--primary-light);
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
@@ -652,7 +652,7 @@ body {
   cursor: text;
   box-shadow: none;
 }
-.input-field::placeholder { color: #4A4A6A; }
+.input-field::placeholder { color: #8B8BAA; }
 .input-field:focus {
   border-color: var(--primary-light);
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);

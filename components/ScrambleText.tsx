@@ -30,11 +30,13 @@ export default function ScrambleText({
     done.current = true
 
     const text = children
+    let chaosId: ReturnType<typeof setInterval> | undefined
+    let resolveId: ReturnType<typeof setInterval> | undefined
 
     const run = () => {
       // Phase 1 — scramble everything (8 chaotic frames)
       let chaos = 0
-      const chaosId = setInterval(() => {
+      chaosId = setInterval(() => {
         setOutput(text.split('').map(ch => (ch === ' ' ? ' ' : rnd())).join(''))
         chaos++
         if (chaos >= 8) {
@@ -43,7 +45,7 @@ export default function ScrambleText({
           // Phase 2 — resolve each character left-to-right
           let frame = 0
           const framesPerChar = 5
-          const resolveId = setInterval(() => {
+          resolveId = setInterval(() => {
             const resolved = Math.floor(frame / framesPerChar)
             setOutput(
               text.split('').map((ch, i) => {
@@ -63,7 +65,11 @@ export default function ScrambleText({
     }
 
     const t = setTimeout(run, delay)
-    return () => clearTimeout(t)
+    return () => {
+      clearTimeout(t)
+      if (chaosId) clearInterval(chaosId)
+      if (resolveId) clearInterval(resolveId)
+    }
   }, [inView])
 
   return (

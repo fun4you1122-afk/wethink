@@ -187,8 +187,8 @@ export default function AiChat() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.95 }}
             transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="fixed bottom-40 right-4 md:right-6 z-[998] w-[340px] md:w-[380px] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-violet-500/20"
-            style={{ height: '520px', background: 'var(--surface)', border: '1px solid rgba(167,139,250,0.2)' }}
+            className="fixed bottom-24 md:bottom-40 right-4 md:right-6 z-[998] w-[340px] md:w-[380px] flex flex-col rounded-2xl overflow-hidden shadow-2xl shadow-violet-500/20"
+            style={{ height: 'min(520px, calc(100dvh - 120px))', background: 'var(--surface)', border: '1px solid rgba(167,139,250,0.2)' }}
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-violet-100 flex-shrink-0"
@@ -206,11 +206,11 @@ export default function AiChat() {
                 </div>
               </div>
               <div className="flex items-center gap-1">
-                <button onClick={reset} title="Reset chat"
+                <button onClick={reset} title="Reset chat" aria-label="Reset chat"
                   className="w-7 h-7 rounded-full hover:bg-white/15 flex items-center justify-center transition-colors">
                   <RotateCcw size={13} className="text-white/70" />
                 </button>
-                <button onClick={() => setOpen(false)}
+                <button onClick={() => setOpen(false)} aria-label="Close chat"
                   className="w-7 h-7 rounded-full hover:bg-white/15 flex items-center justify-center transition-colors">
                   <X size={15} className="text-white" />
                 </button>

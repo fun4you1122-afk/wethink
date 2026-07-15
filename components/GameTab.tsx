@@ -105,7 +105,7 @@ export default function GameTab() {
               exit={{ scale: 0.92, y: 20, opacity: 0 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-3xl rounded-3xl p-5 md:p-6"
+              className="relative w-full max-w-3xl rounded-3xl p-5 md:p-6 max-h-[92dvh] overflow-y-auto"
               style={{
                 background: 'linear-gradient(180deg, #0D0820, #050508)',
                 border: '1px solid rgba(124,58,237,0.25)',

@@ -122,8 +122,8 @@ function ProjectCard({
             {project.category}
           </span>
 
-          {/* Stat — appears on hover */}
-          <div className="opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-400 text-right">
+          {/* Stat — appears on hover (always visible on touch devices) */}
+          <div className="opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-400 text-right [@media(hover:none)]:opacity-100 [@media(hover:none)]:translate-y-0">
             <div className="text-2xl font-black text-white leading-none">{project.stat}</div>
             <div className="text-[10px] text-white/60 mt-0.5">{project.statLabel}</div>
           </div>
@@ -139,8 +139,8 @@ function ProjectCard({
             {project.title}
           </h3>
 
-          {/* Description + tags slide in on hover */}
-          <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500">
+          {/* Description + tags slide in on hover (expanded on touch devices) */}
+          <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 [@media(hover:none)]:grid-rows-[1fr]">
             <div className="overflow-hidden">
               <p className="text-white/75 text-sm leading-relaxed pt-2 pb-3">
                 {project.desc}

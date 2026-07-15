@@ -26,9 +26,12 @@ export default function CinematicScene() {
 
     let animId: number
     let disposed = false
+    let cancelled = false
 
     async function setup() {
       const THREE = await import('three')
+      // Component unmounted while three.js was loading — skip scene creation
+      if (cancelled) return undefined
 
       const canvas  = canvasRef.current!
       const section = sectionRef.current!
@@ -296,8 +299,15 @@ export default function CinematicScene() {
     }
 
     let cleanupFn: (() => void) | undefined
-    setup().then(fn => { cleanupFn = fn })
-    return () => cleanupFn?.()
+    setup().then(fn => {
+      cleanupFn = fn
+      // Effect already tore down while setup was in flight — dispose immediately
+      if (cancelled) cleanupFn?.()
+    })
+    return () => {
+      cancelled = true
+      cleanupFn?.()
+    }
   }, [])
 
   return (
