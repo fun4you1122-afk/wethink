@@ -87,7 +87,7 @@ function ProjectCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.7, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className={`group relative overflow-hidden rounded-2xl ${featured ? 'min-h-[420px]' : 'min-h-[280px]'}`}
+      className={`group relative overflow-hidden rounded-2xl ${featured ? 'min-h-[420px] h-full' : 'min-h-[280px] flex-1'}`}
     >
       {/* Background image */}
       <img
@@ -203,16 +203,16 @@ export default function Projects() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mt-4 text-text-muted text-lg max-w-2xl mx-auto"
           >
-            A selection of transformative engagements across government, finance, education, and enterprise sectors across the UAE and Gulf region.
+            Launches and transformations we've delivered side-by-side with founders and growing businesses across the UAE and the Gulf.
           </motion.p>
         </div>
 
         {/* Row 1: featured (2 cols) + 2 stacked (1 col) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
-          <div className="md:col-span-2">
+          <div className="md:col-span-2 h-full">
             <ProjectCard project={projects[0]} index={0} featured />
           </div>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-5 h-full">
             <ProjectCard project={projects[1]} index={1} />
             <ProjectCard project={projects[2]} index={2} />
           </div>
