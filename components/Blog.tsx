@@ -115,7 +115,7 @@ function ArticleModal({ post, onClose }: { post: typeof posts[0]; onClose: () =>
           {/* CTA */}
           <div className="mt-8 pt-6 border-t border-violet-500/20 flex items-center justify-between">
             <button
-              onClick={() => { onClose(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}
+              onClick={() => { onClose(); (document.querySelector('#contact') ? document.querySelector('#contact')!.scrollIntoView({ behavior: 'smooth' }) : window.location.assign('/#contact')); }}
               className="btn-primary text-sm"
             >
               Discuss This With Us

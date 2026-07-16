@@ -107,7 +107,7 @@ function WeThinkHero() {
               variant="secondary"
               size="sm"
               className="gap-3 shadow-md shadow-violet-900/40"
-              onClick={() => scrollTo("#services")}
+              onClick={() => window.location.assign("/services")}
             >
               Abu Dhabi, UAE — Est. 2019 <MoveRight className="w-4 h-4" />
             </Button>

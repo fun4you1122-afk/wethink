@@ -1,22 +1,24 @@
 'use client'
 
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Logo from './Logo'
 
 const footerLinks = {
   Company: [
-    { label: 'About Us', href: '#about' },
-    { label: 'Our Services', href: '#services' },
-    { label: 'Blog', href: '#blog' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Our Services', href: '/services' },
+    { label: 'Our Work', href: '/work' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'Contact', href: '/#contact' },
   ],
   Services: [
-    { label: 'Digital Transformation', href: '#services' },
-    { label: 'Cloud Services', href: '#services' },
-    { label: 'Cybersecurity', href: '#services' },
-    { label: 'Data Analytics', href: '#services' },
-    { label: 'Custom Software', href: '#services' },
-    { label: 'IT Consulting', href: '#services' },
+    { label: 'Digital Transformation', href: '/services' },
+    { label: 'Cloud Services', href: '/services' },
+    { label: 'Cybersecurity', href: '/services' },
+    { label: 'Data Analytics', href: '/services' },
+    { label: 'Custom Software', href: '/services' },
+    { label: 'IT Consulting', href: '/services' },
   ],
   Legal: [
     { label: 'Privacy Policy', href: '#' },
@@ -49,9 +51,13 @@ const socials = [
 ]
 
 export default function Footer() {
-  const scrollTo = (href: string) => {
-    if (href === '#') return
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+  const goToContact = () => {
+    const el = document.querySelector('#contact')
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      window.location.assign('/#contact')
+    }
   }
 
   return (
@@ -67,9 +73,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-14">
           {/* Brand column */}
           <div className="lg:col-span-2">
-            <button onClick={() => scrollTo('#home')}>
+            <Link href="/">
               <Logo size="md" />
-            </button>
+            </Link>
             <p className="mt-5 text-text-muted text-sm leading-relaxed max-w-xs">
               Transforming ideas into impactful realities through digital innovation, strategic consulting,
               and world-class IT solutions — from Abu Dhabi to the world.
@@ -101,12 +107,16 @@ export default function Footer() {
               <ul className="flex flex-col gap-3">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <button
-                      onClick={() => scrollTo(link.href)}
-                      className="text-text-muted text-sm hover:text-violet-400 transition-colors text-left"
-                    >
-                      {link.label}
-                    </button>
+                    {link.href === '#' ? (
+                      <span className="text-text-muted/50 text-sm cursor-default">{link.label}</span>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className="text-text-muted text-sm hover:text-violet-400 transition-colors text-left"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -127,7 +137,7 @@ export default function Footer() {
             <p className="text-text-muted text-sm">Let&apos;s start the conversation today.</p>
           </div>
           <button
-            onClick={() => scrollTo('#contact')}
+            onClick={goToContact}
             className="btn-primary flex-shrink-0"
           >
             Get Started

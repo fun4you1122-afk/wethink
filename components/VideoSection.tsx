@@ -96,7 +96,7 @@ export default function VideoSection() {
           className="text-center mt-10"
         >
           <button
-            onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => (document.querySelector('#contact') ? document.querySelector('#contact')!.scrollIntoView({ behavior: 'smooth' }) : window.location.assign('/#contact'))}
             className="btn-primary"
           >
             Ready to Transform?

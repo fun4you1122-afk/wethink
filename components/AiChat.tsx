@@ -14,7 +14,7 @@ const RESPONSES: { patterns: RegExp[]; reply: string }[] = [
   {
     patterns: [/contact|reach|email|phone|call|whatsapp/i],
     reply:
-      'You can reach us through:\n\n📧 **info@wethink.ae**\n📞 **+971 50 312 5078**\n💬 WhatsApp (same number)\n📍 Pixel, Al Reem Island, Abu Dhabi\n\nOr scroll down to our **Contact section** — we reply within 24 hours.',
+      'You can reach us through:\n\n📧 **info@wethink.ae**\n📞 **+971 50 312 5078**\n💬 WhatsApp (same number)\n📍 Pixel, Al Reem Island, Abu Dhabi\n\nOr use the **Contact section** on our home page — we reply within 24 hours.',
   },
   {
     patterns: [/location|where|address|abu dhabi|uae/i],
@@ -29,7 +29,7 @@ const RESPONSES: { patterns: RegExp[]; reply: string }[] = [
   {
     patterns: [/price|cost|pricing|quote|budget|fee|rate/i],
     reply:
-      "Our pricing depends on project scope, timeline, and engagement type (advisory, delivery, or managed services).\n\nThe best next step is a **free consultation call** — no commitment required. You can:\n\n• Fill out our **Contact form** below\n• Email **info@wethink.ae**\n• WhatsApp **+971 50 312 5078**",
+      "Our pricing depends on project scope, timeline, and engagement type (advisory, delivery, or managed services).\n\nThe best next step is a **free consultation call** — no commitment required. You can:\n\n• Fill out the **Contact form** on our home page\n• Email **info@wethink.ae**\n• WhatsApp **+971 50 312 5078**",
   },
   {
     patterns: [/cloud|aws|azure|gcp|migration/i],
@@ -49,7 +49,7 @@ const RESPONSES: { patterns: RegExp[]; reply: string }[] = [
   {
     patterns: [/ai|artificial intelligence|machine learning|data analytic/i],
     reply:
-      "Great question — AI is a growing focus for us!\n\nWe build **AI-powered solutions** including:\n• Intelligent dashboards and BI platforms\n• ML-driven matching and recommendation engines\n• Automated workflow and onboarding systems\n• Predictive analytics for business decisions\n\nYou can also try our **Live AI Analytics Demo** on this page — pick a dataset and ask a question in plain English!",
+      "Great question — AI is a growing focus for us!\n\nWe build **AI-powered solutions** including:\n• Intelligent dashboards and BI platforms\n• ML-driven matching and recommendation engines\n• Automated workflow and onboarding systems\n• Predictive analytics for business decisions\n\nYou can also try our **Live AI Analytics Demo** on the Services page — pick a dataset and ask a question in plain English!",
   },
   {
     patterns: [/hello|hi|hey|good morning|good afternoon|salaam/i],
@@ -64,7 +64,7 @@ const RESPONSES: { patterns: RegExp[]; reply: string }[] = [
 ]
 
 const FALLBACK =
-  "Thanks for your message! I'm a demo assistant — for complex queries, our team is happy to help directly.\n\n📧 **info@wethink.ae**\n📞 **+971 50 312 5078**\n\nOr scroll down to our **Contact form** — we reply within 24 hours."
+  "Thanks for your message! I'm a demo assistant — for complex queries, our team is happy to help directly.\n\n📧 **info@wethink.ae**\n📞 **+971 50 312 5078**\n\nOr use the **Contact form** on our home page — we reply within 24 hours."
 
 function getResponse(input: string): string {
   for (const { patterns, reply } of RESPONSES) {

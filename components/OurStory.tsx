@@ -259,7 +259,7 @@ export default function OurStory() {
             href="#contact"
             onClick={(e) => {
               e.preventDefault();
-              document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+              (document.querySelector('#contact') ? document.querySelector('#contact')!.scrollIntoView({ behavior: 'smooth' }) : window.location.assign('/#contact'));
             }}
             className="inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-bold uppercase tracking-widest transition-all hover:opacity-90"
             style={{ backgroundColor: '#7C3AED', color: '#fff' }}

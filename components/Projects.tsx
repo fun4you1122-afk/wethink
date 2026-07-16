@@ -235,7 +235,7 @@ export default function Projects() {
         >
           <p className="text-text-muted mb-5 text-sm">Ready to add your project to this list?</p>
           <button
-            onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => (document.querySelector('#contact') ? document.querySelector('#contact')!.scrollIntoView({ behavior: 'smooth' }) : window.location.assign('/#contact'))}
             className="btn-primary"
           >
             Start Your Project

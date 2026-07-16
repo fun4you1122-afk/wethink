@@ -329,7 +329,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
 
           {/* CTA */}
           <motion.button
-            onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => (document.querySelector('#contact') ? document.querySelector('#contact')!.scrollIntoView({ behavior: 'smooth' }) : window.location.assign('/#contact'))}
             animate={hovered ? { x: 4 } : { x: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             className="flex items-center gap-1.5 text-sm font-semibold mt-1 w-fit"
