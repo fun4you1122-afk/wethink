@@ -51,7 +51,6 @@ export function Sparkles({ className, color = "#9333EA", density = 40 }: Sparkle
 
     return () => {
       cancelAnimationFrame(raf)
-      window.removeEventListener("resize", raf as unknown as EventListenerOrEventListenerObject)
       window.removeEventListener("resize", resize)
     }
   }, [color, density])

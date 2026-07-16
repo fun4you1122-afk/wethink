@@ -517,8 +517,8 @@ export default function IdeaToImpact() {
                             ))}
                           </div>
                           <div className="flex justify-between mt-1.5">
-                            {MONTHS.map((m) => (
-                              <span key={m} className="text-[9px] text-violet-400/50 flex-1 text-center">{m}</span>
+                            {MONTHS.map((m, mi) => (
+                              <span key={`${m}-${mi}`} className="text-[9px] text-violet-400/50 flex-1 text-center">{m}</span>
                             ))}
                           </div>
                         </div>
