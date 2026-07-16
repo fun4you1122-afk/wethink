@@ -1,6 +1,5 @@
 "use client";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Sparkles } from "@/components/ui/sparkles";
 import { VerticalCutReveal } from "@/components/ui/vertical-cut-reveal";
 import { cn } from "@/lib/utils";
 import NumberFlow from "@number-flow/react";
@@ -10,57 +9,54 @@ import { Check } from "lucide-react";
 
 const plans = [
   {
-    name: "Starter",
-    description: "Perfect for small and mid-sized UAE businesses ready to modernise their IT infrastructure.",
-    price: 2999,
-    yearlyPrice: 29999,
+    name: "Essentials",
+    description: "For small UAE businesses that need reliable IT support and a clear technology roadmap.",
+    price: 1499,
+    yearlyPrice: 14990,
     buttonText: "Get Started",
-    buttonVariant: "outline" as const,
     popular: false,
     includes: [
       "What's included:",
       "IT Helpdesk Support (8×5)",
-      "Network & Server Monitoring",
-      "Basic Cybersecurity Audit",
-      "Cloud Migration Assessment",
-      "Monthly Health Reports",
-      "Up to 25 Users",
+      "Network & Device Monitoring",
+      "Annual Cybersecurity Health Check",
+      "Cloud Readiness Assessment",
+      "Monthly Reports & Advisory Call",
+      "Up to 15 Users",
     ],
   },
   {
     name: "Growth",
-    description: "Comprehensive managed IT + cloud for scaling organisations that need strategic partnership.",
-    price: 7999,
-    yearlyPrice: 79999,
+    description: "Managed IT + cloud for scaling teams that want a hands-on technology partner.",
+    price: 4499,
+    yearlyPrice: 44990,
     buttonText: "Get Started",
-    buttonVariant: "default" as const,
     popular: true,
     includes: [
-      "Everything in Starter, plus:",
-      "24×7 NOC & SOC Monitoring",
-      "Cloud Architecture & Management",
-      "ISO 27001 Compliance Support",
-      "Custom Software Development",
-      "Dedicated Project Manager",
-      "Up to 100 Users",
+      "Everything in Essentials, plus:",
+      "24×7 Monitoring & Response",
+      "Cloud Architecture & Cost Optimisation",
+      "Security Hardening & Awareness Training",
+      "Quarterly Strategy Workshops",
+      "Dedicated Account Manager",
+      "Up to 60 Users",
     ],
   },
   {
     name: "Enterprise",
-    description: "Full-scale digital transformation and security for large enterprises and government entities.",
-    price: 18999,
-    yearlyPrice: 189999,
-    buttonText: "Contact Us",
-    buttonVariant: "outline" as const,
+    description: "Tailored transformation programmes for large organisations — scoped and priced per engagement.",
+    price: null,
+    yearlyPrice: null,
+    buttonText: "Request a Quote",
     popular: false,
     includes: [
       "Everything in Growth, plus:",
       "End-to-End Digital Transformation",
-      "AI & Data Analytics Platform",
-      "Multi-Site Infrastructure",
-      "NESA & UAE Gov Compliance",
+      "Custom Software & AI Solutions",
+      "ISO 27001 / NESA Compliance Programmes",
+      "Multi-Site & Hybrid Infrastructure",
       "Dedicated Engineering Team",
-      "Unlimited Users",
+      "Custom SLAs & User Count",
     ],
   },
 ];
@@ -71,7 +67,7 @@ const PricingSwitch = ({ onSwitch }: { onSwitch: (value: string) => void }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="relative z-10 mx-auto flex w-fit rounded-full bg-white/10 border border-violet-500/30 p-1 backdrop-blur-sm">
+      <div className="relative z-10 mx-auto flex w-fit rounded-full bg-white border border-teal-500/30 p-1 shadow-sm">
         {["Monthly", "Yearly"].map((label, i) => {
           const val = String(i);
           const active = selected === val;
@@ -81,19 +77,19 @@ const PricingSwitch = ({ onSwitch }: { onSwitch: (value: string) => void }) => {
               onClick={() => handleSwitch(val)}
               className={cn(
                 "relative z-10 h-10 rounded-full px-6 py-2 text-sm font-semibold transition-colors",
-                active ? "text-white" : "text-violet-300"
+                active ? "text-white" : "text-slate-500"
               )}
             >
               {active && (
                 <motion.span
                   layoutId="pricing-switch"
-                  className="absolute inset-0 rounded-full bg-gradient-to-t from-violet-600 to-violet-500 border border-violet-400 shadow-lg shadow-violet-900/50"
+                  className="absolute inset-0 rounded-full bg-gradient-to-r from-teal-500 to-violet-600 shadow-md shadow-teal-900/20"
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 />
               )}
               <span className="relative flex items-center gap-2">
                 {label}
-                {i === 1 && <span className="text-[10px] font-bold bg-emerald-500 text-white px-1.5 py-0.5 rounded-full">-17%</span>}
+                {i === 1 && <span className="text-[10px] font-bold bg-emerald-500 text-white px-1.5 py-0.5 rounded-full">2 months free</span>}
               </span>
             </button>
           );
@@ -111,30 +107,29 @@ const fadeUp = {
   }),
 };
 
+const goToContact = () => {
+  const el = document.querySelector('#contact')
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' })
+  } else {
+    window.location.assign('/#contact')
+  }
+}
+
 export default function PricingSection() {
   const [isYearly, setIsYearly] = useState(false);
   const togglePricing = (v: string) => setIsYearly(Number(v) === 1);
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-[#0D0616] py-24">
-      {/* Sparkle layer */}
-      <Sparkles
-        density={60}
-        color="#9333EA"
-        className="absolute inset-0 h-full w-full [mask-image:radial-gradient(60%_60%,white,transparent_85%)]"
-      />
-
-      {/* Violet glow blob */}
+    <section className="relative overflow-hidden py-24" style={{ background: 'var(--bg)' }}>
+      {/* Soft brand glows */}
       <div
         className="pointer-events-none absolute left-[10%] right-[10%] top-[-10%] w-[80%] h-[80%]"
         style={{
-          background: "radial-gradient(circle at center, #7C3AED 0%, transparent 65%)",
-          opacity: 0.25,
+          background: "radial-gradient(circle at center, rgba(20,184,166,0.14) 0%, transparent 65%)",
         }}
       />
-
-      {/* Grid overlay */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:60px_60px]" />
+      <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         {/* Header */}
@@ -144,12 +139,12 @@ export default function PricingSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-300 text-xs font-semibold uppercase tracking-widest"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-teal-500/30 bg-teal-500/10 text-teal-700 text-xs font-semibold uppercase tracking-widest"
           >
             Transparent Pricing · AED
           </motion.div>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-white">
+          <h2 className="text-4xl md:text-5xl font-bold" style={{ color: 'var(--text)' }}>
             <VerticalCutReveal
               splitBy="words"
               staggerDuration={0.12}
@@ -167,10 +162,11 @@ export default function PricingSection() {
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeUp}
-            className="text-violet-200/70 max-w-xl mx-auto"
+            className="max-w-xl mx-auto"
+            style={{ color: 'var(--text-muted)' }}
           >
-            No hidden fees. All prices in AED. Cancel anytime.
-            Enterprise contracts available with custom SLAs.
+            Monthly retainers with no hidden fees — cancel anytime.
+            Most engagements are also available as fixed-scope projects.
           </motion.p>
 
           <motion.div
@@ -197,62 +193,71 @@ export default function PricingSection() {
             >
               <Card
                 className={cn(
-                  "relative h-full border text-white overflow-hidden",
+                  "relative h-full overflow-hidden bg-white",
                   plan.popular
-                    ? "border-violet-500/60 bg-gradient-to-b from-violet-950/80 to-[#0D0616] shadow-[0px_-8px_200px_0px_rgba(124,58,237,0.35)]"
-                    : "border-white/10 bg-gradient-to-b from-white/5 to-transparent"
+                    ? "border-2 border-teal-500/50 shadow-[0px_16px_60px_rgba(20,184,166,0.18)]"
+                    : "border border-slate-200 shadow-sm"
                 )}
               >
                 {plan.popular && (
-                  <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-violet-500 to-transparent" />
+                  <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-teal-400 via-teal-500 to-violet-600" />
                 )}
                 {plan.popular && (
-                  <div className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-widest bg-violet-500 text-white px-2.5 py-1 rounded-full">
+                  <div className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-widest bg-gradient-to-r from-teal-500 to-violet-600 text-white px-2.5 py-1 rounded-full">
                     Most Popular
                   </div>
                 )}
 
                 <CardHeader className="text-left pb-4">
-                  <h3 className="text-2xl font-bold mb-1">{plan.name}</h3>
+                  <h3 className="text-2xl font-bold mb-1" style={{ color: 'var(--text)' }}>{plan.name}</h3>
                   <div className="flex items-baseline gap-1 mt-2">
-                    <span className="text-sm font-semibold text-violet-300">AED</span>
-                    <NumberFlow
-                      value={isYearly ? plan.yearlyPrice : plan.price}
-                      className="text-4xl font-black text-white"
-                      format={{ useGrouping: true }}
-                    />
-                    <span className="text-violet-300/70 text-sm ml-1">
-                      /{isYearly ? "year" : "month"}
-                    </span>
+                    {plan.price === null ? (
+                      <span className="text-4xl font-black" style={{ color: 'var(--text)' }}>Custom</span>
+                    ) : (
+                      <>
+                        <span className="text-sm font-semibold text-teal-700">AED</span>
+                        <NumberFlow
+                          value={isYearly ? plan.yearlyPrice! : plan.price}
+                          className="text-4xl font-black"
+                          style={{ color: 'var(--text)' }}
+                          format={{ useGrouping: true }}
+                        />
+                        <span className="text-sm ml-1" style={{ color: 'var(--text-muted)' }}>
+                          /{isYearly ? "year" : "month"}
+                        </span>
+                      </>
+                    )}
                   </div>
-                  {isYearly && (
-                    <p className="text-xs text-emerald-400 mt-1">
-                      Save AED {(plan.price * 12 - plan.yearlyPrice).toLocaleString()} vs monthly
+                  {isYearly && plan.price !== null && (
+                    <p className="text-xs text-emerald-600 mt-1">
+                      Save AED {(plan.price * 12 - plan.yearlyPrice!).toLocaleString()} vs monthly
                     </p>
                   )}
-                  <p className="text-sm text-violet-200/60 mt-3 leading-relaxed">{plan.description}</p>
+                  <p className="text-sm mt-3 leading-relaxed" style={{ color: 'var(--text-muted)' }}>{plan.description}</p>
                 </CardHeader>
 
                 <CardContent className="pt-0">
                   <button
+                    onClick={goToContact}
                     className={cn(
                       "w-full mb-6 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-200",
                       plan.popular
-                        ? "bg-gradient-to-b from-violet-500 to-violet-700 text-white border border-violet-400 shadow-lg shadow-violet-900/50 hover:from-violet-400 hover:to-violet-600"
-                        : "bg-white/5 border border-white/15 text-white hover:bg-white/10"
+                        ? "bg-gradient-to-r from-teal-500 to-violet-600 text-white shadow-md shadow-teal-900/20 hover:opacity-90"
+                        : "bg-white border border-slate-300 hover:border-teal-500/60 hover:bg-teal-50/50"
                     )}
+                    style={plan.popular ? undefined : { color: 'var(--text)' }}
                   >
                     {plan.buttonText}
                   </button>
 
-                  <div className="border-t border-white/10 pt-5 space-y-3">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-violet-300/70">
+                  <div className="border-t border-slate-200 pt-5 space-y-3">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-teal-700">
                       {plan.includes[0]}
                     </p>
                     <ul className="space-y-2.5">
                       {plan.includes.slice(1).map((feature, fi) => (
-                        <li key={fi} className="flex items-start gap-2.5 text-sm text-violet-100/80">
-                          <Check size={14} className="mt-0.5 shrink-0 text-violet-400" />
+                        <li key={fi} className="flex items-start gap-2.5 text-sm" style={{ color: 'var(--text-muted)' }}>
+                          <Check size={14} className="mt-0.5 shrink-0 text-teal-600" />
                           {feature}
                         </li>
                       ))}
@@ -271,7 +276,8 @@ export default function PricingSection() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeUp}
-          className="text-center text-xs text-violet-300/40 mt-10"
+          className="text-center text-xs mt-10"
+          style={{ color: 'var(--text-muted)' }}
         >
           All prices exclusive of VAT (5%). Custom enterprise contracts available — contact us for a tailored quote.
         </motion.p>

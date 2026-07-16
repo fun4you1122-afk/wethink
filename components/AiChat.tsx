@@ -39,12 +39,12 @@ const RESPONSES: { patterns: RegExp[]; reply: string }[] = [
   {
     patterns: [/security|cyber|iso|compliance|soc|zero trust/i],
     reply:
-      "Our Cybersecurity practice includes:\n\n🛡️ Zero-Trust network architecture\n🔍 Penetration testing & vulnerability assessment\n📋 ISO 27001 & NESA compliance programmes\n👁️ 24/7 SOC monitoring\n\nWe helped an ADNOC supplier achieve **ISO 27001 certification in 9 months**.",
+      "Our Cybersecurity practice includes:\n\n🛡️ Zero-Trust network architecture\n🔍 Penetration testing & vulnerability assessment\n📋 ISO 27001 & NESA compliance programmes\n👁️ 24/7 SOC monitoring\n\nWe build **ISO 27001 and NESA-aligned** security programmes for UAE businesses of every size.",
   },
   {
     patterns: [/project|case study|portfolio|work|achieve/i],
     reply:
-      'Recent highlights from our project portfolio:\n\n🏛️ **National Digital Identity Platform** — UAE Government, 12 federal services integrated\n🏦 **Core Banking Modernisation** — Abu Dhabi FI, 45% cost reduction\n🎓 **Smart Campus System** — 18,000 daily users across 3 campuses\n📊 **Retail Analytics Dashboard** — 80+ stores, real-time BI\n🔒 **Zero-Trust Framework** — ISO 27001 in 9 months\n🤖 **AI HR Platform** — 5,000 users in 6 months',
+      'Recent highlights from our project portfolio:\n\n💳 **Nexa Pay** — payments app, idea to pilot in 8 weeks\n🚚 **CargoFlow** — shipment tracking SaaS, 40% less manual dispatch\n✨ **Lumora** — D2C skincare launch, 3× launch-month ROAS\n⌚ **Pulse Loop** — wellness app MVP in 12 weeks\n🏠 **Masakin (مساكن)** — bilingual property portal, 2.5K monthly leads\n🧒 **KidiVerse** — kids-safe streaming with full parental controls\n\nSee them all on our **Our Work** page!',
   },
   {
     patterns: [/ai|artificial intelligence|machine learning|data analytic/i],

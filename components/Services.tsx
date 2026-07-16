@@ -99,7 +99,7 @@ const services = [
     title: 'Cybersecurity',
     description: 'Comprehensive security assessments, threat monitoring, and compliance frameworks that protect your critical assets.',
     color: '#EF4444',
-    stat: 'ISO 27001 in 9 months',
+    stat: 'ISO 27001-aligned programmes',
     tags: ['Zero Trust', 'SOC 24/7', 'NESA'],
     featured: true,
   },
@@ -115,7 +115,7 @@ const services = [
     title: 'Custom Software Dev',
     description: 'Bespoke web, mobile, and enterprise applications engineered from the ground up for your unique requirements.',
     color: '#059669',
-    stat: '5K users in 6 months',
+    stat: 'MVPs in 8–12 weeks',
     tags: ['React', 'Node.js', 'Mobile', 'AI/ML'],
     featured: false,
   },
@@ -131,7 +131,7 @@ const services = [
     title: 'Data Analytics',
     description: 'Transform raw data into actionable intelligence — dashboards, predictive models, and BI platforms built to drive decisions.',
     color: '#F59E0B',
-    stat: '80+ stores connected',
+    stat: 'Real-time dashboards',
     tags: ['Power BI', 'ML Models', 'Data Warehouse'],
     featured: false,
   },
@@ -203,8 +203,10 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
           className="absolute inset-0"
           style={{
             background: isFeatured
-              ? `linear-gradient(145deg, #0A0015 0%, ${service.color}CC 100%)`
-              : '#0D0D18',
+              ? `linear-gradient(145deg, ${service.color} 0%, ${service.color}B8 100%)`
+              : '#FFFFFF',
+            border: isFeatured ? 'none' : '1px solid rgba(16,35,46,0.08)',
+            borderRadius: 'inherit',
           }}
         />
 

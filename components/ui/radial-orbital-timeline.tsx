@@ -222,7 +222,7 @@ export default function RadialOrbitalTimeline({ timelineData }: RadialOrbitalTim
 
                 {/* Label */}
                 <div
-                  className={`absolute top-12 whitespace-nowrap text-xs font-semibold tracking-wider transition-colors duration-300 ${isExpanded ? "text-violet-400" : "text-violet-200/70"}`}
+                  className={`absolute top-12 whitespace-nowrap text-xs font-semibold tracking-wider transition-colors duration-300 ${isExpanded ? "text-violet-700" : "text-slate-600"}`}
                 >
                   {item.title}
                 </div>
