@@ -64,7 +64,7 @@ export default function Navbar() {
         >
           <div className={`flex items-center justify-between px-5 transition-all duration-500 ${
             scrolled
-              ? 'rounded-2xl glass py-3 shadow-2xl shadow-black/40'
+              ? 'rounded-2xl glass py-3 shadow-xl shadow-teal-900/10'
               : 'rounded-2xl py-4 bg-transparent'
           }`}>
             {/* Logo */}
@@ -82,7 +82,7 @@ export default function Navbar() {
                     href={link.href}
                     className="relative px-3.5 py-2 text-sm font-medium rounded-xl transition-all duration-300"
                     style={{
-                      color: isActive ? '#A78BFA' : 'var(--text-muted)',
+                      color: isActive ? '#7C3AED' : 'var(--text-muted)',
                       background: isActive ? 'rgba(124,58,237,0.1)' : 'transparent',
                     }}
                   >
@@ -90,7 +90,7 @@ export default function Navbar() {
                     {isActive && (
                       <motion.span
                         layoutId="nav-indicator"
-                        className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-violet-400"
+                        className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-violet-600"
                       />
                     )}
                   </Link>
@@ -122,17 +122,17 @@ export default function Navbar() {
               <motion.span
                 animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 0 : -5 }}
                 transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
-                className="absolute block w-5 h-px bg-violet-200 origin-center"
+                className="absolute block w-5 h-px bg-slate-800 origin-center"
               />
               <motion.span
                 animate={{ opacity: menuOpen ? 0 : 1, scaleX: menuOpen ? 0 : 1 }}
                 transition={{ duration: 0.2 }}
-                className="absolute block w-5 h-px bg-violet-200 origin-center"
+                className="absolute block w-5 h-px bg-slate-800 origin-center"
               />
               <motion.span
                 animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? 0 : 5 }}
                 transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
-                className="absolute block w-5 h-px bg-violet-200 origin-center"
+                className="absolute block w-5 h-px bg-slate-800 origin-center"
               />
             </button>
           </div>
@@ -148,7 +148,7 @@ export default function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-[1001] flex flex-col items-center justify-center gap-6"
-            style={{ background: 'rgba(5,3,12,0.92)', backdropFilter: 'blur(24px)' }}
+            style={{ background: 'rgba(246,250,249,0.95)', backdropFilter: 'blur(24px)' }}
           >
             {navLinks.map((link, i) => (
               <div key={link.href} style={{ overflow: 'hidden' }}>
@@ -162,7 +162,7 @@ export default function Navbar() {
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
                     className="text-3xl font-bold hover:text-violet-400 transition-colors duration-300"
-                    style={{ color: pathname === link.href ? '#A78BFA' : 'var(--text)' }}
+                    style={{ color: pathname === link.href ? '#7C3AED' : 'var(--text)' }}
                   >
                     {link.label}
                   </Link>

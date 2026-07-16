@@ -109,7 +109,7 @@ export const TestimonialStack = ({ testimonials, visibleBehind = 2 }: Testimonia
         const tagClasses = (type: 'featured' | 'default') =>
           type === 'featured'
             ? 'bg-violet-500/20 text-violet-300 border border-violet-500/30'
-            : 'bg-white/5 text-white/60 border border-white/10';
+            : 'bg-black/5 text-[color:var(--text-muted)] border border-black/10';
 
         return (
           <div
@@ -131,8 +131,8 @@ export const TestimonialStack = ({ testimonials, visibleBehind = 2 }: Testimonia
                     {testimonial.initials}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg text-white">{testimonial.name}</h3>
-                    <p className="text-sm text-white/50 mt-0.5">{testimonial.role}</p>
+                    <h3 className="font-semibold text-lg" style={{ color: 'var(--text)' }}>{testimonial.name}</h3>
+                    <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>{testimonial.role}</p>
                   </div>
                 </div>
                 {/* Quote mark */}
@@ -142,7 +142,7 @@ export const TestimonialStack = ({ testimonials, visibleBehind = 2 }: Testimonia
               </div>
 
               {/* Quote */}
-              <blockquote className="text-white/85 leading-relaxed text-base md:text-lg mb-6">
+              <blockquote className="leading-relaxed text-base md:text-lg mb-6" style={{ color: 'var(--text)' }}>
                 "{testimonial.quote}"
               </blockquote>
 
@@ -155,7 +155,7 @@ export const TestimonialStack = ({ testimonials, visibleBehind = 2 }: Testimonia
                     </span>
                   ))}
                 </div>
-                <div className="flex items-center gap-4 text-xs text-white/40">
+                <div className="flex items-center gap-4 text-xs" style={{ color: 'var(--text-muted)' }}>
                   {testimonial.stats.map((stat, i) => {
                     const Icon = stat.icon;
                     return (

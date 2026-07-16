@@ -23,7 +23,7 @@ function LogoCard({ logo }: { logo: Logo }) {
   return (
     <div
       className="flex h-28 w-48 shrink-0 items-center justify-center overflow-hidden rounded-2xl border grayscale opacity-60 transition-[filter,opacity] duration-300 hover:grayscale-0 hover:opacity-100 [@media(hover:none)]:grayscale-0 [@media(hover:none)]:opacity-100"
-      style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(124,58,237,0.18)', willChange: 'filter' }}
+      style={{ background: '#FFFFFF', borderColor: 'rgba(20,184,166,0.22)', boxShadow: '0 2px 14px rgba(16,35,46,0.06)', willChange: 'filter' }}
     >
       {logo.image ? (
         <img

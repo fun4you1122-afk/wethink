@@ -34,7 +34,7 @@ function Row({ items, reverse = false }: { items: string[]; reverse?: boolean })
               borderRadius: 999,
               background: 'rgba(124,58,237,0.12)',
               border: '1px solid rgba(124,58,237,0.25)',
-              color: '#8B8BAA',
+              color: 'var(--text-muted)',
               fontSize: '0.78rem',
               fontWeight: 600,
               whiteSpace: 'nowrap',

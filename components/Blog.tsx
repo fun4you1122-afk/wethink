@@ -76,7 +76,7 @@ function ArticleModal({ post, onClose }: { post: typeof posts[0]; onClose: () =>
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 40, scale: 0.97 }}
         transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-[#0A0A14] border border-violet-500/20 rounded-3xl shadow-2xl"
+        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-white border border-teal-500/20 rounded-3xl shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top gradient bar */}
@@ -123,7 +123,7 @@ function ArticleModal({ post, onClose }: { post: typeof posts[0]; onClose: () =>
                 <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-            <button onClick={onClose} className="text-sm text-violet-300/60 hover:text-violet-200 transition-colors">
+            <button onClick={onClose} className="text-sm text-[color:var(--text-muted)] hover:text-violet-600 transition-colors">
               Close ✕
             </button>
           </div>

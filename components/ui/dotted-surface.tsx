@@ -38,8 +38,8 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
           0,
           iy * SEPARATION - (AMOUNTY * SEPARATION) / 2,
         )
-        // dark theme: light grey dots
-        colors.push(0.55, 0.45, 0.85)
+        // light theme: teal-violet dots
+        colors.push(0.12, 0.55, 0.52)
       }
     }
 
@@ -51,7 +51,7 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
       size: 6,
       vertexColors: true,
       transparent: true,
-      opacity: 0.55,
+      opacity: 0.35,
       sizeAttenuation: true,
     })
 

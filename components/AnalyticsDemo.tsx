@@ -327,7 +327,7 @@ export default function AnalyticsDemo() {
                     onChange={(e) => setQuestion(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && question.trim() && runAnalysis(question)}
                     placeholder="Or type your own question…"
-                    className="flex-1 px-4 py-3 rounded-xl text-sm border border-violet-500/30 focus:border-violet-400 focus:outline-none bg-[#0A0A14] transition-colors"
+                    className="flex-1 px-4 py-3 rounded-xl text-sm border border-teal-500/30 focus:border-teal-500 focus:outline-none bg-white transition-colors"
                     style={{ color: 'var(--text)' }}
                   />
                   <button

@@ -141,7 +141,7 @@ export default function Contact() {
             className="lg:col-span-2 flex flex-col gap-6"
           >
             <div className="divider" />
-            <h3 className="text-2xl font-bold text-violet-50">Get in Touch</h3>
+            <h3 className="text-2xl font-bold" style={{ color: 'var(--text)' }}>Get in Touch</h3>
             <p className="text-text-muted leading-relaxed">
               Whether you&apos;re looking to modernise your infrastructure, secure your digital assets, or build
               a transformation roadmap — WeThink is ready.
@@ -165,7 +165,7 @@ export default function Contact() {
                   </span>
                   <div>
                     <p className="text-xs text-text-muted uppercase tracking-wider mb-0.5">{item.label}</p>
-                    <p className="text-violet-50 text-sm font-medium">{item.value}</p>
+                    <p className="text-sm font-medium" style={{ color: 'var(--text)' }}>{item.value}</p>
                   </div>
                 </motion.a>
               ))}
@@ -225,7 +225,7 @@ export default function Contact() {
                         <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </motion.div>
-                    <h3 className="text-2xl font-bold text-violet-50 mb-3">Message Sent!</h3>
+                    <h3 className="text-2xl font-bold mb-3" style={{ color: 'var(--text)' }}>Message Sent!</h3>
                     <p className="text-text-muted max-w-sm">
                       Thank you for reaching out. A member of the WeThink team will be in touch within one business day.
                     </p>
@@ -319,7 +319,7 @@ export default function Contact() {
                         >
                           <option value="">Select a service...</option>
                           {services.map((s) => (
-                            <option key={s} value={s} style={{ background: '#0A0A14', color: '#F0EFFF' }}>{s}</option>
+                            <option key={s} value={s} style={{ background: '#FFFFFF', color: '#10232E' }}>{s}</option>
                           ))}
                         </select>
                       </div>

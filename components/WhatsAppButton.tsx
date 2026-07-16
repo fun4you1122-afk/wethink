@@ -21,7 +21,7 @@ export default function WhatsAppButton() {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 10, scale: 0.95 }}
             transition={{ duration: 0.15 }}
-            className="glass rounded-xl px-4 py-2.5 text-sm font-medium text-white whitespace-nowrap shadow-xl"
+            className="glass rounded-xl px-4 py-2.5 text-sm font-medium whitespace-nowrap shadow-xl" style={{ color: 'var(--text)' }}
           >
             Chat on WhatsApp
             <span className="text-text-muted ml-1 text-xs">+971 50 312 5078</span>
