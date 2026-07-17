@@ -41,11 +41,30 @@ const MX = 0.6
 const CW = W - MX * 2
 
 // ── Helpers ─────────────────────────────────────────────────────────
-const grad = (from, to, angle = 90) => ({
-  type: 'grad',
-  stops: [{ position: 0, color: from }, { position: 100, color: to }],
-  angle,
-})
+// pptxgenjs has no gradient shape fills — paint gradients as solid segments
+const lerpHex = (a, b, t) => {
+  const pa = [0, 2, 4].map((i) => parseInt(a.slice(i, i + 2), 16))
+  const pb = [0, 2, 4].map((i) => parseInt(b.slice(i, i + 2), 16))
+  return pa.map((v, i) => Math.round(v + (pb[i] - v) * t).toString(16).padStart(2, '0')).join('').toUpperCase()
+}
+function gradBarH(s, x, y, w, h, from = C.teal, to = C.violet, steps = 28) {
+  const sw = w / steps
+  for (let i = 0; i < steps; i++) {
+    s.addShape(pptx.ShapeType.rect, {
+      x: x + sw * i, y, w: sw + 0.002, h,
+      fill: { color: lerpHex(from, to, i / (steps - 1)) },
+    })
+  }
+}
+function gradBarV(s, x, y, w, h, from = C.teal, to = C.violet, steps = 20) {
+  const sh = h / steps
+  for (let i = 0; i < steps; i++) {
+    s.addShape(pptx.ShapeType.rect, {
+      x, y: y + sh * i, w, h: sh + 0.002,
+      fill: { color: lerpHex(from, to, i / (steps - 1)) },
+    })
+  }
+}
 
 function lightBg(s) {
   s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: '100%', fill: { color: C.bgLight } })
@@ -54,7 +73,7 @@ function darkBg(s) {
   s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: '100%', fill: { color: C.dark } })
 }
 function brandBar(s) {
-  s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: 0.06, fill: grad(C.teal, C.violet, 0) })
+  gradBarH(s, 0, 0, W, 0.06)
 }
 function footer(s, page, onDark = false) {
   s.addText([
@@ -82,7 +101,7 @@ function sectionTitle(s, text, { x = MX, y = 0.5, onDark = false, size = 26 } = 
     x, y, w: CW, h: 0.6, fontSize: size, bold: true, fontFace: FONT,
     color: onDark ? C.white : C.ink,
   })
-  s.addShape(pptx.ShapeType.rect, { x: x + 0.02, y: y + 0.62, w: 0.55, h: 0.045, fill: grad(C.teal, C.violet, 0) })
+  gradBarH(s, x + 0.02, y + 0.62, 0.55, 0.045, C.teal, C.violet, 10)
 }
 function chip(s, text, x, y, w, { onDark = false, color = C.tealDark } = {}) {
   s.addShape(pptx.ShapeType.roundRect, {
@@ -107,7 +126,7 @@ function chip(s, text, x, y, w, { onDark = false, color = C.tealDark } = {}) {
   // scrim for legibility — stronger at the bottom where the title sits
   s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: '100%', fill: { color: C.dark2, transparency: 62 } })
   s.addShape(pptx.ShapeType.rect, { x: 0, y: 4.1, w: '100%', h: 3.4, fill: { color: C.dark2, transparency: 38 } })
-  s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: 0.09, fill: grad(C.teal, C.violet, 0) })
+  gradBarH(s, 0, 0, W, 0.09)
 
   logoBlock(s, MX, 0.45, 1.15, true)
 
@@ -116,7 +135,7 @@ function chip(s, text, x, y, w, { onDark = false, color = C.tealDark } = {}) {
   s.addText('Company\nProfile', {
     x: 1.35, y: 4.35, w: 7.5, h: 1.6, fontSize: 42, bold: true, fontFace: FONT, color: C.white, lineSpacing: 48,
   })
-  s.addShape(pptx.ShapeType.rect, { x: 1.38, y: 6.02, w: 0.14, h: 0.4, fill: grad(C.teal, C.violet, 90) })
+  gradBarV(s, 1.38, 6.02, 0.14, 0.4, C.teal, C.violet, 8)
   s.addText('Your Digital Transformation Partner', {
     x: 1.62, y: 5.98, w: 8.5, h: 0.42, fontSize: 18, fontFace: FONT, color: C.white,
   })
@@ -138,7 +157,7 @@ function chip(s, text, x, y, w, { onDark = false, color = C.tealDark } = {}) {
   lightBg(s)
   const SW = 5.4
   s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: SW, h: H, fill: { color: C.dark } })
-  s.addShape(pptx.ShapeType.rect, { x: SW, y: 0, w: 0.05, h: H, fill: grad(C.teal, C.violet, 90) })
+  gradBarV(s, SW, 0, 0.05, H)
 
   s.addText('WETHINK', { x: 0.55, y: 0.5, w: 4, h: 0.35, fontSize: 14, fontFace: FONT, color: C.teal, charSpacing: 4, bold: true })
   s.addText('AT A GLANCE', { x: 0.55, y: 0.85, w: 4.5, h: 0.55, fontSize: 27, bold: true, fontFace: FONT, color: C.white })
@@ -186,7 +205,7 @@ function chip(s, text, x, y, w, { onDark = false, color = C.tealDark } = {}) {
 
   // leadership card
   s.addShape(pptx.ShapeType.roundRect, { x: RX, y: 3.2, w: RW, h: 1.5, rectRadius: 0.09, fill: { color: C.white }, line: { color: C.line, width: 1 } })
-  s.addShape(pptx.ShapeType.rect, { x: RX + 0.22, y: 3.42, w: 0.055, h: 1.06, fill: grad(C.teal, C.violet, 90) })
+  gradBarV(s, RX + 0.22, 3.42, 0.055, 1.06, C.teal, C.violet, 10)
   s.addText('Rasha Aljalam', { x: RX + 0.45, y: 3.42, w: 4.5, h: 0.35, fontSize: 14, bold: true, fontFace: FONT, color: C.ink })
   s.addText('Founder & Chief Executive Officer', { x: RX + 0.45, y: 3.76, w: 4.5, h: 0.3, fontSize: 10, fontFace: FONT, color: C.tealDark, bold: true })
   s.addText('"We don\'t just advise — we execute, deliver, and stay accountable until you win."', {
@@ -211,7 +230,8 @@ function chip(s, text, x, y, w, { onDark = false, color = C.tealDark } = {}) {
 // ════════════════════════════════════════════════════════════════════
 {
   const s = pptx.addSlide()
-  lightBg(s)
+  // subtle branded circuit pattern as the page background
+  s.addImage({ path: 'public/profile-assets/tech-pattern.jpg', x: 0, y: 0, w: W, h: H })
   brandBar(s)
   sectionTitle(s, 'Our Journey')
   s.addText(
@@ -230,21 +250,37 @@ function chip(s, text, x, y, w, { onDark = false, color = C.tealDark } = {}) {
     ['2026', 'New brand identity and expanded portfolio across the Gulf'],
   ]
   const lineY = 4.35
-  s.addShape(pptx.ShapeType.rect, { x: MX + 0.2, y: lineY, w: CW - 0.4, h: 0.03, fill: grad(C.teal, C.violet, 0) })
+  // strong gradient spine with end caps
+  gradBarH(s, MX + 0.05, lineY - 0.035, CW - 0.1, 0.08, C.teal, C.violet, 40)
+  s.addShape(pptx.ShapeType.ellipse, { x: MX - 0.02, y: lineY - 0.07, w: 0.17, h: 0.17, fill: { color: C.teal } })
+  s.addShape(pptx.ShapeType.ellipse, { x: W - MX - 0.15, y: lineY - 0.07, w: 0.17, h: 0.17, fill: { color: C.violet } })
+
   const step = (CW - 0.4) / (items.length - 1)
   items.forEach(([year, text], i) => {
     const cx = MX + 0.2 + step * i
     const up = i % 2 === 0
+    const color = i < 4 ? C.tealDark : C.violet
+    // connector stem from spine to year pill
+    s.addShape(pptx.ShapeType.rect, {
+      x: cx - 0.011, y: up ? lineY - 0.42 : lineY + 0.06, w: 0.022, h: 0.42,
+      fill: { color, transparency: 12 },
+    })
+    // node on the spine
     s.addShape(pptx.ShapeType.ellipse, {
-      x: cx - 0.07, y: lineY - 0.055, w: 0.14, h: 0.14,
-      fill: { color: C.white }, line: { color: i < 4 ? C.tealDark : C.violet, width: 2 },
+      x: cx - 0.09, y: lineY - 0.075, w: 0.18, h: 0.18,
+      fill: { color: C.white }, line: { color, width: 2.5 },
+    })
+    // year pill
+    s.addShape(pptx.ShapeType.roundRect, {
+      x: cx - 0.42, y: up ? lineY - 0.78 : lineY + 0.44, w: 0.84, h: 0.34, rectRadius: 0.17,
+      fill: { color }, line: { transparency: 100 },
     })
     s.addText(year, {
-      x: cx - 0.55, y: up ? lineY - 0.62 : lineY + 0.16, w: 1.1, h: 0.32,
-      fontSize: 13, bold: true, fontFace: FONT, color: i < 4 ? C.tealDark : C.violet, align: 'center',
+      x: cx - 0.42, y: up ? lineY - 0.8 : lineY + 0.42, w: 0.84, h: 0.36,
+      fontSize: 12, bold: true, fontFace: FONT, color: C.white, align: 'center', valign: 'middle',
     })
     s.addText(text, {
-      x: cx - 0.73, y: up ? lineY - 2.2 : lineY + 0.52, w: 1.46, h: 1.55,
+      x: cx - 0.73, y: up ? lineY - 2.35 : lineY + 0.86, w: 1.46, h: 1.5,
       fontSize: 8.5, fontFace: FONT, color: C.body, align: 'center', lineSpacing: 11,
       valign: up ? 'bottom' : 'top',
     })
@@ -342,9 +378,9 @@ const SERVICES = [
 function servicesSlide(list, page, label) {
   const s = pptx.addSlide()
   darkBg(s)
-  s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: 0.06, fill: grad(C.teal, C.violet, 0) })
+  gradBarH(s, 0, 0, W, 0.06)
   s.addText(`Our Services  —  ${label}`, { x: MX, y: 0.4, w: CW, h: 0.55, fontSize: 24, bold: true, fontFace: FONT, color: C.white })
-  s.addShape(pptx.ShapeType.rect, { x: MX + 0.02, y: 0.98, w: 0.55, h: 0.045, fill: grad(C.teal, C.violet, 0) })
+  gradBarH(s, MX + 0.02, 0.98, 0.55, 0.045, C.teal, C.violet, 10)
 
   list.forEach((sv, i) => {
     const col = i % 2
@@ -496,9 +532,9 @@ servicesSlide(SERVICES.slice(4), 6, '2 of 2')
 {
   const s = pptx.addSlide()
   darkBg(s)
-  s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: 0.06, fill: grad(C.teal, C.violet, 0) })
+  gradBarH(s, 0, 0, W, 0.06)
   s.addText('Why Choose WeThink', { x: MX, y: 0.42, w: CW, h: 0.55, fontSize: 24, bold: true, fontFace: FONT, color: C.white })
-  s.addShape(pptx.ShapeType.rect, { x: MX + 0.02, y: 1.0, w: 0.55, h: 0.045, fill: grad(C.teal, C.violet, 0) })
+  gradBarH(s, MX + 0.02, 1.0, 0.55, 0.045, C.teal, C.violet, 10)
 
   const reasons = [
     ['01', 'One Partner, Every Layer', 'Strategy, engineering, design, and operations under one roof — no vendor patchwork, no finger-pointing.', C.teal],
@@ -601,8 +637,8 @@ servicesSlide(SERVICES.slice(4), 6, '2 of 2')
       line: { color: p.hot ? C.teal : C.line, width: p.hot ? 1.75 : 1 },
     })
     if (p.hot) {
-      s.addShape(pptx.ShapeType.rect, { x: x + 0.05, y, w: w - 0.1, h: 0.09, fill: grad(C.teal, C.violet, 0) })
-      s.addShape(pptx.ShapeType.roundRect, { x: x + w - 1.55, y: y + 0.22, w: 1.35, h: 0.32, rectRadius: 0.16, fill: grad(C.teal, C.violet, 0) })
+      gradBarH(s, x + 0.05, y, w - 0.1, 0.09, C.teal, C.violet, 16)
+      s.addShape(pptx.ShapeType.roundRect, { x: x + w - 1.55, y: y + 0.22, w: 1.35, h: 0.32, rectRadius: 0.16, fill: { color: C.teal } })
       s.addText('MOST POPULAR', { x: x + w - 1.55, y: y + 0.2, w: 1.35, h: 0.34, fontSize: 7, bold: true, color: C.white, align: 'center', valign: 'middle', fontFace: FONT, charSpacing: 1 })
     }
     s.addText(p.n, { x: x + 0.25, y: y + 0.2, w: w - 0.5, h: 0.4, fontSize: 16, bold: true, fontFace: FONT, color: C.ink })
@@ -669,7 +705,7 @@ servicesSlide(SERVICES.slice(4), 6, '2 of 2')
 {
   const s = pptx.addSlide()
   darkBg(s)
-  s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: 0.09, fill: grad(C.teal, C.violet, 0) })
+  gradBarH(s, 0, 0, W, 0.09)
 
   s.addImage({ path: 'public/logo.png', x: W / 2 - 0.45, y: 0.95, w: 0.9, h: 0.9 })
   s.addText([
