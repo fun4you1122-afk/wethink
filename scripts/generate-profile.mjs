@@ -102,24 +102,34 @@ function chip(s, text, x, y, w, { onDark = false, color = C.tealDark } = {}) {
 {
   const s = pptx.addSlide()
   darkBg(s)
-  s.addImage({ path: 'public/projects/nexa-pay.jpg', x: 0, y: 0, w: W, h: H, sizing: { type: 'cover', w: W, h: H } })
-  // dark scrim for legibility
-  s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: '100%', fill: { color: C.dark2, transparency: 28 } })
+  // Brand-only cover. To use a real WeThink office photo instead, place it at
+  // public/profile-assets/office.jpg and uncomment the two lines below:
+  // s.addImage({ path: 'public/profile-assets/office.jpg', x: 0, y: 0, w: W, h: H, sizing: { type: 'cover', w: W, h: H } })
+  // s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: '100%', fill: { color: C.dark2, transparency: 30 } })
+
+  // soft brand glows
+  s.addShape(pptx.ShapeType.ellipse, { x: -2.5, y: -2.8, w: 7.5, h: 7.5, fill: { color: C.teal, transparency: 88 }, line: { transparency: 100 } })
+  s.addShape(pptx.ShapeType.ellipse, { x: 9.0, y: 2.8, w: 8.0, h: 8.0, fill: { color: C.violet, transparency: 88 }, line: { transparency: 100 } })
   s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: 0.09, fill: grad(C.teal, C.violet, 0) })
 
-  logoBlock(s, MX, 0.5, 1.15, true)
-
-  // title block with vertical rule (reference style)
-  s.addShape(pptx.ShapeType.rect, { x: 1.05, y: 3.05, w: 0.028, h: 2.0, fill: { color: C.white, transparency: 30 } })
-  s.addText('Company\nProfile', {
-    x: 1.35, y: 2.95, w: 7.5, h: 1.75, fontSize: 46, bold: true, fontFace: FONT, color: C.white, lineSpacing: 52,
+  s.addImage({ path: 'public/logo.png', x: W / 2 - 0.75, y: 1.15, w: 1.5, h: 1.5 })
+  s.addText([
+    { text: 'We', options: { color: C.white } },
+    { text: 'Think', options: { color: C.violetMid } },
+  ], { x: 0, y: 2.75, w: W, h: 0.7, fontSize: 40, bold: true, align: 'center', fontFace: FONT })
+  s.addText('T H I N K   ·   P L A N   ·   G R O W', {
+    x: 0, y: 3.5, w: W, h: 0.35, fontSize: 11, align: 'center', fontFace: FONT, color: C.teal, charSpacing: 2,
   })
-  s.addShape(pptx.ShapeType.rect, { x: 1.38, y: 4.9, w: 0.14, h: 0.42, fill: grad(C.teal, C.violet, 90) })
+
+  s.addShape(pptx.ShapeType.rect, { x: W / 2 - 0.5, y: 4.05, w: 1.0, h: 0.045, fill: grad(C.teal, C.violet, 0) })
+  s.addText('Company Profile', {
+    x: 0, y: 4.25, w: W, h: 0.85, fontSize: 44, bold: true, align: 'center', fontFace: FONT, color: C.white,
+  })
   s.addText('Your Digital Transformation Partner', {
-    x: 1.62, y: 4.87, w: 8.5, h: 0.45, fontSize: 20, fontFace: FONT, color: C.white,
+    x: 0, y: 5.15, w: W, h: 0.45, fontSize: 17, align: 'center', fontFace: FONT, color: C.dBody,
   })
   s.addText('Consulting  –  Cloud  –  Cybersecurity  –  Custom Software  –  Data & AI', {
-    x: 1.62, y: 5.35, w: 9.5, h: 0.35, fontSize: 12.5, fontFace: FONT, color: C.dBody,
+    x: 0, y: 5.62, w: W, h: 0.35, fontSize: 12, align: 'center', fontFace: FONT, color: C.dMuted,
   })
 
   s.addText('Abu Dhabi, United Arab Emirates  ·  Est. 2019  ·  wethink.ae', {
@@ -184,11 +194,11 @@ function chip(s, text, x, y, w, { onDark = false, color = C.tealDark } = {}) {
 
   // leadership card
   s.addShape(pptx.ShapeType.roundRect, { x: RX, y: 3.2, w: RW, h: 1.5, rectRadius: 0.09, fill: { color: C.white }, line: { color: C.line, width: 1 } })
-  s.addImage({ path: 'public/ceo.jpg', x: RX + 0.18, y: 3.38, w: 1.14, h: 1.14, sizing: { type: 'cover', w: 1.14, h: 1.14 }, rounding: true })
-  s.addText('Rasha Aljalam', { x: RX + 1.5, y: 3.45, w: 4.5, h: 0.35, fontSize: 14, bold: true, fontFace: FONT, color: C.ink })
-  s.addText('Founder & Chief Executive Officer', { x: RX + 1.5, y: 3.79, w: 4.5, h: 0.3, fontSize: 10, fontFace: FONT, color: C.tealDark, bold: true })
+  s.addShape(pptx.ShapeType.rect, { x: RX + 0.22, y: 3.42, w: 0.055, h: 1.06, fill: grad(C.teal, C.violet, 90) })
+  s.addText('Rasha Aljalam', { x: RX + 0.45, y: 3.42, w: 4.5, h: 0.35, fontSize: 14, bold: true, fontFace: FONT, color: C.ink })
+  s.addText('Founder & Chief Executive Officer', { x: RX + 0.45, y: 3.76, w: 4.5, h: 0.3, fontSize: 10, fontFace: FONT, color: C.tealDark, bold: true })
   s.addText('"We don\'t just advise — we execute, deliver, and stay accountable until you win."', {
-    x: RX + 1.5, y: 4.09, w: RW - 1.7, h: 0.55, fontSize: 10, italic: true, fontFace: FONT, color: C.muted, lineSpacing: 13,
+    x: RX + 0.45, y: 4.06, w: RW - 0.7, h: 0.55, fontSize: 10, italic: true, fontFace: FONT, color: C.muted, lineSpacing: 13,
   })
 
   sectionTitle(s, 'Credentials & Alignment', { x: RX, y: 5.0, size: 18 })
@@ -418,25 +428,23 @@ servicesSlide(SERVICES.slice(4), 6, '2 of 2')
     { x: MX, y: 1.26, w: CW, h: 0.45, fontSize: 11, fontFace: FONT, color: C.body },
   )
 
+  // tiles are pre-cropped to this exact aspect (see public/profile-assets/)
   const projects = [
-    ['public/projects/nexa-pay.jpg', 'Nexa Pay', 'Payments app — idea to pilot in 8 weeks'],
-    ['public/projects/cargoflow.jpg', 'CargoFlow', 'Shipment tracking SaaS — 40% less manual dispatch'],
-    ['public/projects/lumora.jpg', 'Lumora', 'D2C skincare launch — 3× launch-month ROAS'],
-    ['public/projects/pulse-loop.jpg', 'Pulse Loop', 'Wellness app MVP — app-store beta in 12 weeks'],
-    ['public/projects/masakin.jpg', 'Masakin مساكن', 'Bilingual property portal — 2.5K monthly leads'],
-    ['public/projects/kidiverse.jpg', 'KidiVerse', 'Kids-safe streaming — full parental-control layer'],
+    ['public/profile-assets/nexa-pay-tile.jpg', 'Nexa Pay', 'Payments app — idea to pilot in 8 weeks'],
+    ['public/profile-assets/cargoflow-tile.jpg', 'CargoFlow', 'Shipment tracking SaaS — 40% less manual dispatch'],
+    ['public/profile-assets/lumora-tile.jpg', 'Lumora', 'D2C skincare launch — 3× launch-month ROAS'],
+    ['public/profile-assets/pulse-loop-tile.jpg', 'Pulse Loop', 'Wellness app MVP — app-store beta in 12 weeks'],
+    ['public/profile-assets/masakin-tile.jpg', 'Masakin مساكن', 'Bilingual property portal — 2.5K monthly leads'],
+    ['public/profile-assets/kidiverse-tile.jpg', 'KidiVerse', 'Kids-safe streaming — full parental-control layer'],
   ]
   const gw = (CW - 0.5) / 3
   projects.forEach(([img, name, sub], i) => {
     const x = MX + (i % 3) * (gw + 0.25)
-    const y = 1.85 + Math.floor(i / 3) * 2.35
-    s.addImage({ path: img, x, y, w: gw, h: 1.55, sizing: { type: 'cover', w: gw, h: 1.55 } })
-    s.addText(name, { x, y: y + 1.57, w: gw, h: 0.3, fontSize: 12.5, bold: true, fontFace: FONT, color: C.ink })
-    s.addText(sub, { x, y: y + 1.85, w: gw, h: 0.3, fontSize: 8.5, fontFace: FONT, color: C.muted })
-  })
-
-  s.addText('Every venture above was launched pre-market with WeThink as the end-to-end technology partner.', {
-    x: MX, y: 6.66, w: CW, h: 0.3, fontSize: 9, italic: true, fontFace: FONT, color: C.muted,
+    const y = 1.8 + Math.floor(i / 3) * 2.62
+    const ih = gw / 2.0404
+    s.addImage({ path: img, x, y, w: gw, h: ih })
+    s.addText(name, { x, y: y + ih + 0.03, w: gw, h: 0.28, fontSize: 12, bold: true, fontFace: FONT, color: C.ink })
+    s.addText(sub, { x, y: y + ih + 0.3, w: gw, h: 0.28, fontSize: 8.5, fontFace: FONT, color: C.muted })
   })
   footer(s, 8)
 }
@@ -448,37 +456,43 @@ servicesSlide(SERVICES.slice(4), 6, '2 of 2')
   const s = pptx.addSlide()
   lightBg(s)
   brandBar(s)
-  sectionTitle(s, 'Case Studies')
+  sectionTitle(s, 'Featured Cases')
+  s.addText('OUR MOST RECENT & MOST CREATIVE WORK', { x: MX, y: 1.18, w: CW, h: 0.28, fontSize: 10, bold: true, fontFace: FONT, color: C.tealDark, charSpacing: 2 })
 
   const cases = [
     {
       t: 'Albina Alareeq Digital Hub', tag: 'Construction · Abu Dhabi', c: C.teal,
-      d: 'End-to-end digital transformation for a major Abu Dhabi construction firm — a brand-aligned corporate website plus a connected project-management portal unifying field reporting and head-office visibility.',
+      logo: 'public/logos/albina-alareeq.png',
+      d: 'End-to-end digital transformation for a major Abu Dhabi contracting firm — a brand-aligned corporate website plus a connected project-management portal unifying field reporting and head-office visibility.',
       out: ['Corporate platform', 'PM portal', 'Unified reporting'],
     },
     {
-      t: 'Nabe Eldiyafa Brand & Digital Ecosystem', tag: 'Hospitality · Abu Dhabi', c: C.violet,
+      t: 'Nabe Eldiyafa Brand & Digital Ecosystem', tag: 'Hospitality · Abu Dhabi', c: C.rose,
+      logo: 'public/logos/nabe-eldiyafa.png',
       d: 'Full digital launch for a heritage Damascene restaurant — brand identity refresh, a bilingual reservations website, and a 12-month social media programme that filled weekend covers.',
       out: ['Brand identity', 'Bilingual site', '12-month campaign'],
     },
     {
-      t: 'KidiVerse — Kids-Safe Streaming', tag: 'EdTech · Amman & UAE', c: C.sky,
-      d: 'A kids-first video streaming platform for a family media operator — curated Arabic and English content, six layers of parental controls, and a human-plus-automated content review pipeline.',
-      out: ['Parental controls', 'Content pipeline', 'AR/EN library'],
+      t: 'Diamond Events — Weddings & Flowers', tag: 'Events · UAE', c: C.amber,
+      logo: 'public/logos/diamond-events.png',
+      d: 'A luxury identity and digital launch for a weddings-and-flowers studio — gold-standard branding, a portfolio website with enquiry and booking flows, and an Instagram-first content system.',
+      out: ['Luxury brand identity', 'Booking website', 'Content system'],
     },
   ]
   cases.forEach((cs, i) => {
     const w = CW / 3 - 0.25
     const x = MX + i * (CW / 3)
-    const y = 1.55
-    s.addShape(pptx.ShapeType.roundRect, { x, y, w, h: 5.0, rectRadius: 0.1, fill: { color: C.white }, line: { color: C.line, width: 1 } })
+    const y = 1.6
+    s.addShape(pptx.ShapeType.roundRect, { x, y, w, h: 5.15, rectRadius: 0.1, fill: { color: C.white }, line: { color: C.line, width: 1 } })
     s.addShape(pptx.ShapeType.rect, { x, y, w, h: 0.07, fill: { color: cs.c } })
-    s.addText(cs.tag.toUpperCase(), { x: x + 0.25, y: y + 0.22, w: w - 0.5, h: 0.28, fontSize: 8, bold: true, fontFace: FONT, color: cs.c, charSpacing: 1.5 })
-    s.addText(cs.t, { x: x + 0.25, y: y + 0.5, w: w - 0.5, h: 0.8, fontSize: 14, bold: true, fontFace: FONT, color: C.ink, lineSpacing: 17 })
-    s.addText(cs.d, { x: x + 0.25, y: y + 1.4, w: w - 0.5, h: 2.05, fontSize: 10, fontFace: FONT, color: C.body, lineSpacing: 14 })
-    s.addText('DELIVERED', { x: x + 0.25, y: y + 3.52, w: w - 0.5, h: 0.25, fontSize: 7.5, bold: true, fontFace: FONT, color: C.muted, charSpacing: 2 })
+    // brand logo, centered
+    const lw = 1.9
+    s.addImage({ path: cs.logo, x: x + w / 2 - lw / 2, y: y + 0.25, w: lw, h: lw * 0.6 })
+    s.addText(cs.tag.toUpperCase(), { x: x + 0.25, y: y + 1.48, w: w - 0.5, h: 0.28, fontSize: 8, bold: true, fontFace: FONT, color: cs.c, charSpacing: 1.5, align: 'center' })
+    s.addText(cs.t, { x: x + 0.25, y: y + 1.76, w: w - 0.5, h: 0.75, fontSize: 13.5, bold: true, fontFace: FONT, color: C.ink, lineSpacing: 16, align: 'center' })
+    s.addText(cs.d, { x: x + 0.25, y: y + 2.56, w: w - 0.5, h: 1.75, fontSize: 9.5, fontFace: FONT, color: C.body, lineSpacing: 13, align: 'center' })
     cs.out.forEach((o, j) => {
-      chip(s, o, x + 0.25, y + 3.8 + j * 0.38, w - 0.5, { color: cs.c })
+      chip(s, o, x + 0.35, y + 3.95 + j * 0.38, w - 0.7, { color: cs.c })
     })
   })
   footer(s, 9)
@@ -625,19 +639,34 @@ servicesSlide(SERVICES.slice(4), 6, '2 of 2')
   lightBg(s)
   brandBar(s)
   sectionTitle(s, 'Brands In Our Portfolio')
-  s.addText('Identities we designed and launched through the pre-launch venture programme — English and Arabic, across fintech, retail, wellness, F&B, fragrance, and real estate.', {
+  s.addText('Identities we designed and launched — English and Arabic, across fintech, logistics, retail, wellness, F&B, media, events, and more.', {
     x: MX, y: 1.26, w: CW, h: 0.5, fontSize: 11, fontFace: FONT, color: C.body, lineSpacing: 15,
   })
 
-  const logos = ['nexa-pay', 'cargoflow', 'lumora', 'pulse-loop', 'qahwat-al-asala', 'anmat', 'abeer-al-diyar', 'masaken']
-  const names = ['Nexa Pay · Fintech', 'CargoFlow · Logistics', 'Lumora · Skincare', 'Pulse Loop · Wellness', 'قهوة الأصالة · Café', 'أنماط · Fashion', 'عبير الديار · Fragrance', 'مساكن · Real Estate']
-  const gw = (CW - 0.9) / 4
-  logos.forEach((l, i) => {
-    const x = MX + (i % 4) * (gw + 0.3)
-    const y = 2.05 + Math.floor(i / 4) * 2.3
-    s.addShape(pptx.ShapeType.roundRect, { x: x - 0.05, y: y - 0.05, w: gw + 0.1, h: 1.9, rectRadius: 0.08, fill: { color: C.white }, line: { color: C.line, width: 1 } })
-    s.addImage({ path: `public/logos/${l}.png`, x: x + 0.35, y: y + 0.12, w: gw - 0.7, h: (gw - 0.7) * 0.6, sizing: { type: 'contain', w: gw - 0.7, h: (gw - 0.7) * 0.6 } })
-    s.addText(names[i], { x: x - 0.05, y: y + 1.45, w: gw + 0.1, h: 0.3, fontSize: 9.5, bold: true, fontFace: FONT, color: C.ink, align: 'center' })
+  const logos = [
+    ['nexa-pay', 'Nexa Pay · Fintech'],
+    ['cargoflow', 'CargoFlow · Logistics'],
+    ['lumora', 'Lumora · Skincare'],
+    ['pulse-loop', 'Pulse Loop · Wellness'],
+    ['satrek-fashion', 'سترك · Fashion'],
+    ['qahwat-al-asala', 'قهوة الأصالة · Café'],
+    ['anmat', 'أنماط · Fashion'],
+    ['abeer-al-diyar', 'عبير الديار · Fragrance'],
+    ['masaken', 'مساكن · Real Estate'],
+    ['fikra', 'فكرة · Creative Studio'],
+    ['basma', 'بصمة · Software House'],
+    ['nashra', 'نشرة · News Platform'],
+    ['wijdan-yoga', 'وجدان · Yoga Space'],
+    ['vet-clinic', 'Vet Clinic · Pet Care'],
+    ['respawn-lab', 'Respawn Lab · Gaming'],
+  ]
+  const gw = (CW - 4 * 0.25) / 5
+  logos.forEach(([l, name], i) => {
+    const x = MX + (i % 5) * (gw + 0.25)
+    const y = 1.95 + Math.floor(i / 5) * 1.68
+    s.addShape(pptx.ShapeType.roundRect, { x: x - 0.04, y: y - 0.04, w: gw + 0.08, h: 1.52, rectRadius: 0.07, fill: { color: C.white }, line: { color: C.line, width: 1 } })
+    s.addImage({ path: `public/logos/${l}.png`, x: x + 0.28, y: y + 0.08, w: gw - 0.56, h: (gw - 0.56) * 0.6 })
+    s.addText(name, { x: x - 0.04, y: y + 1.14, w: gw + 0.08, h: 0.28, fontSize: 8, bold: true, fontFace: FONT, color: C.ink, align: 'center' })
   })
   footer(s, 13)
 }
