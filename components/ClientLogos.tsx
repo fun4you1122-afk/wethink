@@ -17,6 +17,16 @@ const LOGOS: Logo[] = [
   { name: 'أنماط', image: '/logos/anmat.png', accent: '#D4AF37' },
   { name: 'عبير الديار', image: '/logos/abeer-al-diyar.png', accent: '#9B7EBD' },
   { name: 'مساكن', image: '/logos/masaken.png', accent: '#2DD4BF' },
+  { name: 'Albina Alareeq', image: '/logos/albina-alareeq.png', accent: '#38BDF8' },
+  { name: 'Nabe Eldiyafa', image: '/logos/nabe-eldiyafa.png', accent: '#F87171' },
+  { name: 'Diamond Events', image: '/logos/diamond-events.png', accent: '#F59E0B' },
+  { name: 'سترك', image: '/logos/satrek-fashion.png', accent: '#FB7185' },
+  { name: 'فكرة', image: '/logos/fikra.png', accent: '#FBBF24' },
+  { name: 'بصمة', image: '/logos/basma.png', accent: '#FB923C' },
+  { name: 'نشرة', image: '/logos/nashra.png', accent: '#A8A29E' },
+  { name: 'وجدان', image: '/logos/wijdan-yoga.png', accent: '#38BDF8' },
+  { name: 'Vet Clinic', image: '/logos/vet-clinic.png', accent: '#78716C' },
+  { name: 'Respawn Lab', image: '/logos/respawn-lab.png', accent: '#8B5CF6' },
 ]
 
 function LogoCard({ logo }: { logo: Logo }) {
@@ -46,15 +56,15 @@ function LogoCard({ logo }: { logo: Logo }) {
   )
 }
 
-function Row({ reverse = false }: { reverse?: boolean }) {
-  const doubled = [...LOGOS, ...LOGOS]
+function Row({ items, reverse = false }: { items: Logo[]; reverse?: boolean }) {
+  const doubled = [...items, ...items]
   return (
     <div style={{ overflow: 'hidden', maskImage: 'linear-gradient(90deg, transparent, black 6%, black 94%, transparent)' }}>
       <div
         className="marquee-track flex gap-5"
         style={{
           width: 'max-content',
-          animation: `${reverse ? 'logo-marquee-reverse' : 'logo-marquee'} 36s linear infinite`,
+          animation: `${reverse ? 'logo-marquee-reverse' : 'logo-marquee'} 48s linear infinite`,
           willChange: 'transform',
           transform: 'translateZ(0)',
         }}
@@ -93,8 +103,8 @@ export default function ClientLogos() {
       </div>
 
       <div className="flex flex-col gap-5">
-        <Row />
-        <Row reverse />
+        <Row items={LOGOS.slice(0, 9)} />
+        <Row items={LOGOS.slice(9)} reverse />
       </div>
     </section>
   )
