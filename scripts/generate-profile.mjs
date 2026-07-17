@@ -102,40 +102,32 @@ function chip(s, text, x, y, w, { onDark = false, color = C.tealDark } = {}) {
 {
   const s = pptx.addSlide()
   darkBg(s)
-  // Brand-only cover. To use a real WeThink office photo instead, place it at
-  // public/profile-assets/office.jpg and uncomment the two lines below:
-  // s.addImage({ path: 'public/profile-assets/office.jpg', x: 0, y: 0, w: W, h: H, sizing: { type: 'cover', w: W, h: H } })
-  // s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: '100%', fill: { color: C.dark2, transparency: 30 } })
-
-  // soft brand glows
-  s.addShape(pptx.ShapeType.ellipse, { x: -2.5, y: -2.8, w: 7.5, h: 7.5, fill: { color: C.teal, transparency: 88 }, line: { transparency: 100 } })
-  s.addShape(pptx.ShapeType.ellipse, { x: 9.0, y: 2.8, w: 8.0, h: 8.0, fill: { color: C.violet, transparency: 88 }, line: { transparency: 100 } })
+  // Real WeThink office photo (public/profile-assets/office.jpg)
+  s.addImage({ path: 'public/profile-assets/office.jpg', x: 0, y: 0, w: W, h: H, sizing: { type: 'cover', w: W, h: H } })
+  // scrim for legibility — stronger at the bottom where the title sits
+  s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: '100%', fill: { color: C.dark2, transparency: 62 } })
+  s.addShape(pptx.ShapeType.rect, { x: 0, y: 4.1, w: '100%', h: 3.4, fill: { color: C.dark2, transparency: 38 } })
   s.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: 0.09, fill: grad(C.teal, C.violet, 0) })
 
-  s.addImage({ path: 'public/logo.png', x: W / 2 - 0.75, y: 1.15, w: 1.5, h: 1.5 })
-  s.addText([
-    { text: 'We', options: { color: C.white } },
-    { text: 'Think', options: { color: C.violetMid } },
-  ], { x: 0, y: 2.75, w: W, h: 0.7, fontSize: 40, bold: true, align: 'center', fontFace: FONT })
-  s.addText('T H I N K   ·   P L A N   ·   G R O W', {
-    x: 0, y: 3.5, w: W, h: 0.35, fontSize: 11, align: 'center', fontFace: FONT, color: C.teal, charSpacing: 2,
-  })
+  logoBlock(s, MX, 0.45, 1.15, true)
 
-  s.addShape(pptx.ShapeType.rect, { x: W / 2 - 0.5, y: 4.05, w: 1.0, h: 0.045, fill: grad(C.teal, C.violet, 0) })
-  s.addText('Company Profile', {
-    x: 0, y: 4.25, w: W, h: 0.85, fontSize: 44, bold: true, align: 'center', fontFace: FONT, color: C.white,
+  // title block, reference style: vertical rule + title, bottom-left
+  s.addShape(pptx.ShapeType.rect, { x: 1.05, y: 4.45, w: 0.028, h: 1.95, fill: { color: C.white, transparency: 30 } })
+  s.addText('Company\nProfile', {
+    x: 1.35, y: 4.35, w: 7.5, h: 1.6, fontSize: 42, bold: true, fontFace: FONT, color: C.white, lineSpacing: 48,
   })
+  s.addShape(pptx.ShapeType.rect, { x: 1.38, y: 6.02, w: 0.14, h: 0.4, fill: grad(C.teal, C.violet, 90) })
   s.addText('Your Digital Transformation Partner', {
-    x: 0, y: 5.15, w: W, h: 0.45, fontSize: 17, align: 'center', fontFace: FONT, color: C.dBody,
+    x: 1.62, y: 5.98, w: 8.5, h: 0.42, fontSize: 18, fontFace: FONT, color: C.white,
   })
   s.addText('Consulting  –  Cloud  –  Cybersecurity  –  Custom Software  –  Data & AI', {
-    x: 0, y: 5.62, w: W, h: 0.35, fontSize: 12, align: 'center', fontFace: FONT, color: C.dMuted,
+    x: 1.62, y: 6.42, w: 9.5, h: 0.33, fontSize: 11.5, fontFace: FONT, color: C.dBody,
   })
 
   s.addText('Abu Dhabi, United Arab Emirates  ·  Est. 2019  ·  wethink.ae', {
-    x: MX, y: 6.9, w: 9, h: 0.35, fontSize: 10.5, fontFace: FONT, color: C.dBody,
+    x: MX, y: 7.02, w: 9, h: 0.32, fontSize: 10, fontFace: FONT, color: C.dBody,
   })
-  s.addText('2026', { x: W - MX - 1.2, y: 6.82, w: 1.2, h: 0.45, fontSize: 20, bold: true, fontFace: FONT, color: C.white, align: 'right' })
+  s.addText('2026', { x: W - MX - 1.2, y: 6.9, w: 1.2, h: 0.45, fontSize: 20, bold: true, fontFace: FONT, color: C.white, align: 'right' })
 }
 
 // ════════════════════════════════════════════════════════════════════
