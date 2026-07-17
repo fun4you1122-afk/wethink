@@ -453,9 +453,9 @@ servicesSlide(SERVICES.slice(4), 6, '2 of 2')
 
   const cases = [
     {
-      t: 'Albina Alareeq Digital Hub', tag: 'Construction · Abu Dhabi', c: C.teal,
+      t: 'Albina Alareeq Contracting — Digital Transformation', tag: 'Contracting · Abu Dhabi', c: C.teal,
       logo: 'public/logos/albina-alareeq.png',
-      d: 'End-to-end digital transformation for a major Abu Dhabi contracting firm — a brand-aligned corporate website plus a connected project-management portal unifying field reporting and head-office visibility.',
+      d: 'Digital transformation for Albina Alareeq Contracting & General Maintenance — a corporate website plus a project-management portal unifying field reporting and head-office visibility.',
       out: ['Corporate platform', 'PM portal', 'Unified reporting'],
     },
     {

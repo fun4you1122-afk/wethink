@@ -5,9 +5,9 @@ import { Gallery4 } from '@/components/ui/gallery4'
 const caseStudies = [
   {
     id: '01',
-    title: 'Albina Alareeq Digital Hub',
+    title: 'Albina Alareeq Contracting — Digital Transformation',
     description:
-      'End-to-end digital transformation for a major Abu Dhabi construction firm — a brand-aligned corporate website plus a connected project-management portal unifying tender pipeline, site progress, HSE compliance, and manpower tracking across 12 active job sites. Result: 60% faster project reporting cycles and 35% reduction in administrative overhead.',
+      'End-to-end digital transformation for Albina Alareeq Contracting & General Maintenance, Abu Dhabi — a brand-aligned corporate website plus a connected project-management portal unifying tender pipeline, site progress, HSE compliance, and manpower tracking across 12 active job sites. Result: 60% faster project reporting cycles and 35% reduction in administrative overhead.',
     href: '/#contact',
     image: 'https://i.ibb.co/QzN1cV6/file-0000000087f471f4a9d98070fbbeddff.png',
   },
