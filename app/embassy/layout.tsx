@@ -19,7 +19,7 @@ const jost = Jost({
 export const metadata: Metadata = {
   title: 'Marhaba Thailand — An Invitation | Royal Thai Embassy, Abu Dhabi',
   description:
-    'Marhaba Thailand — a two-day celebration of Thai culture, craft, and hospitality at Reem Mall, Abu Dhabi, 11–12 September 2026. Programme, schedule, and RSVP.',
+    'Marhaba Thailand — a two-day celebration of Thai culture, craft, and hospitality at Reem Mall, Abu Dhabi, 11–12 September 2026. Programme, schedule, and venue.',
   alternates: { canonical: '/embassy' },
   // Client presentation, not an official Embassy page — keep it out of search
   // results until the Embassy signs off. Remove this block to publish.

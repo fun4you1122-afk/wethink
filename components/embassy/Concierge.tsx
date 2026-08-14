@@ -22,9 +22,9 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
       'Both days run at Reem Mall.\n\nDay One (11 Sept) — doors open with the opening ceremony, cultural performances and workshops from midday, the Muay Thai showcase in the afternoon, and the lucky draw in the evening.\n\nDay Two (12 Sept) — workshops continue in the morning, Thai massage and the tourism pavilion at midday, a Muay Thai encore, then the grand prize draw and closing ceremony.',
   },
   {
-    patterns: [/rsvp|register|sign up|book|attend|confirm/i],
+    patterns: [/rsvp|register|sign up|book|attend|ticket|save the date/i],
     reply:
-      'Use the RSVP panel on this page — choose Day One, Day Two, or both, and confirm. It prepares a message you can send straight to the Embassy desk by email or WhatsApp.\n\nKindly reply by 4 September 2026.',
+      'No registration is needed — entry is free and open to the public. Use the Save the Date panel on this page to add the festival to your calendar, or share the invitation by WhatsApp or QR code.',
   },
   {
     patterns: [/where|venue|location|reem|mall|address|map|park/i],
@@ -67,9 +67,8 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
       'Thai hospitality is central to the festival, and food partners will be on site. The full food line-up is still being confirmed by the Embassy.',
   },
   {
-    patterns: [/cost|price|ticket|free|entry|fee/i],
-    reply:
-      'Entry is free and open to the public. An RSVP simply helps the Embassy plan numbers.',
+    patterns: [/cost|price|free|entry|fee/i],
+    reply: 'Entry is free and open to the public — just come along on either day.',
   },
   {
     patterns: [/dress|wear|attire|code/i],
@@ -84,7 +83,7 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
   {
     patterns: [/hello|hi|hey|sawasdee|salaam|marhaba|good (morning|evening|afternoon)/i],
     reply:
-      "Sawasdee ka! 🌸 I'm the Marhaba Thailand concierge. Ask me about the programme, the venue, or how to RSVP.",
+      "Sawasdee ka! 🌸 I'm the Marhaba Thailand concierge. Ask me about the programme, the venue, or getting there.",
   },
   {
     patterns: [/thank|thanks|khop khun|شكر/i],
@@ -98,7 +97,7 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
 ]
 
 const FALLBACK =
-  "That detail hasn't been confirmed yet. The Embassy's team can help directly — and everything currently confirmed is on this page: the programme, the two-day schedule, the venue, and the RSVP panel."
+  "That detail hasn't been confirmed yet. The Embassy's team can help directly — and everything currently confirmed is on this page: the programme, the two-day schedule, and the venue."
 
 function answer(q: string) {
   for (const { patterns, reply } of KB) {
@@ -107,7 +106,7 @@ function answer(q: string) {
   return FALLBACK
 }
 
-const CHIPS = ["What's happening each day?", 'How do I RSVP?', 'Where is it held?']
+const CHIPS = ["What's happening each day?", 'Do I need a ticket?', 'Where is it held?']
 
 export default function Concierge() {
   const [open, setOpen] = useState(false)
@@ -116,7 +115,7 @@ export default function Concierge() {
   const [msgs, setMsgs] = useState<Msg[]>([
     {
       who: 'bot',
-      text: "Sawasdee ka! 🌸 I'm the Marhaba Thailand concierge. Ask me about the programme, the highlights, or how to RSVP.",
+      text: "Sawasdee ka! 🌸 I'm the Marhaba Thailand concierge. Ask me about the programme, the highlights, or the venue.",
     },
   ])
   const bodyRef = useRef<HTMLDivElement>(null)

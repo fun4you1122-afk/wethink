@@ -4,21 +4,20 @@ import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
 import {
   CalendarPlus,
-  Check,
   ChevronLeft,
   ChevronRight,
   MapPin,
+  QrCode,
   Send,
-  Sparkles,
+  Share2,
 } from 'lucide-react'
+import { QRCodeSVG } from 'qrcode.react'
 import ThaiBackdrop from '@/components/embassy/ThaiBackdrop'
 import LotusBloom from '@/components/embassy/LotusBloom'
 import Concierge from '@/components/embassy/Concierge'
 
 /* ────────────────────────────────────────────────────────────
    Event details — single source of truth for the page.
-   NOTE: rsvpEmail is still the placeholder from the brief.
-   Replace it with the Embassy's official address before sharing.
    ──────────────────────────────────────────────────────────── */
 const EVENT = {
   host: 'The Royal Thai Embassy, Abu Dhabi',
@@ -27,8 +26,6 @@ const EVENT = {
   dates: '11 – 12 September 2026',
   venue: 'Reem Mall, Abu Dhabi',
   mapUrl: 'https://maps.google.com/?q=Reem+Mall+Abu+Dhabi',
-  rsvpBy: '4 September 2026',
-  rsvpEmail: 'rsvp@thaiembassy-abudhabi.example',
   start: '2026-09-11T10:00:00+04:00',
 }
 
@@ -519,186 +516,107 @@ function downloadIcs() {
   URL.revokeObjectURL(url)
 }
 
-/* ── RSVP ────────────────────────────────────────────────── */
+/* ── save the date & share ───────────────────────────────── */
 
-const DAY_OPTIONS = ['Day One (11 Sept)', 'Day Two (12 Sept)', 'Both days'] as const
+const SHARE_URL = 'https://www.wethink.ae/embassy'
 
-function Rsvp() {
-  const [name, setName] = useState('')
-  const [guests, setGuests] = useState('1')
-  const [day, setDay] = useState<string>(DAY_OPTIONS[2])
-  const [done, setDone] = useState(false)
+function SaveAndShare() {
+  const [copied, setCopied] = useState(false)
+  const [showQR, setShowQR] = useState(false)
 
-  // Restore a previous RSVP so a returning guest isn't asked twice.
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('marhaba:rsvp')
-      if (saved) {
-        const v = JSON.parse(saved)
-        setName(v.name ?? '')
-        setDay(v.day ?? DAY_OPTIONS[2])
-        setGuests(v.guests ?? '1')
-        setDone(true)
+  const shareText = `${EVENT.title} — ${EVENT.dates}, ${EVENT.venue}`
+
+  const share = async () => {
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({ title: EVENT.title, text: shareText, url: SHARE_URL })
+        return
+      } catch {
+        /* dismissed — fall through to copying */
       }
-    } catch {
-      /* storage unavailable — the form simply starts empty */
     }
-  }, [])
-
-  const message = `Marhaba Thailand — RSVP%0A%0AName: ${encodeURIComponent(
-    name,
-  )}%0AAttending: ${encodeURIComponent(day)}%0AGuests: ${encodeURIComponent(guests)}`
-
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!name.trim()) return
     try {
-      localStorage.setItem(
-        'marhaba:rsvp',
-        JSON.stringify({ name, day, guests, ts: new Date().toISOString() }),
-      )
+      await navigator.clipboard.writeText(SHARE_URL)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 2200)
     } catch {
-      /* non-fatal */
+      /* clipboard blocked — the QR code is still available */
     }
-    setDone(true)
   }
 
   return (
     <Panel>
-      <Heading title="Kindly RSVP" note={`We look forward to welcoming you by ${EVENT.rsvpBy}`} />
+      <Heading title="Save the Date" note="Entry is free — simply come and join us" />
 
-      <AnimatePresence mode="wait">
-        {!done ? (
-          <motion.form
-            key="form"
-            onSubmit={submit}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="mx-auto flex max-w-sm flex-col gap-3"
+      <div className="mx-auto flex max-w-md flex-col items-center gap-4">
+        <div className="flex flex-wrap justify-center gap-3">
+          <motion.button
+            type="button"
+            onClick={downloadIcs}
+            whileTap={{ scale: 0.97 }}
+            className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13.5px] font-medium uppercase tracking-[0.08em] shadow-[0_8px_20px_rgba(139,80,100,0.18)]"
+            style={{
+              background: `linear-gradient(135deg, ${C.blush}, ${C.gold})`,
+              color: C.ink,
+              fontFamily: sans,
+            }}
           >
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Your name"
-              aria-label="Your name"
-              required
-              className="rounded-2xl border border-[rgba(139,80,100,0.25)] bg-white/70 px-4 py-3.5 text-[15px] outline-none focus:border-[#8b5064] focus:ring-2 focus:ring-[rgba(139,80,100,0.12)]"
-              style={{ color: C.ink, fontFamily: sans }}
-            />
-            <select
-              value={day}
-              onChange={(e) => setDay(e.target.value)}
-              aria-label="Which day will you attend"
-              className="rounded-2xl border border-[rgba(139,80,100,0.25)] bg-white/70 px-4 py-3.5 text-[15px] outline-none focus:border-[#8b5064]"
-              style={{ color: C.ink, fontFamily: sans }}
-            >
-              {DAY_OPTIONS.map((d) => (
-                <option key={d} value={d}>
-                  Attending {d}
-                </option>
-              ))}
-            </select>
-            <select
-              value={guests}
-              onChange={(e) => setGuests(e.target.value)}
-              aria-label="Number of guests"
-              className="rounded-2xl border border-[rgba(139,80,100,0.25)] bg-white/70 px-4 py-3.5 text-[15px] outline-none focus:border-[#8b5064]"
-              style={{ color: C.ink, fontFamily: sans }}
-            >
-              {['1', '2', '3', '4', '5+'].map((g) => (
-                <option key={g} value={g}>
-                  {g === '1' ? 'Just me' : `${g} guests`}
-                </option>
-              ))}
-            </select>
+            <CalendarPlus className="h-4 w-4" /> Add to Calendar
+          </motion.button>
 
-            <div className="mt-1 flex flex-wrap justify-center gap-3">
-              <motion.button
-                type="submit"
-                whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13.5px] font-medium uppercase tracking-[0.08em] shadow-[0_8px_20px_rgba(139,80,100,0.18)]"
-                style={{
-                  background: `linear-gradient(135deg, ${C.blush}, ${C.gold})`,
-                  color: C.ink,
-                  fontFamily: sans,
-                }}
-              >
-                Confirm RSVP <Check className="h-4 w-4" />
-              </motion.button>
-              <button
-                type="button"
-                onClick={downloadIcs}
-                className="inline-flex items-center gap-2 rounded-full border px-7 py-3.5 text-[13.5px] font-medium uppercase tracking-[0.08em]"
-                style={{ borderColor: C.plum, color: C.plumDeep, fontFamily: sans }}
-              >
-                <CalendarPlus className="h-4 w-4" /> Add to Calendar
-              </button>
-            </div>
-          </motion.form>
-        ) : (
-          <motion.div
-            key="done"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center"
+          <button
+            type="button"
+            onClick={share}
+            className="inline-flex items-center gap-2 rounded-full border px-7 py-3.5 text-[13.5px] font-medium uppercase tracking-[0.08em]"
+            style={{ borderColor: C.plum, color: C.plumDeep, fontFamily: sans }}
           >
-            <div
-              className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full"
-              style={{ background: `linear-gradient(135deg, ${C.blush}, ${C.gold})` }}
-            >
-              <Sparkles className="h-6 w-6" style={{ color: C.plumDeep }} />
-            </div>
-            <h3 className="text-[22px]" style={{ fontFamily: serif, color: C.plumDeep }}>
-              You’re on the list, {name.split(' ')[0]}!
-            </h3>
-            <p className="mx-auto mt-2 max-w-sm text-[15px]" style={{ color: C.inkSoft }}>
-              Your details are saved on this device. Send them to the Embassy to complete your
-              RSVP, and save the date to your calendar.
-            </p>
+            <Share2 className="h-4 w-4" /> {copied ? 'Link copied' : 'Share Invitation'}
+          </button>
+        </div>
 
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <a
-                href={`mailto:${EVENT.rsvpEmail}?subject=${encodeURIComponent(
-                  'Marhaba Thailand — RSVP',
-                )}&body=${message}`}
-                className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13.5px] font-medium uppercase tracking-[0.08em] shadow-[0_8px_20px_rgba(139,80,100,0.18)]"
-                style={{
-                  background: `linear-gradient(135deg, ${C.blush}, ${C.gold})`,
-                  color: C.ink,
-                  fontFamily: sans,
-                }}
-              >
-                <Send className="h-4 w-4" /> Send to the Embassy
-              </a>
-              <button
-                type="button"
-                onClick={downloadIcs}
-                className="inline-flex items-center gap-2 rounded-full border px-7 py-3.5 text-[13.5px] font-medium uppercase tracking-[0.08em]"
-                style={{ borderColor: C.plum, color: C.plumDeep, fontFamily: sans }}
-              >
-                <CalendarPlus className="h-4 w-4" /> Add to Calendar
-              </button>
-            </div>
+        <div className="flex flex-wrap justify-center gap-3">
+          <a
+            href={`https://wa.me/?text=${encodeURIComponent(`${shareText} — ${SHARE_URL}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-[12.5px] uppercase tracking-[0.08em]"
+            style={{ borderColor: 'rgba(139,80,100,0.28)', color: C.plum }}
+          >
+            <Send className="h-3.5 w-3.5" /> WhatsApp
+          </a>
+          <button
+            type="button"
+            onClick={() => setShowQR((v) => !v)}
+            aria-expanded={showQR}
+            className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-[12.5px] uppercase tracking-[0.08em]"
+            style={{ borderColor: 'rgba(139,80,100,0.28)', color: C.plum }}
+          >
+            <QrCode className="h-3.5 w-3.5" /> {showQR ? 'Hide QR' : 'Show QR'}
+          </button>
+        </div>
 
-            <button
-              type="button"
-              onClick={() => {
-                try {
-                  localStorage.removeItem('marhaba:rsvp')
-                } catch {
-                  /* non-fatal */
-                }
-                setDone(false)
-              }}
-              className="mt-5 text-[12.5px] underline underline-offset-4"
-              style={{ color: C.inkSoft }}
+        <AnimatePresence>
+          {showQR && (
+            <motion.div
+              initial={{ opacity: 0, y: -8, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: 'auto' }}
+              exit={{ opacity: 0, y: -8, height: 0 }}
+              className="overflow-hidden text-center"
             >
-              Edit my details
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <div className="mt-2 rounded-2xl bg-white p-3.5 shadow-[0_10px_26px_rgba(139,80,100,0.14)]">
+                <QRCodeSVG value={SHARE_URL} size={150} bgColor="#ffffff" fgColor="#6e3e4e" level="M" />
+              </div>
+              <p className="mt-2.5 text-[12px]" style={{ color: C.inkSoft }}>
+                Scan to open this invitation
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <p className="mt-1 text-center text-[13px] italic" style={{ fontFamily: serif, color: C.inkSoft }}>
+          Questions about the programme? Ask the concierge in the corner.
+        </p>
+      </div>
     </Panel>
   )
 }
@@ -849,9 +767,9 @@ export default function EmbassyInvitation() {
 
         <Rule />
 
-        {/* ── RSVP ── */}
+        {/* ── Save the date ── */}
         <Reveal>
-          <Rsvp />
+          <SaveAndShare />
         </Reveal>
 
         {/* ── Footer ── */}
@@ -867,8 +785,8 @@ export default function EmbassyInvitation() {
             </a>
           </p>
           <p className="mx-auto mt-3 max-w-md text-[11.5px] italic" style={{ color: C.inkSoft }}>
-            Concept presentation prepared by WeThink. Programme details, timings, and RSVP contact
-            are subject to confirmation by the Royal Thai Embassy.
+            Concept presentation prepared by WeThink. Programme details and timings are subject to
+            confirmation by the Royal Thai Embassy.
           </p>
         </footer>
       </div>
