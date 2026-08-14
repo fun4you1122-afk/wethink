@@ -5,19 +5,13 @@ import { useEffect, useRef, useState } from 'react'
 /**
  * Looping Thai-culture footage behind the hero.
  *
- * Drop an .mp4 (and optionally a .webm) at the paths below and it plays
- * automatically. Until then the element removes itself on load failure, so the
- * hero falls back to the canvas backdrop with no broken frame or empty box.
+ * VP9/WebM is offered first (smaller) with H.264/MP4 behind it for Safari. The
+ * element removes itself on load failure, so the hero falls back to the canvas
+ * backdrop with no broken frame or empty box.
  *
  * Muted + playsInline so mobile browsers allow autoplay, paused while
  * offscreen, and skipped entirely for visitors who ask for less motion.
  */
-
-/**
- * Flip to true once the footage is committed to /public/embassy. Left false so
- * the page doesn't fire two 404s per visit for files that aren't there yet.
- */
-const HAS_FOOTAGE = false
 
 const SOURCES = [
   { src: '/embassy/thai-culture.webm', type: 'video/webm' },
@@ -51,7 +45,7 @@ export default function CultureVideo() {
     return () => io.disconnect()
   }, [reduced])
 
-  if (!HAS_FOOTAGE || failed || reduced) return null
+  if (failed || reduced) return null
 
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
@@ -75,7 +69,7 @@ export default function CultureVideo() {
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(180deg, rgba(253,247,240,0.86) 0%, rgba(253,247,240,0.80) 45%, rgba(253,247,240,0.94) 100%)',
+            'linear-gradient(180deg, rgba(253,247,240,0.80) 0%, rgba(253,247,240,0.72) 42%, rgba(253,247,240,0.98) 88%, rgba(253,247,240,1) 100%)',
         }}
       />
     </div>
