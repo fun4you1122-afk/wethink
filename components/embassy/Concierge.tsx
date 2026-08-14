@@ -17,9 +17,14 @@ type Msg = { who: 'bot' | 'user'; text: string }
 
 const KB: { patterns: RegExp[]; reply: string }[] = [
   {
+    patterns: [/open|close|hour|what time|when.*(start|end|finish)|late|early/i],
+    reply:
+      'Doors open at 10:00 AM and the festival runs until 10:00 PM on both days, 11 and 12 September. Come and go as you please — entry is free.',
+  },
+  {
     patterns: [/schedule|programme|program|agenda|each day|what.*happen|timing|time/i],
     reply:
-      'Both days run at Reem Mall.\n\nDay One (11 Sept) — doors open with the opening ceremony, cultural performances and workshops from midday, the Muay Thai showcase in the afternoon, and the lucky draw in the evening.\n\nDay Two (12 Sept) — workshops continue in the morning, Thai massage and the tourism pavilion at midday, a Muay Thai encore, then the grand prize draw and closing ceremony.',
+      'Both days run 10:00 AM to 10:00 PM at Reem Mall.\n\nDay One (11 Sept) — 10 AM doors open and opening ceremony, 12 PM performances and workshops, 3 PM Muay Thai showcase, 6 PM evening performances and Thai massage, 9 PM lucky draw, 10 PM close.\n\nDay Two (12 Sept) — 10 AM workshops continue, 12 PM Thai massage and tourism pavilion, 3 PM Muay Thai encore, 6 PM evening performances, 9 PM grand prize draw, 10 PM closing ceremony.',
   },
   {
     patterns: [/rsvp|register|sign up|book|attend|ticket|save the date/i],
@@ -29,7 +34,7 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
   {
     patterns: [/where|venue|location|reem|mall|address|map|park/i],
     reply:
-      'The festival is at Reem Mall on Al Reem Island, Abu Dhabi. There is a map link in the Venue section of this page.\n\nParking arrangements have not been confirmed yet — the Embassy can advise closer to the date.',
+      'The festival is at Reem Mall on Al Reem Island, Abu Dhabi, open 10:00 AM to 10:00 PM on both days. There is a map link in the Venue section of this page.\n\nParking arrangements have not been confirmed yet — the Embassy can advise closer to the date.',
   },
   {
     patterns: [/massage|spa|wellness/i],
@@ -68,7 +73,8 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
   },
   {
     patterns: [/cost|price|free|entry|fee/i],
-    reply: 'Entry is free and open to the public — just come along on either day.',
+    reply:
+      'Entry is free and open to the public — just come along any time between 10:00 AM and 10:00 PM on either day.',
   },
   {
     patterns: [/dress|wear|attire|code/i],

@@ -15,6 +15,8 @@ import { QRCodeSVG } from 'qrcode.react'
 import ThaiBackdrop from '@/components/embassy/ThaiBackdrop'
 import LotusBloom from '@/components/embassy/LotusBloom'
 import Concierge from '@/components/embassy/Concierge'
+import CultureVideo from '@/components/embassy/CultureVideo'
+import ImageBand from '@/components/embassy/ImageBand'
 
 /* ────────────────────────────────────────────────────────────
    Event details — single source of truth for the page.
@@ -25,6 +27,7 @@ const EVENT = {
   subtitle: 'Creating Your Own Thai Experience',
   dates: '11 – 12 September 2026',
   venue: 'Reem Mall, Abu Dhabi',
+  hours: '10:00 AM – 10:00 PM daily',
   mapUrl: 'https://maps.google.com/?q=Reem+Mall+Abu+Dhabi',
   start: '2026-09-11T10:00:00+04:00',
 }
@@ -401,16 +404,20 @@ function Phrasebook() {
 
 const SCHEDULE = {
   1: [
-    ['Morning', 'Doors open · Opening ceremony'],
-    ['Midday', 'Cultural performances begin · Workshops open'],
-    ['Afternoon', 'Muay Thai showcase'],
-    ['Evening', 'Lucky draw · Close of Day One'],
+    ['10:00 AM', 'Doors open · Opening ceremony'],
+    ['12:00 PM', 'Cultural performances begin · Workshops open'],
+    ['3:00 PM', 'Muay Thai showcase'],
+    ['6:00 PM', 'Evening performances · Thai massage'],
+    ['9:00 PM', 'Lucky draw'],
+    ['10:00 PM', 'Close of Day One'],
   ],
   2: [
-    ['Morning', 'Doors open · Workshops continue'],
-    ['Midday', 'Thai massage sessions · Tourism pavilion'],
-    ['Afternoon', 'Muay Thai showcase encore'],
-    ['Evening', 'Grand prize lucky draw · Closing ceremony'],
+    ['10:00 AM', 'Doors open · Workshops continue'],
+    ['12:00 PM', 'Thai massage sessions · Tourism pavilion'],
+    ['3:00 PM', 'Muay Thai showcase encore'],
+    ['6:00 PM', 'Evening performances'],
+    ['9:00 PM', 'Grand prize lucky draw'],
+    ['10:00 PM', 'Closing ceremony'],
   ],
 } as const
 
@@ -456,7 +463,7 @@ function Schedule() {
             {SCHEDULE[day].map(([time, desc], n) => (
               <div
                 key={time}
-                className="grid grid-cols-[92px_1fr] gap-4 py-3"
+                className="grid grid-cols-[86px_1fr] gap-4 py-3"
                 style={{
                   borderBottom:
                     n === SCHEDULE[day].length - 1
@@ -479,7 +486,7 @@ function Schedule() {
           className="mt-4 text-center text-[13px] italic"
           style={{ fontFamily: serif, color: C.inkSoft }}
         >
-          Programme times are indicative and subject to confirmation by the Embassy.
+          Doors open 10:00 AM and close 10:00 PM on both days. Session times are subject to confirmation by the Embassy.
         </p>
       </div>
     </Panel>
@@ -634,6 +641,12 @@ export default function EmbassyInvitation() {
     >
       <ThaiBackdrop />
 
+      {/* Thai-culture footage behind the opening screen; removes itself if the
+          file isn't present, leaving the canvas backdrop alone. */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[92vh] overflow-hidden">
+        <CultureVideo />
+      </div>
+
       <div className="relative z-10 mx-auto max-w-[780px] px-5 pb-24 pt-14">
         {/* ── Hero ── */}
         <header className="text-center">
@@ -686,6 +699,9 @@ export default function EmbassyInvitation() {
             >
               {EVENT.dates} <span style={{ color: C.gold }}>✦</span> {EVENT.venue}
             </p>
+            <p className="mt-2 text-[13.5px] uppercase tracking-[0.14em]" style={{ color: C.plum }}>
+              {EVENT.hours}
+            </p>
           </Reveal>
 
           <Reveal delay={0.2}>
@@ -737,7 +753,16 @@ export default function EmbassyInvitation() {
           <Schedule />
         </Reveal>
 
-        <Rule />
+        {/* ── Photographic interlude ── */}
+        <ImageBand src="/embassy/thailand-hero.jpg" alt="A golden Thai temple above the river, framed by forested hills">
+          <p className="text-[12px] uppercase tracking-[0.22em] text-white/85">Thailand awaits</p>
+          <p
+            className="text-[24px] italic leading-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] sm:text-[28px]"
+            style={{ fontFamily: serif }}
+          >
+            Come for a day, leave with a country
+          </p>
+        </ImageBand>
 
         {/* ── Venue ── */}
         <Reveal>
@@ -749,7 +774,7 @@ export default function EmbassyInvitation() {
                 {EVENT.venue}
                 <br />
                 <span className="text-[15px]" style={{ color: C.inkSoft }}>
-                  Doors open each morning · Entry is free and open to the public
+                  Open 10:00 AM – 10:00 PM both days · Entry is free and open to the public
                 </span>
               </p>
               <a
@@ -774,6 +799,13 @@ export default function EmbassyInvitation() {
 
         {/* ── Footer ── */}
         <footer className="mt-10 pt-6 text-center">
+          <img
+            src="/wethink-logo.png"
+            alt="WeThink"
+            width={132}
+            height={44}
+            className="mx-auto mb-4 h-11 w-auto opacity-90"
+          />
           <p className="text-[12px] tracking-[0.03em]" style={{ color: C.inkSoft }}>
             Design by WeThink &nbsp;·&nbsp; @wethink.ae &nbsp;·&nbsp;{' '}
             <a
