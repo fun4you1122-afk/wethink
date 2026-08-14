@@ -38,7 +38,7 @@ type Mote = {
   speed: number
 }
 
-const PETAL_COLORS = ['#f3c9c2', '#e9a8a0', '#d3c3e3', '#bcd0b6', '#ddb571']
+const PETAL_COLORS = ['#9FDDE8', '#6FC7D8', '#CBEEF3', '#B7E4E9', '#029FB1']
 
 /** One lotus petal, centred on the origin, pointing up. */
 function petalPath(ctx: CanvasRenderingContext2D, size: number) {
@@ -202,23 +202,23 @@ export default function ThaiBackdrop({ className = '' }: { className?: string })
 
       // 1 — gradient wash
       const wash = ctx.createLinearGradient(0, 0, w * 0.6, h)
-      wash.addColorStop(0, 'rgba(243,201,194,0.30)')
-      wash.addColorStop(0.45, 'rgba(211,195,227,0.22)')
-      wash.addColorStop(0.75, 'rgba(188,208,182,0.20)')
-      wash.addColorStop(1, 'rgba(221,181,113,0.20)')
+      wash.addColorStop(0, 'rgba(159,221,232,0.30)')
+      wash.addColorStop(0.45, 'rgba(203,238,243,0.22)')
+      wash.addColorStop(0.75, 'rgba(183,228,233,0.20)')
+      wash.addColorStop(1, 'rgba(2,159,177,0.20)')
       ctx.fillStyle = wash
       ctx.fillRect(0, 0, w, h)
 
       const glow = ctx.createRadialGradient(w * 0.5, h * 0.18, 0, w * 0.5, h * 0.18, h * 0.55)
-      glow.addColorStop(0, 'rgba(255,246,232,0.55)')
-      glow.addColorStop(1, 'rgba(255,246,232,0)')
+      glow.addColorStop(0, 'rgba(240,252,254,0.55)')
+      glow.addColorStop(1, 'rgba(240,252,254,0)')
       ctx.fillStyle = glow
       ctx.fillRect(0, 0, w, h)
 
       // 2 — gilded skyline, far band then near band
       const baseY = h + 2
-      skyline(ctx, w, baseY, compact ? 0.7 : 1, '#ddb571', 0.16, pointer.x * -18)
-      skyline(ctx, w, baseY, compact ? 0.48 : 0.66, '#b98f4e', 0.13, pointer.x * -34 + 120)
+      skyline(ctx, w, baseY, compact ? 0.7 : 1, '#029FB1', 0.16, pointer.x * -18)
+      skyline(ctx, w, baseY, compact ? 0.48 : 0.66, '#037A8A', 0.13, pointer.x * -34 + 120)
 
       // 3 — petals
       for (const p of petals) {
@@ -247,7 +247,7 @@ export default function ThaiBackdrop({ className = '' }: { className?: string })
       for (const m of motes) {
         const tw = 0.35 + Math.abs(Math.sin(t + m.phase)) * 0.6
         ctx.globalAlpha = tw * 0.7
-        ctx.fillStyle = '#ddb571'
+        ctx.fillStyle = '#029FB1'
         ctx.beginPath()
         ctx.arc(m.x + pointer.x * 30, m.y + pointer.y * 18, m.r, 0, Math.PI * 2)
         ctx.fill()

@@ -48,7 +48,7 @@ export default function LotusBloom({ size = 116 }: { size?: number }) {
                 transition={{ duration: 2.2, ease: 'easeOut' }}
                 className="pointer-events-none absolute left-1/2 top-1/2 h-3 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full"
                 style={{
-                  background: i % 3 === 0 ? '#e9a8a0' : i % 3 === 1 ? '#f3c9c2' : '#d3c3e3',
+                  background: i % 3 === 0 ? '#6FC7D8' : i % 3 === 1 ? '#9FDDE8' : '#CBEEF3',
                 }}
               />
             )
@@ -61,27 +61,27 @@ export default function LotusBloom({ size = 116 }: { size?: number }) {
         onClick={pop}
         aria-label="Bloom the lotus"
         whileTap={{ scale: 0.92 }}
-        className="relative block h-full w-full cursor-pointer rounded-full border-0 bg-transparent p-0 outline-none focus-visible:ring-2 focus-visible:ring-[#8b5064] focus-visible:ring-offset-4 focus-visible:ring-offset-transparent"
+        className="relative block h-full w-full cursor-pointer rounded-full border-0 bg-transparent p-0 outline-none focus-visible:ring-2 focus-visible:ring-[#037A8A] focus-visible:ring-offset-4 focus-visible:ring-offset-transparent"
       >
         <motion.svg
           viewBox="0 0 120 120"
-          className="h-full w-full drop-shadow-[0_6px_18px_rgba(139,80,100,0.18)]"
+          className="h-full w-full drop-shadow-[0_6px_18px_rgba(3,122,138,0.18)]"
           animate={{ scale: [1, 1.035, 1] }}
           transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
         >
           <defs>
             <radialGradient id="lotusCore" cx="50%" cy="50%">
-              <stop offset="0%" stopColor="#f6d99a" />
-              <stop offset="100%" stopColor="#ddb571" />
+              <stop offset="0%" stopColor="#8FE3F0" />
+              <stop offset="100%" stopColor="#029FB1" />
             </radialGradient>
           </defs>
 
-          {/* back ring — sage leaves */}
+          {/* back ring — outer leaves */}
           {Array.from({ length: PETALS }).map((_, i) => (
             <g key={`b${i}`} transform={`rotate(${(360 / PETALS) * i + 22.5} 60 60)`}>
               <motion.path
                 d="M60 26 C71 40 71 54 60 66 C49 54 49 40 60 26Z"
-                fill="#bcd0b6"
+                fill="#B7E4E9"
                 opacity={0.55}
                 style={{ transformBox: 'view-box', transformOrigin: '60px 60px' }}
                 animate={{ scale: open ? 1.3 : 1.08 }}
@@ -90,12 +90,12 @@ export default function LotusBloom({ size = 116 }: { size?: number }) {
             </g>
           ))}
 
-          {/* front ring — blush petals */}
+          {/* front ring — main petals */}
           {Array.from({ length: PETALS }).map((_, i) => (
             <g key={`f${i}`} transform={`rotate(${(360 / PETALS) * i} 60 60)`}>
               <motion.path
                 d="M60 18 C73 36 73 54 60 68 C47 54 47 36 60 18Z"
-                fill={i % 2 === 0 ? '#f3c9c2' : '#e9a8a0'}
+                fill={i % 2 === 0 ? '#9FDDE8' : '#6FC7D8'}
                 style={{ transformBox: 'view-box', transformOrigin: '60px 60px' }}
                 animate={{ scale: open ? 1.16 : 0.94 }}
                 transition={{ type: 'spring', stiffness: 110, damping: 13, delay: i * 0.025 }}
@@ -103,12 +103,12 @@ export default function LotusBloom({ size = 116 }: { size?: number }) {
             </g>
           ))}
 
-          {/* inner ring — lavender */}
+          {/* inner ring */}
           {Array.from({ length: 5 }).map((_, i) => (
             <g key={`i${i}`} transform={`rotate(${(360 / 5) * i + 36} 60 60)`}>
               <motion.path
                 d="M60 34 C68 46 68 56 60 64 C52 56 52 46 60 34Z"
-                fill="#d3c3e3"
+                fill="#CBEEF3"
                 style={{ transformBox: 'view-box', transformOrigin: '60px 60px' }}
                 animate={{ scale: open ? 1.08 : 0.88 }}
                 transition={{ type: 'spring', stiffness: 120, damping: 12, delay: 0.05 + i * 0.03 }}

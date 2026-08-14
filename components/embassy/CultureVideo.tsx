@@ -63,13 +63,13 @@ export default function CultureVideo() {
         ))}
       </video>
 
-      {/* Cream scrim — keeps the invitation's light, printed-paper feel and
+      {/* Scrim — keeps the invitation's light, printed-paper feel and
           guarantees contrast for the headline whatever the footage shows. */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(180deg, rgba(253,247,240,0.80) 0%, rgba(253,247,240,0.72) 42%, rgba(253,247,240,0.98) 88%, rgba(253,247,240,1) 100%)',
+            'linear-gradient(180deg, rgba(242,250,251,0.80) 0%, rgba(242,250,251,0.72) 42%, rgba(242,250,251,0.98) 88%, rgba(242,250,251,1) 100%)',
         }}
       />
     </div>

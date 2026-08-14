@@ -35,12 +35,12 @@ export default function ImageBand({
           transition={{ duration: 24, ease: 'easeInOut', repeat: Infinity, repeatType: 'reverse' }}
         />
 
-        {/* soften the edges into the cream page, and lift the caption off the photo */}
+        {/* soften the edges into the page, and lift the caption off the photo */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, rgba(253,247,240,0.92) 0%, rgba(68,48,46,0.18) 32%, rgba(68,48,46,0.42) 100%)',
+              'linear-gradient(180deg, rgba(242,250,251,0.92) 0%, rgba(12,58,66,0.18) 32%, rgba(12,58,66,0.42) 100%)',
           }}
         />
 

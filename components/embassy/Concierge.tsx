@@ -153,8 +153,8 @@ export default function Concierge() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         whileTap={{ scale: 0.96 }}
-        className="fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full px-5 py-3.5 text-sm font-medium text-white shadow-[0_10px_30px_rgba(139,80,100,0.35)]"
-        style={{ background: 'linear-gradient(135deg,#8b5064,#d3c3e3)' }}
+        className="fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full px-5 py-3.5 text-sm font-medium text-white shadow-[0_10px_30px_rgba(3,122,138,0.35)]"
+        style={{ background: 'linear-gradient(135deg,#015866,#029FB1)' }}
         aria-expanded={open}
       >
         {open ? <X className="h-5 w-5" /> : <MessageCircle className="h-5 w-5" />}
@@ -168,12 +168,12 @@ export default function Concierge() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 220, damping: 22 }}
-            className="fixed bottom-24 right-5 z-40 flex w-[340px] max-w-[calc(100vw-40px)] flex-col overflow-hidden rounded-3xl border border-[rgba(139,80,100,0.18)] bg-[#fdf7f0] shadow-[0_24px_60px_rgba(68,48,46,0.28)]"
+            className="fixed bottom-24 right-5 z-40 flex w-[340px] max-w-[calc(100vw-40px)] flex-col overflow-hidden rounded-3xl border border-[rgba(3,122,138,0.18)] bg-[#F2FAFB] shadow-[0_24px_60px_rgba(12,58,66,0.28)]"
             style={{ height: 460, maxHeight: 'calc(100vh - 150px)' }}
           >
             <div
               className="flex items-center justify-between px-4 py-3.5 text-white"
-              style={{ background: 'linear-gradient(135deg,#8b5064,#d3c3e3)' }}
+              style={{ background: 'linear-gradient(135deg,#015866,#029FB1)' }}
             >
               <div>
                 <div className="font-serif text-[16px] leading-tight">Marhaba Concierge</div>
@@ -197,12 +197,12 @@ export default function Concierge() {
                   animate={{ opacity: 1, y: 0 }}
                   className={
                     m.who === 'bot'
-                      ? 'max-w-[86%] self-start whitespace-pre-line rounded-2xl rounded-bl-sm border border-[rgba(139,80,100,0.12)] bg-white/80 px-3.5 py-2.5 text-[14px] leading-relaxed text-[#44302e]'
-                      : 'max-w-[86%] self-end whitespace-pre-line rounded-2xl rounded-br-sm px-3.5 py-2.5 text-[14px] leading-relaxed text-[#44302e]'
+                      ? 'max-w-[86%] self-start whitespace-pre-line rounded-2xl rounded-bl-sm border border-[rgba(3,122,138,0.12)] bg-white/80 px-3.5 py-2.5 text-[14px] leading-relaxed text-[#0C3A42]'
+                      : 'max-w-[86%] self-end whitespace-pre-line rounded-2xl rounded-br-sm px-3.5 py-2.5 text-[14px] leading-relaxed text-[#015866]'
                   }
                   style={
                     m.who === 'user'
-                      ? { background: 'linear-gradient(135deg,#f3c9c2,#ddb571)' }
+                      ? { background: 'linear-gradient(135deg,#CBEEF3,#9FDDE8)' }
                       : undefined
                   }
                 >
@@ -211,11 +211,11 @@ export default function Concierge() {
               ))}
 
               {typing && (
-                <div className="flex max-w-[86%] items-center gap-1 self-start rounded-2xl rounded-bl-sm border border-[rgba(139,80,100,0.12)] bg-white/80 px-4 py-3">
+                <div className="flex max-w-[86%] items-center gap-1 self-start rounded-2xl rounded-bl-sm border border-[rgba(3,122,138,0.12)] bg-white/80 px-4 py-3">
                   {[0, 1, 2].map((i) => (
                     <motion.span
                       key={i}
-                      className="h-1.5 w-1.5 rounded-full bg-[#8b5064]"
+                      className="h-1.5 w-1.5 rounded-full bg-[#037A8A]"
                       animate={{ y: [0, -4, 0], opacity: [0.4, 1, 0.4] }}
                       transition={{ duration: 1.1, repeat: Infinity, delay: i * 0.15 }}
                     />
@@ -230,7 +230,7 @@ export default function Concierge() {
                   key={c}
                   type="button"
                   onClick={() => ask(c)}
-                  className="rounded-full border border-[rgba(139,80,100,0.18)] bg-[#f7ebe0] px-3 py-1.5 text-[12px] text-[#6e3e4e] transition-colors hover:bg-[#f3c9c2]"
+                  className="rounded-full border border-[rgba(3,122,138,0.18)] bg-[#E3F4F7] px-3 py-1.5 text-[12px] text-[#015866] transition-colors hover:bg-[#9FDDE8]"
                 >
                   {c}
                 </button>
@@ -242,7 +242,7 @@ export default function Concierge() {
                 e.preventDefault()
                 ask(input)
               }}
-              className="flex gap-2 border-t border-[rgba(139,80,100,0.12)] p-3"
+              className="flex gap-2 border-t border-[rgba(3,122,138,0.12)] p-3"
             >
               <input
                 ref={inputRef}
@@ -250,13 +250,13 @@ export default function Concierge() {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type a question…"
                 aria-label="Ask the concierge"
-                className="flex-1 rounded-full border border-[rgba(139,80,100,0.25)] bg-white px-4 py-2.5 text-[14px] text-[#44302e] outline-none focus:border-[#8b5064]"
+                className="flex-1 rounded-full border border-[rgba(3,122,138,0.25)] bg-white px-4 py-2.5 text-[14px] text-[#0C3A42] outline-none focus:border-[#037A8A]"
               />
               <button
                 type="submit"
                 aria-label="Send"
                 className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-white"
-                style={{ background: 'linear-gradient(135deg,#8b5064,#d3c3e3)' }}
+                style={{ background: 'linear-gradient(135deg,#015866,#029FB1)' }}
               >
                 <Send className="h-4 w-4" />
               </button>

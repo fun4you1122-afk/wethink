@@ -33,23 +33,23 @@ const EVENT = {
 }
 
 const C = {
-  cream: '#fdf7f0',
-  cream2: '#f7ebe0',
-  blush: '#f3c9c2',
-  blushDeep: '#e9a8a0',
-  sage: '#bcd0b6',
-  lavender: '#d3c3e3',
-  gold: '#ddb571',
-  plum: '#8b5064',
-  plumDeep: '#6e3e4e',
-  ink: '#44302e',
-  inkSoft: '#7c6560',
+  cream: '#F2FAFB',
+  cream2: '#E3F4F7',
+  blush: '#9FDDE8',
+  blushDeep: '#6FC7D8',
+  sage: '#B7E4E9',
+  lavender: '#CBEEF3',
+  gold: '#029FB1',
+  plum: '#037A8A',
+  plumDeep: '#015866',
+  ink: '#0C3A42',
+  inkSoft: '#46707A',
   // Sampled from the RM mark: deep teal through to bright cyan.
   tealDeep: '#015866',
   teal: '#037A8A',
   tealMid: '#029FB1',
   tealBright: '#01C1D5',
-  tealSoft: '#3F7F8B',
+  tealSoft: '#3A737F',
   glass: 'rgba(255,255,255,0.58)',
   glassStrong: 'rgba(255,255,255,0.80)',
 }
@@ -84,7 +84,7 @@ function Reveal({
 function Rule() {
   return (
     <div className="my-11 flex items-center gap-3.5" aria-hidden="true">
-      <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[rgba(139,80,100,0.25)] to-transparent" />
+      <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[rgba(3,122,138,0.25)] to-transparent" />
       <svg viewBox="0 0 22 22" className="h-5 w-5 flex-shrink-0" fill="none">
         <circle cx="11" cy="11" r="3.5" stroke={C.gold} strokeWidth="1.2" />
         <path
@@ -93,7 +93,7 @@ function Rule() {
           strokeWidth="1.2"
         />
       </svg>
-      <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[rgba(139,80,100,0.25)] to-transparent" />
+      <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[rgba(3,122,138,0.25)] to-transparent" />
     </div>
   )
 }
@@ -101,7 +101,7 @@ function Rule() {
 function Panel({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
     <div
-      className={`rounded-[26px] border border-[rgba(139,80,100,0.12)] p-7 shadow-[0_16px_40px_rgba(139,80,100,0.10)] backdrop-blur-md sm:p-10 ${className}`}
+      className={`rounded-[26px] border border-[rgba(3,122,138,0.12)] p-7 shadow-[0_16px_40px_rgba(3,122,138,0.10)] backdrop-blur-md sm:p-10 ${className}`}
       style={{ background: C.glass }}
     >
       {children}
@@ -163,7 +163,7 @@ function Countdown() {
       {units.map(([value, label]) => (
         <div
           key={label}
-          className="min-w-0 rounded-[18px] border border-[rgba(139,80,100,0.15)] px-2 py-3.5 text-center shadow-[0_6px_18px_rgba(139,80,100,0.08)] backdrop-blur-sm sm:min-w-[82px] sm:px-4"
+          className="min-w-0 rounded-[18px] border border-[rgba(3,122,138,0.15)] px-2 py-3.5 text-center shadow-[0_6px_18px_rgba(3,122,138,0.08)] backdrop-blur-sm sm:min-w-[82px] sm:px-4"
           style={{ background: C.glass }}
         >
           <div
@@ -252,7 +252,7 @@ function HighlightCard({ item, index }: { item: (typeof HIGHLIGHTS)[number]; ind
       aria-expanded={flipped}
       whileHover={{ y: -4 }}
       transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-      className="h-[168px] w-full rounded-[18px] outline-none focus-visible:ring-2 focus-visible:ring-[#8b5064] focus-visible:ring-offset-2"
+      className="h-[168px] w-full rounded-[18px] outline-none focus-visible:ring-2 focus-visible:ring-[#037A8A] focus-visible:ring-offset-2"
       style={{ perspective: 1200 }}
     >
       <motion.div
@@ -263,7 +263,7 @@ function HighlightCard({ item, index }: { item: (typeof HIGHLIGHTS)[number]; ind
       >
         {/* front */}
         <div
-          className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-[18px] border border-[rgba(139,80,100,0.14)] p-3.5 text-center"
+          className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-[18px] border border-[rgba(3,122,138,0.14)] p-3.5 text-center"
           style={{
             backfaceVisibility: 'hidden',
             background: 'linear-gradient(160deg, rgba(255,255,255,0.85), rgba(255,255,255,0.35))',
@@ -293,7 +293,7 @@ function HighlightCard({ item, index }: { item: (typeof HIGHLIGHTS)[number]; ind
 
         {/* back */}
         <div
-          className="absolute inset-0 flex items-center justify-center rounded-[18px] border border-[rgba(139,80,100,0.14)] p-4 text-center text-[14.5px] leading-snug"
+          className="absolute inset-0 flex items-center justify-center rounded-[18px] border border-[rgba(3,122,138,0.14)] p-4 text-center text-[14.5px] leading-snug"
           style={{
             backfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)',
@@ -339,7 +339,7 @@ function Phrasebook() {
           type="button"
           onClick={() => go(-1)}
           aria-label="Previous phrase"
-          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-[rgba(139,80,100,0.22)] transition-colors hover:bg-white/70"
+          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-[rgba(3,122,138,0.22)] transition-colors hover:bg-white/70"
           style={{ color: C.plum }}
         >
           <ChevronLeft className="h-4 w-4" />
@@ -348,7 +348,7 @@ function Phrasebook() {
         <button
           type="button"
           onClick={() => setShown((v) => !v)}
-          className="flex-1 rounded-[20px] border border-[rgba(139,80,100,0.16)] px-5 py-7 text-center outline-none transition-shadow hover:shadow-[0_10px_26px_rgba(139,80,100,0.12)] focus-visible:ring-2 focus-visible:ring-[#8b5064]"
+          className="flex-1 rounded-[20px] border border-[rgba(3,122,138,0.16)] px-5 py-7 text-center outline-none transition-shadow hover:shadow-[0_10px_26px_rgba(3,122,138,0.12)] focus-visible:ring-2 focus-visible:ring-[#037A8A]"
           style={{ background: C.glassStrong }}
           aria-expanded={shown}
         >
@@ -371,7 +371,7 @@ function Phrasebook() {
               </div>
               <div
                 className="mt-3 min-h-[42px] text-[15px] italic"
-                style={{ fontFamily: serif, color: shown ? C.ink : 'rgba(124,101,96,0.5)' }}
+                style={{ fontFamily: serif, color: shown ? C.ink : 'rgba(70,112,122,0.5)' }}
               >
                 {shown ? p.meaning : 'tap to reveal'}
               </div>
@@ -383,7 +383,7 @@ function Phrasebook() {
           type="button"
           onClick={() => go(1)}
           aria-label="Next phrase"
-          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-[rgba(139,80,100,0.22)] transition-colors hover:bg-white/70"
+          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-[rgba(3,122,138,0.22)] transition-colors hover:bg-white/70"
           style={{ color: C.plum }}
         >
           <ChevronRight className="h-4 w-4" />
@@ -397,7 +397,7 @@ function Phrasebook() {
             className="h-1.5 rounded-full transition-all"
             style={{
               width: n === i ? 18 : 6,
-              background: n === i ? C.gold : 'rgba(139,80,100,0.22)',
+              background: n === i ? C.gold : 'rgba(3,122,138,0.22)',
             }}
           />
         ))}
@@ -440,14 +440,14 @@ function Schedule() {
             role="tab"
             aria-selected={day === d}
             onClick={() => setDay(d)}
-            className="relative rounded-full px-5 py-2.5 text-[13px] uppercase tracking-[0.06em] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#8b5064]"
+            className="relative rounded-full px-5 py-2.5 text-[13px] uppercase tracking-[0.06em] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#037A8A]"
             style={{ color: day === d ? C.plumDeep : C.inkSoft, fontFamily: sans }}
           >
             {day === d && (
               <motion.span
                 layoutId="dayPill"
                 className="absolute inset-0 rounded-full"
-                style={{ background: `linear-gradient(135deg, ${C.blush}, ${C.gold})` }}
+                style={{ background: `linear-gradient(135deg, ${C.lavender}, ${C.blush})` }}
                 transition={{ type: 'spring', stiffness: 320, damping: 30 }}
               />
             )}
@@ -474,7 +474,7 @@ function Schedule() {
                   borderBottom:
                     n === SCHEDULE[day].length - 1
                       ? 'none'
-                      : '1px dashed rgba(139,80,100,0.18)',
+                      : '1px dashed rgba(3,122,138,0.18)',
                 }}
               >
                 <div
@@ -567,10 +567,10 @@ function SaveAndShare() {
             type="button"
             onClick={downloadIcs}
             whileTap={{ scale: 0.97 }}
-            className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13.5px] font-medium uppercase tracking-[0.08em] shadow-[0_8px_20px_rgba(139,80,100,0.18)]"
+            className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13.5px] font-medium uppercase tracking-[0.08em] shadow-[0_8px_20px_rgba(3,122,138,0.18)]"
             style={{
-              background: `linear-gradient(135deg, ${C.blush}, ${C.gold})`,
-              color: C.ink,
+              background: `linear-gradient(135deg, ${C.tealDeep}, ${C.teal})`,
+              color: '#ffffff',
               fontFamily: sans,
             }}
           >
@@ -593,7 +593,7 @@ function SaveAndShare() {
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-[12.5px] uppercase tracking-[0.08em]"
-            style={{ borderColor: 'rgba(139,80,100,0.28)', color: C.plum }}
+            style={{ borderColor: 'rgba(3,122,138,0.28)', color: C.plum }}
           >
             <Send className="h-3.5 w-3.5" /> WhatsApp
           </a>
@@ -602,7 +602,7 @@ function SaveAndShare() {
             onClick={() => setShowQR((v) => !v)}
             aria-expanded={showQR}
             className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-[12.5px] uppercase tracking-[0.08em]"
-            style={{ borderColor: 'rgba(139,80,100,0.28)', color: C.plum }}
+            style={{ borderColor: 'rgba(3,122,138,0.28)', color: C.plum }}
           >
             <QrCode className="h-3.5 w-3.5" /> {showQR ? 'Hide QR' : 'Show QR'}
           </button>
@@ -616,8 +616,8 @@ function SaveAndShare() {
               exit={{ opacity: 0, y: -8, height: 0 }}
               className="overflow-hidden text-center"
             >
-              <div className="mt-2 rounded-2xl bg-white p-3.5 shadow-[0_10px_26px_rgba(139,80,100,0.14)]">
-                <QRCodeSVG value={SHARE_URL} size={150} bgColor="#ffffff" fgColor="#6e3e4e" level="M" />
+              <div className="mt-2 rounded-2xl bg-white p-3.5 shadow-[0_10px_26px_rgba(3,122,138,0.14)]">
+                <QRCodeSVG value={SHARE_URL} size={150} bgColor="#ffffff" fgColor="#015866" level="M" />
               </div>
               <p className="mt-2.5 text-[12px]" style={{ color: C.inkSoft }}>
                 Scan to open this invitation
@@ -834,7 +834,7 @@ export default function EmbassyInvitation() {
               href="https://www.instagram.com/wethink.ae/"
               target="_blank"
               rel="noopener noreferrer"
-              className="border-b border-[rgba(124,101,96,0.4)] no-underline"
+              className="border-b border-[rgba(70,112,122,0.4)] no-underline"
               style={{ color: C.inkSoft }}
             >
               @wethink.ae
@@ -842,7 +842,7 @@ export default function EmbassyInvitation() {
             &nbsp;·&nbsp;{' '}
             <a
               href="https://www.wethink.ae"
-              className="border-b border-[rgba(124,101,96,0.4)] no-underline"
+              className="border-b border-[rgba(70,112,122,0.4)] no-underline"
               style={{ color: C.inkSoft }}
             >
               www.wethink.ae
