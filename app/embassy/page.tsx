@@ -44,6 +44,12 @@ const C = {
   plumDeep: '#6e3e4e',
   ink: '#44302e',
   inkSoft: '#7c6560',
+  // Sampled from the RM mark: deep teal through to bright cyan.
+  tealDeep: '#015866',
+  teal: '#037A8A',
+  tealMid: '#029FB1',
+  tealBright: '#01C1D5',
+  tealSoft: '#3F7F8B',
   glass: 'rgba(255,255,255,0.58)',
   glassStrong: 'rgba(255,255,255,0.80)',
 }
@@ -162,13 +168,13 @@ function Countdown() {
         >
           <div
             className="text-[26px] leading-none tabular-nums sm:text-[30px]"
-            style={{ fontFamily: serif, color: C.plumDeep }}
+            style={{ fontFamily: serif, color: C.tealDeep }}
           >
             {value}
           </div>
           <div
             className="mt-1.5 text-[9px] uppercase tracking-[0.1em] sm:text-[10px] sm:tracking-[0.14em]"
-            style={{ color: C.inkSoft }}
+            style={{ color: C.tealSoft }}
           >
             {label}
           </div>
@@ -660,46 +666,62 @@ export default function EmbassyInvitation() {
 
           <Reveal delay={0.1}>
             <p
-              className="mt-5 text-[12.5px] font-medium uppercase tracking-[0.22em]"
-              style={{ color: C.plum }}
+              className="mt-5 text-[12.5px] font-semibold uppercase tracking-[0.22em]"
+              style={{ color: C.teal }}
             >
               {EVENT.host}
             </p>
-            <p className="mt-3 text-[18px] italic" style={{ fontFamily: serif, color: C.inkSoft }}>
+            <p className="mt-3 text-[18px] italic" style={{ fontFamily: serif, color: C.tealSoft }}>
               requests the pleasure of your company at
             </p>
             <h1
-              className="mt-1 bg-clip-text text-[clamp(46px,9vw,78px)] font-medium leading-[1.05] tracking-tight text-transparent"
+              className="mt-1 text-[clamp(46px,9vw,78px)] font-semibold leading-[1.05] tracking-tight"
               style={{
                 fontFamily: serif,
-                backgroundImage: `linear-gradient(100deg, ${C.plumDeep} 10%, ${C.plum} 45%, ${C.blushDeep} 75%, ${C.gold} 100%)`,
+                // Gradient text needs the clip on the element itself; the halo
+                // has to sit on a wrapper, because a filter on clipped text
+                // repaints the background box and kills the effect.
+                filter: 'drop-shadow(0 2px 14px rgba(255,255,255,0.85))',
               }}
             >
-              {EVENT.title}
+              <span
+                className="bg-clip-text text-transparent"
+                style={{
+                  backgroundImage: `linear-gradient(100deg, ${C.tealDeep} 0%, ${C.teal} 34%, ${C.tealMid} 68%, ${C.tealBright} 100%)`,
+                }}
+              >
+                {EVENT.title}
+              </span>
             </h1>
-            <p className="mt-1 text-[21px] italic" style={{ fontFamily: serif, color: C.inkSoft }}>
+            <p
+              className="mt-1 text-[21px] italic"
+              style={{ fontFamily: serif, color: C.tealSoft }}
+            >
               {EVENT.subtitle}
             </p>
 
             {/* trilingual welcome — Thai, Arabic, English */}
             <div
-              className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[15px]"
-              style={{ color: C.plum }}
+              className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[15px] font-medium"
+              style={{ color: C.teal }}
             >
               <span>ยินดีต้อนรับ</span>
-              <span style={{ color: C.gold }}>✦</span>
+              <span style={{ color: C.tealMid }}>✦</span>
               <span dir="rtl">مرحبا</span>
-              <span style={{ color: C.gold }}>✦</span>
+              <span style={{ color: C.tealMid }}>✦</span>
               <span>Welcome</span>
             </div>
 
             <p
-              className="mt-6 text-[14.5px] font-medium uppercase tracking-[0.05em]"
-              style={{ color: C.plumDeep }}
+              className="mt-6 text-[14.5px] font-semibold uppercase tracking-[0.05em]"
+              style={{ color: C.tealDeep }}
             >
-              {EVENT.dates} <span style={{ color: C.gold }}>✦</span> {EVENT.venue}
+              {EVENT.dates} <span style={{ color: C.tealMid }}>✦</span> {EVENT.venue}
             </p>
-            <p className="mt-2 text-[13.5px] uppercase tracking-[0.14em]" style={{ color: C.plum }}>
+            <p
+              className="mt-2 text-[13.5px] font-medium uppercase tracking-[0.14em]"
+              style={{ color: C.teal }}
+            >
               {EVENT.hours}
             </p>
           </Reveal>
