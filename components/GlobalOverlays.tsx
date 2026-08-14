@@ -6,7 +6,7 @@ import ScrollProgress from '@/components/ScrollProgress'
 import AiChat from '@/components/AiChat'
 import GameTab from '@/components/GameTab'
 
-const HIDDEN_ON = ['/card']
+const HIDDEN_ON = ['/card', '/embassy']
 
 export default function GlobalOverlays() {
   const pathname = usePathname()
