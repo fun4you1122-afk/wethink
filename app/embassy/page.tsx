@@ -807,7 +807,17 @@ export default function EmbassyInvitation() {
             className="mx-auto mb-4 h-11 w-auto opacity-90"
           />
           <p className="text-[12px] tracking-[0.03em]" style={{ color: C.inkSoft }}>
-            Design by WeThink &nbsp;·&nbsp; @wethink.ae &nbsp;·&nbsp;{' '}
+            Design by WeThink &nbsp;·&nbsp;{' '}
+            <a
+              href="https://www.instagram.com/wethink.ae/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border-b border-[rgba(124,101,96,0.4)] no-underline"
+              style={{ color: C.inkSoft }}
+            >
+              @wethink.ae
+            </a>{' '}
+            &nbsp;·&nbsp;{' '}
             <a
               href="https://www.wethink.ae"
               className="border-b border-[rgba(124,101,96,0.4)] no-underline"
