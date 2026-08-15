@@ -653,7 +653,25 @@ export default function EmbassyInvitation() {
         <CultureVideo />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-[780px] px-5 pb-24 pt-14">
+      {/* ── Host + venue marks, page corners ── */}
+      <div className="relative z-20 flex items-start justify-between gap-4 px-5 pt-6 sm:px-8 sm:pt-7">
+        <img
+          src="/embassy/royal-thai-embassy.png"
+          alt="Royal Thai Embassy, Abu Dhabi"
+          width={68}
+          height={90}
+          className="h-[58px] w-auto sm:h-[78px]"
+        />
+        <img
+          src="/embassy/reem-mall.png"
+          alt="Reem Mall"
+          width={132}
+          height={67}
+          className="mt-2 h-[44px] w-auto sm:h-[56px]"
+        />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-[780px] px-5 pb-24 pt-6">
         {/* ── Hero ── */}
         <header className="text-center">
           <motion.div
