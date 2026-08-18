@@ -37,5 +37,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    {
+      url: 'https://www.wethink.ae/embassy/programme',
+      changeFrequency: 'weekly',
+      priority: 0.6,
+    },
   ]
 }
