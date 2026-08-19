@@ -25,6 +25,7 @@ import Concierge from '@/components/embassy/Concierge'
 import CultureVideo from '@/components/embassy/CultureVideo'
 import KrathongRelease from '@/components/embassy/KrathongRelease'
 import ShareCardButton from '@/components/embassy/ShareCard'
+import { Spotlight, SkewOnScroll, Magnetic, ChapterRail } from '@/components/embassy/Atmosphere'
 import { SiteFooter } from '@/components/embassy/ui'
 
 /* ────────────────────────────────────────────────────────────
@@ -571,6 +572,7 @@ function SaveAndShare() {
 
       <div className="mx-auto flex max-w-md flex-col items-center gap-4">
         <div className="flex flex-wrap justify-center gap-3">
+          <Magnetic>
           <motion.button
             type="button"
             onClick={downloadIcs}
@@ -584,6 +586,7 @@ function SaveAndShare() {
           >
             <CalendarPlus className="h-4 w-4" /> Add to Calendar
           </motion.button>
+          </Magnetic>
 
           <button
             type="button"
@@ -666,7 +669,18 @@ export default function EmbassyInvitation() {
       </div>
 
       <Masthead />
+      <Spotlight />
+      <ChapterRail
+        chapters={[
+          { id: 'act-invitation', label: 'The Invitation' },
+          { id: 'act-programme', label: 'Programme' },
+          { id: 'act-culture', label: 'Culture' },
+          { id: 'act-journey', label: 'The Journey' },
+          { id: 'act-welcome', label: 'Welcome' },
+        ]}
+      />
 
+      <SkewOnScroll>
       <div className="relative z-10 mx-auto max-w-[780px] px-5 pb-24 pt-24 sm:pt-28">
         {/* ── Hero ── */}
         <HeroRecede>
@@ -703,20 +717,32 @@ export default function EmbassyInvitation() {
             </DepthLayer>
 
             <DepthLayer z={110}>
-              <h1
-                className="mt-1 text-[clamp(46px,9vw,78px)] font-semibold leading-[1.05] tracking-tight"
+              {/* the halo lives on the wrapper: a filter on the same element as
+                  background-clip:text repaints the box and erases the gradient */}
+              <div
                 style={{
-                  fontFamily: serif,
-                  filter: 'drop-shadow(0 3px 18px rgba(255,255,255,0.9))',
-                  perspective: 700,
+                  filter:
+                    'drop-shadow(0 2px 10px rgba(255,255,255,0.95)) drop-shadow(0 10px 30px rgba(255,255,255,0.65))',
                 }}
               >
-                <SplitHeadline
-                  text={EVENT.title}
-                  delay={0.45}
-                  gradient={`linear-gradient(100deg, ${tod.title[0]} 0%, ${tod.title[1]} 34%, ${tod.title[2]} 68%, ${tod.title[3]} 100%)`}
-                />
-              </h1>
+                <motion.h1
+                  className="mt-1 mx-auto bg-clip-text text-[clamp(46px,9vw,78px)] font-semibold leading-[1.05] tracking-tight"
+                  style={{
+                    fontFamily: serif,
+                    perspective: 700,
+                    // one ramp across the whole line, with a bright band inside it
+                    backgroundImage: `linear-gradient(100deg, ${tod.title[0]} 0%, ${tod.title[1]} 26%, ${tod.title[2]} 44%, #4FD3E4 52%, ${tod.title[2]} 60%, ${tod.title[3]} 86%, ${tod.title[1]} 100%)`,
+                    backgroundSize: '260% 100%',
+                    color: 'transparent',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                  initial={{ backgroundPositionX: '130%' }}
+                  animate={{ backgroundPositionX: ['130%', '-30%'] }}
+                  transition={{ duration: 5.5, ease: [0.4, 0, 0.2, 1], repeat: Infinity, repeatDelay: 4.5 }}
+                >
+                  <SplitHeadline text={EVENT.title} delay={0.45} />
+                </motion.h1>
+              </div>
             </DepthLayer>
 
             <DepthLayer z={30}>
@@ -765,8 +791,10 @@ export default function EmbassyInvitation() {
 
         <Rule />
 
+        <div id="act-invitation" />
+
         {/* ── About ── */}
-        <Reveal>
+        <Reveal className="scroll-mt-24" >
           <Panel>
             <p
               className="mx-auto max-w-[600px] text-center text-[18px] leading-relaxed"
@@ -785,6 +813,7 @@ export default function EmbassyInvitation() {
 
         {/* ── Highlights ── */}
         <Reveal>
+          <div id="act-programme" />
           <HorizontalRail
             title={<Heading title="Programme Highlights" note="Tap a card to learn more" />}
             count={HIGHLIGHTS.length}
@@ -805,6 +834,8 @@ export default function EmbassyInvitation() {
         </Reveal>
 
         <Rule />
+
+        <div id="act-culture" />
 
         {/* ── Phrasebook ── */}
         <Reveal>
@@ -830,6 +861,8 @@ export default function EmbassyInvitation() {
         <Reveal>
           <Schedule />
         </Reveal>
+
+        <div id="act-journey" />
 
         {/* ── The journey, scrubbed by scroll ── */}
         <ScrubJourney
@@ -870,6 +903,8 @@ export default function EmbassyInvitation() {
 
         <Rule />
 
+        <div id="act-welcome" />
+
         {/* ── Save the date ── */}
         <Reveal>
           <SaveAndShare />
@@ -878,6 +913,7 @@ export default function EmbassyInvitation() {
         {/* ── Footer ── */}
         <SiteFooter note="Programme details and timings are subject to confirmation by the Royal Thai Embassy." />
       </div>
+      </SkewOnScroll>
 
       <Concierge />
     </div>

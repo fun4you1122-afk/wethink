@@ -122,17 +122,39 @@ export function SplitHeadline({
   className = '',
   style,
   delay = 0,
-  gradient,
 }: {
   text: string
   className?: string
   style?: React.CSSProperties
   delay?: number
-  gradient?: string
 }) {
   const words = text.split(' ')
-  let i = 0
+  const chars = text.replace(/ /g, '').length
+  const [settled, setSettled] = useState(false)
 
+  // Once the letters have landed we drop the per-character transforms. A
+  // transformed descendant paints in its own layer, which stops an ancestor's
+  // background-clip:text gradient from covering it — so the parent ramp only
+  // works after the entry finishes.
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setSettled(true)
+      return
+    }
+    const ms = (delay + chars * 0.045 + 0.9) * 1000
+    const id = window.setTimeout(() => setSettled(true), ms)
+    return () => window.clearTimeout(id)
+  }, [delay, chars])
+
+  if (settled) {
+    return (
+      <span className={className} style={{ ...style, display: 'inline-block' }}>
+        {text}
+      </span>
+    )
+  }
+
+  let i = 0
   return (
     <span className={className} style={{ ...style, display: 'inline-block' }}>
       {words.map((word, w) => (
@@ -146,14 +168,7 @@ export function SplitHeadline({
                 initial={{ opacity: 0, rotateX: -78, y: '0.32em', filter: 'blur(6px)' }}
                 animate={{ opacity: 1, rotateX: 0, y: 0, filter: 'blur(0px)' }}
                 transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: at }}
-                style={{
-                  display: 'inline-block',
-                  transformOrigin: '50% 100%',
-                  backgroundImage: gradient,
-                  backgroundClip: gradient ? 'text' : undefined,
-                  WebkitBackgroundClip: gradient ? 'text' : undefined,
-                  color: gradient ? 'transparent' : undefined,
-                }}
+                style={{ display: 'inline-block', transformOrigin: '50% 100%', color: 'inherit' }}
               >
                 {ch}
               </motion.span>
