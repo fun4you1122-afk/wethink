@@ -15,6 +15,8 @@ import { QRCodeSVG } from 'qrcode.react'
 import ThaiBackdrop from '@/components/embassy/ThaiBackdrop'
 import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
+import Masthead from '@/components/embassy/Masthead'
+import { DepthScene, DepthLayer, SplitHeadline, TiltCard } from '@/components/embassy/motion3d'
 import { WeThinkMark } from '@/components/embassy/WeThinkMark'
 import { useTimeOfDay } from '@/components/embassy/useTimeOfDay'
 import LotusBloom from '@/components/embassy/LotusBloom'
@@ -248,13 +250,14 @@ const HIGHLIGHTS = [
 function HighlightCard({ item, index }: { item: (typeof HIGHLIGHTS)[number]; index: number }) {
   const [flipped, setFlipped] = useState(false)
   return (
+    <TiltCard className="w-full" max={10}>
     <motion.button
       type="button"
       onClick={() => setFlipped((v) => !v)}
       aria-expanded={flipped}
-      whileHover={{ y: -4 }}
+      whileHover={{ y: -6 }}
       transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-      className="h-[168px] w-full rounded-[18px] outline-none focus-visible:ring-2 focus-visible:ring-[#037A8A] focus-visible:ring-offset-2"
+      className="group h-[168px] w-full rounded-[18px] outline-none focus-visible:ring-2 focus-visible:ring-[#037A8A] focus-visible:ring-offset-2"
       style={{ perspective: 1200 }}
     >
       <motion.div
@@ -309,6 +312,7 @@ function HighlightCard({ item, index }: { item: (typeof HIGHLIGHTS)[number]; ind
       <span className="sr-only">{item.back}</span>
       <span className="sr-only">{index}</span>
     </motion.button>
+    </TiltCard>
   )
 }
 
@@ -661,96 +665,100 @@ export default function EmbassyInvitation() {
         <CultureVideo />
       </div>
 
-      {/* ── Venue mark, top right (the Embassy seal now crowns the hero) ── */}
-      <div className="relative z-20 flex items-start justify-end px-5 pt-6 sm:px-8 sm:pt-7">
-        <img
-          src="/embassy/reem-mall.png"
-          alt="Reem Mall"
-          width={132}
-          height={67}
-          className="h-[44px] w-auto sm:h-[56px]"
-        />
-      </div>
+      <Masthead />
 
-      <div className="relative z-10 mx-auto max-w-[780px] px-5 pb-24 pt-6">
+      <div className="relative z-10 mx-auto max-w-[780px] px-5 pb-24 pt-24 sm:pt-28">
         {/* ── Hero ── */}
         <header className="text-center">
-          <motion.img
-            src="/embassy/royal-thai-embassy.png"
-            alt="Royal Thai Embassy, Abu Dhabi"
-            width={130}
-            height={171}
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="mx-auto h-[118px] w-auto drop-shadow-[0_6px_20px_rgba(1,88,102,0.28)] sm:h-[140px]"
-          />
+          <DepthScene strength={1}>
+            <DepthLayer z={80}>
+              <motion.img
+                src="/embassy/royal-thai-embassy.png"
+                alt="Royal Thai Embassy, Abu Dhabi"
+                width={130}
+                height={171}
+                initial={{ opacity: 0, scale: 0.84, rotateX: 26 }}
+                animate={{ opacity: 1, scale: 1, rotateX: 0 }}
+                transition={{ duration: 1.05, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                className="mx-auto h-[118px] w-auto drop-shadow-[0_14px_34px_rgba(1,88,102,0.34)] sm:h-[140px]"
+              />
+            </DepthLayer>
 
-          <Reveal delay={0.1}>
-            <p
-              className="mt-5 text-[12.5px] font-semibold uppercase tracking-[0.22em]"
-              style={{ color: C.teal }}
-            >
-              {EVENT.host}
-            </p>
-            <p className="mt-3 text-[18px] italic" style={{ fontFamily: serif, color: C.tealSoft }}>
-              requests the pleasure of your company at
-            </p>
-            <h1
-              className="mt-1 text-[clamp(46px,9vw,78px)] font-semibold leading-[1.05] tracking-tight"
-              style={{
-                fontFamily: serif,
-                // Gradient text needs the clip on the element itself; the halo
-                // has to sit on a wrapper, because a filter on clipped text
-                // repaints the background box and kills the effect.
-                filter: 'drop-shadow(0 2px 14px rgba(255,255,255,0.85))',
-              }}
-            >
-              <span
-                className="bg-clip-text text-transparent"
+            <DepthLayer z={44}>
+              <Reveal delay={0.1}>
+                <p
+                  className="mt-5 text-[12.5px] font-semibold uppercase tracking-[0.22em]"
+                  style={{ color: C.teal }}
+                >
+                  {EVENT.host}
+                </p>
+                <p
+                  className="mt-3 text-[18px] italic"
+                  style={{ fontFamily: serif, color: C.tealSoft }}
+                >
+                  requests the pleasure of your company at
+                </p>
+              </Reveal>
+            </DepthLayer>
+
+            <DepthLayer z={110}>
+              <h1
+                className="mt-1 text-[clamp(46px,9vw,78px)] font-semibold leading-[1.05] tracking-tight"
                 style={{
-                  backgroundImage: `linear-gradient(100deg, ${C.tealDeep} 0%, ${C.teal} 34%, ${C.tealMid} 68%, ${C.tealBright} 100%)`,
+                  fontFamily: serif,
+                  filter: 'drop-shadow(0 3px 18px rgba(255,255,255,0.9))',
+                  perspective: 700,
                 }}
               >
-                {EVENT.title}
-              </span>
-            </h1>
-            <p
-              className="mt-1 text-[21px] italic"
-              style={{ fontFamily: serif, color: C.tealSoft }}
-            >
-              {EVENT.subtitle}
-            </p>
+                <SplitHeadline
+                  text={EVENT.title}
+                  delay={0.45}
+                  gradient={`linear-gradient(100deg, ${tod.title[0]} 0%, ${tod.title[1]} 34%, ${tod.title[2]} 68%, ${tod.title[3]} 100%)`}
+                />
+              </h1>
+            </DepthLayer>
 
-            {/* trilingual welcome — Thai, Arabic, English */}
-            <div
-              className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[15px] font-medium"
-              style={{ color: C.teal }}
-            >
-              <span>ยินดีต้อนรับ</span>
-              <span style={{ color: C.tealMid }}>✦</span>
-              <span dir="rtl">مرحبا</span>
-              <span style={{ color: C.tealMid }}>✦</span>
-              <span>Welcome</span>
-            </div>
+            <DepthLayer z={30}>
+              <Reveal delay={0.2}>
+                <p
+                  className="mt-1 text-[21px] italic"
+                  style={{ fontFamily: serif, color: C.tealSoft }}
+                >
+                  {EVENT.subtitle}
+                </p>
 
-            <p
-              className="mt-6 text-[14.5px] font-semibold uppercase tracking-[0.05em]"
-              style={{ color: C.tealDeep }}
-            >
-              {EVENT.dates} <span style={{ color: C.tealMid }}>✦</span> {EVENT.venue}
-            </p>
-            <p
-              className="mt-2 text-[13.5px] font-medium uppercase tracking-[0.14em]"
-              style={{ color: C.teal }}
-            >
-              {EVENT.hours}
-            </p>
-          </Reveal>
+                <div
+                  className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[15px] font-medium"
+                  style={{ color: C.teal }}
+                >
+                  <span>ยินดีต้อนรับ</span>
+                  <span style={{ color: C.tealMid }}>✦</span>
+                  <span dir="rtl">مرحبا</span>
+                  <span style={{ color: C.tealMid }}>✦</span>
+                  <span>Welcome</span>
+                </div>
 
-          <Reveal delay={0.2}>
-            <Countdown />
-          </Reveal>
+                <p
+                  className="mt-6 text-[14.5px] font-semibold uppercase tracking-[0.05em]"
+                  style={{ color: C.tealDeep }}
+                >
+                  {EVENT.dates} <span style={{ color: C.tealMid }}>✦</span> {EVENT.venue}
+                </p>
+                <p
+                  className="mt-2 text-[13.5px] font-medium uppercase tracking-[0.14em]"
+                  style={{ color: C.teal }}
+                >
+                  {EVENT.hours}
+                </p>
+              </Reveal>
+            </DepthLayer>
+
+            <DepthLayer z={62}>
+              <Reveal delay={0.3}>
+                <Countdown />
+              </Reveal>
+            </DepthLayer>
+          </DepthScene>
         </header>
 
         <Rule />
