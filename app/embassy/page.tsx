@@ -758,7 +758,7 @@ export default function EmbassyInvitation() {
                   animate={{ backgroundPositionX: ['130%', '-30%'] }}
                   transition={{ duration: 5.5, ease: [0.4, 0, 0.2, 1], repeat: Infinity, repeatDelay: 4.5 }}
                 >
-                  <SplitHeadline text={EVENT.title} delay={0.45} />
+                  <SplitHeadline text={EVENT.title} delay={0.45} solid={tod.title[1]} />
                 </motion.h1>
               </div>
             </DepthLayer>

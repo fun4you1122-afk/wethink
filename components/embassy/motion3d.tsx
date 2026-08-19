@@ -126,11 +126,14 @@ export function SplitHeadline({
   className = '',
   style,
   delay = 0,
+  solid,
 }: {
   text: string
   className?: string
   style?: React.CSSProperties
   delay?: number
+  /** colour worn during the entry, before the parent's gradient takes over */
+  solid?: string
 }) {
   const words = text.split(' ')
   const chars = text.replace(/ /g, '').length
@@ -172,7 +175,16 @@ export function SplitHeadline({
                 initial={{ opacity: 0, rotateX: -78, y: '0.32em', filter: 'blur(6px)' }}
                 animate={{ opacity: 1, rotateX: 0, y: 0, filter: 'blur(0px)' }}
                 transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: at }}
-                style={{ display: 'inline-block', transformOrigin: '50% 100%', color: 'inherit' }}
+                style={{
+                  display: 'inline-block',
+                  transformOrigin: '50% 100%',
+                  // While a letter is transformed it paints in its own layer,
+                  // where the parent's background-clip:text gradient cannot
+                  // reach it. Without an ink of its own it would be invisible
+                  // for the whole entry, which read as a blank gap.
+                  color: solid,
+                  WebkitTextFillColor: solid,
+                }}
               >
                 {ch}
               </motion.span>
