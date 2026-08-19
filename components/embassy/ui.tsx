@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { WeThinkMark } from './WeThinkMark'
 
 /**
  * Shared furniture for the Marhaba Thailand pages — the invitation, the
@@ -55,16 +56,9 @@ export function Reveal({
 
 export function Rule() {
   return (
-    <div className="my-11 flex items-center gap-3.5" aria-hidden="true">
+    <div className="my-11 flex items-center gap-4" aria-hidden="true">
       <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[rgba(3,122,138,0.25)] to-transparent" />
-      <svg viewBox="0 0 22 22" className="h-5 w-5 flex-shrink-0" fill="none">
-        <circle cx="11" cy="11" r="3.5" stroke={C.tealMid} strokeWidth="1.2" />
-        <path
-          d="M11 1 L11 6 M11 16 L11 21 M1 11 L6 11 M16 11 L21 11"
-          stroke={C.tealMid}
-          strokeWidth="1.2"
-        />
-      </svg>
+      <WeThinkMark size={26} stroke={C.teal} dot={C.tealBright} width={5} className="opacity-70" />
       <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[rgba(3,122,138,0.25)] to-transparent" />
     </div>
   )

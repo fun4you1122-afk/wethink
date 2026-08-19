@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
 import { CalendarPlus, Check, ExternalLink, MapPin, Send } from 'lucide-react'
 import ThaiBackdrop from '@/components/embassy/ThaiBackdrop'
+import SignatureIntro from '@/components/embassy/SignatureIntro'
+import ThreadRail from '@/components/embassy/ThreadRail'
 import CultureVideo from '@/components/embassy/CultureVideo'
 import {
   C,
@@ -329,6 +331,8 @@ function Registration() {
 export default function OpeningCeremony() {
   return (
     <MotionConfig reducedMotion="user">
+      <SignatureIntro />
+      <ThreadRail />
       <div
         className="relative min-h-screen"
         style={{ background: C.bg, color: C.ink, fontFamily: sans }}

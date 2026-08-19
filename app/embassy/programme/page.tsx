@@ -5,6 +5,8 @@ import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
 import { QRCodeSVG } from 'qrcode.react'
 import { CalendarPlus, MapPin, QrCode, Share2 } from 'lucide-react'
 import ThaiBackdrop from '@/components/embassy/ThaiBackdrop'
+import SignatureIntro from '@/components/embassy/SignatureIntro'
+import ThreadRail from '@/components/embassy/ThreadRail'
 import {
   C,
   Heading,
@@ -116,6 +118,8 @@ export default function Programme() {
 
   return (
     <MotionConfig reducedMotion="user">
+      <SignatureIntro />
+      <ThreadRail />
       <div
         className="relative min-h-screen"
         style={{ background: C.bg, color: C.ink, fontFamily: sans }}
