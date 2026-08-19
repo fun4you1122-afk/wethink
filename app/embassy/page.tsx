@@ -26,6 +26,9 @@ import CultureVideo from '@/components/embassy/CultureVideo'
 import KrathongRelease from '@/components/embassy/KrathongRelease'
 import ShareCardButton from '@/components/embassy/ShareCard'
 import { Spotlight, SkewOnScroll, Magnetic, ChapterRail } from '@/components/embassy/Atmosphere'
+import FlipCountdown from '@/components/embassy/FlipCountdown'
+import ThaiMarquee from '@/components/embassy/ThaiMarquee'
+import { usePetalBurst } from '@/components/embassy/PetalBurst'
 import { SiteFooter } from '@/components/embassy/ui'
 
 /* ────────────────────────────────────────────────────────────
@@ -95,7 +98,7 @@ function Rule() {
   return (
     <div className="my-11 flex items-center gap-4" aria-hidden="true">
       <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[rgba(3,122,138,0.25)] to-transparent" />
-      <WeThinkMark size={26} stroke={C.teal} dot={C.tealBright} width={5} className="opacity-70" />
+      <WeThinkMark size={26} stroke={C.teal} width={5} className="opacity-70" />
       <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[rgba(3,122,138,0.25)] to-transparent" />
     </div>
   )
@@ -543,6 +546,7 @@ function downloadIcs() {
 const SHARE_URL = 'https://www.wethink.ae/embassy'
 
 function SaveAndShare() {
+  const petals = usePetalBurst()
   const [copied, setCopied] = useState(false)
   const [showQR, setShowQR] = useState(false)
 
@@ -568,6 +572,7 @@ function SaveAndShare() {
 
   return (
     <Panel>
+      {petals.layer}
       <Heading title="Save the Date" note="Entry is free — simply come and join us" />
 
       <div className="mx-auto flex max-w-md flex-col items-center gap-4">
@@ -575,7 +580,10 @@ function SaveAndShare() {
           <Magnetic>
           <motion.button
             type="button"
-            onClick={downloadIcs}
+            onClick={(e) => {
+              petals.fire(e)
+              downloadIcs()
+            }}
             whileTap={{ scale: 0.97 }}
             className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13.5px] font-medium uppercase tracking-[0.08em] shadow-[0_8px_20px_rgba(3,122,138,0.18)]"
             style={{
@@ -658,7 +666,7 @@ export default function EmbassyInvitation() {
       <ThreadRail />
     <div
       className="relative min-h-screen"
-      style={{ background: tod.sky[2], color: C.ink, fontFamily: sans }}
+      style={{ background: tod.sky[2], color: C.ink, fontFamily: sans, overflowX: 'clip' }}
     >
       <ThaiBackdrop />
 
@@ -684,7 +692,17 @@ export default function EmbassyInvitation() {
       <div className="relative z-10 mx-auto max-w-[780px] px-5 pb-24 pt-24 sm:pt-28">
         {/* ── Hero ── */}
         <HeroRecede>
-        <header className="text-center">
+        <header className="relative text-center">
+          {/* a breath of light behind the type, so the footage can never wash
+              the invitation out whatever frame it happens to be on */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[135%] w-[135%] -translate-x-1/2 -translate-y-1/2"
+            style={{
+              background:
+                'radial-gradient(58% 46% at 50% 44%, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.72) 42%, rgba(255,255,255,0) 74%)',
+            }}
+          />
           <DepthScene strength={1}>
             <DepthLayer z={80}>
               <motion.img
@@ -703,13 +721,13 @@ export default function EmbassyInvitation() {
               <Reveal delay={0.1}>
                 <p
                   className="mt-5 text-[12.5px] font-semibold uppercase tracking-[0.22em]"
-                  style={{ color: C.teal }}
+                  style={{ color: '#014653' }}
                 >
                   {EVENT.host}
                 </p>
                 <p
                   className="mt-3 text-[18px] italic"
-                  style={{ fontFamily: serif, color: C.tealSoft }}
+                  style={{ fontFamily: serif, color: '#15606C' }}
                 >
                   requests the pleasure of your company at
                 </p>
@@ -749,14 +767,14 @@ export default function EmbassyInvitation() {
               <Reveal delay={0.2}>
                 <p
                   className="mt-1 text-[21px] italic"
-                  style={{ fontFamily: serif, color: C.tealSoft }}
+                  style={{ fontFamily: serif, color: '#15606C' }}
                 >
                   {EVENT.subtitle}
                 </p>
 
                 <div
-                  className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[15px] font-medium"
-                  style={{ color: C.teal }}
+                  className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[15px] font-semibold"
+                  style={{ color: '#026B79' }}
                 >
                   <span>ยินดีต้อนรับ</span>
                   <span style={{ color: C.tealMid }}>✦</span>
@@ -767,13 +785,13 @@ export default function EmbassyInvitation() {
 
                 <p
                   className="mt-6 text-[14.5px] font-semibold uppercase tracking-[0.05em]"
-                  style={{ color: C.tealDeep }}
+                  style={{ color: '#00252E' }}
                 >
                   {EVENT.dates} <span style={{ color: C.tealMid }}>✦</span> {EVENT.venue}
                 </p>
                 <p
-                  className="mt-2 text-[13.5px] font-medium uppercase tracking-[0.14em]"
-                  style={{ color: C.teal }}
+                  className="mt-2 text-[13.5px] font-semibold uppercase tracking-[0.14em]"
+                  style={{ color: '#065F6B' }}
                 >
                   {EVENT.hours}
                 </p>
@@ -861,6 +879,8 @@ export default function EmbassyInvitation() {
         <Reveal>
           <Schedule />
         </Reveal>
+
+        <ThaiMarquee />
 
         <div id="act-journey" />
 

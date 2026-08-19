@@ -59,7 +59,7 @@ export function Rule() {
   return (
     <div className="my-11 flex items-center gap-4" aria-hidden="true">
       <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[rgba(3,122,138,0.25)] to-transparent" />
-      <WeThinkMark size={26} stroke={C.teal} dot={C.tealBright} width={5} className="opacity-70" />
+      <WeThinkMark size={26} stroke={C.teal} width={5} className="opacity-70" />
       <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[rgba(3,122,138,0.25)] to-transparent" />
     </div>
   )

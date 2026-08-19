@@ -340,7 +340,7 @@ export default function OpeningCeremony() {
       <ThreadRail />
       <div
         className="relative min-h-screen"
-        style={{ background: tod.sky[2], color: C.ink, fontFamily: sans }}
+        style={{ background: tod.sky[2], color: C.ink, fontFamily: sans, overflowX: 'clip' }}
       >
         <ThaiBackdrop />
 

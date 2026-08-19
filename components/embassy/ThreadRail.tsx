@@ -50,7 +50,7 @@ export default function ThreadRail() {
             boxShadow: '0 4px 14px rgba(1,88,102,0.18)',
           }}
         >
-          <WeThinkMark size={19} stroke="#015866" dot="#01C1D5" width={5} />
+          <WeThinkMark size={19} stroke="#015866" width={5} />
         </div>
       </motion.div>
 

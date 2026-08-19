@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Download } from 'lucide-react'
-import { W_PATH, DOT } from './WeThinkMark'
+import { W_PATH } from './WeThinkMark'
 
 /**
  * A share card rendered in the browser, 1080 x 1350 for Instagram.
@@ -42,10 +42,6 @@ function drawMark(ctx: CanvasRenderingContext2D, x: number, y: number, scale: nu
   ctx.lineCap = 'round'
   ctx.lineJoin = 'round'
   ctx.stroke(new Path2D(W_PATH))
-  ctx.fillStyle = '#01C1D5'
-  ctx.beginPath()
-  ctx.arc(DOT.cx, DOT.cy, DOT.r, 0, Math.PI * 2)
-  ctx.fill()
   ctx.restore()
 }
 
