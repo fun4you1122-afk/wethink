@@ -16,7 +16,7 @@ import ThaiBackdrop from '@/components/embassy/ThaiBackdrop'
 import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
 import Masthead from '@/components/embassy/Masthead'
-import { DepthScene, DepthLayer, SplitHeadline, TiltCard } from '@/components/embassy/motion3d'
+import { DepthScene, DepthLayer, TiltCard } from '@/components/embassy/motion3d'
 import { HeroRecede, MaskedHeading, ScrubJourney, HorizontalRail } from '@/components/embassy/ScrollStory'
 import { WeThinkMark } from '@/components/embassy/WeThinkMark'
 import { useTimeOfDay } from '@/components/embassy/useTimeOfDay'
@@ -735,31 +735,47 @@ export default function EmbassyInvitation() {
             </DepthLayer>
 
             <DepthLayer z={110}>
-              {/* the halo lives on the wrapper: a filter on the same element as
-                  background-clip:text repaints the box and erases the gradient */}
+              {/* The title reveals as one piece. Animating individual letters
+                  meant transforming them, which pushed each glyph into its own
+                  layer where the clipped gradient could not reach it — so the
+                  headline was invisible mid-entry. Nothing here transforms the
+                  text itself: the halo and the wipe both live on wrappers. */}
               <div
                 style={{
                   filter:
                     'drop-shadow(0 2px 10px rgba(255,255,255,0.95)) drop-shadow(0 10px 30px rgba(255,255,255,0.65))',
                 }}
               >
-                <motion.h1
-                  className="mt-1 mx-auto bg-clip-text text-[clamp(38px,11vw,78px)] font-semibold leading-[1.05] tracking-tight"
-                  style={{
-                    fontFamily: serif,
-                    perspective: 700,
-                    // one ramp across the whole line, with a bright band inside it
-                    backgroundImage: `linear-gradient(100deg, ${tod.title[0]} 0%, ${tod.title[1]} 26%, ${tod.title[2]} 44%, #4FD3E4 52%, ${tod.title[2]} 60%, ${tod.title[3]} 86%, ${tod.title[1]} 100%)`,
-                    backgroundSize: '260% 100%',
-                    color: 'transparent',
-                    WebkitTextFillColor: 'transparent',
+                <motion.div
+                  initial={{ clipPath: 'inset(0 100% -20% 0)', y: 26 }}
+                  animate={{ clipPath: 'inset(0 0% -20% 0)', y: 0 }}
+                  transition={{
+                    clipPath: { duration: 1.25, ease: [0.16, 1, 0.3, 1], delay: 0.35 },
+                    y: { duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.35 },
                   }}
-                  initial={{ backgroundPositionX: '130%' }}
-                  animate={{ backgroundPositionX: ['130%', '-30%'] }}
-                  transition={{ duration: 5.5, ease: [0.4, 0, 0.2, 1], repeat: Infinity, repeatDelay: 4.5 }}
                 >
-                  <SplitHeadline text={EVENT.title} delay={0.45} solid={tod.title[1]} />
-                </motion.h1>
+                  <motion.h1
+                    className="mt-1 mx-auto bg-clip-text text-[clamp(38px,11vw,78px)] font-semibold leading-[1.05] tracking-tight"
+                    style={{
+                      fontFamily: serif,
+                      // one ramp across the whole line, with a bright band inside it
+                      backgroundImage: `linear-gradient(100deg, ${tod.title[0]} 0%, ${tod.title[1]} 26%, ${tod.title[2]} 44%, #4FD3E4 52%, ${tod.title[2]} 60%, ${tod.title[3]} 86%, ${tod.title[1]} 100%)`,
+                      backgroundSize: '260% 100%',
+                      color: 'transparent',
+                      WebkitTextFillColor: 'transparent',
+                    }}
+                    initial={{ backgroundPositionX: '130%' }}
+                    animate={{ backgroundPositionX: ['130%', '-30%'] }}
+                    transition={{
+                      duration: 5.5,
+                      ease: [0.4, 0, 0.2, 1],
+                      repeat: Infinity,
+                      repeatDelay: 4.5,
+                    }}
+                  >
+                    {EVENT.title}
+                  </motion.h1>
+                </motion.div>
               </div>
             </DepthLayer>
 
