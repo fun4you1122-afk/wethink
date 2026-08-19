@@ -744,7 +744,7 @@ export default function EmbassyInvitation() {
                 }}
               >
                 <motion.h1
-                  className="mt-1 mx-auto bg-clip-text text-[clamp(46px,9vw,78px)] font-semibold leading-[1.05] tracking-tight"
+                  className="mt-1 mx-auto bg-clip-text text-[clamp(38px,11vw,78px)] font-semibold leading-[1.05] tracking-tight"
                   style={{
                     fontFamily: serif,
                     perspective: 700,

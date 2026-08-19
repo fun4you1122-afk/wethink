@@ -20,7 +20,7 @@ import {
  * Everything here is transform and opacity only, so it stays on the compositor.
  */
 
-type Ctx = { rx: MotionValue<number>; ry: MotionValue<number>; on: boolean }
+type Ctx = { rx: MotionValue<number>; ry: MotionValue<number>; on: boolean; zScale: number }
 const DepthCtx = createContext<Ctx | null>(null)
 
 export function DepthScene({
@@ -38,8 +38,11 @@ export function DepthScene({
   const px = useMotionValue(0)
   const py = useMotionValue(0)
   const [on, setOn] = useState(false)
+  const [zScale, setZScale] = useState(0)
 
   useEffect(() => {
+    const compact = window.innerWidth < 768
+    setZScale(compact ? 0 : 1)
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     setOn(true)
 
@@ -65,7 +68,7 @@ export function DepthScene({
   const ry = useSpring(useTransform(px, (v) => v * 4 * strength), spring)
 
   return (
-    <DepthCtx.Provider value={{ rx, ry, on }}>
+    <DepthCtx.Provider value={{ rx, ry, on, zScale }}>
       <div className={className} style={{ perspective, transformStyle: 'preserve-3d' }}>
         <motion.div
           style={{
@@ -95,14 +98,15 @@ export function DepthLayer({
   // hooks must run unconditionally, so keep local fallbacks and pick after
   const zeroX = useMotionValue(0)
   const zeroY = useMotionValue(0)
-  const shiftX = useTransform(ctx?.ry ?? zeroX, (v) => (v / 4) * z * 0.22)
-  const shiftY = useTransform(ctx?.rx ?? zeroY, (v) => (-v / 3.2) * z * 0.16)
+  const depth = z * (ctx?.zScale ?? 0)
+  const shiftX = useTransform(ctx?.ry ?? zeroX, (v) => (v / 4) * depth * 0.22)
+  const shiftY = useTransform(ctx?.rx ?? zeroY, (v) => (-v / 3.2) * depth * 0.16)
 
   return (
     <motion.div
       className={className}
       style={{
-        translateZ: z,
+        translateZ: depth,
         x: ctx?.on ? shiftX : 0,
         y: ctx?.on ? shiftY : 0,
         transformStyle: 'preserve-3d',
