@@ -326,7 +326,7 @@ export default function Programme() {
             </Panel>
           </Reveal>
 
-          <SiteFooter note="Concept presentation prepared by WeThink. Programme details and timings are subject to confirmation by the Royal Thai Embassy." />
+          <SiteFooter note="Programme details and timings are subject to confirmation by the Royal Thai Embassy." />
         </div>
       </div>
     </MotionConfig>

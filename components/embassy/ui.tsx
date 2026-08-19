@@ -138,36 +138,51 @@ export function VenueMark() {
 
 export function SiteFooter({ note }: { note?: string }) {
   return (
-    <footer className="mt-10 pt-6 text-center">
-      <img
-        src="/wethink-logo.png"
-        alt="WeThink"
-        width={132}
-        height={44}
-        className="mx-auto mb-4 h-11 w-auto opacity-90"
-      />
-      <p className="text-[12px] tracking-[0.03em]" style={{ color: C.inkSoft }}>
-        Design by WeThink &nbsp;·&nbsp;{' '}
-        <a
-          href="https://www.instagram.com/wethink.ae/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="border-b border-[rgba(70,112,122,0.4)] no-underline"
-          style={{ color: C.inkSoft }}
-        >
-          @wethink.ae
-        </a>{' '}
-        &nbsp;·&nbsp;{' '}
-        <a
-          href="https://www.wethink.ae"
-          className="border-b border-[rgba(70,112,122,0.4)] no-underline"
-          style={{ color: C.inkSoft }}
-        >
-          www.wethink.ae
-        </a>
-      </p>
+    <footer className="mt-12 pt-8 text-center">
+      {/* Credit block agreed with the Embassy in place of a fee. Clear
+          attribution, kept quiet enough to sit inside a formal invitation. */}
+      <div
+        className="mx-auto max-w-[360px] rounded-[22px] border border-[rgba(3,122,138,0.14)] px-6 py-7"
+        style={{ background: 'rgba(255,255,255,0.55)' }}
+      >
+        <p className="text-[10.5px] uppercase tracking-[0.2em]" style={{ color: C.tealSoft }}>
+          Designed and built by
+        </p>
+        <img
+          src="/wethink-logo.png"
+          alt="WeThink"
+          width={150}
+          height={50}
+          className="mx-auto mt-3 h-12 w-auto"
+        />
+        <p className="mt-3 text-[12.5px] leading-relaxed" style={{ color: C.inkSoft }}>
+          Digital invitation and daily programme for Marhaba Thailand
+        </p>
+        <p className="mt-3 text-[12px] tracking-[0.03em]" style={{ color: C.inkSoft }}>
+          <a
+            href="https://www.instagram.com/wethink.ae/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="border-b border-[rgba(70,112,122,0.4)] no-underline"
+            style={{ color: C.inkSoft }}
+          >
+            @wethink.ae
+          </a>
+          {'  '}&nbsp;·&nbsp;{' '}
+          <a
+            href="https://www.wethink.ae"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="border-b border-[rgba(70,112,122,0.4)] no-underline"
+            style={{ color: C.inkSoft }}
+          >
+            www.wethink.ae
+          </a>
+        </p>
+      </div>
+
       {note && (
-        <p className="mx-auto mt-3 max-w-md text-[11.5px] italic" style={{ color: C.inkSoft }}>
+        <p className="mx-auto mt-5 max-w-md text-[11.5px] italic" style={{ color: C.inkSoft }}>
           {note}
         </p>
       )}
