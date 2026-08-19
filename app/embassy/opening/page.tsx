@@ -5,6 +5,8 @@ import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
 import { CalendarPlus, Check, ExternalLink, MapPin, Send } from 'lucide-react'
 import ThaiBackdrop from '@/components/embassy/ThaiBackdrop'
 import { useTimeOfDay } from '@/components/embassy/useTimeOfDay'
+import { useGuestName } from '@/components/embassy/useGuestName'
+import ShareCardButton from '@/components/embassy/ShareCard'
 import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
 import CultureVideo from '@/components/embassy/CultureVideo'
@@ -331,6 +333,7 @@ function Registration() {
 
 export default function OpeningCeremony() {
   const tod = useTimeOfDay()
+  const guest = useGuestName()
   return (
     <MotionConfig reducedMotion="user">
       <SignatureIntro />
@@ -352,6 +355,17 @@ export default function OpeningCeremony() {
             <Seal />
 
             <Reveal delay={0.1}>
+              {guest && (
+                <motion.p
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.35 }}
+                  className="mt-6 text-[22px] italic sm:text-[25px]"
+                  style={{ fontFamily: serif, color: C.tealDeep }}
+                >
+                  Dear {guest},
+                </motion.p>
+              )}
               <p
                 className="mt-5 text-[12.5px] font-semibold uppercase tracking-[0.22em]"
                 style={{ color: C.teal }}
@@ -480,13 +494,16 @@ export default function OpeningCeremony() {
                 title="The Two-Day Programme"
                 note="Everything happening on 11 and 12 September"
               />
-              <a
-                href="/embassy/programme"
-                className="inline-flex items-center gap-2 rounded-full border px-7 py-3.5 text-[13.5px] font-medium uppercase tracking-[0.08em]"
-                style={{ borderColor: C.teal, color: C.tealDeep, fontFamily: sans }}
-              >
-                View the daily programme <ExternalLink className="h-4 w-4" />
-              </a>
+              <div className="flex flex-wrap justify-center gap-3">
+                <a
+                  href="/embassy/programme"
+                  className="inline-flex items-center gap-2 rounded-full border px-7 py-3.5 text-[13.5px] font-medium uppercase tracking-[0.08em]"
+                  style={{ borderColor: C.teal, color: C.tealDeep, fontFamily: sans }}
+                >
+                  View the daily programme <ExternalLink className="h-4 w-4" />
+                </a>
+                <ShareCardButton guest={guest ?? undefined} label="Save your invitation" />
+              </div>
             </Panel>
           </Reveal>
 

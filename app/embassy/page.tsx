@@ -22,6 +22,7 @@ import Concierge from '@/components/embassy/Concierge'
 import CultureVideo from '@/components/embassy/CultureVideo'
 import ImageBand from '@/components/embassy/ImageBand'
 import KrathongRelease from '@/components/embassy/KrathongRelease'
+import ShareCardButton from '@/components/embassy/ShareCard'
 import { SiteFooter } from '@/components/embassy/ui'
 
 /* ────────────────────────────────────────────────────────────
@@ -609,6 +610,7 @@ function SaveAndShare() {
           >
             <QrCode className="h-3.5 w-3.5" /> {showQR ? 'Hide QR' : 'Show QR'}
           </button>
+          <ShareCardButton />
         </div>
 
         <AnimatePresence>

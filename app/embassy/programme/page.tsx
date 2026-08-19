@@ -6,6 +6,8 @@ import { QRCodeSVG } from 'qrcode.react'
 import { CalendarPlus, MapPin, QrCode, Share2 } from 'lucide-react'
 import ThaiBackdrop from '@/components/embassy/ThaiBackdrop'
 import { useTimeOfDay } from '@/components/embassy/useTimeOfDay'
+import LiveNow from '@/components/embassy/LiveNow'
+import ShareCardButton from '@/components/embassy/ShareCard'
 import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
 import {
@@ -162,6 +164,12 @@ export default function Programme() {
           <Rule />
 
           <Reveal>
+            <Panel className="mb-6">
+              <LiveNow schedule={SCHEDULE} />
+            </Panel>
+          </Reveal>
+
+          <Reveal>
             <Panel>
               {/* day switch */}
               <div className="mb-6 flex justify-center gap-1.5" role="tablist">
@@ -284,6 +292,7 @@ export default function Programme() {
                   >
                     <QrCode className="h-4 w-4" /> {showQR ? 'Hide QR' : 'Show QR'}
                   </button>
+                  <ShareCardButton />
                 </div>
 
                 <AnimatePresence>
