@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { WeThinkMark } from './WeThinkMark'
+import { useTimeOfDay } from './useTimeOfDay'
 
 /**
  * Shared furniture for the Marhaba Thailand pages — the invitation, the
@@ -71,10 +72,11 @@ export function Panel({
   children: React.ReactNode
   className?: string
 }) {
+  const p = useTimeOfDay()
   return (
     <div
-      className={`rounded-[26px] border border-[rgba(3,122,138,0.12)] p-7 shadow-[0_16px_40px_rgba(3,122,138,0.10)] backdrop-blur-md sm:p-10 ${className}`}
-      style={{ background: C.glass }}
+      className={`rounded-[26px] border p-7 shadow-[0_16px_40px_rgba(3,122,138,0.10)] backdrop-blur-md sm:p-10 ${className}`}
+      style={{ background: p.panel, borderColor: p.panelBorder }}
     >
       {children}
     </div>

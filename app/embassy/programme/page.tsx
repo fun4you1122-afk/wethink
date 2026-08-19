@@ -5,6 +5,7 @@ import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
 import { QRCodeSVG } from 'qrcode.react'
 import { CalendarPlus, MapPin, QrCode, Share2 } from 'lucide-react'
 import ThaiBackdrop from '@/components/embassy/ThaiBackdrop'
+import { useTimeOfDay } from '@/components/embassy/useTimeOfDay'
 import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
 import {
@@ -75,6 +76,7 @@ function gulfNow() {
 const DAY_DATE: Record<1 | 2, string> = { 1: '2026-09-11', 2: '2026-09-12' }
 
 export default function Programme() {
+  const tod = useTimeOfDay()
   const [day, setDay] = useState<1 | 2>(1)
   const [now, setNow] = useState<{ date: string; minutes: number } | null>(null)
   const [showQR, setShowQR] = useState(false)
@@ -122,7 +124,7 @@ export default function Programme() {
       <ThreadRail />
       <div
         className="relative min-h-screen"
-        style={{ background: C.bg, color: C.ink, fontFamily: sans }}
+        style={{ background: tod.sky[2], color: C.ink, fontFamily: sans }}
       >
         <ThaiBackdrop />
         <VenueMark />

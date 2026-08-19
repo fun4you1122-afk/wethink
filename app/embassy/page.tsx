@@ -16,10 +16,12 @@ import ThaiBackdrop from '@/components/embassy/ThaiBackdrop'
 import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
 import { WeThinkMark } from '@/components/embassy/WeThinkMark'
+import { useTimeOfDay } from '@/components/embassy/useTimeOfDay'
 import LotusBloom from '@/components/embassy/LotusBloom'
 import Concierge from '@/components/embassy/Concierge'
 import CultureVideo from '@/components/embassy/CultureVideo'
 import ImageBand from '@/components/embassy/ImageBand'
+import KrathongRelease from '@/components/embassy/KrathongRelease'
 import { SiteFooter } from '@/components/embassy/ui'
 
 /* ────────────────────────────────────────────────────────────
@@ -96,10 +98,11 @@ function Rule() {
 }
 
 function Panel({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  const p = useTimeOfDay()
   return (
     <div
-      className={`rounded-[26px] border border-[rgba(3,122,138,0.12)] p-7 shadow-[0_16px_40px_rgba(3,122,138,0.10)] backdrop-blur-md sm:p-10 ${className}`}
-      style={{ background: C.glass }}
+      className={`rounded-[26px] border p-7 shadow-[0_16px_40px_rgba(3,122,138,0.10)] backdrop-blur-md sm:p-10 ${className}`}
+      style={{ background: p.panel, borderColor: p.panelBorder }}
     >
       {children}
     </div>
@@ -127,6 +130,7 @@ function Heading({ title, note }: { title: string; note?: string }) {
 /* ── countdown ───────────────────────────────────────────── */
 
 function Countdown() {
+  const tod = useTimeOfDay()
   const target = useMemo(() => new Date(EVENT.start).getTime(), [])
   const [left, setLeft] = useState<number | null>(null)
 
@@ -160,8 +164,8 @@ function Countdown() {
       {units.map(([value, label]) => (
         <div
           key={label}
-          className="min-w-0 rounded-[18px] border border-[rgba(3,122,138,0.15)] px-2 py-3.5 text-center shadow-[0_6px_18px_rgba(3,122,138,0.08)] backdrop-blur-sm sm:min-w-[82px] sm:px-4"
-          style={{ background: C.glass }}
+          className="min-w-0 rounded-[18px] border px-2 py-3.5 text-center shadow-[0_6px_18px_rgba(3,122,138,0.08)] backdrop-blur-sm sm:min-w-[82px] sm:px-4"
+          style={{ background: tod.panel, borderColor: tod.panelBorder }}
         >
           <div
             className="text-[26px] leading-none tabular-nums sm:text-[30px]"
@@ -636,6 +640,7 @@ function SaveAndShare() {
 /* ══════════════════ PAGE ══════════════════ */
 
 export default function EmbassyInvitation() {
+  const tod = useTimeOfDay()
   return (
     // reducedMotion="user" makes every animation on the page collapse to an
     // instant state change when the visitor asks for less motion.
@@ -644,7 +649,7 @@ export default function EmbassyInvitation() {
       <ThreadRail />
     <div
       className="relative min-h-screen"
-      style={{ background: C.cream, color: C.ink, fontFamily: sans }}
+      style={{ background: tod.sky[2], color: C.ink, fontFamily: sans }}
     >
       <ThaiBackdrop />
 
@@ -781,6 +786,19 @@ export default function EmbassyInvitation() {
         {/* ── Phrasebook ── */}
         <Reveal>
           <Phrasebook />
+        </Reveal>
+
+        <Rule />
+
+        {/* ── Loy Krathong ── */}
+        <Reveal>
+          <Panel>
+            <Heading
+              title="Float a Krathong"
+              note="Write a wish and set it on the water, as Thailand does each Loy Krathong"
+            />
+            <KrathongRelease />
+          </Panel>
         </Reveal>
 
         <Rule />

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useTimeOfDay, withAlpha } from './useTimeOfDay'
 
 /**
  * Looping Thai-culture footage behind the hero.
@@ -19,6 +20,7 @@ const SOURCES = [
 ]
 
 export default function CultureVideo() {
+  const p = useTimeOfDay()
   const videoRef = useRef<HTMLVideoElement>(null)
   const [failed, setFailed] = useState(false)
   const [reduced, setReduced] = useState(false)
@@ -63,13 +65,20 @@ export default function CultureVideo() {
         ))}
       </video>
 
-      {/* Scrim — keeps the invitation's light, printed-paper feel and
-          guarantees contrast for the headline whatever the footage shows. */}
+      {/* Scrim, tinted to the hour. Kept luminous even at night so the
+          invitation reads as lit paper held against a dark sky. */}
       <div
         className="absolute inset-0"
         style={{
-          background:
-            'linear-gradient(180deg, rgba(242,250,251,0.80) 0%, rgba(242,250,251,0.72) 42%, rgba(242,250,251,0.98) 88%, rgba(242,250,251,1) 100%)',
+          background: p.isDark
+            ? `linear-gradient(180deg, ${withAlpha('#FFFFFF', 0.74)} 0%, ${withAlpha(
+                '#FFFFFF',
+                0.62,
+              )} 42%, ${withAlpha(p.sky[2], 0.9)} 88%, ${p.sky[2]} 100%)`
+            : `linear-gradient(180deg, ${withAlpha(p.sky[1], 0.8)} 0%, ${withAlpha(
+                p.sky[1],
+                0.72,
+              )} 42%, ${withAlpha(p.sky[2], 0.98)} 88%, ${p.sky[2]} 100%)`,
         }}
       />
     </div>
