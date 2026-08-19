@@ -24,6 +24,7 @@ export default function Masthead() {
     '0 6px 26px rgba(1,88,102,0.14)',
   ])
   const pad = useTransform(eased, [0, 220], ['22px', '12px'])
+  const barBg = useTransform(barAlpha, (a) => `rgba(255,255,255,${a})`)
 
   return (
     <motion.div
@@ -34,7 +35,7 @@ export default function Masthead() {
       <motion.div
         className="absolute inset-0 -z-10"
         style={{
-          background: useTransform(barAlpha, (a) => `rgba(255,255,255,${a})`),
+          background: barBg,
           backdropFilter: barBlur,
           WebkitBackdropFilter: barBlur,
         }}

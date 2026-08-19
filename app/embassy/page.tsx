@@ -17,12 +17,12 @@ import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
 import Masthead from '@/components/embassy/Masthead'
 import { DepthScene, DepthLayer, SplitHeadline, TiltCard } from '@/components/embassy/motion3d'
+import { HeroRecede, MaskedHeading, ScrubJourney, HorizontalRail } from '@/components/embassy/ScrollStory'
 import { WeThinkMark } from '@/components/embassy/WeThinkMark'
 import { useTimeOfDay } from '@/components/embassy/useTimeOfDay'
 import LotusBloom from '@/components/embassy/LotusBloom'
 import Concierge from '@/components/embassy/Concierge'
 import CultureVideo from '@/components/embassy/CultureVideo'
-import ImageBand from '@/components/embassy/ImageBand'
 import KrathongRelease from '@/components/embassy/KrathongRelease'
 import ShareCardButton from '@/components/embassy/ShareCard'
 import { SiteFooter } from '@/components/embassy/ui'
@@ -115,12 +115,12 @@ function Panel({ children, className = '' }: { children: React.ReactNode; classN
 function Heading({ title, note }: { title: string; note?: string }) {
   return (
     <div className="mb-7 text-center">
-      <h2
+      <MaskedHeading
         className="text-[26px] font-medium sm:text-[28px]"
         style={{ fontFamily: serif, color: C.plumDeep }}
       >
         {title}
-      </h2>
+      </MaskedHeading>
       {note && (
         <p className="mt-1 text-[16px] italic" style={{ fontFamily: serif, color: C.inkSoft }}>
           {note}
@@ -669,6 +669,7 @@ export default function EmbassyInvitation() {
 
       <div className="relative z-10 mx-auto max-w-[780px] px-5 pb-24 pt-24 sm:pt-28">
         {/* ── Hero ── */}
+        <HeroRecede>
         <header className="text-center">
           <DepthScene strength={1}>
             <DepthLayer z={80}>
@@ -760,6 +761,7 @@ export default function EmbassyInvitation() {
             </DepthLayer>
           </DepthScene>
         </header>
+        </HeroRecede>
 
         <Rule />
 
@@ -783,12 +785,23 @@ export default function EmbassyInvitation() {
 
         {/* ── Highlights ── */}
         <Reveal>
-          <Heading title="Programme Highlights" note="Tap a card to learn more" />
-          <div className="grid grid-cols-1 gap-3.5 min-[420px]:grid-cols-2 min-[680px]:grid-cols-3">
+          <HorizontalRail
+            title={<Heading title="Programme Highlights" note="Tap a card to learn more" />}
+            count={HIGHLIGHTS.length}
+            fallback={
+              <div className="grid grid-cols-1 gap-3.5 min-[420px]:grid-cols-2">
+                {HIGHLIGHTS.map((h, i) => (
+                  <HighlightCard key={h.name} item={h} index={i} />
+                ))}
+              </div>
+            }
+          >
             {HIGHLIGHTS.map((h, i) => (
-              <HighlightCard key={h.name} item={h} index={i} />
+              <div key={h.name} className="w-[300px] flex-shrink-0 sm:w-[340px]">
+                <HighlightCard item={h} index={i} />
+              </div>
             ))}
-          </div>
+          </HorizontalRail>
         </Reveal>
 
         <Rule />
@@ -818,18 +831,18 @@ export default function EmbassyInvitation() {
           <Schedule />
         </Reveal>
 
-        {/* ── Photographic interlude ── */}
-        <ImageBand src="/embassy/thailand-hero.jpg" alt="A golden Thai temple above the river, framed by forested hills">
-          <p className="text-[12px] uppercase tracking-[0.22em] text-white/85">Thailand awaits</p>
-          <p
-            className="text-[24px] italic leading-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] sm:text-[28px]"
-            style={{ fontFamily: serif }}
-          >
-            Come for a day, leave with a country
-          </p>
-        </ImageBand>
+        {/* ── The journey, scrubbed by scroll ── */}
+        <ScrubJourney
+          src="/embassy/thailand-band.jpg"
+          alt="A golden Thai temple above the river, framed by forested hills"
+          lines={[
+            { kicker: 'Thailand awaits', text: 'Come for a day, leave with a country' },
+            { kicker: 'Two days', text: 'Dance, craft, and the smell of lemongrass in a mall in Abu Dhabi' },
+            { kicker: 'Everyone welcome', text: 'Entry is free, from ten in the morning until ten at night' },
+          ]}
+        />
 
-        {/* ── Venue ── */}
+        {/* ── Venue ── */}        {/* ── Venue ── */}
         <Reveal>
           <Panel>
             <Heading title="The Venue" note="Al Reem Island, Abu Dhabi" />

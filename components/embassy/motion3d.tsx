@@ -183,6 +183,10 @@ export function TiltCard({
   const rotateX = useSpring(useTransform(py, [-0.5, 0.5], [max, -max]), spring)
   const rotateY = useSpring(useTransform(px, [-0.5, 0.5], [-max, max]), spring)
   const glareX = useTransform(px, [-0.5, 0.5], ['12%', '88%'])
+  const glare = useTransform(
+    glareX,
+    (x) => `radial-gradient(140px 90px at ${x} 12%, rgba(255,255,255,0.5), transparent 70%)`,
+  )
 
   const move = (e: React.PointerEvent) => {
     const el = ref.current
@@ -209,12 +213,7 @@ export function TiltCard({
         <motion.span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 rounded-[18px] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-          style={{
-            background: useTransform(
-              glareX,
-              (x) => `radial-gradient(140px 90px at ${x} 12%, rgba(255,255,255,0.5), transparent 70%)`,
-            ),
-          }}
+          style={{ background: glare }}
         />
       </div>
     </motion.div>
