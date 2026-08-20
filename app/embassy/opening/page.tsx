@@ -9,6 +9,8 @@ import { readGuestName, useGuestName } from '@/components/embassy/useGuestName'
 import ShareCardButton from '@/components/embassy/ShareCard'
 import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
+import Masthead from '@/components/embassy/Masthead'
+import Concierge from '@/components/embassy/Concierge'
 import { CEREMONY } from '../programme/schedule'
 import Ticket from '@/components/embassy/Ticket'
 import CultureVideo from '@/components/embassy/CultureVideo'
@@ -20,6 +22,7 @@ import {
   Rule,
   Seal,
   SiteFooter,
+  StudioCredit,
   TITLE_GRADIENT,
   VenueMark,
   sans,
@@ -148,14 +151,14 @@ function downloadIcs() {
   const ics = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Marhaba Thailand//Royal Thai Embassy Abu Dhabi//EN',
+    'PRODID:-//WeThink//Marhaba Thailand//Royal Thai Embassy Abu Dhabi//EN',
     'BEGIN:VEVENT',
     'UID:marhaba-thailand-opening-2026@wethink.ae',
     'DTSTAMP:20260814T000000Z',
     'DTSTART:20260911T130000Z',
     'DTEND:20260911T140000Z',
     'SUMMARY:Marhaba Thailand — Opening Ceremony',
-    'DESCRIPTION:Opening Ceremony of Marhaba Thailand\\, hosted by the Royal Thai Embassy\\, Abu Dhabi.',
+    'DESCRIPTION:Opening Ceremony of Marhaba Thailand\\, hosted by the Royal Thai Embassy\\, Abu Dhabi.\\n\\nYour invitation: https://www.wethink.ae/embassy/opening\\nDigital invitation designed and built by WeThink · wethink.ae',
     'LOCATION:Main Atrium (near Zara), Reem Mall, Abu Dhabi, UAE',
     'END:VEVENT',
     'END:VCALENDAR',
@@ -415,6 +418,7 @@ export default function OpeningCeremony() {
         style={{ background: tod.sky[2], color: C.ink, fontFamily: sans, overflowX: 'clip' }}
       >
         <ThaiBackdrop />
+        <Masthead />
 
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[92vh] overflow-hidden">
           <CultureVideo />
@@ -422,7 +426,7 @@ export default function OpeningCeremony() {
 
         <VenueMark />
 
-        <div className="relative z-10 mx-auto max-w-[780px] px-5 pb-24 pt-6">
+        <div className="relative z-10 mx-auto max-w-[780px] px-5 pb-24 pt-[96px]">
           <header className="text-center">
             <Seal />
 
@@ -557,6 +561,11 @@ export default function OpeningCeremony() {
             <Registration />
           </Reveal>
 
+          <StudioCredit
+            what="This invitation, your ticket, and the wallet pass that carries it"
+            className="my-12"
+          />
+
           <Rule />
 
           <Reveal>
@@ -619,6 +628,8 @@ export default function OpeningCeremony() {
 
           <SiteFooter note="Programme details and timings are subject to confirmation by the Royal Thai Embassy." />
         </div>
+
+        <Concierge />
       </div>
     </MotionConfig>
   )

@@ -17,12 +17,13 @@ const jost = Jost({
 })
 
 export const metadata: Metadata = {
-  title: 'Marhaba Thailand — An Invitation | Royal Thai Embassy, Abu Dhabi',
+  title: 'Marhaba Thailand — An Invitation | Royal Thai Embassy, Abu Dhabi · by WeThink',
   description:
     'Marhaba Thailand — a two-day celebration of Thai culture, craft, and hospitality at Reem Mall, Abu Dhabi, 11–12 September 2026. Programme, schedule, and venue.',
   alternates: { canonical: '/embassy' },
   openGraph: {
     title: 'Marhaba Thailand — An Invitation',
+    siteName: 'WeThink',
     description:
       'Two days of Thai culture, craft, and hospitality at Reem Mall, Abu Dhabi · 11–12 September 2026',
     url: '/embassy',

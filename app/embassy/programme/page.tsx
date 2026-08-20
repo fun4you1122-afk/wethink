@@ -11,6 +11,8 @@ import { COMPANY, SCHEDULE, TRACKS, TrackId, allSlots } from './schedule'
 import ShareCardButton from '@/components/embassy/ShareCard'
 import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
+import Masthead from '@/components/embassy/Masthead'
+import Concierge from '@/components/embassy/Concierge'
 import {
   C,
   Heading,
@@ -19,6 +21,7 @@ import {
   Rule,
   Seal,
   SiteFooter,
+  StudioCredit,
   TITLE_GRADIENT,
   VenueMark,
   sans,
@@ -78,7 +81,11 @@ export default function Programme() {
   const share = async () => {
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
-        await navigator.share({ title: 'Marhaba Thailand — Daily Programme', url: PAGE_URL })
+        await navigator.share({
+          title: 'Marhaba Thailand — Daily Programme',
+          text: 'The full programme for Marhaba Thailand, all three stages.\n\nBuilt by WeThink · wethink.ae',
+          url: PAGE_URL,
+        })
         return
       } catch {
         /* dismissed */
@@ -102,9 +109,10 @@ export default function Programme() {
         style={{ background: tod.sky[2], color: C.ink, fontFamily: sans, overflowX: 'clip' }}
       >
         <ThaiBackdrop />
+        <Masthead />
         <VenueMark />
 
-        <div className="relative z-10 mx-auto max-w-[780px] px-5 pb-24 pt-6">
+        <div className="relative z-10 mx-auto max-w-[780px] px-5 pb-24 pt-[96px]">
           <header className="text-center">
             <Seal className="!h-[86px] sm:!h-[104px]" />
             <Reveal delay={0.1}>
@@ -287,6 +295,11 @@ export default function Programme() {
 
           <Rule />
 
+          <StudioCredit
+            what="The live programme for all three stages, both days of the festival"
+            className="my-12"
+          />
+
           <Reveal>
             <Panel>
               <Heading
@@ -396,6 +409,8 @@ export default function Programme() {
 
           <SiteFooter note="Programme details and timings are subject to confirmation by the Royal Thai Embassy." />
         </div>
+
+        <Concierge />
       </div>
     </MotionConfig>
   )

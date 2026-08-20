@@ -132,6 +132,66 @@ export function VenueMark() {
   )
 }
 
+/**
+ * A credit moment partway down the page, distinct from the footer.
+ *
+ * The footer is the formal attribution the Embassy agreed to. This is the
+ * warmer one: it names what was actually made, so a guest who is enjoying
+ * the thing learns who made it while they are still inside it, rather than
+ * only at the very end.
+ */
+export function StudioCredit({
+  what,
+  className = '',
+}: {
+  what: string
+  className?: string
+}) {
+  return (
+    <div className={`mx-auto max-w-[560px] text-center ${className}`}>
+      <a
+        href="https://www.wethink.ae"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group inline-flex flex-col items-center rounded-[24px] px-8 py-7 no-underline transition-colors"
+        style={{
+          background: 'rgba(255,255,255,0.44)',
+          border: '1px solid rgba(3,122,138,0.12)',
+        }}
+      >
+        <span
+          className="text-[10px] font-semibold uppercase tracking-[0.24em]"
+          style={{ color: C.tealSoft }}
+        >
+          A digital experience by
+        </span>
+        <img
+          src="/wethink-logo.png"
+          alt="WeThink"
+          width={132}
+          height={44}
+          className="mt-3 h-10 w-auto transition-transform duration-500 group-hover:scale-105"
+        />
+        <span
+          className="mt-3 text-[13.5px] leading-relaxed"
+          style={{ color: C.inkSoft, fontFamily: serif }}
+        >
+          {what}
+        </span>
+        <span
+          className="mt-3 inline-flex items-center gap-1.5 text-[11.5px] uppercase tracking-[0.14em]"
+          style={{ color: C.teal }}
+        >
+          wethink.ae
+          <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </span>
+      </a>
+    </div>
+  )
+}
+
 export function SiteFooter({ note }: { note?: string }) {
   return (
     <footer className="mt-12 pt-8 text-center">

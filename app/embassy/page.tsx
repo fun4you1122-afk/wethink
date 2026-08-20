@@ -30,7 +30,7 @@ import { Spotlight, SkewOnScroll, Magnetic, ChapterRail } from '@/components/emb
 import FlipCountdown from '@/components/embassy/FlipCountdown'
 import ThaiMarquee from '@/components/embassy/ThaiMarquee'
 import { usePetalBurst } from '@/components/embassy/PetalBurst'
-import { SiteFooter } from '@/components/embassy/ui'
+import { SiteFooter, StudioCredit } from '@/components/embassy/ui'
 
 /* ────────────────────────────────────────────────────────────
    Event details — single source of truth for the page.
@@ -530,14 +530,14 @@ function downloadIcs() {
   const ics = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Marhaba Thailand//Royal Thai Embassy Abu Dhabi//EN',
+    'PRODID:-//WeThink//Marhaba Thailand//Royal Thai Embassy Abu Dhabi//EN',
     'BEGIN:VEVENT',
     'UID:marhaba-thailand-2026@wethink.ae',
     'DTSTAMP:20260814T000000Z',
     'DTSTART:20260911T060000Z',
     'DTEND:20260912T180000Z',
     'SUMMARY:Marhaba Thailand — Royal Thai Embassy Cultural Festival',
-    'DESCRIPTION:Two-day Thai cultural festival at Reem Mall\\, Abu Dhabi. Three stages of Thai dance\\, live music\\, Muay Thai\\, and hands-on craft workshops.',
+    'DESCRIPTION:Two-day Thai cultural festival at Reem Mall\\, Abu Dhabi. Three stages of Thai dance\\, live music\\, Muay Thai\\, and hands-on craft workshops.\\n\\nProgramme: https://www.wethink.ae/embassy/programme\\nDigital invitation designed and built by WeThink · wethink.ae',
     'LOCATION:Reem Mall, Abu Dhabi, UAE',
     'END:VEVENT',
     'END:VCALENDAR',
@@ -563,7 +563,8 @@ function SaveAndShare() {
   const [copied, setCopied] = useState(false)
   const [showQR, setShowQR] = useState(false)
 
-  const shareText = `${EVENT.title} — ${EVENT.dates}, ${EVENT.venue}`
+  // the studio's name rides along with every forward
+  const shareText = `${EVENT.title} — ${EVENT.dates}, ${EVENT.venue}\n\nDigital invitation by WeThink · wethink.ae`
 
   const share = async () => {
     if (typeof navigator !== 'undefined' && navigator.share) {
@@ -908,6 +909,11 @@ export default function EmbassyInvitation() {
         />
 
         {/* ── Venue ── */}        {/* ── Venue ── */}
+        <StudioCredit
+          what="The invitation, the ceremony page and the daily programme for Marhaba Thailand"
+          className="my-12"
+        />
+
         <Reveal>
           <Panel>
             <Heading title="The Venue" note="Al Reem Island, Abu Dhabi" />
