@@ -10,6 +10,7 @@ import ShareCardButton from '@/components/embassy/ShareCard'
 import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
 import { CEREMONY } from '../programme/schedule'
+import Ticket from '@/components/embassy/Ticket'
 import CultureVideo from '@/components/embassy/CultureVideo'
 import {
   C,
@@ -173,7 +174,9 @@ function downloadIcs() {
 
 /* ── registration ────────────────────────────────────────── */
 
-function Registration() {
+const TICKET_KEY = 'wt:marhaba:ticket'
+
+function Registration({ invitedAs }: { invitedAs: string }) {
   const [name, setName] = useState('')
   const [position, setPosition] = useState('')
   const [affiliation, setAffiliation] = useState('')
@@ -204,6 +207,33 @@ function Registration() {
   useEffect(() => () => {
     if (guard.current) window.clearTimeout(guard.current)
   }, [])
+
+  // A guest who already confirmed comes back to their ticket, not to a
+  // blank form. The name in the link prefills the field for everyone else.
+  useEffect(() => {
+    let stored: string | null = null
+    try {
+      stored = window.localStorage.getItem(TICKET_KEY)
+    } catch {
+      /* private browsing, fall through to the form */
+    }
+    if (stored) {
+      setName(stored)
+      setState('done')
+    } else if (invitedAs) {
+      setName(invitedAs)
+    }
+  }, [invitedAs])
+
+  // Remember the confirmed guest so the ticket survives a reload.
+  useEffect(() => {
+    if (state !== 'done' || !name.trim()) return
+    try {
+      window.localStorage.setItem(TICKET_KEY, name.trim())
+    } catch {
+      /* nothing to do, the ticket is still on screen */
+    }
+  }, [state, name])
 
   if (REGISTRATION.mode === 'pending' || !REGISTRATION.action || !REGISTRATION.entries) {
     return (
@@ -338,6 +368,11 @@ function Registration() {
               Your attendance is confirmed with the Embassy. We look forward to welcoming you on
               Friday 11 September at 17:00.
             </p>
+
+            <div className="mt-7">
+              <Ticket guest={name} />
+            </div>
+
             <button
               type="button"
               onClick={downloadIcs}
@@ -506,7 +541,7 @@ export default function OpeningCeremony() {
           <Rule />
 
           <Reveal>
-            <Registration />
+            <Registration invitedAs={guest ?? ''} />
           </Reveal>
 
           <Rule />
