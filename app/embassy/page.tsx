@@ -198,41 +198,24 @@ function Countdown() {
 const HIGHLIGHTS = [
   {
     name: 'Cultural\nPerformances',
-    back: 'Traditional Thai dance and live music on the main stage, throughout both days.',
+    back: 'Thai cultural performance by Kai Kaew, and Thai dance by Kru Kae, on both stages across both days.',
     icon: (
       <path d="M12 3c-3 3-3 6 0 9M12 3c3 3 3 6 0 9M4 12c0 5 4 9 8 9s8-4 8-9M7 12c1.5 1 3 1 5 1s3.5 0 5-1" />
     ),
   },
   {
-    name: 'Hands-On\nWorkshops',
-    back: 'Thai fruit carving, garland-making, and traditional crafts with local artisans.',
-    icon: (
-      <path d="M4 15c2-1 3-3 3-5V6M8 10c2-1 3-3 3-5v3M12 10c2-1 3-3 3-6v4M16 10c1.5-.5 2.5-2 3-3.5M4 15c0 3 3 5 7 5s8-2 8-6" />
-    ),
-  },
-  {
-    name: 'Free Thai\nMassage',
-    back: 'Complimentary traditional Thai massage sessions, courtesy of our wellness partners.',
+    name: 'Live\nMusic',
+    back: 'The Thai band Sun Der, joined by Kany on day two, with Kim from Dusit Thani each morning and the Officers’ band in the evening.',
     icon: (
       <>
-        <circle cx="12" cy="7" r="3" />
-        <path d="M6 21c0-4 2.5-7 6-7s6 3 6 7" />
+        <circle cx="7" cy="17" r="3" />
+        <path d="M10 17V5l9-2v12M10 8l9-2" />
       </>
     ),
   },
   {
-    name: 'Tourism\nPavilion',
-    back: "Meet Thailand's resorts, airlines, and tour operators, and plan your next trip.",
-    icon: (
-      <>
-        <circle cx="12" cy="12" r="9" />
-        <path d="M15.5 8.5 L13 13 L8.5 15.5 L11 11 Z" />
-      </>
-    ),
-  },
-  {
-    name: 'Muay Thai\nShowcase',
-    back: 'Live demonstrations from Muay Thai practitioners, with techniques explained ringside.',
+    name: 'Muay Thai\nby UAM',
+    back: 'Live demonstrations by the UAE Association of Muay Thai, twice a day on the main stage.',
     icon: (
       <>
         <circle cx="7" cy="7" r="3" />
@@ -241,8 +224,24 @@ const HIGHLIGHTS = [
     ),
   },
   {
-    name: 'Prize\nLucky Draw',
-    back: 'Daily prize draws featuring flights, resort stays, and experiences across Thailand.',
+    name: 'Hands-On\nWorkshops',
+    back: 'Fruit and soap carving, weaving, batik and Benjarong painting, umbrella painting and Roy Malai garlands, taught by SACIT, the Thai Women’s Circle and Kai Kaew.',
+    icon: (
+      <path d="M4 15c2-1 3-3 3-5V6M8 10c2-1 3-3 3-5v3M12 10c2-1 3-3 3-6v4M16 10c1.5-.5 2.5-2 3-3.5M4 15c0 3 3 5 7 5s8-2 8-6" />
+    ),
+  },
+  {
+    name: 'Youth\nTalent Show',
+    back: 'Young performers take the second stage each afternoon and evening, alongside Thai games hosted by the Embassy.',
+    icon: (
+      <>
+        <path d="M12 3l2.4 5.2 5.6.7-4.1 3.9 1.1 5.6L12 15.7 6.9 18.4 8 12.8 3.9 8.9l5.6-.7z" />
+      </>
+    ),
+  },
+  {
+    name: 'Prizes &\nLucky Draw',
+    back: 'A lucky draw at the Opening Ceremony, and the Reem Mall campaign prize presentation on day two.',
     icon: (
       <>
         <rect x="4" y="9" width="16" height="11" rx="0.5" />
@@ -423,20 +422,24 @@ function Phrasebook() {
 
 const SCHEDULE = {
   1: [
-    ['10:00 AM', 'Doors open · Opening ceremony'],
-    ['12:00 PM', 'Cultural performances begin · Workshops open'],
-    ['3:00 PM', 'Muay Thai showcase'],
-    ['6:00 PM', 'Evening performances · Thai massage'],
-    ['9:00 PM', 'Lucky draw'],
+    ['10:00 AM', 'Day One opens · Music, Thai dance and workshops on all three stages'],
+    ['11:30 AM', 'Thai cultural performance by Kai Kaew · Thai games with the Embassy'],
+    ['1:40 PM', 'Influencer Panel I · Youth talent show'],
+    ['2:40 PM', 'Muay Thai demonstration by UAM'],
+    ['5:00 PM', 'Opening Ceremony · Main Atrium, Ground Floor'],
+    ['6:40 PM', 'Quiz game, batik painting and the Officers’ band'],
+    ['9:00 PM', 'Kai Kaew closes the night · Benjarong painting'],
     ['10:00 PM', 'Close of Day One'],
   ],
   2: [
-    ['10:00 AM', 'Doors open · Workshops continue'],
-    ['12:00 PM', 'Thai massage sessions · Tourism pavilion'],
-    ['3:00 PM', 'Muay Thai showcase encore'],
-    ['6:00 PM', 'Evening performances'],
-    ['9:00 PM', 'Grand prize lucky draw'],
-    ['10:00 PM', 'Closing ceremony'],
+    ['10:00 AM', 'Day Two opens · Music, Thai dance and workshops resume'],
+    ['11:30 AM', 'Thai cultural performance by Kai Kaew · Thai games with the Embassy'],
+    ['1:40 PM', 'Influencer Panel II · Youth talent show'],
+    ['2:40 PM', 'Muay Thai demonstration by UAM'],
+    ['5:00 PM', 'Reem Mall campaign prize presentation'],
+    ['6:40 PM', 'Kai Kaew, weaving with SACIT and the youth talent show'],
+    ['8:15 PM', 'Muay Thai encore · Umbrella painting with Kai Kaew'],
+    ['10:00 PM', 'Close of Day Two'],
   ],
 } as const
 
@@ -501,6 +504,15 @@ function Schedule() {
             ))}
           </motion.div>
         </AnimatePresence>
+        <div className="mt-5 text-center">
+          <a
+            href="/embassy/programme"
+            className="inline-flex items-center gap-2 rounded-full border px-6 py-3 text-[12.5px] font-medium uppercase tracking-[0.08em] transition-colors hover:bg-[rgba(3,122,138,0.06)]"
+            style={{ borderColor: 'rgba(3,122,138,0.3)', color: C.tealDeep, fontFamily: sans }}
+          >
+            The full programme, stage by stage
+          </a>
+        </div>
         <p
           className="mt-4 text-center text-[13px] italic"
           style={{ fontFamily: serif, color: C.inkSoft }}
@@ -525,7 +537,7 @@ function downloadIcs() {
     'DTSTART:20260911T060000Z',
     'DTEND:20260912T180000Z',
     'SUMMARY:Marhaba Thailand — Royal Thai Embassy Cultural Festival',
-    'DESCRIPTION:Two-day Thai cultural festival at Reem Mall\\, Abu Dhabi. Performances\\, workshops\\, Thai massage\\, Muay Thai\\, and a daily lucky draw.',
+    'DESCRIPTION:Two-day Thai cultural festival at Reem Mall\\, Abu Dhabi. Three stages of Thai dance\\, live music\\, Muay Thai\\, and hands-on craft workshops.',
     'LOCATION:Reem Mall, Abu Dhabi, UAE',
     'END:VEVENT',
     'END:VCALENDAR',
@@ -818,10 +830,11 @@ export default function EmbassyInvitation() {
               style={{ color: C.ink }}
             >
               Join the Royal Thai Embassy in Abu Dhabi for a two-day celebration of Thai culture,
-              craft, and hospitality at Reem Mall. Marhaba Thailand brings traditional dance, live
-              Muay Thai, hands-on workshops, and complimentary Thai massage to the UAE capital,
-              alongside a showcase of Thailand’s finest destinations from our tourism and airline
-              partners. Each day closes with a lucky draw of prizes contributed by our sponsors.
+              craft, and hospitality at Reem Mall. Across three stages, Marhaba Thailand brings
+              Thai dance and cultural performance, live music, Muay Thai, and hands-on workshops in
+              carving, weaving, batik and umbrella painting to the UAE capital, with artisans from
+              SACIT, the Thai Women’s Circle and the Embassy’s own teams. The Opening Ceremony is on
+              Friday evening, and both days run from 10:00 AM to 10:00 PM.
             </p>
           </Panel>
         </Reveal>

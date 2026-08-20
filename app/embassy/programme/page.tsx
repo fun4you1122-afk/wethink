@@ -7,6 +7,7 @@ import { CalendarPlus, MapPin, QrCode, Share2 } from 'lucide-react'
 import ThaiBackdrop from '@/components/embassy/ThaiBackdrop'
 import { useTimeOfDay } from '@/components/embassy/useTimeOfDay'
 import LiveNow from '@/components/embassy/LiveNow'
+import { COMPANY, SCHEDULE, TRACKS, TrackId, allSlots } from './schedule'
 import ShareCardButton from '@/components/embassy/ShareCard'
 import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
@@ -23,37 +24,6 @@ import {
   sans,
   serif,
 } from '@/components/embassy/ui'
-
-/* ────────────────────────────────────────────────────────────
-   Daily programme — the link behind the QR codes at the venue.
-
-   Draft content, mirroring the schedule on the main invitation.
-   Replace SCHEDULE below when the Embassy's final programme lands;
-   `start` and `end` are minutes from midnight, Gulf time, and drive
-   the "happening now" marker.
-   ──────────────────────────────────────────────────────────── */
-
-type Slot = { start: number; end: number; time: string; title: string; where: string }
-
-const SCHEDULE: Record<1 | 2, Slot[]> = {
-  1: [
-    { start: 600, end: 720, time: '10:00 AM', title: 'Doors open · Opening of the festival', where: 'Main entrance' },
-    { start: 720, end: 900, time: '12:00 PM', title: 'Cultural performances begin · Workshops open', where: 'Main stage · Workshop area' },
-    { start: 900, end: 1080, time: '3:00 PM', title: 'Muay Thai showcase', where: 'Ring' },
-    { start: 1020, end: 1080, time: '5:00 PM', title: 'Opening Ceremony', where: 'Main stage' },
-    { start: 1080, end: 1260, time: '6:00 PM', title: 'Evening performances · Thai massage', where: 'Main stage · Wellness corner' },
-    { start: 1260, end: 1320, time: '9:00 PM', title: 'Lucky draw', where: 'Main stage' },
-    { start: 1320, end: 1321, time: '10:00 PM', title: 'Close of Day One', where: '' },
-  ],
-  2: [
-    { start: 600, end: 720, time: '10:00 AM', title: 'Doors open · Workshops continue', where: 'Workshop area' },
-    { start: 720, end: 900, time: '12:00 PM', title: 'Thai massage sessions · Tourism pavilion', where: 'Wellness corner · Pavilion' },
-    { start: 900, end: 1080, time: '3:00 PM', title: 'Muay Thai showcase encore', where: 'Ring' },
-    { start: 1080, end: 1260, time: '6:00 PM', title: 'Evening performances', where: 'Main stage' },
-    { start: 1260, end: 1320, time: '9:00 PM', title: 'Grand prize lucky draw', where: 'Main stage' },
-    { start: 1320, end: 1321, time: '10:00 PM', title: 'Closing ceremony', where: 'Main stage' },
-  ],
-}
 
 const PAGE_URL = 'https://www.wethink.ae/embassy/programme'
 
@@ -80,6 +50,7 @@ const DAY_DATE: Record<1 | 2, string> = { 1: '2026-09-11', 2: '2026-09-12' }
 export default function Programme() {
   const tod = useTimeOfDay()
   const [day, setDay] = useState<1 | 2>(1)
+  const [track, setTrack] = useState<TrackId>('main')
   const [now, setNow] = useState<{ date: string; minutes: number } | null>(null)
   const [showQR, setShowQR] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -96,11 +67,13 @@ export default function Programme() {
     return () => clearInterval(id)
   }, [])
 
+  const slots = SCHEDULE[day][track]
   const isToday = now?.date === DAY_DATE[day]
-  const liveIndex =
-    isToday && now
-      ? SCHEDULE[day].findIndex((s) => now.minutes >= s.start && now.minutes < s.end)
-      : -1
+  const isLive = (s: { start: number; end: number }) =>
+    Boolean(isToday && now && now.minutes >= s.start && now.minutes < s.end)
+
+  // the two days, each flattened across its three tracks, for the live panel
+  const merged = { 1: allSlots(1), 2: allSlots(2) } as const
 
   const share = async () => {
     if (typeof navigator !== 'undefined' && navigator.share) {
@@ -165,7 +138,7 @@ export default function Programme() {
 
           <Reveal>
             <Panel className="mb-6">
-              <LiveNow schedule={SCHEDULE} />
+              <LiveNow schedule={merged} />
             </Panel>
           </Reveal>
 
@@ -197,26 +170,49 @@ export default function Programme() {
                 ))}
               </div>
 
+              {/* three stages run in parallel; pick one */}
+              <div className="mb-5 flex flex-wrap justify-center gap-1.5" role="tablist">
+                {TRACKS.map((tr) => (
+                  <button
+                    key={tr.id}
+                    role="tab"
+                    aria-selected={track === tr.id}
+                    onClick={() => setTrack(tr.id)}
+                    className="rounded-full border px-4 py-2 text-[11.5px] font-semibold uppercase tracking-[0.1em] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#037A8A]"
+                    style={
+                      track === tr.id
+                        ? {
+                            borderColor: 'transparent',
+                            background: `linear-gradient(135deg, ${C.tealDeep}, ${C.teal})`,
+                            color: '#fff',
+                          }
+                        : { borderColor: 'rgba(3,122,138,0.28)', color: C.teal }
+                    }
+                  >
+                    {tr.short}
+                  </button>
+                ))}
+              </div>
+
               <AnimatePresence mode="wait">
                 <motion.ol
-                  key={day}
+                  key={`${day}-${track}`}
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
                   transition={{ duration: 0.3 }}
                   className="mx-auto max-w-lg list-none"
                 >
-                  {SCHEDULE[day].map((slot, i) => {
-                    const live = i === liveIndex
+                  {slots.map((slot, i) => {
+                    const live = isLive(slot)
                     return (
                       <li
                         key={slot.time + slot.title}
                         className="grid grid-cols-[78px_1fr] gap-3 py-3 sm:grid-cols-[92px_1fr] sm:gap-4"
                         style={{
                           borderBottom:
-                            i === SCHEDULE[day].length - 1
-                              ? 'none'
-                              : '1px dashed rgba(3,122,138,0.18)',
+                            i === slots.length - 1 ? 'none' : '1px dashed rgba(3,122,138,0.18)',
+                          opacity: slot.rest ? 0.62 : 1,
                         }}
                       >
                         <div
@@ -229,7 +225,12 @@ export default function Programme() {
                           <div className="flex flex-wrap items-center gap-2">
                             <span
                               className="text-[15.5px]"
-                              style={{ color: C.ink, fontWeight: live ? 600 : 400 }}
+                              style={{
+                                color: C.ink,
+                                fontWeight: live || slot.feature ? 600 : 400,
+                                fontFamily: slot.feature ? serif : sans,
+                                fontSize: slot.feature ? '17.5px' : undefined,
+                              }}
                             >
                               {slot.title}
                             </span>
@@ -244,10 +245,28 @@ export default function Programme() {
                               </span>
                             )}
                           </div>
-                          {slot.where && (
+                          {slot.where && slot.feature && (
                             <div className="mt-0.5 text-[13px]" style={{ color: C.inkSoft }}>
                               {slot.where}
                             </div>
+                          )}
+                          {slot.feature && (
+                            <ol
+                              className="mt-2 list-none rounded-xl px-4 py-3 text-[13.5px]"
+                              style={{
+                                background: `linear-gradient(135deg, ${C.pale}, ${C.light})`,
+                                color: C.tealDeep,
+                              }}
+                            >
+                              {slot.feature.map((line, n) => (
+                                <li key={line} className="flex gap-2.5 py-0.5">
+                                  <span className="tabular-nums opacity-55">
+                                    {String(n + 1).padStart(2, '0')}
+                                  </span>
+                                  <span>{line}</span>
+                                </li>
+                              ))}
+                            </ol>
                           )}
                         </div>
                       </li>
@@ -260,8 +279,35 @@ export default function Programme() {
                 className="mt-5 text-center text-[13px] italic"
                 style={{ fontFamily: serif, color: C.inkSoft }}
               >
-                Draft programme — activity times are being finalised by the Embassy.
+                {TRACKS.find((t) => t.id === track)?.note} · timings as issued by the
+                Royal Thai Embassy and subject to change on the day.
               </p>
+            </Panel>
+          </Reveal>
+
+          <Rule />
+
+          <Reveal>
+            <Panel>
+              <Heading
+                title="Who You’ll Meet"
+                note="The artists, artisans and teams behind the two days"
+              />
+              <ul className="mx-auto grid max-w-xl list-none gap-x-6 gap-y-3 sm:grid-cols-2">
+                {COMPANY.map(([name, what]) => (
+                  <li key={name}>
+                    <div
+                      className="text-[14.5px] font-semibold"
+                      style={{ color: C.tealDeep, fontFamily: serif }}
+                    >
+                      {name}
+                    </div>
+                    <div className="text-[13px] leading-snug" style={{ color: C.inkSoft }}>
+                      {what}
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </Panel>
           </Reveal>
 
@@ -335,6 +381,13 @@ export default function Programme() {
                     style={{ borderColor: 'rgba(3,122,138,0.28)', color: C.teal }}
                   >
                     <CalendarPlus className="h-3.5 w-3.5" /> About the festival
+                  </a>
+                  <a
+                    href="/embassy/opening"
+                    className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-[12.5px] uppercase tracking-[0.08em]"
+                    style={{ borderColor: 'rgba(3,122,138,0.28)', color: C.teal }}
+                  >
+                    <CalendarPlus className="h-3.5 w-3.5" /> Opening Ceremony
                   </a>
                 </div>
               </div>

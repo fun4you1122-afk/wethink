@@ -9,6 +9,7 @@ import { useGuestName } from '@/components/embassy/useGuestName'
 import ShareCardButton from '@/components/embassy/ShareCard'
 import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
+import { CEREMONY } from '../programme/schedule'
 import CultureVideo from '@/components/embassy/CultureVideo'
 import {
   C,
@@ -41,14 +42,7 @@ const EVENT = {
 }
 
 /** The Embassy's running order for the evening. */
-const CEREMONY = [
-  'Opening Remarks',
-  'Cultural Performance',
-  'Cake Cutting',
-  'VIP Photo',
-  'Muay Thai Performance',
-  'Lucky Draw',
-]
+
 
 /* ────────────────────────────────────────────────────────────
    Registration.

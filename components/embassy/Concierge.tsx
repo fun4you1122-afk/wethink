@@ -24,12 +24,12 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
   {
     patterns: [/schedule|programme|program|agenda|each day|what.*happen|timing|time/i],
     reply:
-      'Both days run 10:00 AM to 10:00 PM at Reem Mall.\n\nDay One (11 Sept) — 10 AM doors open and opening ceremony, 12 PM performances and workshops, 3 PM Muay Thai showcase, 6 PM evening performances and Thai massage, 9 PM lucky draw, 10 PM close.\n\nDay Two (12 Sept) — 10 AM workshops continue, 12 PM Thai massage and tourism pavilion, 3 PM Muay Thai encore, 6 PM evening performances, 9 PM grand prize draw, 10 PM closing ceremony.',
+      'Three stages run in parallel from 10:00 AM to 10:00 PM on both days: the Main Stage, the Second Stage, and the Workshop area.\n\nDay One (11 Sept): music by Sun Der, Thai cultural performance by Kai Kaew, Thai dance with Kru Kae, Influencer Panel I, Muay Thai by UAM at 2:40 PM, the Opening Ceremony at 5:00 PM in the Main Atrium, then a quiz game, the Officers\u2019 band and batik painting through the evening.\n\nDay Two (12 Sept): the same three tracks, with Influencer Panel II, the Reem Mall campaign prize presentation at 5:00 PM, and Muay Thai again at 8:15 PM.\n\nThe full hour-by-hour programme for all three stages is on the Daily Programme page.',
   },
   {
     patterns: [/rsvp|register|sign up|book|attend|ticket|save the date/i],
     reply:
-      'No registration is needed — entry is free and open to the public. Use the Save the Date panel on this page to add the festival to your calendar, or share the invitation by WhatsApp or QR code.',
+      'No registration is needed for the festival itself. Entry is free and open to the public. The Opening Ceremony on Friday evening is by invitation, and invited guests can confirm attendance on the Opening Ceremony page. Use the Save the Date panel here to add the festival to your calendar.',
   },
   {
     patterns: [/where|venue|location|reem|mall|address|map|park/i],
@@ -37,39 +37,39 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
       'The festival is at Reem Mall on Al Reem Island, Abu Dhabi, open 10:00 AM to 10:00 PM on both days. There is a map link in the Venue section of this page.\n\nParking arrangements have not been confirmed yet — the Embassy can advise closer to the date.',
   },
   {
-    patterns: [/massage|spa|wellness/i],
+    patterns: [/ceremony|opening|vip|official|ambassador/i],
     reply:
-      'Complimentary traditional Thai massage sessions run through both days, courtesy of our wellness partners. They are offered on a first-come basis at the wellness corner.',
+      'The Opening Ceremony is on Friday 11 September, 17:00 to 18:00, in the Main Atrium on the Ground Floor near Zara. It runs to opening remarks, a cultural performance, the cake cutting, a Muay Thai performance, the group photo, and a lucky draw. Invited guests can confirm attendance on the Opening Ceremony page.',
   },
   {
     patterns: [/muay|thai boxing|boxing|fight/i],
     reply:
-      'The Muay Thai showcase features live demonstrations with the techniques explained ringside — afternoons on both days, with an encore on Day Two.',
+      'Muay Thai is demonstrated by UAM on the Main Stage at 2:40 PM on both days, with a second demonstration on Saturday at 8:15 PM, and a Wai Kru at the Opening Ceremony.',
   },
   {
     patterns: [/workshop|craft|carving|garland|hands.?on/i],
     reply:
-      'The hands-on workshops cover Thai fruit carving, garland-making (phuang malai), and other traditional crafts, taught by artisans. Open from midday on Day One and all morning on Day Two.',
+      'The workshop area runs all day, both days. Fruit and soap carving and Roy Malai garlands with the Thai Women\u2019s Circle, weaving, batik and Benjarong painting with SACIT, umbrella painting with Kai Kaew, and tote bag decoration and Thai art colouring with the Embassy.',
   },
   {
     patterns: [/dance|perform|music|show|stage|culture/i],
     reply:
-      'Traditional Thai dance and live music run on the main stage across both days, beginning at midday on Day One.',
+      'Kai Kaew brings Thai cultural performance, Kru Kae leads Thai dance performances and classes, and the band Sun Der plays through the day, joined by Kany on Saturday. Kim from Dusit Thani opens each morning on the Second Stage, and the Officers\u2019 band plays on Friday evening.',
   },
   {
     patterns: [/prize|draw|lucky|win|raffle/i],
     reply:
-      'There is a prize draw each evening, with flights, resort stays, and experiences across Thailand contributed by our sponsors. The grand draw closes Day Two.',
+      'There is a lucky draw at the Opening Ceremony on Friday evening, and the Reem Mall campaign prize presentation takes place on Saturday at 5:00 PM.',
   },
   {
     patterns: [/tourism|travel|airline|resort|holiday|trip|visa/i],
     reply:
-      "The tourism pavilion brings together Thailand's resorts, airlines, and tour operators, so you can plan a trip on the spot. For visa questions, please contact the Embassy directly.",
+      'For travel and visa questions, the Royal Thai Embassy in Abu Dhabi can help directly. The festival itself is a cultural celebration rather than a travel fair.',
   },
   {
     patterns: [/food|eat|cuisine|restaurant|dish|aroi/i],
     reply:
-      'Thai hospitality is central to the festival, and food partners will be on site. The full food line-up is still being confirmed by the Embassy.',
+      'Thai hospitality is central to the festival, and the food line-up is being confirmed by the Embassy. The programme also includes fruit and soap carving demonstrations by the Thai Women\u2019s Circle.',
   },
   {
     patterns: [/cost|price|free|entry|fee/i],
