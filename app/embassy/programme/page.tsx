@@ -139,6 +139,24 @@ export default function Programme() {
               >
                 11 – 12 September 2026 <span style={{ color: C.tealMid }}>✦</span> 10:00 AM – 10:00 PM
               </p>
+              <a
+                href="https://www.wethink.ae"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center gap-2.5 rounded-full py-1.5 pl-1.5 pr-4 no-underline"
+                style={{
+                  background: 'rgba(255,255,255,0.6)',
+                  border: '1px solid rgba(3,122,138,0.14)',
+                }}
+              >
+                <img src="/wethink-logo.png" alt="WeThink" width={72} height={24} className="h-6 w-auto" />
+                <span
+                  className="text-[10.5px] font-semibold uppercase tracking-[0.16em]"
+                  style={{ color: C.teal }}
+                >
+                  A live guide by WeThink
+                </span>
+              </a>
             </Reveal>
           </header>
 
@@ -147,6 +165,18 @@ export default function Programme() {
           <Reveal>
             <Panel className="mb-6">
               <LiveNow schedule={merged} />
+              <div
+                className="mt-4 flex items-center justify-center gap-2 border-t pt-3"
+                style={{ borderColor: 'rgba(3,122,138,0.12)' }}
+              >
+                <span
+                  className="text-[9.5px] font-semibold uppercase tracking-[0.18em]"
+                  style={{ color: 'rgba(70,112,122,0.7)' }}
+                >
+                  Live programme by
+                </span>
+                <img src="/wethink-logo.png" alt="WeThink" width={54} height={18} className="h-[18px] w-auto" />
+              </div>
             </Panel>
           </Reveal>
 
@@ -402,6 +432,74 @@ export default function Programme() {
                   >
                     <CalendarPlus className="h-3.5 w-3.5" /> Opening Ceremony
                   </a>
+                </div>
+              </div>
+            </Panel>
+          </Reveal>
+
+          <Rule />
+
+          <Reveal>
+            <Panel>
+              <Heading
+                title="Who Built This"
+                note="The studio behind the invitation and this programme"
+              />
+              <div className="mx-auto flex max-w-xl flex-col items-center gap-6 sm:flex-row sm:items-start sm:gap-8">
+                <div className="flex flex-shrink-0 flex-col items-center">
+                  <div
+                    className="rounded-2xl bg-white p-3"
+                    style={{ boxShadow: '0 8px 22px rgba(1,88,102,0.12)' }}
+                  >
+                    <QRCodeSVG
+                      value="https://www.wethink.ae"
+                      size={116}
+                      bgColor="#ffffff"
+                      fgColor="#015866"
+                      level="M"
+                    />
+                  </div>
+                  <p className="mt-2 text-center text-[11px]" style={{ color: C.inkSoft }}>
+                    Scan for WeThink
+                  </p>
+                </div>
+
+                <div className="text-center sm:text-left">
+                  <img
+                    src="/wethink-logo.png"
+                    alt="WeThink"
+                    width={132}
+                    height={44}
+                    className="mx-auto h-11 w-auto sm:mx-0"
+                  />
+                  <p className="mt-3 text-[14.5px] leading-relaxed" style={{ color: C.ink }}>
+                    WeThink is a digital studio in Abu Dhabi. We built the invitation for the
+                    Opening Ceremony, this live programme, and the ticket that goes with them,
+                    as our contribution to Marhaba Thailand.
+                  </p>
+                  <div className="mt-4 flex flex-wrap justify-center gap-2.5 sm:justify-start">
+                    <a
+                      href="https://www.wethink.ae"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[12px] font-medium uppercase tracking-[0.08em] text-white no-underline"
+                      style={{
+                        background: `linear-gradient(135deg, ${C.tealDeep}, ${C.teal})`,
+                        fontFamily: sans,
+                      }}
+                    >
+                      wethink.ae
+                    </a>
+                    <a
+                      href="https://www.instagram.com/wethink.ae/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-[12px] uppercase tracking-[0.08em] no-underline"
+                      style={{ borderColor: 'rgba(3,122,138,0.28)', color: C.teal }}
+                    >
+                      @wethink.ae
+                    </a>
+                  </div>
                 </div>
               </div>
             </Panel>

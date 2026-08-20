@@ -17,6 +17,13 @@ type Msg = { who: 'bot' | 'user'; text: string }
 
 const KB: { patterns: RegExp[]; reply: string }[] = [
   {
+    // first in the list, and without a bare "opening", so "when does the
+    // opening ceremony start" lands here while "what time do you open" does not
+    patterns: [/ceremony|opening ceremony|\bvip\b|ambassador/i],
+    reply:
+      'The Opening Ceremony is on Friday 11 September, 17:00 to 18:00, in the Main Atrium on the Ground Floor near Zara. It runs to opening remarks, a cultural performance, the cake cutting, a Muay Thai performance, the group photo, and a lucky draw. Invited guests can confirm attendance on the Opening Ceremony page.',
+  },
+  {
     patterns: [/open|close|hour|what time|when.*(start|end|finish)|late|early/i],
     reply:
       'Doors open at 10:00 AM and the festival runs until 10:00 PM on both days, 11 and 12 September. Come and go as you please — entry is free.',
@@ -35,11 +42,6 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
     patterns: [/where|venue|location|reem|mall|address|map|park/i],
     reply:
       'The festival is at Reem Mall on Al Reem Island, Abu Dhabi, open 10:00 AM to 10:00 PM on both days. There is a map link in the Venue section of this page.\n\nParking arrangements have not been confirmed yet — the Embassy can advise closer to the date.',
-  },
-  {
-    patterns: [/ceremony|opening|vip|official|ambassador/i],
-    reply:
-      'The Opening Ceremony is on Friday 11 September, 17:00 to 18:00, in the Main Atrium on the Ground Floor near Zara. It runs to opening remarks, a cultural performance, the cake cutting, a Muay Thai performance, the group photo, and a lucky draw. Invited guests can confirm attendance on the Opening Ceremony page.',
   },
   {
     patterns: [/muay|thai boxing|boxing|fight/i],
@@ -72,7 +74,7 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
       'Thai hospitality is central to the festival, and the food line-up is being confirmed by the Embassy. The programme also includes fruit and soap carving demonstrations by the Thai Women\u2019s Circle.',
   },
   {
-    patterns: [/cost|price|free|entry|fee/i],
+    patterns: [/cost|price|free|entry|\bfee\b/i],
     reply:
       'Entry is free and open to the public — just come along any time between 10:00 AM and 10:00 PM on either day.',
   },
@@ -87,9 +89,9 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
       'The festival is a public, family-friendly celebration — the workshops and performances are enjoyable for all ages.',
   },
   {
-    patterns: [/hello|hi|hey|sawasdee|salaam|marhaba|good (morning|evening|afternoon)/i],
+    patterns: [/\b(hello|hi|hey|sawasdee|salaam|marhaba)\b|good (morning|evening|afternoon)/i],
     reply:
-      "Sawasdee ka! 🌸 I'm the Marhaba Thailand concierge. Ask me about the programme, the venue, or getting there.",
+      "Sawasdee ka! 🌸 I'm the Marhaba Thailand concierge, built by WeThink. Ask me about the programme, the venue, or getting there.",
   },
   {
     patterns: [/thank|thanks|khop khun|شكر/i],
@@ -98,7 +100,7 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
   {
     patterns: [/who.*(made|built|design)|wethink|website/i],
     reply:
-      'This invitation was designed and built by WeThink, a digital studio in Abu Dhabi — wethink.ae.',
+      'WeThink is a digital studio in Abu Dhabi. We designed and built the invitation for the Opening Ceremony, this live programme, the ticket and wallet pass, and me. It was our contribution to Marhaba Thailand rather than a commission.\n\nwethink.ae · @wethink.ae on Instagram',
   },
 ]
 
@@ -112,7 +114,7 @@ function answer(q: string) {
   return FALLBACK
 }
 
-const CHIPS = ["What's happening each day?", 'Do I need a ticket?', 'Where is it held?']
+const CHIPS = ["What's happening each day?", 'Do I need a ticket?', 'Where is it held?', 'Who built this?']
 
 export default function Concierge() {
   const [open, setOpen] = useState(false)
@@ -121,7 +123,7 @@ export default function Concierge() {
   const [msgs, setMsgs] = useState<Msg[]>([
     {
       who: 'bot',
-      text: "Sawasdee ka! 🌸 I'm the Marhaba Thailand concierge. Ask me about the programme, the highlights, or the venue.",
+      text: "Sawasdee ka! 🌸 I'm the Marhaba Thailand concierge, built by WeThink. Ask me about the programme, the highlights, or the venue.",
     },
   ])
   const bodyRef = useRef<HTMLDivElement>(null)
