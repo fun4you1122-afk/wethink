@@ -5,7 +5,7 @@ import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
 import { CalendarPlus, Check, ExternalLink, MapPin, Send } from 'lucide-react'
 import ThaiBackdrop from '@/components/embassy/ThaiBackdrop'
 import { useTimeOfDay } from '@/components/embassy/useTimeOfDay'
-import { useGuestName } from '@/components/embassy/useGuestName'
+import { readGuestName, useGuestName } from '@/components/embassy/useGuestName'
 import ShareCardButton from '@/components/embassy/ShareCard'
 import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
@@ -176,7 +176,10 @@ function downloadIcs() {
 
 const TICKET_KEY = 'wt:marhaba:ticket'
 
-function Registration({ invitedAs }: { invitedAs: string }) {
+function Registration() {
+  // read from the URL rather than the hook: the hook's first render is null,
+  // which would look like "no invitation" to the restore below
+  const [invitedAs, setInvitedAs] = useState('')
   const [name, setName] = useState('')
   const [position, setPosition] = useState('')
   const [affiliation, setAffiliation] = useState('')
@@ -208,32 +211,42 @@ function Registration({ invitedAs }: { invitedAs: string }) {
     if (guard.current) window.clearTimeout(guard.current)
   }, [])
 
-  // A guest who already confirmed comes back to their ticket, not to a
-  // blank form. The name in the link prefills the field for everyone else.
+  // A guest who already confirmed comes back to their ticket rather than a
+  // blank form. The stored ticket remembers which invitation it belongs to,
+  // so a second guest opening their own link on a shared phone gets their
+  // own form instead of somebody else's ticket.
   useEffect(() => {
-    let stored: string | null = null
+    const invited = readGuestName()
+    setInvitedAs(invited)
+
+    let stored: { invited?: string; name?: string } | null = null
     try {
-      stored = window.localStorage.getItem(TICKET_KEY)
+      const raw = window.localStorage.getItem(TICKET_KEY)
+      stored = raw ? JSON.parse(raw) : null
     } catch {
-      /* private browsing, fall through to the form */
+      /* private browsing or older format, fall through to the form */
     }
-    if (stored) {
-      setName(stored)
+    const sameInvitation = stored && (stored.invited || '') === invited
+    if (stored?.name && sameInvitation) {
+      setName(stored.name)
       setState('done')
-    } else if (invitedAs) {
-      setName(invitedAs)
+    } else if (invited) {
+      setName(invited)
     }
-  }, [invitedAs])
+  }, [])
 
   // Remember the confirmed guest so the ticket survives a reload.
   useEffect(() => {
     if (state !== 'done' || !name.trim()) return
     try {
-      window.localStorage.setItem(TICKET_KEY, name.trim())
+      window.localStorage.setItem(
+        TICKET_KEY,
+        JSON.stringify({ invited: invitedAs, name: name.trim() }),
+      )
     } catch {
       /* nothing to do, the ticket is still on screen */
     }
-  }, [state, name])
+  }, [state, name, invitedAs])
 
   if (REGISTRATION.mode === 'pending' || !REGISTRATION.action || !REGISTRATION.entries) {
     return (
@@ -541,7 +554,7 @@ export default function OpeningCeremony() {
           <Rule />
 
           <Reveal>
-            <Registration invitedAs={guest ?? ''} />
+            <Registration />
           </Reveal>
 
           <Rule />
