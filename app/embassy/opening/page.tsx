@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
 import { CalendarPlus, Check, ExternalLink, MapPin, Send } from 'lucide-react'
 import ThaiBackdrop from '@/components/embassy/ThaiBackdrop'
@@ -33,11 +33,22 @@ const EVENT = {
   festival: 'Marhaba Thailand',
   subtitle: 'Creating Your Own Thai Experience',
   day: 'Friday 11 September 2026',
-  time: '5:00 PM',
-  venue: 'Reem Mall, Abu Dhabi',
+  time: '17:00 – 18:00 hrs',
+  venue: 'Main Atrium, Ground Floor (near Zara)',
+  venueFull: 'Reem Mall, Abu Dhabi',
   mapUrl: 'https://maps.google.com/?q=Reem+Mall+Abu+Dhabi',
   start: '2026-09-11T17:00:00+04:00',
 }
+
+/** The Embassy's running order for the evening. */
+const CEREMONY = [
+  'Opening Remarks',
+  'Cultural Performance',
+  'Cake Cutting',
+  'VIP Photo',
+  'Muay Thai Performance',
+  'Lucky Draw',
+]
 
 /* ────────────────────────────────────────────────────────────
    Registration.
@@ -55,14 +66,31 @@ type RegistrationConfig = {
   mode: 'native' | 'iframe' | 'pending'
   action?: string
   embedUrl?: string
-  entries?: { name?: string; email?: string; organisation?: string; guests?: string }
+  /** somewhere to send anyone whose submission fails */
+  formUrl?: string
+  entries?: {
+    name?: string
+    position?: string
+    affiliation?: string
+    phone?: string
+    email?: string
+  }
 }
 
 const REGISTRATION: RegistrationConfig = {
-  mode: 'pending',
-  // mode: 'native',
-  // action: 'https://docs.google.com/forms/d/e/FORM_ID/formResponse',
-  // entries: { name: 'entry.111', email: 'entry.222', organisation: 'entry.333', guests: 'entry.444' },
+  mode: 'native',
+  action:
+    'https://docs.google.com/forms/d/e/1FAIpQLScWP5xzoVwQN7ZZVnXXUODsXFW5xmSpGEBYdbcbKQLiod61nQ/formResponse',
+  entries: {
+    name: 'entry.1612220284',
+    position: 'entry.98852281',
+    affiliation: 'entry.264572762',
+    phone: 'entry.383538205',
+    email: 'entry.1408811448',
+  },
+  // the same form the QR code on the printed card opens
+  formUrl:
+    'https://docs.google.com/forms/d/e/1FAIpQLScWP5xzoVwQN7ZZVnXXUODsXFW5xmSpGEBYdbcbKQLiod61nQ/viewform',
 }
 
 const CONTACT_EMAIL = 'info@wethink.ae'
@@ -130,10 +158,10 @@ function downloadIcs() {
     'UID:marhaba-thailand-opening-2026@wethink.ae',
     'DTSTAMP:20260814T000000Z',
     'DTSTART:20260911T130000Z',
-    'DTEND:20260911T180000Z',
+    'DTEND:20260911T140000Z',
     'SUMMARY:Marhaba Thailand — Opening Ceremony',
     'DESCRIPTION:Opening Ceremony of Marhaba Thailand\\, hosted by the Royal Thai Embassy\\, Abu Dhabi.',
-    'LOCATION:Reem Mall, Abu Dhabi, UAE',
+    'LOCATION:Main Atrium (near Zara), Reem Mall, Abu Dhabi, UAE',
     'END:VEVENT',
     'END:VCALENDAR',
   ].join('\r\n')
@@ -153,132 +181,130 @@ function downloadIcs() {
 
 function Registration() {
   const [name, setName] = useState('')
+  const [position, setPosition] = useState('')
+  const [affiliation, setAffiliation] = useState('')
+  const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
-  const [organisation, setOrganisation] = useState('')
-  const [guests, setGuests] = useState('1')
-  const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
+  const [state, setState] = useState<'idle' | 'sending' | 'done'>('idle')
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!name.trim() || !email.trim() || !REGISTRATION.action || !REGISTRATION.entries) return
+  // The form posts natively into a hidden frame rather than through fetch.
+  // A no-cors fetch to Google never settles, which left the button stuck on
+  // "Sending". A real submit has no such restriction, and the frame's load
+  // event tells us it went through.
+  const sent = useRef(false)
+  const guard = useRef<number | undefined>(undefined)
+
+  const onSubmit = () => {
+    sent.current = true
     setState('sending')
-
-    const body = new FormData()
-    const { entries } = REGISTRATION
-    if (entries.name) body.append(entries.name, name)
-    if (entries.email) body.append(entries.email, email)
-    if (entries.organisation) body.append(entries.organisation, organisation)
-    if (entries.guests) body.append(entries.guests, guests)
-
-    try {
-      // Google Forms accepts the post but blocks reading the response, so the
-      // request is fire-and-forget: an opaque result still means delivered.
-      await fetch(REGISTRATION.action, { method: 'POST', mode: 'no-cors', body })
-      setState('done')
-    } catch {
-      setState('error')
-    }
+    // if the frame's load never reaches us, don't strand the guest
+    guard.current = window.setTimeout(() => setState('done'), 4500)
   }
 
-  if (REGISTRATION.mode === 'iframe' && REGISTRATION.embedUrl) {
+  const onFrameLoad = () => {
+    if (!sent.current) return // the frame's own initial load
+    if (guard.current) window.clearTimeout(guard.current)
+    setState('done')
+  }
+
+  useEffect(() => () => {
+    if (guard.current) window.clearTimeout(guard.current)
+  }, [])
+
+  if (REGISTRATION.mode === 'pending' || !REGISTRATION.action || !REGISTRATION.entries) {
     return (
       <Panel>
         <Heading title="Kindly Confirm Your Attendance" note="Registration for the Opening Ceremony" />
-        <div className="overflow-hidden rounded-2xl border border-[rgba(3,122,138,0.15)] bg-white">
-          <iframe
-            src={REGISTRATION.embedUrl}
-            title="Opening Ceremony registration"
-            className="h-[720px] w-full"
-            loading="lazy"
-          />
-        </div>
+        <p className="mx-auto max-w-md text-center text-[16px]" style={{ color: C.ink }}>
+          Registration opens here shortly.
+        </p>
       </Panel>
     )
   }
 
-  if (REGISTRATION.mode === 'pending') {
-    return (
-      <Panel>
-        <Heading title="Kindly Confirm Your Attendance" note="Registration for the Opening Ceremony" />
-        <div className="mx-auto max-w-md text-center">
-          <p className="text-[16px] leading-relaxed" style={{ color: C.ink }}>
-            Registration for the Opening Ceremony opens here shortly. Guests will be able to
-            confirm their attendance on this page.
-          </p>
-          <a
-            href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
-              'Marhaba Thailand — Opening Ceremony',
-            )}`}
-            className="mt-6 inline-flex items-center gap-2 rounded-full border px-7 py-3.5 text-[13.5px] font-medium uppercase tracking-[0.08em]"
-            style={{ borderColor: C.teal, color: C.tealDeep, fontFamily: sans }}
-          >
-            <Send className="h-4 w-4" /> Enquire by email
-          </a>
-        </div>
-      </Panel>
-    )
-  }
+  const f = REGISTRATION.entries
+  const field =
+    'rounded-2xl border border-[rgba(3,122,138,0.25)] bg-white/80 px-4 py-3.5 text-[15px] outline-none focus:border-[#037A8A] focus:ring-2 focus:ring-[rgba(3,122,138,0.12)]'
 
   return (
     <Panel>
-      <Heading title="Kindly Confirm Your Attendance" note="Registration for the Opening Ceremony" />
+      <Heading
+        title="Kindly Confirm Your Attendance"
+        note="Spouses, children, colleagues and friends are all welcome"
+      />
+
+      <iframe
+        name="wt-registration"
+        title="Registration delivery"
+        onLoad={onFrameLoad}
+        className="hidden"
+        aria-hidden="true"
+      />
+
       <AnimatePresence mode="wait">
         {state !== 'done' ? (
           <motion.form
             key="form"
-            onSubmit={submit}
+            action={REGISTRATION.action}
+            method="POST"
+            target="wt-registration"
+            onSubmit={onSubmit}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="mx-auto flex max-w-sm flex-col gap-3"
           >
             <input
+              name={f.name}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Full name"
-              aria-label="Full name"
+              placeholder="Title, name and surname"
+              aria-label="Title, name and surname"
               required
-              className="rounded-2xl border border-[rgba(3,122,138,0.25)] bg-white/70 px-4 py-3.5 text-[15px] outline-none focus:border-[#037A8A] focus:ring-2 focus:ring-[rgba(3,122,138,0.12)]"
+              className={field}
               style={{ color: C.ink, fontFamily: sans }}
             />
             <input
+              name={f.position}
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
+              placeholder="Position (optional)"
+              aria-label="Position"
+              className={field}
+              style={{ color: C.ink, fontFamily: sans }}
+            />
+            <input
+              name={f.affiliation}
+              value={affiliation}
+              onChange={(e) => setAffiliation(e.target.value)}
+              placeholder="Affiliation"
+              aria-label="Affiliation"
+              required
+              className={field}
+              style={{ color: C.ink, fontFamily: sans }}
+            />
+            <input
+              name={f.phone}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              type="tel"
+              placeholder="Phone number"
+              aria-label="Phone number"
+              required
+              className={field}
+              style={{ color: C.ink, fontFamily: sans }}
+            />
+            <input
+              name={f.email}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               type="email"
-              placeholder="Email address"
-              aria-label="Email address"
+              placeholder="Email"
+              aria-label="Email"
               required
-              className="rounded-2xl border border-[rgba(3,122,138,0.25)] bg-white/70 px-4 py-3.5 text-[15px] outline-none focus:border-[#037A8A] focus:ring-2 focus:ring-[rgba(3,122,138,0.12)]"
+              className={field}
               style={{ color: C.ink, fontFamily: sans }}
             />
-            <input
-              value={organisation}
-              onChange={(e) => setOrganisation(e.target.value)}
-              placeholder="Organisation (optional)"
-              aria-label="Organisation"
-              className="rounded-2xl border border-[rgba(3,122,138,0.25)] bg-white/70 px-4 py-3.5 text-[15px] outline-none focus:border-[#037A8A]"
-              style={{ color: C.ink, fontFamily: sans }}
-            />
-            <select
-              value={guests}
-              onChange={(e) => setGuests(e.target.value)}
-              aria-label="Number attending"
-              className="rounded-2xl border border-[rgba(3,122,138,0.25)] bg-white/70 px-4 py-3.5 text-[15px] outline-none focus:border-[#037A8A]"
-              style={{ color: C.ink, fontFamily: sans }}
-            >
-              {['1', '2', '3', '4'].map((g) => (
-                <option key={g} value={g}>
-                  {g === '1' ? 'Attending alone' : `${g} attending`}
-                </option>
-              ))}
-            </select>
-
-            {state === 'error' && (
-              <p className="text-center text-[13px]" style={{ color: '#9B2C2C' }}>
-                Something went wrong sending that. Please try again, or email{' '}
-                {CONTACT_EMAIL}.
-              </p>
-            )}
 
             <motion.button
               type="submit"
@@ -293,6 +319,10 @@ function Registration() {
             >
               {state === 'sending' ? 'Sending…' : 'Confirm attendance'} <Check className="h-4 w-4" />
             </motion.button>
+
+            <p className="mt-1 text-center text-[12px]" style={{ color: C.inkSoft }}>
+              Your details go directly to the Royal Thai Embassy.
+            </p>
           </motion.form>
         ) : (
           <motion.div
@@ -308,11 +338,11 @@ function Registration() {
               <Check className="h-6 w-6 text-white" />
             </div>
             <h3 className="text-[22px]" style={{ fontFamily: serif, color: C.tealDeep }}>
-              Thank you, {name.split(' ')[0]}
+              Thank you, {name.split(' ').slice(-1)[0] || 'and welcome'}
             </h3>
             <p className="mx-auto mt-2 max-w-sm text-[15px]" style={{ color: C.inkSoft }}>
               Your attendance is confirmed with the Embassy. We look forward to welcoming you on
-              11 September.
+              Friday 11 September at 17:00.
             </p>
             <button
               type="button"
@@ -414,10 +444,10 @@ export default function OpeningCeremony() {
                 {EVENT.day} <span style={{ color: C.tealMid }}>✦</span> {EVENT.time}
               </p>
               <p
-                className="mt-2 text-[13.5px] font-medium uppercase tracking-[0.14em]"
-                style={{ color: C.teal }}
+                className="mt-2 text-[13.5px] font-semibold uppercase tracking-[0.14em]"
+                style={{ color: '#065F6B' }}
               >
-                {EVENT.venue}
+                {EVENT.venue} <span style={{ color: C.tealMid }}>✦</span> {EVENT.venueFull}
               </p>
             </Reveal>
 
@@ -446,6 +476,42 @@ export default function OpeningCeremony() {
           <Rule />
 
           <Reveal>
+            <Panel>
+              <Heading title="The Evening" note="Draft programme for the ceremony" />
+              <ol className="mx-auto max-w-sm list-none">
+                {CEREMONY.map((item, i) => (
+                  <li
+                    key={item}
+                    className="grid grid-cols-[34px_1fr] items-baseline gap-3 py-2.5"
+                    style={{
+                      borderBottom:
+                        i === CEREMONY.length - 1 ? 'none' : '1px dashed rgba(3,122,138,0.18)',
+                    }}
+                  >
+                    <span
+                      className="text-[12px] font-semibold tabular-nums"
+                      style={{ color: C.tealMid }}
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span className="text-[16px]" style={{ color: C.ink }}>
+                      {item}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+              <p
+                className="mt-5 text-center text-[13px] italic"
+                style={{ fontFamily: serif, color: C.inkSoft }}
+              >
+                Stay to the end for the lucky draw. Order subject to confirmation by the Embassy.
+              </p>
+            </Panel>
+          </Reveal>
+
+          <Rule />
+
+          <Reveal>
             <Registration />
           </Reveal>
 
@@ -459,8 +525,10 @@ export default function OpeningCeremony() {
                 <p className="text-[17px]" style={{ color: C.ink }}>
                   {EVENT.venue}
                   <br />
+                  {EVENT.venueFull}
+                  <br />
                   <span className="text-[15px]" style={{ color: C.inkSoft }}>
-                    Opening Ceremony begins at {EVENT.time}
+                    The ceremony runs {EVENT.time}
                   </span>
                 </p>
                 <div className="flex flex-wrap justify-center gap-3">
