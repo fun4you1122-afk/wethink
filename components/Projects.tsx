@@ -5,6 +5,18 @@ import { motion, useInView } from 'framer-motion'
 
 const projects = [
   {
+    title: 'Marhaba Thailand — Royal Thai Embassy',
+    client: 'The Royal Thai Embassy, Abu Dhabi · Reem Mall',
+    category: 'Digital Transformation',
+    desc: 'Three connected digital experiences for the Embassy’s two-day national cultural festival: the public invitation, a VIP invitation for the Opening Ceremony with registration wired into the Embassy’s own systems, and a live three-stage programme reached from QR codes at the venue.',
+    tags: ['Next.js', 'Live Programme', 'Wallet Passes'],
+    accent: '#037A8A',
+    image: '/projects/marhaba/invitation-desktop.jpg',
+    stat: 'Live',
+    statLabel: 'open it on your phone',
+    href: '/embassy',
+  },
+  {
     title: 'Nexa Pay — Digital Payments App',
     client: 'Nexa Pay · Fintech Startup, Abu Dhabi',
     category: 'Custom Software',
@@ -89,6 +101,14 @@ function ProjectCard({
       transition={{ duration: 0.7, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={`group relative overflow-hidden rounded-2xl ${featured ? 'min-h-[420px] h-full' : 'min-h-[280px] flex-1'}`}
     >
+      {/* work that is actually live is openable from the tile */}
+      {'href' in project && project.href && (
+        <a
+          href={project.href as string}
+          className="absolute inset-0 z-30"
+          aria-label={`Open ${project.title}`}
+        />
+      )}
       {/* Background image */}
       <img
         src={project.image}

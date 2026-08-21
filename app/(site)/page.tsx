@@ -1,5 +1,7 @@
 import Hero from '@/components/Hero'
 import Welcome from '@/components/Welcome'
+import FeaturedCase from '@/components/FeaturedCase'
+import CityBand from '@/components/CityBand'
 import BigOnPurpose from '@/components/BigOnPurpose'
 import OrbitalServices from '@/components/OrbitalServices'
 import Stats from '@/components/Stats'
@@ -12,8 +14,10 @@ export default function Home() {
     <>
       <Hero />
       <Welcome />
+      <FeaturedCase />
       <BigOnPurpose />
       <OrbitalServices />
+      <CityBand />
       <Stats />
       <ClientLogos />
       <Testimonials />
