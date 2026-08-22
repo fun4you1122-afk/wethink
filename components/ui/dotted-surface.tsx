@@ -13,14 +13,20 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
     const container = containerRef.current
     if (!container) return
 
-    const SEPARATION = 150
-    const AMOUNTX = 40
-    const AMOUNTY = 60
+    // A denser, closer field than before. The old grid was so wide and so
+    // far from the camera that sizeAttenuation shrank almost every dot to
+    // a speck, which read as no background at all.
+    // sparse enough that individual rows stay distinguishable; any denser
+    // and the rows merge and the ripples read as noise
+    const SEPARATION = 115
+    const AMOUNTX = 58
+    const AMOUNTY = 32
 
     const scene = new THREE.Scene()
 
-    const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 1, 10000)
-    camera.position.set(0, 355, 1220)
+    const camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 1, 10000)
+    camera.position.set(0, 210, 700)
+    camera.lookAt(0, 0, 0)
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -38,8 +44,14 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
           0,
           iy * SEPARATION - (AMOUNTY * SEPARATION) / 2,
         )
-        // light theme: teal-violet dots
-        colors.push(0.12, 0.55, 0.52)
+        // the brand ramp, teal on the left through to violet on the right,
+        // so the field reads as ours rather than as generic noise
+        const t = ix / (AMOUNTX - 1)
+        colors.push(
+          0.06 + t * 0.42,
+          0.62 - t * 0.38,
+          0.58 + t * 0.32,
+        )
       }
     }
 
@@ -48,11 +60,14 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
 
     const material = new THREE.PointsMaterial({
-      size: 6,
+      size: 3.4,
       vertexColors: true,
       transparent: true,
-      opacity: 0.35,
-      sizeAttenuation: true,
+      opacity: 0.9,
+      // fixed screen size: with attenuation the far rows shrank to nothing
+      // and the ripples never read as ripples, only as scattered dust
+      sizeAttenuation: false,
+      depthWrite: false,
     })
 
     const points = new THREE.Points(geometry, material)
@@ -66,18 +81,29 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
     const animate = () => {
       animationId = requestAnimationFrame(animate)
       const pos = geometry.attributes.position.array as Float32Array
+      const col = geometry.attributes.color.array as Float32Array
       let i = 0
       for (let ix = 0; ix < AMOUNTX; ix++) {
+        const t = ix / (AMOUNTX - 1)
+        const r = 0.06 + t * 0.42
+        const g = 0.62 - t * 0.38
+        const bl = 0.58 + t * 0.32
         for (let iy = 0; iy < AMOUNTY; iy++) {
-          pos[i * 3 + 1] =
-            Math.sin((ix + count) * 0.3) * 50 +
-            Math.sin((iy + count) * 0.5) * 50
+          const a = Math.sin((ix + count) * 0.3)
+          const b = Math.sin((iy + count) * 0.5)
+          pos[i * 3 + 1] = a * 95 + b * 95
+          // crest bright, trough faint
+          const lift = 0.45 + ((a + b) / 2 + 1) * 0.55
+          col[i * 3] = r * lift
+          col[i * 3 + 1] = g * lift
+          col[i * 3 + 2] = bl * lift
           i++
         }
       }
       geometry.attributes.position.needsUpdate = true
+      geometry.attributes.color.needsUpdate = true
       renderer.render(scene, camera)
-      count += 0.08
+      count += 0.055
     }
 
     // Render one static frame; only loop while the hero is on screen
@@ -126,6 +152,12 @@ export function DottedSurface({ className, ...props }: DottedSurfaceProps) {
     <div
       ref={containerRef}
       className={cn('pointer-events-none absolute inset-0', className)}
+      style={{
+        maskImage:
+          'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.35) 18%, #000 52%, #000 100%)',
+        WebkitMaskImage:
+          'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.35) 18%, #000 52%, #000 100%)',
+      }}
       {...props}
     />
   )
