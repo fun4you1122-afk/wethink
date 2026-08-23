@@ -3,11 +3,20 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 
+// Every figure here has to survive someone checking it. The old row claimed
+// 5,000 projects and 1,000 clients for a firm founded in 2019, which works out
+// at two finished projects a day, and one visitor doing that arithmetic
+// discounts everything else on the page.
 const stats = [
-  { value: new Date().getFullYear() - 2019, suffix: '+', label: 'Years of Excellence', desc: 'Serving clients since 2019' },
-  { value: 5000, suffix: '+', label: 'Projects Delivered', desc: 'Across UAE & MENA' },
-  { value: 1000, suffix: '+', label: 'Happy Clients', desc: 'From startups to enterprise' },
-  { value: 8, suffix: '', label: 'Core Services', desc: 'End-to-end digital solutions' },
+  {
+    value: new Date().getFullYear() - 2019,
+    suffix: '',
+    label: 'Years in Abu Dhabi',
+    desc: 'Founded 2019, based on Al Reem Island',
+  },
+  { value: 18, suffix: '+', label: 'Clients', desc: 'Across the UAE and the Gulf' },
+  { value: 5, suffix: '', label: 'Practice Areas', desc: 'Cloud, security, software, data, transformation' },
+  { value: 8, suffix: '', label: 'Core Services', desc: 'Strategy through to delivery' },
 ]
 
 function AnimatedCounter({ value, suffix, active }: { value: number; suffix: string; active: boolean }) {

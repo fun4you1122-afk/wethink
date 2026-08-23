@@ -5,7 +5,7 @@ import BigOnPurpose from '@/components/BigOnPurpose'
 import OrbitalServices from '@/components/OrbitalServices'
 import Stats from '@/components/Stats'
 import ClientLogos from '@/components/ClientLogos'
-import Testimonials from '@/components/Testimonials'
+import Engagements from '@/components/Engagements'
 import Contact from '@/components/Contact'
 
 export default function Home() {
@@ -18,7 +18,7 @@ export default function Home() {
       <CityBand />
       <Stats />
       <ClientLogos />
-      <Testimonials />
+      <Engagements />
       <Contact />
     </>
   )

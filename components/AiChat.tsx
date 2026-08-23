@@ -336,7 +336,7 @@ export default function AiChat() {
         onClick={() => setOpen((v) => !v)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.94 }}
-        className="fixed bottom-24 right-4 md:right-6 z-[999] w-14 h-14 rounded-full shadow-xl shadow-violet-500/40 flex items-center justify-center"
+        className="fixed bottom-24 right-4 md:right-6 z-[999] flex h-12 w-12 items-center justify-center rounded-full shadow-lg shadow-violet-900/20"
         style={{ background: 'linear-gradient(135deg, #6D28D9, #7C3AED)' }}
         title="Chat with WeThink AI"
       >
@@ -347,15 +347,12 @@ export default function AiChat() {
             </motion.div>
           ) : (
             <motion.div key="ai" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
-              <span className="text-white font-black text-lg tracking-tight leading-none">AI</span>
+              <span className="text-[15px] font-bold leading-none tracking-tight text-white">AI</span>
             </motion.div>
           )}
         </AnimatePresence>
-        {/* Pulse ring */}
-        {!open && (
-          <span className="absolute inset-0 rounded-full animate-ping opacity-20"
-            style={{ background: '#7C3AED' }} />
-        )}
+        {/* The pulse ring used to live here. A permanently pulsing button
+            competes with the page for attention and reads as a demo. */}
       </motion.button>
     </>
   )
