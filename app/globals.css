@@ -165,11 +165,14 @@ p { text-wrap: pretty; }
   align-items: center;
   gap: 0.5rem;
   padding: 0.85rem 2rem;
-  background: linear-gradient(135deg, var(--teal) 0%, var(--primary) 100%);
+  /* Was a teal-to-violet gradient. A gradient-filled button is the same
+     template signal as gradient headline text: it belongs to no company in
+     particular. One solid ink, and the ramp stays on the logo. */
+  background: var(--primary);
   color: white;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 0.9rem;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   border-radius: 50px;
   border: none;
   cursor: pointer;

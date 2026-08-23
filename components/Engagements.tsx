@@ -25,6 +25,14 @@ const ENGAGEMENTS = [
     hrefLabel: 'Open the invitation',
   },
   {
+    client: 'Nabe Eldiyafa Aldimashqi',
+    sector: 'Hospitality · Abu Dhabi',
+    title: 'A Damascene kitchen, online',
+    body:
+      'Full digital launch for a heritage Damascene restaurant: brand identity refresh, a bilingual reservations site, and a twelve-month social programme shot with original photography and video in Arabic and English.',
+    meta: '4× social following · 28% more dine-in reservations',
+  },
+  {
     client: 'Albina Alareeq Contracting & General Maintenance',
     sector: 'Construction · Abu Dhabi',
     title: 'Tender to site, in one place',
@@ -62,7 +70,7 @@ export default function Engagements() {
           </h2>
         </motion.div>
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+        <div className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {ENGAGEMENTS.map((e, i) => (
             <motion.article
               key={e.client}

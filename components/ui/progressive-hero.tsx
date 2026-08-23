@@ -99,14 +99,14 @@ function WeThinkHero() {
 
       {/* Content */}
       <div className="relative z-20 flex flex-col items-center justify-center w-full min-h-screen px-6">
-        <div className="flex gap-8 py-20 lg:py-40 items-center justify-center flex-col w-full max-w-3xl mx-auto text-center">
+        <div className="mx-auto flex w-full max-w-4xl flex-col items-start justify-center gap-8 py-20 text-left lg:py-40">
 
           {/* Top badge */}
           <div>
             <Button
               variant="secondary"
               size="sm"
-              className="gap-3 shadow-md shadow-violet-900/40"
+              className="gap-3"
               onClick={() => window.location.assign("/services")}
             >
               Abu Dhabi, UAE — Est. 2019 <MoveRight className="w-4 h-4" />
@@ -115,20 +115,19 @@ function WeThinkHero() {
 
           {/* Headline */}
           <div className="flex gap-4 flex-col w-full">
-            <h1 className="text-5xl md:text-7xl tracking-tight font-extrabold drop-shadow-[0_2px_16px_rgba(20,184,166,0.15)]" style={{ color: "var(--text)" }}>
-              <span className="font-extrabold" style={{ color: "var(--text)" }}>WeThink is</span>
-              <span className="relative flex w-full justify-center overflow-hidden md:pb-4 md:pt-1" style={{ minHeight: "1.2em" }}>
+            <h1 className="text-[clamp(2.5rem,6vw,4.25rem)] font-bold leading-[1.06] tracking-tight" style={{ color: "var(--text)" }}>
+              <span style={{ color: "var(--text)" }}>WeThink is</span>
+              <span className="relative flex w-full overflow-hidden md:pb-3 md:pt-1" style={{ minHeight: "1.15em" }}>
                 &nbsp;
                 {titles.map((title, index) => (
                   <motion.span
                     key={index}
-                    className="absolute font-extrabold"
-                    style={{
-                      background: "linear-gradient(90deg,#14B8A6,#7C3AED)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      filter: "drop-shadow(0 2px 16px rgba(20,184,166,0.25))",
-                    }}
+                    className="absolute font-bold"
+                    // Gradient-filled headline text with a glow behind it is the
+                    // single loudest "template" signal on a page. One solid ink
+                    // reads as a company; the ramp stays on the logo, where it
+                    // means something.
+                    style={{ color: "#0B7A6E" }}
                     initial={{ opacity: 0, y: 150 }}
                     transition={{ type: "spring", stiffness: 50 }}
                     animate={
@@ -144,18 +143,18 @@ function WeThinkHero() {
             </h1>
 
             {/* Description */}
-            <p className="text-lg md:text-xl leading-relaxed max-w-2xl mx-auto" style={{ color: "var(--text-muted)" }}>
+            <p className="max-w-xl text-lg leading-relaxed md:text-xl" style={{ color: "var(--text-muted)" }}>
               End-to-end IT consulting, cloud strategy, cybersecurity, and custom software —
               helping UAE enterprises compete and thrive in the digital age.
             </p>
           </div>
 
           {/* CTA buttons */}
-          <div className="flex flex-row flex-wrap gap-3 justify-center">
+          <div className="flex flex-row flex-wrap gap-3">
             <Button
               size="lg"
               variant="default"
-              className="gap-3 shadow-md shadow-violet-900/50"
+              className="gap-3"
               onClick={openEmail}
             >
               Start a Project <MoveRight className="w-4 h-4" />
@@ -163,7 +162,7 @@ function WeThinkHero() {
             <Button
               size="lg"
               variant="outline"
-              className="gap-3 shadow-md shadow-violet-900/40"
+              className="gap-3"
               onClick={openWhatsApp}
             >
               Book a Call <PhoneCall className="w-4 h-4" />
@@ -171,7 +170,7 @@ function WeThinkHero() {
           </div>
 
           {/* Trust badges */}
-          <div className="flex flex-wrap justify-center gap-3 mt-2">
+          <div className="mt-2 flex flex-wrap gap-3">
             {["ISO 27001 Ready", "AWS Partner", "Microsoft Azure", "UAE Gov Compliant"].map((badge) => (
               <span
                 key={badge}
