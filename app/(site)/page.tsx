@@ -1,4 +1,4 @@
-import Hero from '@/components/Hero'
+import StudioHero from '@/components/StudioHero'
 import Welcome from '@/components/Welcome'
 import CityBand from '@/components/CityBand'
 import ScrollPath from '@/components/ScrollPath'
@@ -7,12 +7,13 @@ import OrbitalServices from '@/components/OrbitalServices'
 import Stats from '@/components/Stats'
 import ClientLogos from '@/components/ClientLogos'
 import Engagements from '@/components/Engagements'
+import Testimonials from '@/components/Testimonials'
 import Contact from '@/components/Contact'
 
 export default function Home() {
   return (
     <>
-      <Hero />
+      <StudioHero />
       <Welcome />
       <BigOnPurpose />
       <OrbitalServices />
@@ -21,6 +22,7 @@ export default function Home() {
       <Stats />
       <ClientLogos />
       <Engagements />
+      <Testimonials />
       <Contact />
     </>
   )

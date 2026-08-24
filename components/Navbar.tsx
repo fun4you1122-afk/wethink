@@ -19,6 +19,10 @@ export default function Navbar() {
   const [hidden, setHidden] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
+  // The home page opens on a black studio, so the bar has to invert while it
+  // is over it and return to normal once the glass panel appears on scroll.
+  const overDarkHero = pathname === '/' && !scrolled
+
   useEffect(() => {
     let last = 0
     const handleScroll = () => {
@@ -82,15 +86,25 @@ export default function Navbar() {
                     href={link.href}
                     className="relative px-3.5 py-2 text-sm font-medium rounded-xl transition-all duration-300"
                     style={{
-                      color: isActive ? '#7C3AED' : 'var(--text-muted)',
-                      background: isActive ? 'rgba(124,58,237,0.1)' : 'transparent',
+                      color: overDarkHero
+                        ? isActive
+                          ? '#ffffff'
+                          : 'rgba(255,255,255,0.62)'
+                        : isActive
+                          ? '#7C3AED'
+                          : 'var(--text-muted)',
+                      background: isActive
+                        ? overDarkHero
+                          ? 'rgba(255,255,255,0.10)'
+                          : 'rgba(124,58,237,0.1)'
+                        : 'transparent',
                     }}
                   >
                     {link.label}
                     {isActive && (
                       <motion.span
                         layoutId="nav-indicator"
-                        className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-violet-600"
+                        className={`absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full ${overDarkHero ? 'bg-white' : 'bg-violet-600'}`}
                       />
                     )}
                   </Link>
@@ -102,7 +116,11 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-3">
               <button
                 onClick={goToContact}
-                className="btn-primary text-sm py-2 px-5 group"
+                className={`group text-sm ${
+                  overDarkHero
+                    ? 'inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 font-semibold text-black transition-transform hover:scale-[1.03]'
+                    : 'btn-primary px-5 py-2'
+                }`}
               >
                 Get Started
                 <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-px">
