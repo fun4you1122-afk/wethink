@@ -55,17 +55,17 @@ export default function Engagements() {
   const seen = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section ref={ref} className="relative bg-[#05030C] py-24 sm:py-28">
+    <section ref={ref} className="relative py-24 sm:py-28" style={{ background: 'var(--surface-2)' }}>
       <div className="mx-auto max-w-7xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={seen ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
-          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-violet-300">
+          <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: 'var(--primary)' }}>
             Selected engagements
           </p>
-          <h2 className="mt-4 max-w-2xl text-[clamp(1.9rem,4vw,3rem)] font-bold leading-[1.08] tracking-tight text-white">
+          <h2 className="mt-4 max-w-2xl text-[clamp(1.9rem,4vw,3rem)] font-bold leading-[1.08] tracking-tight" style={{ color: 'var(--text)' }}>
             Work you can look up
           </h2>
         </motion.div>
@@ -77,19 +77,19 @@ export default function Engagements() {
               initial={{ opacity: 0, y: 28 }}
               animate={seen ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.65, delay: 0.1 + i * 0.09, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-7"
+              className="flex flex-col rounded-2xl border p-7" style={{ background: '#ffffff', borderColor: 'var(--border, rgba(233,216,253,1))' }}
             >
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-violet-300/80">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={{ color: 'var(--primary)' }}>
                 {e.sector}
               </p>
-              <h3 className="mt-3 text-[19px] font-bold leading-snug text-white">{e.title}</h3>
-              <p className="mt-1.5 text-[13.5px] text-white/50">{e.client}</p>
-              <p className="mt-4 flex-1 text-[14.5px] leading-relaxed text-white/70">{e.body}</p>
-              <p className="mt-5 text-[12.5px] text-white/40">{e.meta}</p>
+              <h3 className="mt-3 text-[19px] font-bold leading-snug" style={{ color: 'var(--text)' }}>{e.title}</h3>
+              <p className="mt-1.5 text-[13.5px]" style={{ color: 'var(--text-muted)' }}>{e.client}</p>
+              <p className="mt-4 flex-1 text-[14.5px] leading-relaxed" style={{ color: 'var(--text-muted)' }}>{e.body}</p>
+              <p className="mt-5 text-[12.5px]" style={{ color: '#9ca3af' }}>{e.meta}</p>
               {e.href && (
                 <a
                   href={e.href}
-                  className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-white no-underline transition-colors hover:text-violet-300"
+                  className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-semibold no-underline transition-opacity hover:opacity-70" style={{ color: 'var(--primary)' }}
                 >
                   {e.hrefLabel}
                   <ArrowUpRight className="h-3.5 w-3.5" />
@@ -107,10 +107,10 @@ export default function Engagements() {
         >
           <a
             href="/work"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white no-underline transition-colors hover:border-violet-400/60 hover:bg-white/5"
+            className="inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold no-underline transition-colors hover:bg-white" style={{ borderColor: 'rgba(233,216,253,1)', color: 'var(--text)', background: 'rgba(255,255,255,0.7)' }}
           >
             All our work
-            <ArrowUpRight className="h-4 w-4 text-violet-300" />
+            <ArrowUpRight className="h-4 w-4" style={{ color: 'var(--primary)' }} />
           </a>
         </motion.div>
       </div>
