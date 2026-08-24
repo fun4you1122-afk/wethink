@@ -6,21 +6,20 @@ interface LogoProps {
 }
 
 export default function Logo({ className = '', size = 'md' }: LogoProps) {
-  const heights = { sm: 96, md: 120, lg: 148 }
-  const h = heights[size]
+  // Heights were fixed pixels, so the navbar mark was 96px tall on a phone and
+  // hung across the hero's lighting rail. Each size is now a pair: phone, then
+  // from sm upwards.
+  const heights = {
+    sm: 'h-9 sm:h-12',
+    md: 'h-11 sm:h-[120px]',
+    lg: 'h-14 sm:h-[148px]',
+  }
 
   return (
     <img
       src="/logo.png"
       alt="WeThink — Think. Plan. Grow."
-      height={h}
-      style={{
-        height: h,
-        width: 'auto',
-        objectFit: 'contain',
-        filter: 'none',
-      }}
-      className={className}
+      className={`w-auto object-contain ${heights[size]} ${className}`}
     />
   )
 }

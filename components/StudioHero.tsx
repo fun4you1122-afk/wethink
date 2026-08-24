@@ -36,7 +36,7 @@ export default function StudioHero() {
       >
         {/* On a phone the lamps hang into the middle of the frame, so the
             copy starts below them rather than being centred behind them. */}
-        <div className="pointer-events-none relative z-10 flex min-h-[100svh] w-full flex-col items-center justify-center px-6 pb-32 pt-[26svh] text-center sm:pb-0 sm:pt-0">
+        <div className="pointer-events-none relative z-10 flex min-h-[100svh] w-full flex-col items-center justify-center px-6 pb-[29svh] pt-[22svh] text-center sm:pb-0 sm:pt-0">
           <motion.p
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}

@@ -35,6 +35,8 @@ type RoomProps = {
   isFlickering?: boolean;
   /** how far down the rail hangs, in percent, so it can clear a fixed navbar */
   railTop?: number;
+  /** the rig is drawn at fixed pixel sizes, so it is scaled down on narrow screens */
+  rigScale?: number;
   className?: string;
 };
 
@@ -47,6 +49,7 @@ function Room({
   vignette = 0.55,
   isFlickering = false,
   railTop = 3,
+  rigScale = 1,
   className = "",
 }: RoomProps) {
   const { tl, tr, br, bl } = backWall;
@@ -177,8 +180,26 @@ function Room({
             // react-three-fiber sets pointer-events on its own container, so
             // the class alone is not enough: the canvases sat over the hero
             // buttons and swallowed every click.
-            className="pointer-events-none absolute flex h-[80vh] w-[800px] -translate-x-1/2 justify-center [&_canvas]:!pointer-events-none [&>div]:!pointer-events-none"
-            style={{ left: `${pos}%`, top: `calc(${railTop}% + 80px)`, mixBlendMode: "screen", willChange: "opacity" }}
+            className="pointer-events-none absolute flex justify-center [&_canvas]:!pointer-events-none [&>div]:!pointer-events-none"
+            // Each beam is placed where its scaled lamp ended up, and shrunk
+            // about its own axis. Transforming the whole layer instead moved
+            // the beams off the lamps, because the canvases are far wider than
+            // a phone and scale about a distant origin.
+            // Sized in real pixels rather than scaled with a transform.
+            // react-three-fiber measures its container with a ResizeObserver,
+            // which reports the already-transformed box; it then writes that
+            // back as the canvas size and the transform scales it a second
+            // time, leaving the canvas at 0.62 x 0.62 of where it belongs and
+            // every beam adrift of its lamp.
+            style={{
+              left: `${50 + (pos - 50) * rigScale}%`,
+              top: `calc(${railTop}% + ${80 * rigScale}px)`,
+              width: 800 * rigScale,
+              height: `${80 * rigScale}vh`,
+              marginLeft: -(800 * rigScale) / 2,
+              mixBlendMode: "screen",
+              willChange: "opacity",
+            }}
           >
             <Canvas
               camera={{ position: [0, 0, 10], fov: 45 }}
@@ -208,8 +229,8 @@ function Room({
           most of the frame and lands on top of the headline. Scale it from the
           rail down rather than repositioning every piece. */}
       <div
-        className="pointer-events-none absolute inset-0 origin-top scale-[0.62] sm:scale-90 lg:scale-100"
-        style={{ zIndex: 31, transformOrigin: `50% ${railTop}%` }}
+        className="pointer-events-none absolute inset-0"
+        style={{ zIndex: 31, transform: `scale(${rigScale})`, transformOrigin: `50% ${railTop}%` }}
       >
         {spots.map((pos, i) => (
           <div
@@ -335,6 +356,17 @@ export const VolumetricStudio = ({
 }) => {
   const [lightsOn, setLightsOn] = useState(false);
   const [isFlickering, setIsFlickering] = useState(true);
+  const [rigScale, setRigScale] = useState(1);
+
+  React.useEffect(() => {
+    const pick = () => {
+      const w = window.innerWidth;
+      setRigScale(w < 640 ? 0.62 : w < 1024 ? 0.9 : 1);
+    };
+    pick();
+    window.addEventListener("resize", pick);
+    return () => window.removeEventListener("resize", pick);
+  }, []);
 
   React.useEffect(() => {
     let mounted = true;
@@ -382,6 +414,7 @@ export const VolumetricStudio = ({
         spots={[35, 50, 65]}
         isFlickering={isFlickering}
         railTop={railTop}
+        rigScale={rigScale}
         backWall={backWall}
       />
       <div className="pointer-events-none relative z-10 h-full w-full">{children}</div>
