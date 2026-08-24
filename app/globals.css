@@ -89,6 +89,9 @@
   --logo-4: #4E11BB;
   --logo-5: #7840CF;
   --logo-ramp: linear-gradient(100deg, #00B4BD 0%, #006FA3 22%, #4474E3 50%, #4E11BB 76%, #7840CF 100%);
+  /* the same ramp lifted for dark grounds: the deep violet end reads as mud
+     over video, so every stop is raised while the hues are kept */
+  --logo-ramp-on-dark: linear-gradient(100deg, #3FE3E8 0%, #46B7E8 24%, #7FA5F5 50%, #9C7BF5 76%, #C4A6FF 100%);
   --font-display: 'Poppins', 'Open Sans', system-ui, sans-serif;
   --purple-glow: rgba(167, 139, 250, 0.16);
   --purple-glow-sm: rgba(167, 139, 250, 0.09);

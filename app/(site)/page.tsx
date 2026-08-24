@@ -1,4 +1,4 @@
-import GradientHero from '@/components/GradientHero'
+import HomeHero from '@/components/HomeHero'
 import Welcome from '@/components/Welcome'
 import CityBand from '@/components/CityBand'
 import HowWeWork from '@/components/HowWeWork'
@@ -13,7 +13,7 @@ import Contact from '@/components/Contact'
 export default function Home() {
   return (
     <>
-      <GradientHero />
+      <HomeHero />
       <Welcome />
       <BigOnPurpose />
       <OrbitalServices />

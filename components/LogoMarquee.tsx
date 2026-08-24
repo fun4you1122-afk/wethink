@@ -30,7 +30,7 @@ const MARKS: Mark[] = [
   { name: 'Kubernetes', src: '/logos/tech/kubernetes.svg', kind: 'platform' },
 ]
 
-function Row({ marks }: { marks: Mark[] }) {
+function Row({ marks, onDark }: { marks: Mark[]; onDark: boolean }) {
   return (
     <ul className="flex shrink-0 list-none items-center gap-14 pr-14" aria-hidden="true">
       {marks.map((m) => (
@@ -44,10 +44,19 @@ function Row({ marks }: { marks: Mark[] }) {
             // out against the pale ground. Multiply drops the white and keeps
             // the artwork.
             className={`w-auto shrink-0 ${
-              m.kind === 'platform' ? 'opacity-45' : 'opacity-95 mix-blend-multiply'
+              m.kind === 'platform'
+                ? onDark
+                  ? 'opacity-70 brightness-0 invert'
+                  : 'opacity-45'
+                : onDark
+                  ? 'opacity-95'
+                  : 'opacity-95 mix-blend-multiply'
             }`}
           />
-          <span className="whitespace-nowrap text-[15px] font-medium text-[#4b5563]">
+          <span
+            className="whitespace-nowrap text-[15px] font-medium"
+            style={{ color: onDark ? 'rgba(255,255,255,0.72)' : '#4b5563' }}
+          >
             {m.name}
           </span>
         </li>
@@ -59,9 +68,12 @@ function Row({ marks }: { marks: Mark[] }) {
 export default function LogoMarquee({
   label = 'Clients, and the platforms we build on',
   className = '',
+  onDark = false,
 }: {
   label?: string
   className?: string
+  /** invert the ink and drop the multiply blend when sitting over video */
+  onDark?: boolean
 }) {
   const [still, setStill] = useState(false)
 
@@ -72,7 +84,10 @@ export default function LogoMarquee({
   return (
     <div className={className}>
       {label && (
-        <p className="mb-6 text-center text-[10.5px] font-semibold uppercase tracking-[0.2em] text-[#9ca3af]">
+        <p
+          className="mb-6 text-center text-[10.5px] font-semibold uppercase tracking-[0.2em]"
+          style={{ color: onDark ? 'rgba(255,255,255,0.45)' : '#9ca3af' }}
+        >
           {label}
         </p>
       )}
@@ -95,8 +110,8 @@ export default function LogoMarquee({
               : { animation: 'wt-marquee 46s linear infinite' }
           }
         >
-          <Row marks={MARKS} />
-          <Row marks={MARKS} />
+          <Row marks={MARKS} onDark={onDark} />
+          <Row marks={MARKS} onDark={onDark} />
         </div>
       </div>
 

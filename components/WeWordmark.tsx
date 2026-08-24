@@ -22,7 +22,14 @@ const WORDS = ['Think', 'Build', 'Grow']
 const LONGEST = WORDS.reduce((a, b) => (b.length > a.length ? b : a))
 const ROLL = { duration: 0.62, ease: [0.22, 1, 0.28, 1] as const }
 
-export default function WeWordmark({ className = '' }: { className?: string }) {
+export default function WeWordmark({
+  className = '',
+  ramp = 'var(--logo-ramp)',
+}: {
+  className?: string
+  /** swap for --logo-ramp-on-dark when the wordmark sits over video */
+  ramp?: string
+}) {
   const [i, setI] = useState(0)
   const [still, setStill] = useState(false)
   const [metrics, setMetrics] = useState({ we: 0, line: 0 })
@@ -55,7 +62,7 @@ export default function WeWordmark({ className = '' }: { className?: string }) {
   }, [])
 
   const clip: React.CSSProperties = {
-    backgroundImage: 'var(--logo-ramp)',
+    backgroundImage: ramp,
     WebkitBackgroundClip: 'text',
     backgroundClip: 'text',
     color: 'transparent',
