@@ -1,4 +1,4 @@
-import StudioHero from '@/components/StudioHero'
+import PhotoHero from '@/components/PhotoHero'
 import Welcome from '@/components/Welcome'
 import CityBand from '@/components/CityBand'
 import HowWeWork from '@/components/HowWeWork'
@@ -14,7 +14,7 @@ import Contact from '@/components/Contact'
 export default function Home() {
   return (
     <>
-      <StudioHero />
+      <PhotoHero />
       <Welcome />
       <BigOnPurpose />
       <OrbitalServices />
