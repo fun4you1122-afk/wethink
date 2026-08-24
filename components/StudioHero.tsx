@@ -34,7 +34,9 @@ export default function StudioHero() {
         railTop={11}
         backWall={{ tl: [22, 19], tr: [78, 19], br: [78, 74], bl: [22, 74] }}
       >
-        <div className="pointer-events-none relative z-10 flex min-h-[100svh] w-full flex-col items-center justify-center px-6 text-center">
+        {/* On a phone the lamps hang into the middle of the frame, so the
+            copy starts below them rather than being centred behind them. */}
+        <div className="pointer-events-none relative z-10 flex min-h-[100svh] w-full flex-col items-center justify-center px-6 pb-32 pt-[26svh] text-center sm:pb-0 sm:pt-0">
           <motion.p
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
@@ -48,7 +50,7 @@ export default function StudioHero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.7, duration: 1.2, ease }}
-            className="mb-6 bg-gradient-to-b from-white to-white/40 bg-clip-text text-[clamp(2.75rem,8vw,6.25rem)] font-bold leading-[0.95] tracking-tight text-transparent drop-shadow-2xl"
+            className="mb-6 bg-gradient-to-b from-white to-white/40 bg-clip-text text-[clamp(2.25rem,8vw,6.25rem)] font-bold leading-[0.98] tracking-tight text-transparent drop-shadow-2xl"
           >
             New Era
             <br />

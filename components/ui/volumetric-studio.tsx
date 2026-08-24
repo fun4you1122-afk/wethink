@@ -204,8 +204,14 @@ function Room({
         ))}
       </div>
 
-      <div className="pointer-events-none absolute inset-0" style={{ zIndex: 31 }}>
-        {[35, 50, 65].map((pos, i) => (
+      {/* The rig is drawn at a fixed pixel size, so on a phone it takes up
+          most of the frame and lands on top of the headline. Scale it from the
+          rail down rather than repositioning every piece. */}
+      <div
+        className="pointer-events-none absolute inset-0 origin-top scale-[0.62] sm:scale-90 lg:scale-100"
+        style={{ zIndex: 31, transformOrigin: `50% ${railTop}%` }}
+      >
+        {spots.map((pos, i) => (
           <div
             key={i}
             className="absolute flex flex-col items-center"
