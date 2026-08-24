@@ -11,14 +11,16 @@ import { useEffect, useState } from 'react'
  * the animation rather than JavaScript, so it costs nothing per frame and
  * stops dead for anyone who has asked for less motion.
  *
- * Two groups, labelled, because they are not the same claim: three are clients
- * we delivered for, the rest are platforms we build on.
+ * Two groups, labelled, because they are not the same claim: the first are
+ * clients we delivered for, the rest are platforms we build on.
+ *
+ * The Embassy work is deliberately not here. It belongs on the work page and
+ * in Selected Engagements, not in the hero.
  */
 
 type Mark = { name: string; src: string; kind: 'client' | 'platform'; h?: number }
 
 const MARKS: Mark[] = [
-  { name: 'The Royal Thai Embassy', src: '/embassy/royal-thai-embassy.png', kind: 'client', h: 40 },
   { name: 'Albina Alareeq Contracting', src: '/logos/albina-alareeq.png', kind: 'client', h: 34 },
   { name: 'Nabe Eldiyafa Aldimashqi', src: '/logos/nabe-eldiyafa.png', kind: 'client', h: 36 },
   { name: 'Microsoft Azure', src: '/logos/tech/microsoftazure.svg', kind: 'platform' },

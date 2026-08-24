@@ -1,114 +1,129 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { ArrowRight } from 'lucide-react'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { Search } from 'lucide-react'
+import LogoMarquee from '@/components/LogoMarquee'
+import WeWordmark from '@/components/WeWordmark'
 
 /**
- * The hero, matching the reference exactly in structure.
- *
- * Theirs is a full-bleed autoplay video with a ticker along the foot that
- * repeats a single current announcement, and one button beside it. No
- * headline, no paragraph, no chips. The video carries the frame and the
- * ticker carries the news.
- *
- * Everything that used to live here moved into the section below, so nothing
- * was lost, it just stopped competing with the film.
+ * The hero: the rolling wordmark on a pale ground with soft colour blooms, the
+ * positioning line, one input, a row of topics, and the moving logo strip
+ * along the foot.
  */
 
-const ANNOUNCEMENT = 'Marhaba Thailand, for the Royal Thai Embassy, Abu Dhabi'
-const HREF = '/embassy'
-const REPEATS = 4
+const ease = [0.16, 1, 0.3, 1] as const
+
+const TOPICS = [
+  { label: 'Cloud', href: '/services#cloud' },
+  { label: 'Cybersecurity', href: '/services#security' },
+  { label: 'Custom Software', href: '/services#software' },
+  { label: 'Data & AI', href: '/services#data' },
+]
 
 export default function HomeHero() {
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const [motionOk, setMotionOk] = useState(false)
+  const [brief, setBrief] = useState('')
 
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    setMotionOk(true)
-    videoRef.current?.play().catch(() => {
-      /* the poster carries the frame on its own */
-    })
-  }, [])
-
-  const ticker = (
-    <span className="flex shrink-0 items-center" aria-hidden="true">
-      {Array.from({ length: REPEATS }).map((_, n) => (
-        <span key={n} className="flex shrink-0 items-center">
-          <span className="whitespace-nowrap px-6 text-[14px] font-medium text-white/85 sm:text-[15px]">
-            {ANNOUNCEMENT}
-          </span>
-          <span className="text-white/30">—</span>
-        </span>
-      ))}
-    </span>
-  )
+  const send = () => {
+    const text = brief.trim()
+      ? `Hello WeThink, I'd like to talk about: ${brief.trim()}`
+      : 'Hello WeThink, I would like to discuss a project.'
+    window.open(
+      `https://wa.me/971503125078?text=${encodeURIComponent(text)}`,
+      '_blank',
+      'noopener,noreferrer',
+    )
+  }
 
   return (
-    <section id="home" className="relative isolate min-h-[100svh] w-full overflow-hidden bg-[#14101C]">
-      {motionOk ? (
-        <video
-          ref={videoRef}
-          className="absolute inset-0 h-full w-full object-cover"
-          poster="/images/wethink/event.jpg"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-        >
-          <source src="/video/wethink-hero.mp4" type="video/mp4" />
-          <source src="/video/wethink-hero.webm" type="video/webm" />
-        </video>
-      ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src="/images/wethink/event.jpg"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-      )}
-
-      {/* just enough to keep the ticker legible, so the film stays the subject */}
+    <section
+      id="home"
+      className="relative isolate flex min-h-[100svh] w-full flex-col overflow-hidden"
+      style={{ background: 'var(--bg)' }}
+    >
       <div
-        className="absolute inset-0"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
         style={{
-          background:
-            'linear-gradient(180deg, rgba(20,16,28,0.42) 0%, rgba(20,16,28,0.10) 38%, rgba(20,16,28,0.34) 72%, rgba(20,16,28,0.88) 100%)',
+          background: [
+            'radial-gradient(46% 42% at 78% 22%, rgba(236,170,220,0.55) 0%, rgba(236,170,220,0) 70%)',
+            'radial-gradient(44% 40% at 16% 68%, rgba(120,110,245,0.42) 0%, rgba(120,110,245,0) 70%)',
+            'radial-gradient(38% 34% at 62% 84%, rgba(167,139,250,0.30) 0%, rgba(167,139,250,0) 72%)',
+            'radial-gradient(50% 44% at 40% 8%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 70%)',
+          ].join(','),
         }}
       />
 
-      <div className="relative flex min-h-[100svh] flex-col justify-end pb-28 sm:pb-10">
-        <div // right padding keeps the button clear of the floating chat bubbles
-          className="mx-auto flex w-full max-w-[1600px] flex-col gap-4 px-6 sm:flex-row sm:items-center sm:gap-8 sm:pr-28">
+      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-6 pb-12 pt-32 text-center">
+        <motion.h1
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease }}
+          className="text-[clamp(3rem,9vw,7rem)] font-bold leading-[1.02] tracking-tight"
+        >
+          <WeWordmark />
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.9, ease }}
+          className="mx-auto mt-7 max-w-2xl text-[17px] leading-relaxed md:text-[19px]"
+          style={{ color: 'var(--text-muted)' }}
+        >
+          Cloud, cybersecurity, custom software and data for government,
+          financial institutions and growing companies across the UAE and the
+          Gulf.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18, duration: 0.9, ease }}
+          className="mx-auto mt-10 w-full max-w-2xl"
+        >
           <div
-            className="relative min-w-0 flex-1 overflow-hidden"
-            style={{
-              maskImage: 'linear-gradient(to right, #000 84%, transparent)',
-              WebkitMaskImage: 'linear-gradient(to right, #000 84%, transparent)',
-            }}
+            className="flex flex-col gap-2 rounded-3xl bg-white/85 p-2 shadow-[0_16px_44px_-12px_rgba(55,20,90,0.22)] backdrop-blur-sm sm:flex-row sm:items-center sm:rounded-full sm:pl-6"
+            style={{ border: '1px solid rgba(233,216,253,0.9)' }}
           >
-            <div
-              className="flex w-max"
-              style={motionOk ? { animation: 'wt-marquee 38s linear infinite' } : undefined}
-            >
-              {ticker}
-              {ticker}
+            <div className="flex min-w-0 flex-1 items-center gap-2 pl-3 sm:pl-0">
+              <Search className="h-[18px] w-[18px] shrink-0" style={{ color: '#9ca3af' }} />
+              <input
+                value={brief}
+                onChange={(e) => setBrief(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && send()}
+                placeholder="Tell us what you need"
+                aria-label="Tell us what you need"
+                className="min-w-0 flex-1 bg-transparent py-3 text-[16px] outline-none placeholder:text-[#9ca3af]"
+                style={{ color: 'var(--text)' }}
+              />
             </div>
-            {/* the ticker is decorative repetition; this is what is announced */}
-            <span className="sr-only">{ANNOUNCEMENT}</span>
+            <button
+              type="button"
+              onClick={send}
+              className="w-full shrink-0 rounded-full bg-[#1a1523] px-7 py-3.5 text-[14.5px] font-semibold text-white transition-transform hover:scale-[1.02] active:scale-[0.99] sm:w-auto"
+            >
+              Get Started
+            </button>
           </div>
 
-          <a
-            href={HREF}
-            className="inline-flex w-auto shrink-0 items-center justify-center gap-2.5 self-start rounded-full border border-white/25 px-7 py-3.5 text-[14px] font-semibold text-white no-underline backdrop-blur-md transition-colors hover:bg-white/15 sm:self-auto"
-          >
-            See the invitation
-            <ArrowRight className="h-4 w-4" />
-          </a>
-        </div>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            {TOPICS.map((t) => (
+              <a
+                key={t.label}
+                href={t.href}
+                className="rounded-full bg-white/80 px-6 py-2.5 text-[14px] font-medium no-underline shadow-[0_8px_22px_-10px_rgba(55,20,90,0.22)] transition-colors hover:bg-white"
+                style={{ color: 'var(--text)', border: '1px solid rgba(233,216,253,0.9)' }}
+              >
+                {t.label}
+              </a>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
+      <div className="relative z-10 w-full pb-14">
+        <LogoMarquee />
       </div>
     </section>
   )

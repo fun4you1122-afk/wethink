@@ -1,5 +1,4 @@
 import HomeHero from '@/components/HomeHero'
-import HomeIntro from '@/components/HomeIntro'
 import Welcome from '@/components/Welcome'
 import CityBand from '@/components/CityBand'
 import HowWeWork from '@/components/HowWeWork'
@@ -15,7 +14,6 @@ export default function Home() {
   return (
     <>
       <HomeHero />
-      <HomeIntro />
       <Welcome />
       <BigOnPurpose />
       <OrbitalServices />

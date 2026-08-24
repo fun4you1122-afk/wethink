@@ -21,8 +21,8 @@ export default function Navbar() {
   const pathname = usePathname()
   // The home page opens on a black studio, so the bar has to invert while it
   // is over it and return to normal once the glass panel appears on scroll.
-  // The home hero is film again, so the bar inverts while it sits over it.
-  const overDarkHero = pathname === '/' && !scrolled
+  // The home hero is pale, so the bar keeps its normal colours over it.
+  const overDarkHero = false
 
   useEffect(() => {
     let last = 0
