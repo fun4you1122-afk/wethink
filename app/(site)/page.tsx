@@ -1,6 +1,7 @@
 import StudioHero from '@/components/StudioHero'
 import Welcome from '@/components/Welcome'
 import CityBand from '@/components/CityBand'
+import HowWeWork from '@/components/HowWeWork'
 import ScrollPath from '@/components/ScrollPath'
 import BigOnPurpose from '@/components/BigOnPurpose'
 import OrbitalServices from '@/components/OrbitalServices'
@@ -18,6 +19,7 @@ export default function Home() {
       <BigOnPurpose />
       <OrbitalServices />
       <ScrollPath className="mx-auto -mt-16 mb-2 h-[240px] max-w-[180px] sm:h-[320px]" />
+      <HowWeWork />
       <CityBand />
       <Stats />
       <ClientLogos />
