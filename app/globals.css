@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
 
@@ -80,6 +81,15 @@
   --teal-dark: #6D28D9;
   --text: #374151;
   --text-muted: #6B7280;
+  /* Sampled straight off the logo mark, left stroke through to the dot, so
+     the wordmark on the page is the same ramp as the mark beside it. */
+  --logo-1: #00B4BD;
+  --logo-2: #006FA3;
+  --logo-3: #4474E3;
+  --logo-4: #4E11BB;
+  --logo-5: #7840CF;
+  --logo-ramp: linear-gradient(100deg, #00B4BD 0%, #006FA3 22%, #4474E3 50%, #4E11BB 76%, #7840CF 100%);
+  --font-display: 'Poppins', 'Open Sans', system-ui, sans-serif;
   --purple-glow: rgba(167, 139, 250, 0.16);
   --purple-glow-sm: rgba(167, 139, 250, 0.09);
   --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);

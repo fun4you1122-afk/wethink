@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Search } from 'lucide-react'
 import LogoMarquee from '@/components/LogoMarquee'
+import WeWordmark from '@/components/WeWordmark'
 
 /**
  * The hero, built to the supplied reference: a pale ground with soft colour
@@ -67,12 +68,9 @@ export default function GradientHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease }}
-          className="max-w-4xl text-[clamp(2.5rem,6.4vw,4.75rem)] font-bold leading-[1.06] tracking-tight"
-          style={{ color: 'var(--text)' }}
+          className="text-[clamp(3.25rem,10vw,7.5rem)] font-bold leading-[1.02] tracking-tight"
         >
-          We don&apos;t just advise.
-          <br />
-          We build it, and stay until it runs.
+          <WeWordmark />
         </motion.h1>
 
         <motion.p
