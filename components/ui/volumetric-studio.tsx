@@ -33,6 +33,8 @@ type RoomProps = {
   spots?: number[];
   vignette?: number;
   isFlickering?: boolean;
+  /** how far down the rail hangs, in percent, so it can clear a fixed navbar */
+  railTop?: number;
   className?: string;
 };
 
@@ -44,6 +46,7 @@ function Room({
   spots = [35, 50, 65],
   vignette = 0.55,
   isFlickering = false,
+  railTop = 3,
   className = "",
 }: RoomProps) {
   const { tl, tr, br, bl } = backWall;
@@ -171,10 +174,18 @@ function Room({
             initial={{ opacity: 0 }}
             animate={{ opacity: lightsOn ? intensity : 0 }}
             transition={isFlickering ? { duration: 0 } : { delay: i * 0.1, duration: 0.8, ease: "easeInOut" }}
-            className="pointer-events-none absolute flex h-[80vh] w-[800px] -translate-x-1/2 justify-center"
-            style={{ left: `${pos}%`, top: "calc(3% + 80px)", mixBlendMode: "screen", willChange: "opacity" }}
+            // react-three-fiber sets pointer-events on its own container, so
+            // the class alone is not enough: the canvases sat over the hero
+            // buttons and swallowed every click.
+            className="pointer-events-none absolute flex h-[80vh] w-[800px] -translate-x-1/2 justify-center [&_canvas]:!pointer-events-none [&>div]:!pointer-events-none"
+            style={{ left: `${pos}%`, top: `calc(${railTop}% + 80px)`, mixBlendMode: "screen", willChange: "opacity" }}
           >
-            <Canvas camera={{ position: [0, 0, 10], fov: 45 }} shadows={false} gl={{ alpha: true }}>
+            <Canvas
+              camera={{ position: [0, 0, 10], fov: 45 }}
+              shadows={false}
+              gl={{ alpha: true }}
+              style={{ pointerEvents: 'none' }}
+            >
               <ambientLight intensity={0.5} />
               <SpotLight
                 distance={12}
@@ -198,7 +209,7 @@ function Room({
           <div
             key={i}
             className="absolute flex flex-col items-center"
-            style={{ left: `${pos}%`, top: "3%", transform: "translate(-50%, -4px)" }}
+            style={{ left: `${pos}%`, top: `${railTop}%`, transform: "translate(-50%, -4px)" }}
           >
             <div
               className="relative h-[34px] w-[14px] overflow-hidden rounded-sm border border-zinc-900 shadow-[0_5px_10px_rgba(0,0,0,0.9),inset_0_0_4px_rgba(255,255,255,0.5)]"
@@ -263,7 +274,7 @@ function Room({
 
       <div
         className="pointer-events-none absolute h-[80px] w-full bg-gradient-to-b from-black/60 to-transparent blur-xl"
-        style={{ zIndex: 29, top: "4%", left: 0 }}
+        style={{ zIndex: 29, top: `${railTop + 1}%`, left: 0 }}
       />
 
       <div
@@ -273,7 +284,7 @@ function Room({
         <div
           className="absolute h-[26px] w-full"
           style={{
-            top: "3%",
+            top: `${railTop}%`,
             left: "0%",
             background: "linear-gradient(to bottom, #111 0%, #3a3a3a 30%, #555 50%, #2a2a2a 80%, #000 100%)",
             boxShadow:
@@ -308,9 +319,13 @@ function Room({
 export const VolumetricStudio = ({
   className,
   children,
+  railTop = 3,
+  backWall,
 }: {
   className?: string;
   children?: React.ReactNode;
+  railTop?: number;
+  backWall?: RoomProps["backWall"];
 }) => {
   const [lightsOn, setLightsOn] = useState(false);
   const [isFlickering, setIsFlickering] = useState(true);
@@ -354,7 +369,15 @@ export const VolumetricStudio = ({
 
   return (
     <section className={cn("relative h-full min-h-[600px] w-full overflow-hidden bg-black font-sans", className)}>
-      <Room lightsOn={lightsOn} intensity={1} lightColor="230,240,255" spots={[35, 50, 65]} isFlickering={isFlickering} />
+      <Room
+        lightsOn={lightsOn}
+        intensity={1}
+        lightColor="230,240,255"
+        spots={[35, 50, 65]}
+        isFlickering={isFlickering}
+        railTop={railTop}
+        backWall={backWall}
+      />
       <div className="pointer-events-none relative z-10 h-full w-full">{children}</div>
     </section>
   );

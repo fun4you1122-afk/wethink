@@ -27,7 +27,13 @@ export default function StudioHero() {
 
   return (
     <section id="home" className="relative min-h-[100svh] w-full overflow-hidden bg-black">
-      <VolumetricStudio className="min-h-[100svh]">
+      <VolumetricStudio
+        className="min-h-[100svh]"
+        // drop the rail below the fixed navbar, and the back wall with it, so
+        // the fixtures are not hanging through the menu
+        railTop={11}
+        backWall={{ tl: [22, 19], tr: [78, 19], br: [78, 74], bl: [22, 74] }}
+      >
         <div className="pointer-events-none relative z-10 flex min-h-[100svh] w-full flex-col items-center justify-center px-6 text-center">
           <motion.p
             initial={{ opacity: 0, y: 14 }}

@@ -45,9 +45,12 @@ const config: Config = {
           foreground: 'hsl(var(--destructive-foreground))',
         },
         'muted-foreground': 'hsl(var(--muted-foreground))',
+        'primary-strong': 'hsl(var(--primary-strong))',
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'sans-serif'],
+        sans: ['Open Sans', 'system-ui', 'sans-serif'],
+        serif: ['Source Serif 4', 'Georgia', 'serif'],
+        mono: ['IBM Plex Mono', 'ui-monospace', 'monospace'],
       },
       animation: {
         'spin-slow': 'spin 20s linear infinite',
