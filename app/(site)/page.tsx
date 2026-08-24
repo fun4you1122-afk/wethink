@@ -1,4 +1,4 @@
-import PhotoHero from '@/components/PhotoHero'
+import VideoHero from '@/components/VideoHero'
 import Welcome from '@/components/Welcome'
 import CityBand from '@/components/CityBand'
 import HowWeWork from '@/components/HowWeWork'
@@ -14,7 +14,7 @@ import Contact from '@/components/Contact'
 export default function Home() {
   return (
     <>
-      <PhotoHero />
+      <VideoHero />
       <Welcome />
       <BigOnPurpose />
       <OrbitalServices />
