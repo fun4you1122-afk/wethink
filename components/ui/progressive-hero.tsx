@@ -28,7 +28,7 @@ const buttonVariants = cva(
       variant: {
         default: "bg-violet-600 text-white hover:bg-violet-700 border border-violet-700",
         secondary:
-          "bg-white/80 text-teal-700 border border-teal-500/40 hover:bg-teal-50 hover:text-teal-800",
+          "bg-white/80 text-violet-700 border border-violet-500/40 hover:bg-violet-50 hover:text-violet-800",
         outline:
           "border border-violet-500/50 bg-transparent text-violet-700 hover:bg-violet-50 hover:text-violet-800",
       },
@@ -174,7 +174,7 @@ function WeThinkHero() {
             {["ISO 27001 Ready", "AWS Partner", "Microsoft Azure", "UAE Gov Compliant"].map((badge) => (
               <span
                 key={badge}
-                className="px-4 py-1.5 rounded-full text-xs font-semibold border border-teal-500/30 bg-white/70 backdrop-blur-sm text-teal-800"
+                className="px-4 py-1.5 rounded-full text-xs font-semibold border border-violet-500/30 bg-white/70 backdrop-blur-sm text-violet-800"
               >
                 {badge}
               </span>
@@ -194,9 +194,9 @@ function WeThinkHero() {
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="w-5 h-8 border border-teal-600/40 rounded-full flex items-start justify-center pt-1.5"
+          className="w-5 h-8 border border-violet-600/40 rounded-full flex items-start justify-center pt-1.5"
         >
-          <div className="w-1 h-2 rounded-full bg-teal-500" />
+          <div className="w-1 h-2 rounded-full bg-violet-500" />
         </motion.div>
       </motion.div>
     </div>

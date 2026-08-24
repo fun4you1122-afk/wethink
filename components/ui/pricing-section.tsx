@@ -67,7 +67,7 @@ const PricingSwitch = ({ onSwitch }: { onSwitch: (value: string) => void }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="relative z-10 mx-auto flex w-fit rounded-full bg-white border border-teal-500/30 p-1 shadow-sm">
+      <div className="relative z-10 mx-auto flex w-fit rounded-full bg-white border border-violet-500/30 p-1 shadow-sm">
         {["Monthly", "Yearly"].map((label, i) => {
           const val = String(i);
           const active = selected === val;
@@ -83,7 +83,7 @@ const PricingSwitch = ({ onSwitch }: { onSwitch: (value: string) => void }) => {
               {active && (
                 <motion.span
                   layoutId="pricing-switch"
-                  className="absolute inset-0 rounded-full bg-gradient-to-r from-teal-500 to-violet-600 shadow-md shadow-teal-900/20"
+                  className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-500 to-violet-600 shadow-md shadow-violet-900/20"
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 />
               )}
@@ -139,7 +139,7 @@ export default function PricingSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-teal-500/30 bg-teal-500/10 text-teal-700 text-xs font-semibold uppercase tracking-widest"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-700 text-xs font-semibold uppercase tracking-widest"
           >
             Transparent Pricing · AED
           </motion.div>
@@ -195,15 +195,15 @@ export default function PricingSection() {
                 className={cn(
                   "relative h-full overflow-hidden bg-white",
                   plan.popular
-                    ? "border-2 border-teal-500/50 shadow-[0px_16px_60px_rgba(20,184,166,0.18)]"
+                    ? "border-2 border-violet-500/50 shadow-[0px_16px_60px_rgba(20,184,166,0.18)]"
                     : "border border-slate-200 shadow-sm"
                 )}
               >
                 {plan.popular && (
-                  <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-teal-400 via-teal-500 to-violet-600" />
+                  <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-violet-400 via-violet-500 to-violet-600" />
                 )}
                 {plan.popular && (
-                  <div className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-widest bg-gradient-to-r from-teal-500 to-violet-600 text-white px-2.5 py-1 rounded-full">
+                  <div className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-widest bg-gradient-to-r from-violet-500 to-violet-600 text-white px-2.5 py-1 rounded-full">
                     Most Popular
                   </div>
                 )}
@@ -215,7 +215,7 @@ export default function PricingSection() {
                       <span className="text-4xl font-black" style={{ color: 'var(--text)' }}>Custom</span>
                     ) : (
                       <>
-                        <span className="text-sm font-semibold text-teal-700">AED</span>
+                        <span className="text-sm font-semibold text-violet-700">AED</span>
                         <NumberFlow
                           value={isYearly ? plan.yearlyPrice! : plan.price}
                           className="text-4xl font-black"
@@ -242,8 +242,8 @@ export default function PricingSection() {
                     className={cn(
                       "w-full mb-6 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-200",
                       plan.popular
-                        ? "bg-gradient-to-r from-teal-500 to-violet-600 text-white shadow-md shadow-teal-900/20 hover:opacity-90"
-                        : "bg-white border border-slate-300 hover:border-teal-500/60 hover:bg-teal-50/50"
+                        ? "bg-gradient-to-r from-violet-500 to-violet-600 text-white shadow-md shadow-violet-900/20 hover:opacity-90"
+                        : "bg-white border border-slate-300 hover:border-violet-500/60 hover:bg-violet-50/50"
                     )}
                     style={plan.popular ? undefined : { color: 'var(--text)' }}
                   >
@@ -251,13 +251,13 @@ export default function PricingSection() {
                   </button>
 
                   <div className="border-t border-slate-200 pt-5 space-y-3">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-teal-700">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-violet-700">
                       {plan.includes[0]}
                     </p>
                     <ul className="space-y-2.5">
                       {plan.includes.slice(1).map((feature, fi) => (
                         <li key={fi} className="flex items-start gap-2.5 text-sm" style={{ color: 'var(--text-muted)' }}>
-                          <Check size={14} className="mt-0.5 shrink-0 text-teal-600" />
+                          <Check size={14} className="mt-0.5 shrink-0 text-violet-600" />
                           {feature}
                         </li>
                       ))}

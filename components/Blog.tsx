@@ -76,7 +76,7 @@ function ArticleModal({ post, onClose }: { post: typeof posts[0]; onClose: () =>
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 40, scale: 0.97 }}
         transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-white border border-teal-500/20 rounded-3xl shadow-2xl"
+        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-white border border-violet-500/20 rounded-3xl shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top gradient bar */}

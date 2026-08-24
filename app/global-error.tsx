@@ -47,7 +47,7 @@ export default function GlobalError({
           onClick={() => window.location.reload()}
           style={{
             padding: '0.85rem 2rem',
-            background: 'linear-gradient(135deg, #14B8A6 0%, #7C3AED 100%)',
+            background: 'linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%)',
             color: '#fff',
             fontWeight: 700,
             borderRadius: 50,

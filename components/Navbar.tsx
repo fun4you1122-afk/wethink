@@ -69,7 +69,7 @@ export default function Navbar() {
         >
           <div className={`flex items-center justify-between px-5 transition-all duration-500 ${
             scrolled
-              ? 'rounded-2xl glass py-3 shadow-xl shadow-teal-900/10'
+              ? 'rounded-2xl glass py-3 shadow-xl shadow-violet-900/10'
               : 'rounded-2xl py-4 bg-transparent'
           }`}>
             {/* Logo */}

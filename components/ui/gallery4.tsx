@@ -101,7 +101,7 @@ const Gallery4 = ({
               >
                 <a
                   href={item.href}
-                  className="group block overflow-hidden rounded-2xl border border-teal-500/20 bg-white transition-all duration-300 hover:border-teal-500/50 hover:shadow-lg hover:shadow-teal-900/10"
+                  className="group block overflow-hidden rounded-2xl border border-violet-500/20 bg-white transition-all duration-300 hover:border-violet-500/50 hover:shadow-lg hover:shadow-violet-900/10"
                 >
                   {/* Image */}
                   <div className="relative aspect-[3/2] overflow-hidden">

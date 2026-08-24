@@ -108,15 +108,18 @@ export const ParallaxBody = ({
   cta?: string;
 }) => (
   <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 px-4 pb-24 pt-12 md:grid-cols-12">
-    <h2 className="col-span-1 text-3xl font-bold md:col-span-4">{title}</h2>
+    <h2 className="col-span-1 text-3xl font-bold md:col-span-4"
+      style={{ color: 'var(--text)' }}>{title}</h2>
     <div className="col-span-1 md:col-span-8">
-      <div className="mb-8 space-y-4 text-lg leading-relaxed text-neutral-600 md:text-xl">
+      <div className="mb-8 space-y-4 text-lg leading-relaxed md:text-xl"
+      style={{ color: 'var(--text-muted)' }}>
         {body}
       </div>
       {href && (
         <a
           href={href}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-neutral-900 px-9 py-4 text-lg text-white no-underline transition-colors hover:bg-neutral-700 md:w-fit"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-full px-9 py-4 text-lg text-white no-underline transition-opacity hover:opacity-90 md:w-fit"
+          style={{ background: 'var(--primary)' }}
         >
           {cta} <ArrowUpRight className="inline h-5 w-5" />
         </a>

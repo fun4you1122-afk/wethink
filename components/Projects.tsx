@@ -22,7 +22,7 @@ const projects = [
     category: 'Custom Software',
     desc: 'Took a first-time founder from wireframes to a working payments app: onboarding and KYC flows, wallet top-ups, and a merchant checkout — ready for their pre-launch pilot.',
     tags: ['React Native', 'Node.js', 'KYC Flows'],
-    accent: '#14B8A6',
+    accent: '#A78BFA',
     image: '/projects/nexa-pay.jpg',
     stat: '8 wks',
     statLabel: 'idea to pilot',

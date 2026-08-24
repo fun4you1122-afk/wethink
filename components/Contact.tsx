@@ -319,7 +319,7 @@ export default function Contact() {
                         >
                           <option value="">Select a service...</option>
                           {services.map((s) => (
-                            <option key={s} value={s} style={{ background: '#FFFFFF', color: '#10232E' }}>{s}</option>
+                            <option key={s} value={s} style={{ background: 'var(--surface)', color: 'var(--text)' }}>{s}</option>
                           ))}
                         </select>
                       </div>

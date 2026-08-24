@@ -106,7 +106,7 @@ const SCENES = [
 
 export default function HowWeWork() {
   return (
-    <section className="bg-white">
+    <section style={{ background: 'var(--bg)' }}>
       {SCENES.map((s) => (
         <TextParallaxContent
           key={s.img}

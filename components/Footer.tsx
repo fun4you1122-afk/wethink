@@ -61,12 +61,12 @@ export default function Footer() {
   }
 
   return (
-    <footer className="relative overflow-hidden border-t border-teal-500/20" style={{ background: 'var(--surface-2)' }}>
+    <footer className="relative overflow-hidden border-t border-violet-500/20" style={{ background: 'var(--surface-2)' }}>
       {/* Top glow line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/60 to-transparent" />
 
       {/* Background orb */}
-      <div className="orb w-[600px] h-[600px] bg-teal-200 opacity-40 bottom-[-300px] left-1/2 -translate-x-1/2 pointer-events-none" />
+      <div className="orb w-[600px] h-[600px] bg-violet-200 opacity-40 bottom-[-300px] left-1/2 -translate-x-1/2 pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6 pt-16 pb-8">
         {/* Top row */}

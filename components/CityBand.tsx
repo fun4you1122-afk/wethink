@@ -26,7 +26,13 @@ export default function CityBand() {
   const y = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
 
   return (
-    <section ref={ref} className="relative overflow-hidden bg-[#05030C]">
+    <section
+      ref={ref}
+      className="relative overflow-hidden"
+      // the theme's own dark ground rather than a near-black of its own, so
+      // the one dark moment on the page still belongs to the palette
+      style={{ background: '#1C1917' }}
+    >
       <div className="relative h-[52vh] min-h-[360px] w-full overflow-hidden">
         <motion.img
           src={PHOTO.src}
@@ -39,7 +45,7 @@ export default function CityBand() {
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, rgba(5,3,12,0.72) 0%, rgba(5,3,12,0.28) 42%, rgba(5,3,12,0.9) 100%)',
+              'linear-gradient(180deg, rgba(28,25,23,0.70) 0%, rgba(45,37,53,0.24) 42%, rgba(28,25,23,0.92) 100%)',
           }}
         />
 
@@ -50,7 +56,7 @@ export default function CityBand() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="mx-auto w-full max-w-7xl px-6 pb-12"
           >
-            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-violet-300">
+            <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: 'var(--primary-tint, #C0AAFD)' }}>
               Where we work
             </p>
             <h2 className="mt-3 max-w-2xl text-[clamp(1.75rem,4vw,3rem)] font-bold leading-[1.08] tracking-tight text-white">
