@@ -37,15 +37,6 @@ export default function StudioHero() {
         {/* On a phone the lamps hang into the middle of the frame, so the
             copy starts below them rather than being centred behind them. */}
         <div className="pointer-events-none relative z-10 flex min-h-[100svh] w-full flex-col items-center justify-center px-6 pb-[29svh] pt-[22svh] text-center sm:pb-0 sm:pt-0">
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.55, duration: 1, ease }}
-            className="mb-6 text-[11px] font-semibold uppercase tracking-[0.34em] text-white/40"
-          >
-            Abu Dhabi · Since 2019
-          </motion.p>
-
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -89,6 +80,17 @@ export default function StudioHero() {
               <PhoneCall className="h-4 w-4" />
             </button>
           </motion.div>
+
+          {/* Sits under the buttons rather than above the headline, where the
+              lamps were hanging straight over it. */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.35, duration: 1.1, ease }}
+            className="mt-12 text-[11px] font-semibold uppercase tracking-[0.34em] text-white/40"
+          >
+            Abu Dhabi · Since 2019
+          </motion.p>
         </div>
       </VolumetricStudio>
     </section>
