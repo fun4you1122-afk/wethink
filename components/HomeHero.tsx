@@ -4,12 +4,13 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Search } from 'lucide-react'
 import LogoMarquee from '@/components/LogoMarquee'
+import { FluxCardDeck, WETHINK_CARDS } from '@/components/ui/flux-card-hero'
 import WeWordmark from '@/components/WeWordmark'
 
 /**
  * The hero: the rolling wordmark on a pale ground with soft colour blooms, the
- * positioning line, one input, a row of topics, and the moving logo strip
- * along the foot.
+ * positioning line, one input, a row of topics, then a fanned deck of cards
+ * that cycles, and the moving logo strip along the foot.
  */
 
 const ease = [0.16, 1, 0.3, 1] as const
@@ -38,7 +39,7 @@ export default function HomeHero() {
   return (
     <section
       id="home"
-      className="relative isolate flex min-h-[100svh] w-full flex-col overflow-hidden"
+      className="relative isolate flex w-full flex-col overflow-hidden"
       style={{ background: 'var(--bg)' }}
     >
       <div
@@ -54,7 +55,7 @@ export default function HomeHero() {
         }}
       />
 
-      <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-6 pb-12 pt-32 text-center">
+      <div className="mx-auto flex w-full max-w-7xl flex-col justify-center px-6 pb-14 pt-32 text-center">
         <motion.h1
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
@@ -121,6 +122,15 @@ export default function HomeHero() {
           </div>
         </motion.div>
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 1, ease }}
+        className="relative z-10 mx-auto w-full max-w-3xl px-6 pb-14"
+      >
+        <FluxCardDeck cards={WETHINK_CARDS} />
+      </motion.div>
 
       <div className="relative z-10 w-full pb-14">
         <LogoMarquee />
