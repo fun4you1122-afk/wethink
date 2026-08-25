@@ -100,7 +100,7 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
   {
     patterns: [/who.*(made|built|design)|wethink|website/i],
     reply:
-      'WeThink is a digital studio in Abu Dhabi. We designed and built the invitation for the Opening Ceremony, this live programme, the ticket and wallet pass, and me. It was our contribution to Marhaba Thailand rather than a commission.\n\nwethink.ae · @wethink.ae on Instagram',
+      'WeThink is an IT consulting company in Abu Dhabi, working across cloud, cybersecurity, custom software and data. We designed and built the invitation for the Opening Ceremony, this live programme, and me. It was our contribution to Marhaba Thailand rather than a commission.\n\nwethink.ae · @wethink.ae on Instagram',
   },
 ]
 

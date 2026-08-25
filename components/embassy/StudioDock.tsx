@@ -6,7 +6,7 @@ import { X } from 'lucide-react'
 import { WeThinkMark } from './WeThinkMark'
 
 /**
- * A small studio dock on the left edge of the invitation.
+ * A small WeThink dock on the left edge of the invitation.
  *
  * It introduces itself once and then gets out of the way, which is the whole
  * idea: it slides open on its own a few seconds in, waits about seven seconds,
@@ -37,7 +37,7 @@ const FOLD_AFTER = 6200
 
 const LINKS = [
   {
-    label: 'Follow the studio',
+    label: 'Follow WeThink',
     detail: '@wethink.ae',
     href: 'https://www.instagram.com/wethink.ae/',
     Icon: InstagramGlyph,
@@ -147,7 +147,7 @@ export default function StudioDock() {
             {/* the sentence is a nicety; on a phone the height it costs is
                 better spent not covering the countdown behind it */}
             <p className="mt-2.5 hidden text-[12.5px] leading-snug sm:block" style={{ color: '#46707A' }}>
-              This invitation was designed and built by WeThink, in Abu Dhabi.
+WeThink is an IT consulting company in Abu Dhabi. This invitation is ours.
             </p>
 
             <div className="mt-3.5 flex flex-col gap-2">

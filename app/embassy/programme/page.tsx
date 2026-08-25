@@ -437,7 +437,7 @@ export default function Programme() {
             <Panel>
               <Heading
                 title="Who Built This"
-                note="The studio behind the invitation and this programme"
+                note="The IT consultancy behind the invitation and this programme"
               />
               <div className="mx-auto flex max-w-xl flex-col items-center gap-6 sm:flex-row sm:items-start sm:gap-8">
                 <div className="flex flex-shrink-0 flex-col items-center">
@@ -467,9 +467,10 @@ export default function Programme() {
                     className="mx-auto h-11 w-auto sm:mx-0"
                   />
                   <p className="mt-3 text-[14.5px] leading-relaxed" style={{ color: C.ink }}>
-                    WeThink is a digital studio in Abu Dhabi. We built the invitation for the
-                    Opening Ceremony, this live programme, and the ticket that goes with them,
-                    as our contribution to Marhaba Thailand.
+                    WeThink is an IT consulting company in Abu Dhabi, working across cloud,
+                    cybersecurity, custom software and data. We built the invitation for the
+                    Opening Ceremony and this live programme as our contribution to
+                    Marhaba Thailand.
                   </p>
                   <div className="mt-4 flex flex-wrap justify-center gap-2.5 sm:justify-start">
                     <a
