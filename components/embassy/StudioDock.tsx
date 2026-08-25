@@ -16,8 +16,9 @@ import { WeThinkMark } from './WeThinkMark'
  * The right side of these pages is already spoken for by the concierge and the
  * thread rail, so it lives on the left.
  *
- * Closing it entirely is remembered for the session, so it never nags on the
- * same visit, and it holds still for anyone who has asked for less motion.
+ * Closing folds it back to the tab rather than removing it. The mark stays on
+ * the edge either way, and nothing is remembered between visits: a refresh
+ * gets the introduction again, which is the point of it being there.
  */
 
 /** lucide dropped its brand icons at v1, so the Instagram mark is drawn here. */
@@ -31,7 +32,6 @@ function InstagramGlyph({ className = '' }: { className?: string }) {
   )
 }
 
-const KEY = 'wt:marhaba:dock'
 const OPEN_AFTER = 4200
 const FOLD_AFTER = 6200
 
@@ -55,24 +55,14 @@ export default function StudioDock() {
   const [touched, setTouched] = useState(false)
   const foldTimer = useRef<number | undefined>(undefined)
 
+  // Closing folds it away rather than removing it, so the studio mark is
+  // always somewhere on the edge and the guest can bring it back.
   const dismiss = useCallback(() => {
-    setState('hidden')
-    try {
-      sessionStorage.setItem(KEY, 'dismissed')
-    } catch {
-      /* private browsing: it simply returns on the next page */
-    }
+    setTouched(true)
+    setState('tab')
   }, [])
 
   useEffect(() => {
-    let gone = false
-    try {
-      gone = sessionStorage.getItem(KEY) === 'dismissed'
-    } catch {
-      /* nothing stored, treat as a first visit */
-    }
-    if (gone) return
-
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const id = window.setTimeout(() => setState(reduced ? 'tab' : 'open'), OPEN_AFTER)
     return () => window.clearTimeout(id)
@@ -146,7 +136,7 @@ export default function StudioDock() {
               <button
                 type="button"
                 onClick={dismiss}
-                aria-label="Close"
+                aria-label="Close the panel"
                 className="-mr-1 -mt-1 rounded-full p-1.5 transition-colors hover:bg-[rgba(3,122,138,0.08)]"
                 style={{ color: '#5b7d86' }}
               >
