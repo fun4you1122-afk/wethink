@@ -13,6 +13,7 @@ import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
 import Masthead from '@/components/embassy/Masthead'
 import Concierge from '@/components/embassy/Concierge'
+import StudioDock from '@/components/embassy/StudioDock'
 import {
   C,
   Heading,
@@ -505,6 +506,7 @@ export default function Programme() {
         </div>
 
         <Concierge />
+        <StudioDock />
       </div>
     </MotionConfig>
   )

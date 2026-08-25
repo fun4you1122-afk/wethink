@@ -11,6 +11,7 @@ import SignatureIntro from '@/components/embassy/SignatureIntro'
 import ThreadRail from '@/components/embassy/ThreadRail'
 import Masthead from '@/components/embassy/Masthead'
 import Concierge from '@/components/embassy/Concierge'
+import StudioDock from '@/components/embassy/StudioDock'
 import { CEREMONY } from '../programme/schedule'
 import CultureVideo from '@/components/embassy/CultureVideo'
 import AmbientMusic from '@/components/embassy/AmbientMusic'
@@ -677,6 +678,7 @@ export default function OpeningCeremony() {
         </div>
 
         <Concierge />
+        <StudioDock />
       </div>
     </MotionConfig>
   )
