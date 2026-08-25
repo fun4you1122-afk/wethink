@@ -59,11 +59,12 @@ const BENJARONG = 'Benjarong painting (SACIT)'
 /** The Opening Ceremony, as the Embassy set it out. */
 export const CEREMONY = [
   'Opening Remarks',
-  'Cultural Performance',
-  'Cake Cutting',
-  'Muay Thai Performance',
+  'Cake Cutting and Sign Reveal',
   'Group Photo',
+  'Cultural Performance',
+  'Muay Thai Performance',
   'Lucky Draw',
+  'Thai Silk Fashion Show',
 ]
 
 const day1Main = build('Main Stage', [

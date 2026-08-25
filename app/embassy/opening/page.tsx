@@ -12,8 +12,8 @@ import ThreadRail from '@/components/embassy/ThreadRail'
 import Masthead from '@/components/embassy/Masthead'
 import Concierge from '@/components/embassy/Concierge'
 import { CEREMONY } from '../programme/schedule'
-import Ticket from '@/components/embassy/Ticket'
 import CultureVideo from '@/components/embassy/CultureVideo'
+import AmbientMusic from '@/components/embassy/AmbientMusic'
 import {
   C,
   Heading,
@@ -22,9 +22,7 @@ import {
   Rule,
   Seal,
   SiteFooter,
-  StudioCredit,
   TITLE_GRADIENT,
-  VenueMark,
   sans,
   serif,
 } from '@/components/embassy/ui'
@@ -270,7 +268,7 @@ function Registration() {
     <Panel>
       <Heading
         title="Kindly Confirm Your Attendance"
-        note="Spouses, children, colleagues and friends are all welcome"
+        note="Registration for the Opening Ceremony"
       />
 
       <iframe
@@ -381,13 +379,13 @@ function Registration() {
               Thank you, {name.split(' ').slice(-1)[0] || 'and welcome'}
             </h3>
             <p className="mx-auto mt-2 max-w-sm text-[15px]" style={{ color: C.inkSoft }}>
-              Your attendance is confirmed with the Embassy. We look forward to welcoming you on
-              Friday 11 September at 17:00.
+              Your attendance is confirmed with the Embassy. We look forward to welcoming
+              you on Friday 11 September at 17:00, in the Main Atrium on the Ground Floor
+              near Zara.
+              <br />
+              <br />
+              There is nothing to show at the door. Just come along.
             </p>
-
-            <div className="mt-7">
-              <Ticket guest={name} />
-            </div>
 
             <button
               type="button"
@@ -424,7 +422,6 @@ export default function OpeningCeremony() {
           <CultureVideo />
         </div>
 
-        <VenueMark />
 
         <div className="relative z-10 mx-auto max-w-[780px] px-5 pb-24 pt-[96px]">
           <header className="text-center">
@@ -483,24 +480,69 @@ export default function OpeningCeremony() {
                 <span>Welcome</span>
               </div>
 
-              <p
-                className="mt-6 text-[14.5px] font-semibold uppercase tracking-[0.05em]"
-                style={{ color: C.tealDeep }}
+              {/* The when and where, given a frame of their own. They were two
+                  quiet lines and the Embassy asked for them to carry. */}
+              <div
+                className="mx-auto mt-7 max-w-[560px] rounded-[22px] px-6 py-5"
+                style={{
+                  background: 'rgba(255,255,255,0.72)',
+                  border: '1px solid rgba(3,122,138,0.18)',
+                  boxShadow: '0 10px 30px -14px rgba(1,88,102,0.35)',
+                }}
               >
-                {EVENT.day} <span style={{ color: C.tealMid }}>✦</span> {EVENT.time}
-              </p>
-              <p
-                className="mt-2 text-[13.5px] font-semibold uppercase tracking-[0.14em]"
-                style={{ color: '#065F6B' }}
-              >
-                {EVENT.venue} <span style={{ color: C.tealMid }}>✦</span> {EVENT.venueFull}
-              </p>
+                <p
+                  className="text-[clamp(17px,3.4vw,21px)] font-bold uppercase leading-snug tracking-[0.04em]"
+                  style={{ color: C.tealDeep }}
+                >
+                  {EVENT.day} <span style={{ color: C.tealMid }}>✦</span> {EVENT.time}
+                </p>
+                <p
+                  className="mt-2 text-[clamp(13px,2.6vw,15.5px)] font-semibold leading-snug tracking-[0.06em]"
+                  style={{ color: '#065F6B' }}
+                >
+                  {EVENT.venue} <span style={{ color: C.tealMid }}>✦</span> {EVENT.venueFull}
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.15}>
+              <div className="mt-7 flex justify-center">
+                <AmbientMusic
+                  src="/embassy/audio/piphat-loop.mp3"
+                  title="Piphat in Wat Khung Taphao"
+                  author="เทวประภาส มากคล้าย"
+                  licence="CC BY-SA 3.0"
+                  licenceUrl="https://creativecommons.org/licenses/by-sa/3.0"
+                  sourceUrl="https://commons.wikimedia.org/wiki/File:Piphat_in_Wat_Khung_Taphao.ogg"
+                />
+              </div>
             </Reveal>
 
             <Reveal delay={0.2}>
               <Countdown />
             </Reveal>
           </header>
+
+          <Rule />
+
+          {/* Registration first: the Embassy asked for confirming to be the
+              first thing anyone can do, before any of the detail. */}
+          <Reveal>
+            <Registration />
+          </Reveal>
+
+          <Reveal>
+            <p
+              className="mx-auto mt-6 max-w-[560px] rounded-[20px] px-6 py-4 text-center text-[clamp(15px,2.8vw,17.5px)] font-semibold leading-snug"
+              style={{
+                color: C.tealDeep,
+                background: 'rgba(1,193,213,0.10)',
+                border: '1px solid rgba(3,122,138,0.20)',
+              }}
+            >
+              Spouses, children, colleagues and friends are all welcome.
+            </p>
+          </Reveal>
 
           <Rule />
 
@@ -558,17 +600,6 @@ export default function OpeningCeremony() {
           <Rule />
 
           <Reveal>
-            <Registration />
-          </Reveal>
-
-          <StudioCredit
-            what="This invitation, your ticket, and the wallet pass that carries it"
-            className="my-12"
-          />
-
-          <Rule />
-
-          <Reveal>
             <Panel>
               <Heading title="The Venue" note="Al Reem Island, Abu Dhabi" />
               <div className="flex flex-col items-center gap-4 text-center">
@@ -613,7 +644,7 @@ export default function OpeningCeremony() {
                 title="The Two-Day Programme"
                 note="Everything happening on 11 and 12 September"
               />
-              <div className="flex flex-wrap justify-center gap-3">
+              <div className="flex justify-center">
                 <a
                   href="/embassy/programme"
                   className="inline-flex items-center gap-2 rounded-full border px-7 py-3.5 text-[13.5px] font-medium uppercase tracking-[0.08em]"
@@ -621,12 +652,28 @@ export default function OpeningCeremony() {
                 >
                   View the daily programme <ExternalLink className="h-4 w-4" />
                 </a>
+              </div>
+            </Panel>
+          </Reveal>
+
+          <Rule />
+
+          <Reveal>
+            <Panel className="text-center">
+              <Heading
+                title="Save Your Invitation"
+                note="Keep it on your phone, or send it on"
+              />
+              <div className="flex justify-center">
                 <ShareCardButton guest={guest ?? undefined} label="Save your invitation" />
               </div>
             </Panel>
           </Reveal>
 
-          <SiteFooter note="Programme details and timings are subject to confirmation by the Royal Thai Embassy." />
+          <SiteFooter
+            what="This invitation, and the daily programme for Marhaba Thailand"
+            note="Programme details and timings are subject to confirmation by the Royal Thai Embassy."
+          />
         </div>
 
         <Concierge />

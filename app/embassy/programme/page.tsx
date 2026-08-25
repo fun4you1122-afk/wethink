@@ -21,9 +21,7 @@ import {
   Rule,
   Seal,
   SiteFooter,
-  StudioCredit,
   TITLE_GRADIENT,
-  VenueMark,
   sans,
   serif,
 } from '@/components/embassy/ui'
@@ -110,7 +108,6 @@ export default function Programme() {
       >
         <ThaiBackdrop />
         <Masthead />
-        <VenueMark />
 
         <div className="relative z-10 mx-auto max-w-[780px] px-5 pb-24 pt-[96px]">
           <header className="text-center">
@@ -325,10 +322,6 @@ export default function Programme() {
 
           <Rule />
 
-          <StudioCredit
-            what="The live programme for all three stages, both days of the festival"
-            className="my-12"
-          />
 
           <Reveal>
             <Panel>
@@ -505,7 +498,10 @@ export default function Programme() {
             </Panel>
           </Reveal>
 
-          <SiteFooter note="Programme details and timings are subject to confirmation by the Royal Thai Embassy." />
+          <SiteFooter
+            what="The live programme for all three stages, both days of the festival"
+            note="Programme details and timings are subject to confirmation by the Royal Thai Embassy."
+          />
         </div>
 
         <Concierge />

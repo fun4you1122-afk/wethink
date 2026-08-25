@@ -192,7 +192,7 @@ export function StudioCredit({
   )
 }
 
-export function SiteFooter({ note }: { note?: string }) {
+export function SiteFooter({ note, what }: { note?: string; what?: string }) {
   return (
     <footer className="mt-12 pt-8 text-center">
       {/* Credit block agreed with the Embassy in place of a fee. Clear
@@ -212,7 +212,7 @@ export function SiteFooter({ note }: { note?: string }) {
           className="mx-auto mt-3 h-12 w-auto"
         />
         <p className="mt-3 text-[12.5px] leading-relaxed" style={{ color: C.inkSoft }}>
-          Digital invitation and daily programme for Marhaba Thailand
+          {what ?? 'Digital invitation and daily programme for Marhaba Thailand'}
         </p>
         <p className="mt-3 text-[12px] tracking-[0.03em]" style={{ color: C.inkSoft }}>
           <a
