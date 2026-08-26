@@ -75,7 +75,9 @@ export type CardPerson = {
   brief?: {
     capabilities: string[]
     platforms: { name: string; src: string }[]
-    askMeAbout: string[]
+    /** a looping banner reel; muted, since it plays on its own */
+    video?: { src: string; poster: string; label?: string }
+    askMeAbout?: string[]
     action: { label: string; href: string }
   }
 }
@@ -520,24 +522,49 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
                 ))}
               </div>
 
-              <p style={{ margin: '0 0 8px', fontSize: 10.5, letterSpacing: '0.14em',
-                textTransform: 'uppercase', color: T.mutedFg, fontFamily: BODY }}>
-                Ask me about
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 14 }}>
-                {INFO.brief.askMeAbout.map((q) => (
-                  <a key={q}
-                    href={`${INFO.whatsapp}?text=${encodeURIComponent(`Hi Ahmad, I'd like to talk about: ${q}`)}`}
-                    target="_blank" rel="noopener noreferrer"
-                    style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 13px',
-                      borderRadius: 12, background: 'rgba(255,255,255,0.03)',
-                      border: '1px solid rgba(255,255,255,0.07)', textDecoration: 'none' }}
-                  >
-                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: T.primary, flexShrink: 0 }} />
-                    <span style={{ color: 'rgba(255,255,255,0.78)', fontSize: 13.5, fontFamily: BODY, lineHeight: 1.35 }}>{q}</span>
-                  </a>
-                ))}
-              </div>
+              {INFO.brief.video && (
+                <div style={{
+                  position: 'relative', width: '100%', aspectRatio: '16 / 9',
+                  borderRadius: 14, overflow: 'hidden', marginBottom: 14,
+                  border: '1px solid rgba(255,255,255,0.07)',
+                  boxShadow: `0 10px 30px rgba(0,0,0,0.45)`,
+                }}>
+                  <video
+                    src={INFO.brief.video.src}
+                    poster={INFO.brief.video.poster}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    aria-label={INFO.brief.video.label ?? 'WeThink'}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
+                </div>
+              )}
+
+              {INFO.brief.askMeAbout && INFO.brief.askMeAbout.length > 0 && (
+                <>
+                  <p style={{ margin: '0 0 8px', fontSize: 10.5, letterSpacing: '0.14em',
+                    textTransform: 'uppercase', color: T.mutedFg, fontFamily: BODY }}>
+                    Ask me about
+                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 14 }}>
+                    {INFO.brief.askMeAbout.map((q) => (
+                      <a key={q}
+                        href={`${INFO.whatsapp}?text=${encodeURIComponent(`Hi ${INFO.name.split(' ')[0]}, I'd like to talk about: ${q}`)}`}
+                        target="_blank" rel="noopener noreferrer"
+                        style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 13px',
+                          borderRadius: 12, background: 'rgba(255,255,255,0.03)',
+                          border: '1px solid rgba(255,255,255,0.07)', textDecoration: 'none' }}
+                      >
+                        <span style={{ width: 5, height: 5, borderRadius: '50%', background: T.primary, flexShrink: 0 }} />
+                        <span style={{ color: 'rgba(255,255,255,0.78)', fontSize: 13.5, fontFamily: BODY, lineHeight: 1.35 }}>{q}</span>
+                      </a>
+                    ))}
+                  </div>
+                </>
+              )}
 
               <a href={INFO.brief.action.href} target="_blank" rel="noopener noreferrer"
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,

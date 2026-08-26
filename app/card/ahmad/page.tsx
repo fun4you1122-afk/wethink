@@ -49,18 +49,15 @@ const AHMAD: CardPerson = {
   theme: GOLD,
   brief: {
     capabilities: ['Cloud', 'Cybersecurity', 'Custom Software', 'Data & AI'],
+    video: {
+      src: '/video/wethink-grow.mp4',
+      poster: '/video/wethink-grow-poster.jpg',
+      label: 'WeThink — Ready to grow?',
+    },
     platforms: [
       { name: 'Microsoft Azure', src: '/logos/tech/microsoftazure.svg' },
       { name: 'Amazon Web Services', src: '/logos/tech/amazonwebservices.svg' },
       { name: 'Google Cloud', src: '/logos/tech/google.svg' },
-    ],
-    // Written as the thing a person would actually bring, so the card answers
-    // "what is he the right person to ask" without any of it being a claim
-    // about a client.
-    askMeAbout: [
-      'Moving an estate to Azure or AWS',
-      'Getting ISO 27001 ready',
-      'Building the internal system your team keeps asking for',
     ],
     action: {
       label: 'Start a conversation',
