@@ -47,6 +47,27 @@ const AHMAD: CardPerson = {
   vcardFile: 'Ahmad-Saeed-WeThink.vcf',
   photo: '/ahmad-saeed.jpg',
   theme: GOLD,
+  brief: {
+    capabilities: ['Cloud', 'Cybersecurity', 'Custom Software', 'Data & AI'],
+    platforms: [
+      { name: 'Microsoft Azure', src: '/logos/tech/microsoftazure.svg' },
+      { name: 'Amazon Web Services', src: '/logos/tech/amazonwebservices.svg' },
+      { name: 'Google Cloud', src: '/logos/tech/google.svg' },
+    ],
+    // Written as the thing a person would actually bring, so the card answers
+    // "what is he the right person to ask" without any of it being a claim
+    // about a client.
+    askMeAbout: [
+      'Moving an estate to Azure or AWS',
+      'Getting ISO 27001 ready',
+      'Building the internal system your team keeps asking for',
+    ],
+    action: {
+      label: 'Start a conversation',
+      href: 'https://wa.me/971501882882?text=' +
+        encodeURIComponent('Hi Ahmad, I just scanned your card.'),
+    },
+  },
 }
 
 export default function AhmadCardPage() {

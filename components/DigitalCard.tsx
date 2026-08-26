@@ -68,6 +68,16 @@ export type CardPerson = {
   photo?: string
   /** optional palette; omit for the original violet */
   theme?: CardTheme
+  /**
+   * Replaces the four site links with something that works on a card: what we
+   * do at a glance, what to bring, and one way to start. Omit for the links.
+   */
+  brief?: {
+    capabilities: string[]
+    platforms: { name: string; src: string }[]
+    askMeAbout: string[]
+    action: { label: string; href: string }
+  }
 }
 
 
@@ -488,7 +498,61 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
           {/* Divider */}
           <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: 10 }} />
 
-          {/* Action links */}
+          {/* Either the brief, or the original four site links */}
+          {INFO.brief ? (
+            <div style={{ marginBottom: 12 }}>
+              {/* what we do, readable without a tap */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
+                {INFO.brief.capabilities.map((c) => (
+                  <span key={c} style={{
+                    fontSize: 11.5, fontFamily: BODY, padding: '5px 11px', borderRadius: 50,
+                    color: T.accentSoft, background: `rgba(${T.primaryRgb},0.10)`,
+                    border: `1px solid rgba(${T.primaryRgb},0.28)`,
+                  }}>{c}</span>
+                ))}
+              </div>
+
+              {/* the ground we build on: real, checkable, and no client named */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 18, opacity: 0.62 }}>
+                {INFO.brief.platforms.map((pl) => (
+                  <img key={pl.name} src={pl.src} alt={pl.name} height={19}
+                    style={{ height: 19, width: 'auto', filter: 'brightness(0) invert(1)' }} />
+                ))}
+              </div>
+
+              <p style={{ margin: '0 0 8px', fontSize: 10.5, letterSpacing: '0.14em',
+                textTransform: 'uppercase', color: T.mutedFg, fontFamily: BODY }}>
+                Ask me about
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 14 }}>
+                {INFO.brief.askMeAbout.map((q) => (
+                  <a key={q}
+                    href={`${INFO.whatsapp}?text=${encodeURIComponent(`Hi Ahmad, I'd like to talk about: ${q}`)}`}
+                    target="_blank" rel="noopener noreferrer"
+                    style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 13px',
+                      borderRadius: 12, background: 'rgba(255,255,255,0.03)',
+                      border: '1px solid rgba(255,255,255,0.07)', textDecoration: 'none' }}
+                  >
+                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: T.primary, flexShrink: 0 }} />
+                    <span style={{ color: 'rgba(255,255,255,0.78)', fontSize: 13.5, fontFamily: BODY, lineHeight: 1.35 }}>{q}</span>
+                  </a>
+                ))}
+              </div>
+
+              <a href={INFO.brief.action.href} target="_blank" rel="noopener noreferrer"
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  height: 46, borderRadius: 50, textDecoration: 'none',
+                  background: `linear-gradient(135deg, ${T.primary}, ${T.primaryDeep})`,
+                  color: T.primaryFg, fontWeight: 700, fontSize: 14, fontFamily: SERIF_B,
+                  boxShadow: `0 6px 20px rgba(${T.primaryRgb},0.35)` }}
+              >
+                {INFO.brief.action.label}
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6"/>
+                </svg>
+              </a>
+            </div>
+          ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 10 }}>
             <ActionLink T={T} href="https://www.wethink.ae/services" label="Our Services" icon={
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.primary} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -513,6 +577,8 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
               </svg>
             } />
           </div>
+
+          )}
 
           <div style={{ textAlign: 'center', paddingBottom: 8 }}>
             <p style={{ color: 'rgba(255,255,255,0.15)', fontSize: 11, margin: 0,
