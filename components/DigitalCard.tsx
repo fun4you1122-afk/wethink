@@ -490,19 +490,19 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
 
           {/* Action links */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 10 }}>
-            <ActionLink T={T} href="https://www.wethink.ae/#services" label="Our Services" icon={
+            <ActionLink T={T} href="https://www.wethink.ae/services" label="Our Services" icon={
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.primary} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
               </svg>
             } />
-            <ActionLink T={T} href="https://www.wethink.ae/#projects" label="Our Projects" icon={
+            <ActionLink T={T} href="https://www.wethink.ae/work" label="Our Projects" icon={
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.primary} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="3" width="6" height="6" rx="1"/><rect x="16" y="3" width="6" height="6" rx="1"/>
                 <rect x="2" y="15" width="6" height="6" rx="1"/><rect x="16" y="15" width="6" height="6" rx="1"/>
                 <path d="M8 6h8M6 8v7M18 8v7M8 18h8"/>
               </svg>
             } />
-            <ActionLink T={T} href="https://www.wethink.ae/#about" label="About WeThink" icon={
+            <ActionLink T={T} href="https://www.wethink.ae/about" label="About WeThink" icon={
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.primary} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
               </svg>
