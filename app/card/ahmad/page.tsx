@@ -1,6 +1,32 @@
 'use client'
 
-import DigitalCard, { type CardPerson } from '@/components/DigitalCard'
+import DigitalCard, { type CardPerson, type CardTheme } from '@/components/DigitalCard'
+
+/**
+ * The supplied palette, translated to what the card actually paints.
+ *
+ * It arrived as Tailwind v4 tokens with an `@theme inline` block, and this
+ * project is on v3, so rather than adding shadcn variables the whole site
+ * would inherit, the values are read straight into the card's own theme. That
+ * also keeps it off Rasha's card, which stays violet.
+ *
+ * Gold on near-black measures 9.90:1, and the dark label on a gold button the
+ * same, so the palette holds up without adjustment. The banner keeps the
+ * theme's own chart ramp rather than the old teal-to-magenta nodes.
+ */
+const GOLD: CardTheme = {
+  bg: '#09090b',
+  surface: '#101013',
+  banner: '#09090b',
+  bannerNodes: ['#e3af35', '#c2820a', '#e38935', '#7a4e05', '#f0cd7a'],
+  primary: '#e3af35',
+  primaryDeep: '#c2820a',
+  // primary-foreground from the palette: dark text on gold, not white
+  primaryFg: '#09090b',
+  primaryRgb: '227,175,53',
+  accentSoft: '#f0cd7a',
+  mutedFg: '#a1a1aa',
+}
 
 const AHMAD: CardPerson = {
   name: 'Ahmad Saeed',
@@ -20,6 +46,7 @@ const AHMAD: CardPerson = {
   cardUrlDisplay: 'wethink.ae/card/ahmad',
   vcardFile: 'Ahmad-Saeed-WeThink.vcf',
   photo: '/ahmad-saeed.jpg',
+  theme: GOLD,
 }
 
 export default function AhmadCardPage() {

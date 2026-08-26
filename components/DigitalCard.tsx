@@ -8,6 +8,43 @@ const SERIF   = "'Playfair Display', Georgia, serif"
 const SERIF_B = "'Playfair Display', Georgia, serif"
 const BODY    = "'Lora', Georgia, serif"
 
+export type CardTheme = {
+  /** page ground */
+  bg: string
+  /** raised panels: the QR sheet */
+  surface: string
+  /** the canvas banner's ground */
+  banner: string
+  /** the five node colours drifting in the banner */
+  bannerNodes: string[]
+  /** the brand colour: buttons, rings, accents */
+  primary: string
+  /** the darker end of the button gradient */
+  primaryDeep: string
+  /** what sits on top of primary — must survive the contrast check */
+  primaryFg: string
+  /** primary as "r,g,b" so it can be used inside rgba() */
+  primaryRgb: string
+  /** the lighter tint used for link text and hover states */
+  accentSoft: string
+  /** secondary copy */
+  mutedFg: string
+}
+
+/** the original card's palette, so anything not passing a theme is unchanged */
+export const VIOLET_THEME: CardTheme = {
+  bg: '#06010F',
+  surface: '#0D0820',
+  banner: '#04010C',
+  bannerNodes: ['#00C9A7', '#3B8BFF', '#8B30D4', '#C026D3', '#00B4D8'],
+  primary: '#7C3AED',
+  primaryDeep: '#5B21B6',
+  primaryFg: '#ffffff',
+  primaryRgb: '124,58,237',
+  accentSoft: '#C4B5FD',
+  mutedFg: 'rgba(255,255,255,0.38)',
+}
+
 export type CardPerson = {
   name: string
   role: string
@@ -29,17 +66,19 @@ export type CardPerson = {
   vcardFile: string
   /** a portrait for the frame; without one the WeThink mark is used */
   photo?: string
+  /** optional palette; omit for the original violet */
+  theme?: CardTheme
 }
 
 
 /* ── Animated AI neural-network banner (canvas) ── */
-function AIBanner() {
+function AIBanner({ T }: { T: CardTheme }) {
   const ref = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
     const canvas = ref.current!
     const ctx    = canvas.getContext('2d')!
     const W = canvas.width, H = canvas.height
-    const COLS = ['#00C9A7','#3B8BFF','#8B30D4','#C026D3','#00B4D8']
+    const COLS = T.bannerNodes
 
     const nodes = Array.from({ length: 28 }, () => ({
       x: Math.random() * W,
@@ -54,7 +93,7 @@ function AIBanner() {
     let raf: number
     const tick = () => {
       // Dark bg
-      ctx.fillStyle = '#04010C'
+      ctx.fillStyle = T.banner
       ctx.fillRect(0, 0, W, H)
 
       // Subtle grid
@@ -138,8 +177,8 @@ async function shareCard(INFO: CardPerson, setCopied: (v: boolean) => void) {
 }
 
 /* ── Icon button ── */
-function IconBtn({ icon, label, href, onClick, delay = 0 }: {
-  icon: React.ReactNode; label: string; href?: string; onClick?: () => void; delay?: number
+function IconBtn({ icon, label, href, onClick, delay = 0, T }: {
+  icon: React.ReactNode; label: string; href?: string; onClick?: () => void; delay?: number; T: CardTheme
 }) {
   const wrap: React.CSSProperties = {
     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
@@ -154,15 +193,15 @@ function IconBtn({ icon, label, href, onClick, delay = 0 }: {
           transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut', delay }}
           style={{
             position: 'absolute', inset: 0, borderRadius: '50%',
-            border: '1.5px solid rgba(167,139,250,0.6)',
+            border: `1.5px solid rgba(${T.primaryRgb},0.6)`,
             pointerEvents: 'none',
           }}
         />
         <motion.div
           animate={{ boxShadow: [
-            '0 0 0px rgba(167,139,250,0)',
-            '0 0 14px rgba(167,139,250,0.55)',
-            '0 0 0px rgba(167,139,250,0)',
+            `0 0 0px rgba(${T.primaryRgb},0)`,
+            `0 0 14px rgba(${T.primaryRgb},0.55)`,
+            `0 0 0px rgba(${T.primaryRgb},0)`,
           ]}}
           transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut', delay }}
           whileTap={{ scale: 0.78, rotate: 10, transition: { type: 'spring', stiffness: 400, damping: 12 } }}
@@ -171,7 +210,7 @@ function IconBtn({ icon, label, href, onClick, delay = 0 }: {
             background: 'rgba(255,255,255,0.06)',
             border: '1px solid rgba(255,255,255,0.18)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#C4B5FD', fontSize: 17,
+            color: T.accentSoft, fontSize: 17,
           }}
         >{icon}</motion.div>
       </div>
@@ -215,14 +254,15 @@ function SocialBtn({ href, color, icon, delay = 0 }: { href: string; color: stri
 }
 
 /* ── Action link ── */
-const arrowVariants = {
-  rest: { x: 0, y: 0, opacity: 0.5, color: 'rgba(124,58,237,0.55)', scale: 1 },
-  hover: { x: 4, y: -4, opacity: 1, color: '#C4B5FD', scale: 1.2,
+const makeArrowVariants = (T: CardTheme) => ({
+  rest: { x: 0, y: 0, opacity: 0.5, color: `rgba(${T.primaryRgb},0.55)`, scale: 1 },
+  hover: { x: 4, y: -4, opacity: 1, color: T.accentSoft, scale: 1.2,
     transition: { type: 'spring' as const, stiffness: 400, damping: 18 } },
   tap: { x: 2, y: -2, scale: 0.95 },
-}
+})
 
-function ActionLink({ icon, label, href, onClick }: { icon: React.ReactNode; label: string; href?: string; onClick?: () => void }) {
+function ActionLink({ icon, label, href, onClick, T }: { icon: React.ReactNode; label: string; href?: string; onClick?: () => void; T: CardTheme }) {
+  const arrowVariants = makeArrowVariants(T)
   const inner = (
     <motion.div
       initial="rest" whileHover="hover" whileTap="tap"
@@ -242,18 +282,18 @@ function ActionLink({ icon, label, href, onClick }: { icon: React.ReactNode; lab
 }
 
 /* ── QR Modal ── */
-function QRModal({ onClose, INFO }: { onClose: () => void; INFO: CardPerson }) {
+function QRModal({ onClose, INFO, T }: { onClose: () => void; INFO: CardPerson; T: CardTheme }) {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       onClick={onClose}
       style={{ position: 'fixed', inset: 0, zIndex: 100,
-        background: 'rgba(4,1,14,0.9)', backdropFilter: 'blur(14px)',
+        background: T.bg + 'ee', backdropFilter: 'blur(14px)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
     >
       <motion.div initial={{ scale: 0.88, y: 20 }} animate={{ scale: 1, y: 0 }}
         onClick={e => e.stopPropagation()}
-        style={{ background: '#0D0820', borderRadius: 24, padding: 32,
-          border: '1px solid rgba(124,58,237,0.3)', boxShadow: '0 24px 60px rgba(0,0,0,0.6)',
+        style={{ background: T.surface, borderRadius: 24, padding: 32,
+          border: `1px solid rgba(${T.primaryRgb},0.3)`, boxShadow: '0 24px 60px rgba(0,0,0,0.6)',
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}
       >
         <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, margin: 0,
@@ -261,9 +301,9 @@ function QRModal({ onClose, INFO }: { onClose: () => void; INFO: CardPerson }) {
         <div style={{ padding: 14, background: '#fff', borderRadius: 16 }}>
           <QRCodeSVG value={INFO.cardUrl} size={180} bgColor="#fff" fgColor="#04010c" level="M" />
         </div>
-        <p style={{ color: '#7C3AED', fontWeight: 700, fontSize: 15, margin: 0, fontFamily: SERIF }}>{INFO.cardUrlDisplay}</p>
+        <p style={{ color: T.primary, fontWeight: 700, fontSize: 15, margin: 0, fontFamily: SERIF }}>{INFO.cardUrlDisplay}</p>
         <button onClick={onClose} style={{ padding: '10px 28px', borderRadius: 50, border: 'none',
-          background: 'rgba(124,58,237,0.15)', color: '#A78BFA',
+          background: `rgba(${T.primaryRgb},0.15)`, color: T.primary,
           fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: BODY }}>Close</button>
       </motion.div>
     </motion.div>
@@ -272,17 +312,18 @@ function QRModal({ onClose, INFO }: { onClose: () => void; INFO: CardPerson }) {
 
 /* ══════════════ PAGE ══════════════ */
 export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
+  const T = INFO.theme ?? VIOLET_THEME
   const [copied, setCopied] = useState(false)
   const [showQR, setShowQR]  = useState(false)
 
   return (
-    <div style={{ minHeight: '100dvh', background: '#06010F',
+    <div style={{ minHeight: '100dvh', background: T.bg,
       fontFamily: BODY, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <div style={{ width: '100%', maxWidth: 480 }}>
 
         {/* ── AI Banner ── */}
         <div style={{ position: 'relative', height: 110, overflow: 'hidden' }}>
-          <AIBanner />
+          <AIBanner T={T} />
 
           {/* Company name overlay on banner */}
           <div style={{ position: 'absolute', inset: 0, display: 'flex',
@@ -309,9 +350,9 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
             {/* Circular logo with badge ON the frame */}
             <div style={{ position: 'relative', width: 100, height: 100, flexShrink: 0 }}>
               <div style={{ width: 100, height: 100, borderRadius: '50%',
-                border: '4px solid #06010F', background: '#fff',
+                border: `4px solid ${T.bg}`, background: '#fff',
                 overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.5), 0 0 0 2px rgba(124,58,237,0.25)',
+                boxShadow: `0 8px 32px rgba(0,0,0,0.5), 0 0 0 2px rgba(${T.primaryRgb},0.25)`,
               }}>
                 {INFO.photo ? (
                   <img
@@ -336,7 +377,7 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
                   width: 26, height: 26, borderRadius: '50%',
                   background: 'linear-gradient(135deg, #1D9BF0, #1A7AC7)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  border: '2.5px solid #06010F',
+                  border: `2.5px solid ${T.bg}`,
                   boxShadow: '0 2px 10px rgba(29,155,240,0.6)',
                 }}
               >
@@ -351,14 +392,14 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
           <div style={{ marginBottom: 12 }}>
             <h1 style={{ margin: '0 0 3px', fontFamily: SERIF_B, fontWeight: 800,
               fontSize: 24, color: '#fff', letterSpacing: '-0.01em', lineHeight: 1.2,
-              textShadow: '0 2px 20px rgba(167,139,250,0.25)' }}>
+              textShadow: `0 2px 20px rgba(${T.primaryRgb},0.25)` }}>
               {INFO.name}
             </h1>
             <p style={{ margin: '0 0 3px', fontFamily: SERIF_B, fontWeight: 600,
-              fontStyle: 'italic', color: 'rgba(167,139,250,0.9)', fontSize: 14 }}>
+              fontStyle: 'italic', color: T.primary, fontSize: 14 }}>
               {INFO.role}
             </p>
-            <p style={{ margin: 0, fontFamily: BODY, color: 'rgba(255,255,255,0.38)',
+            <p style={{ margin: 0, fontFamily: BODY, color: T.mutedFg,
               fontSize: 12.5 }}>
               {INFO.location}
             </p>
@@ -366,22 +407,22 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
 
           {/* Quick-action icons */}
           <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: 14 }}>
-            <IconBtn delay={0} label="Call" href={`tel:${INFO.phone}`} icon={
+            <IconBtn T={T} delay={0} label="Call" href={`tel:${INFO.phone}`} icon={
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.64 3.5 2 2 0 0 1 3.62 1.5h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.08a16 16 0 0 0 6.01 6.01l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
               </svg>
             } />
-            <IconBtn delay={0.6} label="Email" href={`mailto:${INFO.email}`} icon={
+            <IconBtn T={T} delay={0.6} label="Email" href={`mailto:${INFO.email}`} icon={
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
               </svg>
             } />
-            <IconBtn delay={1.2} label="Website" href={INFO.website} icon={
+            <IconBtn T={T} delay={1.2} label="Website" href={INFO.website} icon={
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>
               </svg>
             } />
-            <IconBtn delay={1.8} label="Share" onClick={() => shareCard(INFO, setCopied)} icon={
+            <IconBtn T={T} delay={1.8} label="Share" onClick={() => shareCard(INFO, setCopied)} icon={
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
                 <path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98"/>
@@ -393,10 +434,11 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
           <div style={{ display: 'flex', gap: 10, marginBottom: 14 }}>
             <motion.button whileTap={{ scale: 0.97 }} onClick={() => saveContact(INFO)}
               style={{ flex: 1, height: 42, borderRadius: 50,
-                background: 'linear-gradient(135deg, #7C3AED, #5B21B6)',
-                border: 'none', cursor: 'pointer', color: '#fff',
+                background: `linear-gradient(135deg, ${T.primary}, ${T.primaryDeep})`,
+                // primaryFg, not white: on a gold button white is 1.93:1
+                border: 'none', cursor: 'pointer', color: T.primaryFg,
                 fontWeight: 700, fontSize: 13.5, fontFamily: SERIF_B,
-                boxShadow: '0 6px 20px rgba(124,58,237,0.35)',
+                boxShadow: `0 6px 20px rgba(${T.primaryRgb},0.35)`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -407,8 +449,8 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
             </motion.button>
             <motion.button whileTap={{ scale: 0.97 }} onClick={() => setShowQR(true)}
               style={{ flex: 1, height: 42, borderRadius: 50,
-                background: 'transparent', border: '1.5px solid rgba(124,58,237,0.45)',
-                cursor: 'pointer', color: '#A78BFA',
+                background: 'transparent', border: `1.5px solid rgba(${T.primaryRgb},0.45)`,
+                cursor: 'pointer', color: T.primary,
                 fontWeight: 700, fontSize: 13.5, fontFamily: SERIF_B,
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}
             >
@@ -448,25 +490,25 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
 
           {/* Action links */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 10 }}>
-            <ActionLink href="https://www.wethink.ae/#services" label="Our Services" icon={
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <ActionLink T={T} href="https://www.wethink.ae/#services" label="Our Services" icon={
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.primary} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
               </svg>
             } />
-            <ActionLink href="https://www.wethink.ae/#projects" label="Our Projects" icon={
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <ActionLink T={T} href="https://www.wethink.ae/#projects" label="Our Projects" icon={
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.primary} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="3" width="6" height="6" rx="1"/><rect x="16" y="3" width="6" height="6" rx="1"/>
                 <rect x="2" y="15" width="6" height="6" rx="1"/><rect x="16" y="15" width="6" height="6" rx="1"/>
                 <path d="M8 6h8M6 8v7M18 8v7M8 18h8"/>
               </svg>
             } />
-            <ActionLink href="https://www.wethink.ae/#about" label="About WeThink" icon={
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <ActionLink T={T} href="https://www.wethink.ae/#about" label="About WeThink" icon={
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.primary} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
               </svg>
             } />
-            <ActionLink href="https://www.wethink.ae/#contact" label="Get a Free Quote" icon={
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <ActionLink T={T} href="https://www.wethink.ae/#contact" label="Get a Free Quote" icon={
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.primary} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
               </svg>
             } />
@@ -481,14 +523,14 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
         </div>
       </div>
 
-      {showQR && <QRModal INFO={INFO} onClose={() => setShowQR(false)} />}
+      {showQR && <QRModal INFO={INFO} T={T} onClose={() => setShowQR(false)} />}
 
       {copied && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           style={{ position: 'fixed', bottom: 28, left: '50%', transform: 'translateX(-50%)',
-            background: '#7C3AED', color: '#fff', fontWeight: 700, fontSize: 13,
+            background: T.primary, color: T.primaryFg, fontWeight: 700, fontSize: 13,
             padding: '10px 24px', borderRadius: 50, fontFamily: SERIF_B,
-            boxShadow: '0 8px 24px rgba(124,58,237,0.4)', zIndex: 200 }}>
+            boxShadow: `0 8px 24px rgba(${T.primaryRgb},0.4)`, zIndex: 200 }}>
           ✓ Link copied!
         </motion.div>
       )}
