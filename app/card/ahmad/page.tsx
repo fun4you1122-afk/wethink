@@ -48,16 +48,17 @@ const AHMAD: CardPerson = {
   photo: '/ahmad-saeed.jpg',
   theme: GOLD,
   brief: {
-    capabilities: ['Cloud', 'Cybersecurity', 'Custom Software', 'Data & AI'],
     video: {
       src: '/video/wethink-grow.mp4',
       poster: '/video/wethink-grow-poster.jpg',
       label: 'WeThink — Ready to grow?',
     },
-    platforms: [
-      { name: 'Microsoft Azure', src: '/logos/tech/microsoftazure.svg' },
-      { name: 'Amazon Web Services', src: '/logos/tech/amazonwebservices.svg' },
-      { name: 'Google Cloud', src: '/logos/tech/google.svg' },
+    services: [
+      'Digital Transformation & AI',
+      'Data Analytics & Decision Intelligence',
+      'Business Systems & Digital Platforms',
+      'Strategy, Transformation & Optimization',
+      'Brand, Events & Media',
     ],
     action: {
       label: 'Start a conversation',

@@ -73,8 +73,10 @@ export type CardPerson = {
    * do at a glance, what to bring, and one way to start. Omit for the links.
    */
   brief?: {
-    capabilities: string[]
-    platforms: { name: string; src: string }[]
+    capabilities?: string[]
+    platforms?: { name: string; src: string }[]
+    /** numbered practice areas, listed under the banner */
+    services?: string[]
     /** a looping banner reel; muted, since it plays on its own */
     video?: { src: string; poster: string; label?: string }
     askMeAbout?: string[]
@@ -504,6 +506,7 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
           {INFO.brief ? (
             <div style={{ marginBottom: 12 }}>
               {/* what we do, readable without a tap */}
+              {INFO.brief.capabilities && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
                 {INFO.brief.capabilities.map((c) => (
                   <span key={c} style={{
@@ -513,14 +516,17 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
                   }}>{c}</span>
                 ))}
               </div>
+              )}
 
               {/* the ground we build on: real, checkable, and no client named */}
+              {INFO.brief.platforms && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 18, opacity: 0.62 }}>
                 {INFO.brief.platforms.map((pl) => (
                   <img key={pl.name} src={pl.src} alt={pl.name} height={19}
                     style={{ height: 19, width: 'auto', filter: 'brightness(0) invert(1)' }} />
                 ))}
               </div>
+              )}
 
               {INFO.brief.video && (
                 <div style={{
@@ -540,6 +546,34 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
                     aria-label={INFO.brief.video.label ?? 'WeThink'}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                   />
+                </div>
+              )}
+
+              {INFO.brief.services && INFO.brief.services.length > 0 && (
+                <div style={{ marginBottom: 16 }}>
+                  <p style={{ margin: '0 0 10px', fontSize: 10.5, letterSpacing: '0.14em',
+                    textTransform: 'uppercase', color: T.mutedFg, fontFamily: BODY }}>
+                    What we do
+                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                    {INFO.brief.services.map((name, i) => (
+                      <div key={name} style={{
+                        display: 'flex', alignItems: 'center', gap: 13, padding: '11px 4px',
+                        borderTop: i === 0 ? 'none' : '1px solid rgba(255,255,255,0.06)',
+                      }}>
+                        <span style={{
+                          fontFamily: SERIF_B, fontWeight: 800, fontSize: 13,
+                          color: T.primary, minWidth: 22, letterSpacing: '0.02em',
+                        }}>
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <span style={{
+                          color: 'rgba(255,255,255,0.82)', fontSize: 13.5,
+                          fontFamily: BODY, lineHeight: 1.35,
+                        }}>{name}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
