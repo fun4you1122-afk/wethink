@@ -339,19 +339,29 @@ export default function DigitalCard({ INFO }: { INFO: CardPerson }) {
         <div style={{ position: 'relative', height: 110, overflow: 'hidden' }}>
           <AIBanner T={T} />
 
-          {/* Company name overlay on banner */}
+          {/* Company logo + name overlay on banner */}
           <div style={{ position: 'absolute', inset: 0, display: 'flex',
-            flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            gap: 4, pointerEvents: 'none' }}>
-            <span style={{
-              fontFamily: SERIF_B, fontWeight: 800, fontSize: 22,
-              color: '#fff', letterSpacing: '0.04em',
-              textShadow: '0 0 30px rgba(59,139,255,0.6), 0 2px 12px rgba(0,0,0,0.8)',
-            }}>WeThink</span>
-            <span style={{
-              fontFamily: BODY, fontStyle: 'italic', fontSize: 11,
-              color: 'rgba(255,255,255,0.6)', letterSpacing: '0.1em',
-            }}>Digital Smart Solutions</span>
+            alignItems: 'center', justifyContent: 'center',
+            gap: 11, pointerEvents: 'none' }}>
+            <img
+              src="/wethink-logo.png"
+              alt={`${INFO.company} logo`}
+              width={46}
+              height={46}
+              style={{ width: 46, height: 46, objectFit: 'contain', flexShrink: 0,
+                filter: 'drop-shadow(0 2px 10px rgba(0,0,0,0.65))' }}
+            />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <span style={{
+                fontFamily: SERIF_B, fontWeight: 800, fontSize: 22,
+                color: '#fff', letterSpacing: '0.04em', lineHeight: 1,
+                textShadow: '0 0 30px rgba(59,139,255,0.6), 0 2px 12px rgba(0,0,0,0.8)',
+              }}>WeThink</span>
+              <span style={{
+                fontFamily: BODY, fontStyle: 'italic', fontSize: 11,
+                color: 'rgba(255,255,255,0.6)', letterSpacing: '0.1em', lineHeight: 1,
+              }}>Digital Smart Solutions</span>
+            </div>
           </div>
         </div>
 
