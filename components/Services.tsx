@@ -15,26 +15,39 @@ const services = [
         <path d="M8 25v-3M8 31v3M5 28H2M11 28h3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
       </svg>
     ),
-    title: 'Digital Transformation',
-    description: 'End-to-end digital overhaul of your business processes, culture, and technology stack — aligned with UAE Vision 2031.',
+    title: 'Digital Transformation & AI',
+    description: 'End-to-end overhaul of how the business runs — process, culture and technology — with AI applied where it moves the numbers rather than where it decorates the slide. Aligned with UAE Vision 2031.',
     color: '#7C3AED',
     stat: '70% faster onboarding',
-    tags: ['Process Design', 'Change Mgmt', 'Vision 2031'],
+    capabilities: [
+      'Operating model & process design',
+      'AI, ML and intelligent automation',
+      'Workflow and back-office automation',
+      'Change management & adoption',
+    ],
+    tags: ['Process Design', 'AI/ML', 'Automation', 'Vision 2031'],
     featured: true,
   },
   {
     number: '02',
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
-        <path d="M20 4L36 13v14L20 36 4 27V13L20 4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-        <path d="M20 4v32M4 13l16 9 16-9" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+        <path d="M6 30l8-10 6 6 6-8 8 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="28" cy="12" r="4" stroke="currentColor" strokeWidth="2"/>
+        <path d="M28 8V6M32 12h2M28 16v2M24 12h-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
       </svg>
     ),
-    title: 'Strategic Consulting',
-    description: 'Data-driven strategy and C-suite advisory that helps businesses navigate complexity and unlock competitive advantage.',
-    color: '#4F46E5',
-    stat: '3× faster decision-making',
-    tags: ['Roadmapping', 'C-Suite Advisory', 'OKRs'],
+    title: 'Data Analytics & Decision Intelligence',
+    description: 'Raw data turned into decisions — dashboards leaders actually open, forecasts they can act on, and a warehouse underneath that the numbers can be trusted from.',
+    color: '#F59E0B',
+    stat: 'Real-time dashboards',
+    capabilities: [
+      'BI dashboards & executive reporting',
+      'Data warehousing and pipelines',
+      'Predictive & forecasting models',
+      'KPI and performance frameworks',
+    ],
+    tags: ['Power BI', 'Data Warehouse', 'ML Models', 'Forecasting'],
     featured: false,
   },
   {
@@ -46,93 +59,61 @@ const services = [
         <path d="M10 14h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
       </svg>
     ),
-    title: 'IT Solutions',
-    description: 'Tailored infrastructure, software integration, and managed IT services that scale with your business ambitions.',
+    title: 'Business Systems & Digital Platforms',
+    description: 'The systems the business actually runs on: bespoke software, the integrations between it, the cloud underneath and the security around all of it — built to scale and to stay up.',
     color: '#0EA5E9',
     stat: '99.98% uptime delivered',
-    tags: ['Infrastructure', 'Managed IT', 'Integration'],
+    capabilities: [
+      'Custom web, mobile & enterprise apps',
+      'Cloud architecture, migration & FinOps',
+      'Systems integration and managed IT',
+      'Cybersecurity, Zero Trust & compliance',
+    ],
+    tags: ['React', 'Node.js', 'AWS / Azure / GCP', 'ISO 27001'],
     featured: false,
   },
   {
     number: '04',
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
-        <path d="M6 10h28M6 20h20M6 30h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <circle cx="32" cy="28" r="6" stroke="currentColor" strokeWidth="2"/>
-        <path d="M30 28l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M20 4L36 13v14L20 36 4 27V13L20 4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+        <path d="M20 4v32M4 13l16 9 16-9" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
       </svg>
     ),
-    title: 'Project Management',
-    description: 'Agile and structured delivery frameworks that keep complex technology projects on time, on budget, and on scope.',
-    color: '#9333EA',
+    title: 'Strategy, Transformation & Optimization',
+    description: 'Advisory that ends in delivery — strategy and roadmaps at the top, and the PMO discipline underneath that keeps complex programmes on time, on budget and on scope.',
+    color: '#4F46E5',
     stat: '100% on-time delivery',
-    tags: ['Agile', 'PMO', 'Stakeholder Mgmt'],
+    capabilities: [
+      'C-suite advisory and roadmapping',
+      'Operating model optimisation',
+      'Programme & project management (PMO)',
+      'Cost, process and efficiency reviews',
+    ],
+    tags: ['Roadmapping', 'OKRs', 'Agile', 'PMO'],
     featured: false,
   },
   {
     number: '05',
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
-        <path d="M8 26c0-7.18 5.82-13 13-13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M14 26c0-3.866 3.134-7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <circle cx="21" cy="26" r="2" fill="currentColor"/>
-        <path d="M28 10v4M34 16h-4M28 30v-4M22 16h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <rect x="5" y="9" width="30" height="22" rx="3" stroke="currentColor" strokeWidth="2"/>
+        <path d="M17 16.5l7 3.5-7 3.5v-7z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+        <path d="M11 35h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M31 4v3M34.5 6.5L32.5 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
       </svg>
     ),
-    title: 'Cloud Services',
-    description: 'Multi-cloud architecture, migration, and optimisation on AWS, Azure, and GCP — built for resilience and efficiency.',
-    color: '#06B6D4',
-    stat: '45% cost reduction',
-    tags: ['AWS', 'Azure', 'GCP', 'FinOps'],
-    featured: false,
-  },
-  {
-    number: '06',
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
-        <rect x="12" y="18" width="16" height="14" rx="2" stroke="currentColor" strokeWidth="2"/>
-        <path d="M15 18v-4a5 5 0 0110 0v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <circle cx="20" cy="25" r="2" fill="currentColor"/>
-        <path d="M20 27v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-    ),
-    title: 'Cybersecurity',
-    description: 'Comprehensive security assessments, threat monitoring, and compliance frameworks that protect your critical assets.',
-    color: '#EF4444',
-    stat: 'ISO 27001-aligned programmes',
-    tags: ['Zero Trust', 'SOC 24/7', 'NESA'],
-    featured: true,
-  },
-  {
-    number: '07',
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
-        <path d="M8 32V16l12-8 12 8v16" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-        <rect x="16" y="22" width="8" height="10" rx="1" stroke="currentColor" strokeWidth="2"/>
-        <path d="M14 16h4M22 16h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      </svg>
-    ),
-    title: 'Custom Software Dev',
-    description: 'Bespoke web, mobile, and enterprise applications engineered from the ground up for your unique requirements.',
+    title: 'Brand, Events & Media',
+    description: 'How the work is seen. Brand systems, the digital platforms around an event, and the film and photography that carry it — from the invitation in someone\u2019s hand to the room on the day.',
     color: '#059669',
-    stat: 'MVPs in 8–12 weeks',
-    tags: ['React', 'Node.js', 'Mobile', 'AI/ML'],
-    featured: false,
-  },
-  {
-    number: '08',
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
-        <path d="M6 30l8-10 6 6 6-8 8 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <circle cx="28" cy="12" r="4" stroke="currentColor" strokeWidth="2"/>
-        <path d="M28 8V6M32 12h2M28 16v2M24 12h-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-    ),
-    title: 'Data Analytics',
-    description: 'Transform raw data into actionable intelligence — dashboards, predictive models, and BI platforms built to drive decisions.',
-    color: '#F59E0B',
-    stat: 'Real-time dashboards',
-    tags: ['Power BI', 'ML Models', 'Data Warehouse'],
+    stat: 'From invitation to the room',
+    capabilities: [
+      'Brand identity and design systems',
+      'Event platforms & digital invitations',
+      'Film, photography and content',
+      'Campaign and launch support',
+    ],
+    tags: ['Brand Systems', 'Event Platforms', 'Film & Photo', 'Campaigns'],
     featured: false,
   },
 ]
@@ -312,6 +293,25 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
             </span>
           </div>
 
+          {/* Folded-in capabilities */}
+          <ul className="flex list-none flex-col gap-1.5 p-0">
+            {service.capabilities.map((capability) => (
+              <li key={capability} className="flex items-start gap-2">
+                <span
+                  aria-hidden="true"
+                  className="mt-[7px] h-1 w-1 flex-shrink-0 rounded-full"
+                  style={{ background: isFeatured ? 'rgba(255,255,255,0.55)' : service.color }}
+                />
+                <span
+                  className="text-[13px] leading-snug"
+                  style={{ color: isFeatured ? 'rgba(255,255,255,0.78)' : 'var(--text-muted)' }}
+                >
+                  {capability}
+                </span>
+              </li>
+            ))}
+          </ul>
+
           {/* Tags */}
           <div className="flex flex-wrap gap-1.5 mt-auto">
             {service.tags.map((tag) => (
@@ -381,13 +381,13 @@ export default function Services() {
             className="mt-4 text-lg max-w-2xl mx-auto"
             style={{ color: 'var(--text-muted)' }}
           >
-            From strategy to execution — we deliver the full spectrum of digital and technology services
-            that modern enterprises demand.
+            Five lines of work, from strategy through to the thing running in production —
+            and the brand and media around it.
           </motion.p>
         </div>
 
         {/* Bento grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {services.map((service, i) => (
             <ServiceCard key={service.title} service={service} index={i} />
           ))}

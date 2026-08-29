@@ -11,11 +11,11 @@ const PricingSection = dynamic(() => import('@/components/ui/pricing-section'))
 export const metadata: Metadata = {
   title: 'Services | WeThink',
   description:
-    'Digital transformation, cloud, cybersecurity, custom software, data analytics, and strategic IT consulting — explore everything WeThink delivers across the UAE.',
+    'Digital transformation and AI, data analytics and decision intelligence, business systems and digital platforms, strategy and optimisation, and brand, events and media — the five lines of work WeThink delivers across the UAE.',
   alternates: { canonical: '/services' },
   openGraph: {
     title: 'Services | WeThink',
-    description: 'Everything WeThink delivers — from cloud strategy to cybersecurity.',
+    description: 'The five lines of work WeThink delivers — from AI and analytics to platforms, strategy and media.',
     url: '/services',
   },
 }
