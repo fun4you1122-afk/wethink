@@ -43,11 +43,20 @@ const LINKS = [
     Icon: InstagramGlyph,
   },
   {
-    label: 'What we build',
+    label: 'See our work',
     detail: 'wethink.ae',
-    href: 'https://www.wethink.ae/services',
+    href: 'https://www.wethink.ae/work',
     Icon: null as null | typeof InstagramGlyph,
   },
+] as const
+
+/** The five lines of work, kept in the same order as wethink.ae/services. */
+const SERVICES = [
+  'Digital Transformation & AI',
+  'Data Analytics & Decision Intelligence',
+  'Business Systems & Digital Platforms',
+  'Strategy, Transformation & Optimization',
+  'Brand, Events & Media',
 ] as const
 
 export default function StudioDock() {
@@ -149,6 +158,29 @@ export default function StudioDock() {
             <p className="mt-2.5 hidden text-[12.5px] leading-snug sm:block" style={{ color: '#46707A' }}>
 WeThink is an IT consulting company in Abu Dhabi. This invitation is ours.
             </p>
+
+            <div className="mt-3">
+              <p
+                className="text-[9.5px] font-semibold uppercase tracking-[0.16em]"
+                style={{ color: '#8AA9B0' }}
+              >
+                What we do
+              </p>
+              <ul className="mt-1.5 flex list-none flex-col gap-1 p-0">
+                {SERVICES.map((service) => (
+                  <li key={service} className="flex items-start gap-2">
+                    <span
+                      aria-hidden="true"
+                      className="mt-[6px] h-1 w-1 shrink-0 rounded-full"
+                      style={{ background: '#029FB1' }}
+                    />
+                    <span className="text-[11.5px] leading-snug" style={{ color: '#3F6C76' }}>
+                      {service}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             <div className="mt-3.5 flex flex-col gap-2">
               {LINKS.map(({ label, detail, href, Icon }) => (
