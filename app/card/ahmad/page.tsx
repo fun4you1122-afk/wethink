@@ -30,7 +30,7 @@ const GOLD: CardTheme = {
 
 const AHMAD: CardPerson = {
   name: 'Ahmad Saeed',
-  role: 'Founder',
+  role: 'Co-Founder',
   company: 'WeThink',
   tagline: 'Digital Smart Solutions',
   email: 'info@wethink.ae',

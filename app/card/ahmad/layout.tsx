@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Ahmad Saeed — Founder | WeThink',
+  title: 'Ahmad Saeed — Co-Founder | WeThink',
   description:
-    'Digital business card of Ahmad Saeed, Founder of WeThink — IT consulting and digital transformation in Abu Dhabi, UAE. Save the contact, connect on WhatsApp, LinkedIn, or Instagram.',
+    'Digital business card of Ahmad Saeed, Co-Founder of WeThink — IT consulting and digital transformation in Abu Dhabi, UAE. Save the contact, connect on WhatsApp, LinkedIn, or Instagram.',
   alternates: { canonical: '/card/ahmad' },
   openGraph: {
-    title: 'Ahmad Saeed — Founder | WeThink',
+    title: 'Ahmad Saeed — Co-Founder | WeThink',
     description:
       'Digital business card — IT consulting and digital transformation in Abu Dhabi, UAE.',
     url: '/card/ahmad',
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ahmad Saeed — Founder | WeThink',
+    title: 'Ahmad Saeed — Co-Founder | WeThink',
   },
 }
 
