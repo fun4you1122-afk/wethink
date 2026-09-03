@@ -21,17 +21,17 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
     // opening ceremony start" lands here while "what time do you open" does not
     patterns: [/ceremony|opening ceremony|\bvip\b|ambassador/i],
     reply:
-      'The Opening Ceremony is on Friday 11 September, 17:00 to 18:00, in the Main Atrium on the Ground Floor near Zara. It runs to opening remarks, a cultural performance, the cake cutting, a Muay Thai performance, the group photo, and a lucky draw. Invited guests can confirm attendance on the Opening Ceremony page.',
+      'The Opening Ceremony is on Friday 11 September, 17:00 to 18:00, in the Main Atrium on the Ground Floor near Zara. It runs to remarks by the Ambassador, the cake cutting, the group photo, a performance of Thailand\u2019s Heritage: From Tradition to World Heritage by Kai Kaew with the UAE Muay Thai and Kickboxing Federation, a lucky draw and a fashion show. Invited guests can confirm attendance on the Opening Ceremony page.',
   },
   {
     patterns: [/open|close|hour|what time|when.*(start|end|finish)|late|early/i],
     reply:
-      'Doors open at 10:00 AM and the festival runs until 10:00 PM on both days, 11 and 12 September. Come and go as you please — entry is free.',
+      'Doors open at 10:00 AM and the festival runs until 11:00 PM on both days, 11 and 12 September. Come and go as you please — entry is free.',
   },
   {
     patterns: [/schedule|programme|program|agenda|each day|what.*happen|timing|time/i],
     reply:
-      'Three stages run in parallel from 10:00 AM to 10:00 PM on both days: the Main Stage, the Second Stage, and the Workshop area.\n\nDay One (11 Sept): music by Sun Der, Thai cultural performance by Kai Kaew, Thai dance with Kru Kae, Influencer Panel I, Muay Thai by UAM at 2:40 PM, the Opening Ceremony at 5:00 PM in the Main Atrium, then a quiz game, the Officers\u2019 band and batik painting through the evening.\n\nDay Two (12 Sept): the same three tracks, with Influencer Panel II, the Reem Mall campaign prize presentation at 5:00 PM, and Muay Thai again at 8:15 PM.\n\nThe full hour-by-hour programme for all three stages is on the Daily Programme page.',
+      'Three stages run in parallel from 10:00 AM to 11:00 PM on both days: the Main Stage, the Secondary Stage, and the Workshop area.\n\nDay One (11 Sept): music by Sun Der, classical dance and puppet theatre by Kai Kaew, the youth talent show, Thai dance classes with Yasothara Thai Dance, an influencer panel with @sallyelazab, Muay Thai at 12:40 PM and 4:05 PM, the Opening Ceremony at 5:00 PM in the Main Atrium, then Thailand trivia with Kru Aom, Thai games with the Embassy and Nora beading through the evening.\n\nDay Two (12 Sept): the same three tracks, with an influencer panel with @boscoandsharon at 5:40 PM, Thailand trivia with Kru Aom, and the Lucky Draw at 10:20 PM before the MC closes the festival.\n\nThe full hour-by-hour programme for all three stages is on the Daily Programme page.',
   },
   {
     patterns: [/rsvp|register|sign up|book|attend|ticket|save the date/i],
@@ -41,27 +41,27 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
   {
     patterns: [/where|venue|location|reem|mall|address|map|park/i],
     reply:
-      'The festival is at Reem Mall on Al Reem Island, Abu Dhabi, open 10:00 AM to 10:00 PM on both days. There is a map link in the Venue section of this page.\n\nParking arrangements have not been confirmed yet — the Embassy can advise closer to the date.',
+      'The festival is at Reem Mall on Al Reem Island, Abu Dhabi, open 10:00 AM to 11:00 PM on both days. There is a map link in the Venue section of this page.\n\nParking arrangements have not been confirmed yet — the Embassy can advise closer to the date.',
   },
   {
     patterns: [/muay|thai boxing|boxing|fight/i],
     reply:
-      'Muay Thai is demonstrated by UAM on the Main Stage at 2:40 PM on both days, with a second demonstration on Saturday at 8:15 PM, and a Wai Kru at the Opening Ceremony.',
+      'The UAE Muay Thai and Kickboxing Federation demonstrates on the Main Stage at 12:40 PM and 4:05 PM on both days, with a third demonstration on Saturday at 7:10 PM, and an appearance at the Opening Ceremony.',
   },
   {
     patterns: [/workshop|craft|carving|garland|hands.?on/i],
     reply:
-      'The workshop area runs all day, both days. Fruit and soap carving and Roy Malai garlands with the Thai Women\u2019s Circle, weaving, batik and Benjarong painting with SACIT, umbrella painting with Kai Kaew, and tote bag decoration and Thai art colouring with the Embassy.',
+      'The workshop area runs all day, both days. Floral garlands and fruit and soap carving with the Thai Women\u2019s Circle, bamboo weaving, pin making and Nora beading with SACIT, umbrella painting with Kai Kaew, and tote bag decoration and Thai art colouring with the Embassy.',
   },
   {
     patterns: [/dance|perform|music|show|stage|culture/i],
     reply:
-      'Kai Kaew brings Thai cultural performance, Kru Kae leads Thai dance performances and classes, and the band Sun Der plays through the day, joined by Kany on Saturday. Kim from Dusit Thani opens each morning on the Second Stage, and the Officers\u2019 band plays on Friday evening.',
+      'Kai Kaew brings classical dance and puppet theatre, Yasothara Thai Dance leads the dance classes and demonstrations, and the band Sun Der plays through the day, joined by Kany. Dusit Thani Abu Dhabi plays the Kim instrument on the Secondary Stage, the UAE Muay Thai and Kickboxing Federation demonstrates on the Main Stage, and Kru Aom hosts Thailand trivia and Thai language.',
   },
   {
     patterns: [/prize|draw|lucky|win|raffle/i],
     reply:
-      'There is a lucky draw at the Opening Ceremony on Friday evening, and the Reem Mall campaign prize presentation takes place on Saturday at 5:00 PM.',
+      'There is a lucky draw at the Opening Ceremony on Friday evening, and a second lucky draw on Saturday at 10:20 PM, just before the MC closes the festival.',
   },
   {
     patterns: [/tourism|travel|airline|resort|holiday|trip|visa/i],
@@ -76,7 +76,7 @@ const KB: { patterns: RegExp[]; reply: string }[] = [
   {
     patterns: [/cost|price|free|entry|\bfee\b/i],
     reply:
-      'Entry is free and open to the public — just come along any time between 10:00 AM and 10:00 PM on either day.',
+      'Entry is free and open to the public — just come along any time between 10:00 AM and 11:00 PM on either day.',
   },
   {
     patterns: [/dress|wear|attire|code/i],

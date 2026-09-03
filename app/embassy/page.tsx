@@ -41,7 +41,7 @@ const EVENT = {
   subtitle: 'Creating Your Own Thai Experience',
   dates: '11 – 12 September 2026',
   venue: 'Reem Mall, Abu Dhabi',
-  hours: '10:00 AM – 10:00 PM daily',
+  hours: '10:00 AM – 11:00 PM daily',
   mapUrl: 'https://maps.google.com/?q=Reem+Mall+Abu+Dhabi',
   start: '2026-09-11T10:00:00+04:00',
 }
@@ -198,14 +198,14 @@ function Countdown() {
 const HIGHLIGHTS = [
   {
     name: 'Cultural\nPerformances',
-    back: 'Thai cultural performance by Kai Kaew, and Thai dance by Kru Kae, on both stages across both days.',
+    back: 'Classical dance and puppet theatre by Kai Kaew on the main stage, and Thai dance classes and demonstrations by Yasothara Thai Dance on the secondary stage, across both days.',
     icon: (
       <path d="M12 3c-3 3-3 6 0 9M12 3c3 3 3 6 0 9M4 12c0 5 4 9 8 9s8-4 8-9M7 12c1.5 1 3 1 5 1s3.5 0 5-1" />
     ),
   },
   {
     name: 'Live\nMusic',
-    back: 'The Thai band Sun Der, joined by Kany on day two, with Kim from Dusit Thani each morning and the Officers’ band in the evening.',
+    back: 'The Thai band Sun Der, joined by Kany, with the Kim instrument from Dusit Thani Abu Dhabi through the day and Thai instrument demonstrations in the evening.',
     icon: (
       <>
         <circle cx="7" cy="17" r="3" />
@@ -214,8 +214,8 @@ const HIGHLIGHTS = [
     ),
   },
   {
-    name: 'Muay Thai\nby UAM',
-    back: 'Live demonstrations by the UAE Association of Muay Thai, twice a day on the main stage.',
+    name: 'Muay Thai\nDemonstrations',
+    back: 'Live demonstrations by the UAE Muay Thai and Kickboxing Federation, twice a day on the main stage, and again at the Opening Ceremony.',
     icon: (
       <>
         <circle cx="7" cy="7" r="3" />
@@ -225,7 +225,7 @@ const HIGHLIGHTS = [
   },
   {
     name: 'Hands-On\nWorkshops',
-    back: 'Fruit and soap carving, weaving, batik and Benjarong painting, umbrella painting and Roy Malai garlands, taught by SACIT, the Thai Women’s Circle and Kai Kaew.',
+    back: 'Bamboo weaving, pin making and Nora beading, umbrella painting, floral garlands, fruit and soap carving, tote bag decoration and Thai art colouring, taught by SACIT, the Thai Women’s Circle, Kai Kaew and the Embassy.',
     icon: (
       <path d="M4 15c2-1 3-3 3-5V6M8 10c2-1 3-3 3-5v3M12 10c2-1 3-3 3-6v4M16 10c1.5-.5 2.5-2 3-3.5M4 15c0 3 3 5 7 5s8-2 8-6" />
     ),
@@ -241,7 +241,7 @@ const HIGHLIGHTS = [
   },
   {
     name: 'Prizes &\nLucky Draw',
-    back: 'A lucky draw at the Opening Ceremony, and the Reem Mall campaign prize presentation on day two.',
+    back: 'A lucky draw at the Opening Ceremony on Friday, and a second lucky draw late on Saturday before the MC closes the festival.',
     icon: (
       <>
         <rect x="4" y="9" width="16" height="11" rx="0.5" />
@@ -423,23 +423,23 @@ function Phrasebook() {
 const SCHEDULE = {
   1: [
     ['10:00 AM', 'Day One opens · Music, Thai dance and workshops on all three stages'],
-    ['11:30 AM', 'Thai cultural performance by Kai Kaew · Thai games with the Embassy'],
-    ['1:40 PM', 'Influencer Panel I · Youth talent show'],
-    ['2:40 PM', 'Muay Thai demonstration by UAM'],
+    ['11:20 AM', 'Youth talent show · Floral garland making with the Thai Women’s Circle'],
+    ['12:40 PM', 'Muay Thai demonstration · Thai dance class with Yasothara Thai Dance'],
+    ['3:20 PM', 'Influencer panel with @sallyelazab · Bamboo weaving with SACIT'],
     ['5:00 PM', 'Opening Ceremony · Main Atrium, Ground Floor'],
-    ['6:40 PM', 'Quiz game, batik painting and the Officers’ band'],
-    ['9:00 PM', 'Kai Kaew closes the night · Benjarong painting'],
-    ['10:00 PM', 'Close of Day One'],
+    ['6:40 PM', 'Kiosks introduced by the MC · Nora beading with SACIT'],
+    ['8:15 PM', 'Thailand trivia with Kru Aom · Thai games with the Embassy'],
+    ['11:00 PM', 'Close of Day One'],
   ],
   2: [
     ['10:00 AM', 'Day Two opens · Music, Thai dance and workshops resume'],
-    ['11:30 AM', 'Thai cultural performance by Kai Kaew · Thai games with the Embassy'],
-    ['1:40 PM', 'Influencer Panel II · Youth talent show'],
-    ['2:40 PM', 'Muay Thai demonstration by UAM'],
-    ['5:00 PM', 'Reem Mall campaign prize presentation'],
-    ['6:40 PM', 'Kai Kaew, weaving with SACIT and the youth talent show'],
-    ['8:15 PM', 'Muay Thai encore · Umbrella painting with Kai Kaew'],
-    ['10:00 PM', 'Close of Day Two'],
+    ['11:20 AM', 'Youth talent show · Fruit and soap carving with the Thai Women’s Circle'],
+    ['12:40 PM', 'Muay Thai demonstration · Thai dance class with Yasothara Thai Dance'],
+    ['3:20 PM', 'Thailand trivia with Kru Aom · Umbrella painting with Kai Kaew'],
+    ['5:40 PM', 'Influencer panel with @boscoandsharon'],
+    ['6:40 PM', 'Thai dance class · Nora beading with SACIT'],
+    ['10:20 PM', 'Lucky Draw · Kai Kaew closes the festival'],
+    ['11:00 PM', 'Close of Day Two'],
   ],
 } as const
 
@@ -517,7 +517,7 @@ function Schedule() {
           className="mt-4 text-center text-[13px] italic"
           style={{ fontFamily: serif, color: C.inkSoft }}
         >
-          Doors open 10:00 AM and close 10:00 PM on both days. Session times are subject to confirmation by the Embassy.
+          Doors open 10:00 AM and close 11:00 PM on both days. Session times are subject to confirmation by the Embassy.
         </p>
       </div>
     </Panel>
@@ -833,9 +833,9 @@ export default function EmbassyInvitation() {
               Join the Royal Thai Embassy in Abu Dhabi for a two-day celebration of Thai culture,
               craft, and hospitality at Reem Mall. Across three stages, Marhaba Thailand brings
               Thai dance and cultural performance, live music, Muay Thai, and hands-on workshops in
-              carving, weaving, batik and umbrella painting to the UAE capital, with artisans from
+              carving, weaving, beading and umbrella painting to the UAE capital, with artisans from
               SACIT, the Thai Women’s Circle and the Embassy’s own teams. The Opening Ceremony is on
-              Friday evening, and both days run from 10:00 AM to 10:00 PM.
+              Friday evening, and both days run from 10:00 AM to 11:00 PM.
             </p>
           </Panel>
         </Reveal>
@@ -923,7 +923,7 @@ export default function EmbassyInvitation() {
                 {EVENT.venue}
                 <br />
                 <span className="text-[15px]" style={{ color: C.inkSoft }}>
-                  Open 10:00 AM – 10:00 PM both days · Entry is free and open to the public
+                  Open 10:00 AM – 11:00 PM both days · Entry is free and open to the public
                 </span>
               </p>
               <a

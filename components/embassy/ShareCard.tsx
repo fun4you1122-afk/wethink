@@ -135,7 +135,7 @@ export async function renderShareCard(guest?: string): Promise<string> {
   ctx.fillText('11 – 12 SEPTEMBER 2026', W / 2, 1096)
   ctx.font = `500 26px ${sans}`
   ctx.fillStyle = '#BFE6EC'
-  ctx.fillText('REEM MALL, ABU DHABI  ·  10:00 AM – 10:00 PM', W / 2, 1144)
+  ctx.fillText('REEM MALL, ABU DHABI  ·  10:00 AM – 11:00 PM', W / 2, 1144)
   ctx.letterSpacing = '0px'
 
   // the WeThink signature along the foot

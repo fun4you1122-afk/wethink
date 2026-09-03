@@ -135,7 +135,7 @@ export default function Programme() {
                 className="mt-2 text-[15px] font-semibold uppercase tracking-[0.06em]"
                 style={{ color: C.tealDeep }}
               >
-                11 – 12 September 2026 <span style={{ color: C.tealMid }}>✦</span> 10:00 AM – 10:00 PM
+                11 – 12 September 2026 <span style={{ color: C.tealMid }}>✦</span> 10:00 AM – 11:00 PM
               </p>
               <a
                 href="https://www.wethink.ae"

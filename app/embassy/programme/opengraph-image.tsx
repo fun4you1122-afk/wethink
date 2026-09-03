@@ -8,6 +8,6 @@ export default function Image() {
   return ogImage({
     eyebrow: 'Marhaba Thailand',
     title: 'Daily Programme',
-    meta: 'Three stages · 10:00 AM – 10:00 PM · Reem Mall, Abu Dhabi',
+    meta: 'Three stages · 10:00 AM – 11:00 PM · Reem Mall, Abu Dhabi',
   })
 }
