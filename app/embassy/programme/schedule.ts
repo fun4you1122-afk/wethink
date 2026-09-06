@@ -2,7 +2,7 @@
    Marhaba Thailand 2026 — the festival's running order.
 
    Transcribed from the Embassy's schedule sheet
-   (MARHABA_2026_SCHEDULE_final3.KG, received 03/09/2026):
+   (MARHABA_2026_SCHEDULE_final4, received 06/09/2026):
    three parallel tracks across both days, 10:00 to 23:00.
 
    `start` and `end` are minutes past midnight, Gulf time. They drive
@@ -116,7 +116,7 @@ const day1Main = build('Main Stage', [
 // the ceremony sits between the afternoon and the evening on day one
 day1Main.splice(15, 0, {
   start: t(17, 0),
-  end: t(18, 15),
+  end: t(18, 0),
   time: label(17, 0),
   title: 'Opening Ceremony',
   where: 'Main Atrium, Ground Floor (near Zara)',
@@ -184,9 +184,9 @@ const day2Main = build('Main Stage', [
   [20, 0, 20, 15, BREAK, 'rest'],
   [20, 15, 20, 45, KAI_KAEW_B],
   [21, 0, 21, 30, 'Nora beading demonstration by SACIT'],
-  [21, 30, 21, 50, 'Music performance by Sun Der x Kany'],
-  [22, 0, 22, 20, KAI_KAEW_C],
-  [22, 20, 22, 45, 'Lucky Draw'],
+  [21, 40, 22, 0, 'Music performance by Sun Der x Kany'],
+  [22, 10, 22, 30, KAI_KAEW_C],
+  [22, 30, 22, 45, 'Lucky Draw'],
   [22, 45, 23, 0, 'The MC closes the festival'],
 ])
 
@@ -205,7 +205,7 @@ const day2Second = build('Second Stage', [
   [18, 40, 20, 0, DANCE_CLASS],
   [20, 0, 20, 15, BREAK, 'rest'],
   [20, 15, 21, 15, 'Instrument demonstration by Sun Der'],
-  [21, 15, 22, 0, 'Thailand trivia and Thai language with Kru Aom'],
+  [21, 25, 22, 0, 'Thailand trivia and Thai language with Kru Aom'],
   [22, 10, 22, 30, KIM],
 ])
 
