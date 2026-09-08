@@ -58,11 +58,30 @@ export default function Programme() {
   const [copied, setCopied] = useState(false)
 
   // Open on whichever festival day it actually is, and keep the marker moving.
+  //
+  // The printed panels at the venue carry a QR per stage, so ?track= opens on
+  // the stage the guest is standing at. ?day= is honoured too, and pins the
+  // day rather than letting the clock move it, which is what a poster for a
+  // specific day would want. Read here rather than through useSearchParams:
+  // this page is prerendered, and the hook would force it to render on demand.
   useEffect(() => {
+    let pinned = false
+
+    const params = new URLSearchParams(window.location.search)
+
+    const wanted = params.get('track')
+    if (wanted && TRACKS.some((tr) => tr.id === wanted)) setTrack(wanted as TrackId)
+
+    const wantedDay = params.get('day')
+    if (wantedDay === '1' || wantedDay === '2') {
+      setDay(wantedDay === '1' ? 1 : 2)
+      pinned = true
+    }
+
     const tick = () => {
       const n = gulfNow()
       setNow(n)
-      if (n.date === DAY_DATE[2]) setDay(2)
+      if (!pinned && n.date === DAY_DATE[2]) setDay(2)
     }
     tick()
     const id = setInterval(tick, 60000)
