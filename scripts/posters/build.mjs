@@ -24,6 +24,7 @@ import path from 'node:path'
 import QRCode from 'qrcode'
 import { chromium } from 'playwright-core'
 import { loadSchedule, clock } from './schedule-data.mjs'
+import { GOLD, kanokBand, skyline, petal, lotus, corner } from './ornament.mjs'
 
 const HERE = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(HERE, '../..')
@@ -34,6 +35,8 @@ const OUT = path.join(ROOT, 'public/embassy/print')
 const PANEL = { w: 450, h: 1150 }   // mm, the physical panel
 const BLEED = 3                      // mm, trim allowance for the printer
 const SAFE = 16                      // mm, kept clear of the glass frame
+const CROWN = 196                    // mm, the deep teal field at the head of the panel
+const CROWN_DENSE = 168              // mm, shallower on the master, which carries 110 rows
 
 /* ── palette, sampled from the Reem Mall RM mark like the site ── */
 
@@ -140,7 +143,9 @@ function slotRow(s, dense) {
 
 function dayColumn(schedule, day, track, dense) {
   const d = DAYS.find((x) => x.n === day)
-  const head = `<div class="dayhead"><span class="dow">${d.dow}</span><span class="date">${d.date}</span></div>`
+  const head =
+    `<div class="dayhead">${lotus({ size: 26, fill: GOLD.mid, opacity: 0.9 })}` +
+    `<span class="dow">${d.dow}</span><span class="date">${d.date}</span></div>`
 
   if (track) {
     return `<section class="col">${head}${schedule[day][track].map((s) => slotRow(s, dense)).join('')}</section>`
@@ -165,6 +170,7 @@ async function html(panel, schedule, scale = 1, air = 0) {
   })
   const dense = !panel.track
   /** schedule type, scaled to fill the column on this particular panel */
+  const crown = dense ? CROWN_DENSE : CROWN
   const z = (mm) => `${(mm * scale).toFixed(2)}mm`
   /** surplus column height, spread through the rows so a short
       programme breathes instead of leaving a hole above the footer */
@@ -184,34 +190,66 @@ async function html(panel, schedule, scale = 1, air = 0) {
 html,body{width:${PANEL.w + BLEED * 2}mm;height:${PANEL.h + BLEED * 2}mm}
 body{font-family:'Jost',sans-serif;color:${C.ink};background:${C.bg}}
 
-.sheet{position:absolute;inset:0;padding:${BLEED + SAFE}mm ${BLEED + SAFE}mm}
-.wash{position:absolute;left:0;right:0;top:0;height:330mm;
-  background:linear-gradient(160deg,${C.pale} 0%,${C.bg} 78%)}
+.sheet{position:absolute;inset:0;padding:0 ${BLEED + SAFE}mm}
+.wash{position:absolute;left:0;right:0;top:0;bottom:0;
+  background:linear-gradient(178deg,${C.bg} 0%,${C.bg} 62%,${C.pale} 100%)}
+
+/* the crown: a deep teal field carrying the crest, edged in gold kanok */
+.crown{position:absolute;left:0;right:0;top:0;height:${crown}mm;overflow:hidden;
+  background:linear-gradient(168deg,${C.tealDeep} 0%,#02414D 52%,${C.teal} 100%)}
+.crown .sky{position:absolute;left:0;right:0;bottom:0;width:100%;height:34mm}
+.crown .p{position:absolute}
+.kanok{position:absolute;left:0;right:0;width:100%;height:7mm}
+.kanok.bottom{bottom:0;transform:scaleY(-1)}
+.goldline{position:absolute;left:0;right:0;height:.6mm;background:
+  linear-gradient(90deg,transparent,${GOLD.mid} 12%,${GOLD.pale} 50%,${GOLD.mid} 88%,transparent)}
+
+.frame{position:absolute;inset:${BLEED + 7}mm;pointer-events:none;
+  border:.4mm solid rgba(201,162,39,.42);border-radius:2mm}
+.frame .corner{position:absolute}
+.frame .corner.tl{top:-1mm;left:-1mm}
+.frame .corner.tr{top:-1mm;right:-1mm;transform:scaleX(-1)}
+.frame .corner.bl{bottom:-1mm;left:-1mm;transform:scaleY(-1)}
+.frame .corner.br{bottom:-1mm;right:-1mm;transform:scale(-1)}
+
 .rule{height:1.1mm;background:linear-gradient(90deg,${C.tealDeep},${C.teal} 34%,${C.tealMid} 68%,${C.tealBright});border-radius:1mm}
 
-header{position:relative;text-align:center}
-.crest{height:52mm;width:auto;display:block;margin:0 auto 7mm}
-.host{font-size:5.4mm;letter-spacing:.62mm;text-transform:uppercase;font-weight:600;color:${C.teal}}
-.fest{font-family:'Fraunces',serif;font-size:23mm;line-height:.98;font-weight:600;color:${C.tealDeep};margin-top:4mm;letter-spacing:-.2mm}
-.tag{font-family:'Fraunces',serif;font-style:italic;font-size:6.6mm;color:${C.inkSoft};margin-top:3mm}
-.stage{margin:9mm auto 0;display:inline-block;padding:4.5mm 11mm;border-radius:40mm;
-  background:${C.tealDeep};color:#fff;font-size:9.4mm;font-weight:600;letter-spacing:.5mm;text-transform:uppercase}
-.where{font-size:5mm;letter-spacing:.4mm;text-transform:uppercase;color:${C.inkSoft};margin-top:5mm;font-weight:500}
-.when{font-size:5.6mm;letter-spacing:.34mm;text-transform:uppercase;color:${C.teal};margin-top:2.5mm;font-weight:600}
-header .rule{margin-top:9mm}
+header{position:relative;text-align:center;padding-top:20mm;height:${crown}mm}
+.crest{height:52mm;width:auto;display:block;margin:0 auto 6mm;
+  filter:drop-shadow(0 1.6mm 3mm rgba(0,0,0,.35))}
+.host{font-size:5.2mm;letter-spacing:.62mm;text-transform:uppercase;font-weight:600;color:${GOLD.light}}
+.fest{font-family:'Fraunces',serif;font-size:24mm;line-height:.98;font-weight:600;color:#fff;margin-top:4mm;letter-spacing:-.2mm}
+.tag{font-family:'Fraunces',serif;font-style:italic;font-size:6.6mm;color:rgba(255,255,255,.72);margin-top:3mm}
+.crestwrap{position:relative;display:inline-block}
+.crestwrap .lotus{position:absolute;top:50%;margin-top:-4mm}
+.crestwrap .lotus.l{left:-19mm}
+.crestwrap .lotus.r{right:-19mm}
+
+.plate{position:relative;margin-top:-14mm;text-align:center}
+.stage{display:inline-block;padding:5mm 13mm;border-radius:40mm;
+  background:${GOLD.mid};color:${C.tealDeep};font-size:10mm;font-weight:700;
+  letter-spacing:.6mm;text-transform:uppercase;
+  box-shadow:0 0 0 1.2mm ${C.bg},0 0 0 1.7mm rgba(201,162,39,.5)}
+.where{font-size:5mm;letter-spacing:.4mm;text-transform:uppercase;color:${C.inkSoft};margin-top:6mm;font-weight:500}
+.when{font-size:5.8mm;letter-spacing:.34mm;text-transform:uppercase;color:${C.teal};margin-top:2.5mm;font-weight:700}
 
 .days{display:grid;grid-template-columns:1fr 1fr;gap:${z(dense ? 7 : 10)};margin-top:${z(dense ? 8 : 10)}}
 .col{break-inside:avoid}
-.dayhead{display:flex;align-items:baseline;gap:${z(3)};padding-bottom:${z(3)};margin-bottom:${z(dense ? 3 : 4.5)};
-  border-bottom:.9mm solid ${C.tealDeep}}
+.dayhead{display:flex;align-items:center;gap:${z(3)};padding-bottom:${z(3)};margin-bottom:${z(dense ? 3 : 4.5)};
+  border-bottom:.9mm solid ${C.tealDeep};position:relative}
+.dayhead::after{content:'';position:absolute;left:0;right:0;bottom:-1.6mm;height:.4mm;
+  background:${GOLD.mid};opacity:.7}
+.dayhead .lotus{flex:0 0 auto}
 .dow{font-family:'Fraunces',serif;font-size:${z(dense ? 8 : 9.6)};font-weight:600;color:${C.tealDeep}}
 .date{font-size:${z(dense ? 5 : 5.8)};text-transform:uppercase;letter-spacing:.34mm;color:${C.teal};font-weight:600}
 .trackhead{margin:${z(dense ? 6 : 8)} 0 ${z(2.5)};font-size:${z(4.6)};font-weight:700;text-transform:uppercase;
-  letter-spacing:.5mm;color:#fff;background:${C.teal};padding:${z(2)} ${z(3.5)};border-radius:2mm}
+  letter-spacing:.5mm;color:#fff;background:linear-gradient(90deg,${C.tealDeep},${C.teal});
+  padding:${z(2)} ${z(3.5)};border-radius:2mm;border-left:1mm solid ${GOLD.mid}}
 .trackhead:first-child{margin-top:0}
 
-.row{display:flex;gap:${z(dense ? 3 : 4)};padding:${pad(dense ? 2.1 : 3.1)} 0;
-  border-bottom:.25mm solid rgba(3,122,138,.22)}
+.row{display:flex;gap:${z(dense ? 3 : 4)};padding:${pad(dense ? 2.1 : 3.1)} ${z(2)};
+  border-bottom:.25mm solid rgba(3,122,138,.18);position:relative}
+.row:nth-child(even){background:rgba(3,122,138,.045);border-radius:1.6mm}
 .t{flex:0 0 ${z(dense ? 15 : 18)};font-size:${z(dense ? 4.7 : 5.6)};font-weight:600;color:${C.teal};
   font-variant-numeric:tabular-nums;padding-top:${z(dense ? 0.3 : 0.5)}}
 .ap{font-size:${z(dense ? 2.9 : 3.4)};margin-left:.7mm;letter-spacing:.2mm}
@@ -221,11 +259,20 @@ header .rule{margin-top:9mm}
 .by{font-size:${z(dense ? 3.9 : 4.5)};line-height:1.2;color:${C.inkSoft};margin-top:.9mm;letter-spacing:.08mm}
 .row.rest{opacity:.5}
 .row.rest .act{font-size:${z(dense ? 4 : 4.6)};font-weight:400;letter-spacing:.12mm}
-.row.cer{background:${C.pale};border-radius:2.5mm;padding:${z(dense ? 3 : 4)};border-bottom:none;margin:${z(2)} 0}
+.row.cer{background:linear-gradient(150deg,${C.tealDeep},#02414D);color:#fff;
+  border-radius:2.5mm;padding:${z(dense ? 3.4 : 4.6)};border-bottom:none;margin:${z(2.4)} 0;
+  box-shadow:0 0 0 .5mm ${GOLD.mid}}
+.row.cer .t{color:${GOLD.light}}
+.row.cer .act.big{color:#fff}
+.row.cer .by{color:rgba(255,255,255,.7)}
+.row.cer .cer-list{color:rgba(255,255,255,.9)}
+.row.cer .cer-list li::marker{color:${GOLD.light}}
 .cer-list{margin:${z(3)} 0 0 ${z(5)};font-size:${z(4.3)};line-height:1.45;color:${C.ink}}
 
-footer{position:absolute;left:${BLEED + SAFE}mm;right:${BLEED + SAFE}mm;bottom:${BLEED + SAFE}mm}
+footer{position:absolute;left:${BLEED + SAFE}mm;right:${BLEED + SAFE}mm;bottom:${BLEED + SAFE}mm;z-index:2}
 footer .rule{margin-bottom:8mm}
+.footsky{position:absolute;left:0;right:0;bottom:0;height:64mm;z-index:1;pointer-events:none}
+.footsky svg{width:100%;height:100%;display:block}
 .foot{display:flex;align-items:center;gap:10mm}
 .qr{flex:0 0 62mm;height:62mm;padding:3.4mm;background:#fff;border-radius:3mm;box-shadow:0 0 0 .4mm ${C.pale}}
 .qr svg{width:100%;height:100%;display:block}
@@ -245,17 +292,41 @@ footer .rule{margin-bottom:8mm}
 .reem{height:15mm;display:block;margin:0 0 0 auto;opacity:.9}
 </style></head><body>
 <div class="wash"></div>
+
+<div class="crown">
+  ${skyline({ width: 456, height: 34, fill: '#9FDDE8', opacity: 0.13 })}
+  <span class="p" style="top:26mm;left:22mm">${petal({ size: 34, rotate: 24, opacity: 0.16 })}</span>
+  <span class="p" style="top:74mm;right:26mm">${petal({ size: 26, rotate: -38, opacity: 0.14 })}</span>
+  <span class="p" style="top:132mm;left:38mm">${petal({ size: 20, rotate: 62, opacity: 0.12 })}</span>
+  <span class="p" style="top:118mm;right:44mm">${petal({ size: 30, rotate: -12, opacity: 0.1 })}</span>
+  ${kanokBand({ width: 456, height: 7, fill: GOLD.mid, opacity: 0.7 })}
+  <div class="goldline" style="top:7mm"></div>
+  <div class="goldline" style="bottom:0"></div>
+</div>
+
+<div class="frame">
+  ${['tl', 'tr', 'bl', 'br'].map((k) => `<span class="corner ${k}">${corner({ size: 26 })}</span>`).join('')}
+</div>
+
+<div class="footsky">${skyline({ width: 456, height: 64, fill: C.teal, opacity: 0.1 })}</div>
+
 <div class="sheet">
   <header>
-    <img class="crest" src="data:image/png;base64,${CREST}" alt="">
+    <span class="crestwrap">
+      <span class="lotus l">${lotus({ size: 8.5 * 3.78, fill: GOLD.mid, opacity: 0.55 })}</span>
+      <img class="crest" src="data:image/png;base64,${CREST}" alt="">
+      <span class="lotus r">${lotus({ size: 8.5 * 3.78, fill: GOLD.mid, opacity: 0.55 })}</span>
+    </span>
     <div class="host">The Royal Thai Embassy, Abu Dhabi</div>
     <div class="fest">Marhaba Thailand</div>
     <div class="tag">Creating Your Own Thai Experience</div>
+  </header>
+
+  <div class="plate">
     <div class="stage">${esc(panel.name)}</div>
     <div class="where">${esc(panel.where)} · Reem Mall, Abu Dhabi</div>
     <div class="when">11 &amp; 12 September 2026 · 10.00 AM – 11.00 PM</div>
-    <div class="rule"></div>
-  </header>
+  </div>
 
   <div class="days">
     ${dayColumn(schedule, 1, panel.track, dense)}
@@ -322,6 +393,7 @@ async function measure(markup) {
 for (const panel of PANELS) {
   // Fit the schedule to the column: measure, scale, settle. Two passes is
   // enough because reflow only shifts the answer by a line here and there.
+  const dense = !panel.track
   let scale = 1
   let markup = await html(panel, schedule, scale)
   let m = await measure(markup)
@@ -329,7 +401,7 @@ for (const panel of PANELS) {
   for (let pass = 0; pass < 4; pass++) {
     const available = m.footerTop - GAP - m.top
     const used = m.bottom - m.top
-    const next = Math.min(1.55, Math.max(0.82, scale * (available / used)))
+    const next = Math.min(1.55, Math.max(dense ? 0.74 : 0.9, scale * (available / used)))
     if (Math.abs(next - scale) < 0.01) break
     scale = next
     markup = await html(panel, schedule, scale)
