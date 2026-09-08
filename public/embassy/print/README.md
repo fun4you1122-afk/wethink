@@ -1,15 +1,20 @@
 # Marhaba Thailand 2026 — printed programme panels
 
-Four panels for the Reem Mall info stands, generated from
+Five panels for the Reem Mall info stands, carrying four designs, generated from
 `app/embassy/programme/schedule.ts` so the wall and the page behind the QR
 code cannot disagree.
 
-| File | Panel | QR opens |
-|---|---|---|
-| `main.pdf` | Main Stage | `/embassy/programme?track=main` |
-| `second.pdf` | Secondary Stage | `/embassy/programme?track=second` |
-| `workshop.pdf` | Workshops | `/embassy/programme?track=workshop` |
-| `master.pdf` | Full Programme, all three stages | `/embassy/programme` |
+| File | Goes on | Panels | Sheets | QR opens |
+|---|---|---|---|---|
+| `master.pdf` | The two entrance panels | 2 | 4 | `/embassy/programme` |
+| `main.pdf` | Main Stage | 1 | 2 | `/embassy/programme?track=main` |
+| `second.pdf` | Secondary Stage | 1 | 2 | `/embassy/programme?track=second` |
+| `workshop.pdf` | Workshop area | 1 | 2 | `/embassy/programme?track=workshop` |
+| | | **5** | **10** | |
+
+Each panel is double sided and carries the same artwork on both faces, and the
+glass unscrews so a poster can be laid in behind it. That means ten separate
+single sided sheets, not five printed back to back.
 
 `proof-*.png` are small on-screen proofs for review, not for printing.
 
@@ -26,8 +31,11 @@ code cannot disagree.
 - **Stock:** 200 gsm satin or silk coated poster paper. Not gloss: the panel is
   under glass and gloss behind glass double-reflects under mall lighting.
   Keep it at or under 250 gsm so it sits flat in the frame.
-- Each panel is double sided with the same artwork, so print **two copies of
-  each file**: eight sheets in total.
+- **Quantities:** four copies of `master.pdf`, two each of `main.pdf`,
+  `second.pdf` and `workshop.pdf`. Ten sheets, all single sided. The panels
+  are not printed duplex: each face has its own glass and its own sheet.
+- Trim to exactly 450 × 1150 mm so the sheet drops into the frame. The 3 mm
+  bleed is there to give the trimmer something to cut into.
 
 ## Rebuilding
 
