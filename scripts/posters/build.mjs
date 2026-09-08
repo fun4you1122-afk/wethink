@@ -48,6 +48,15 @@ const C = {
   inkSoft: '#46707A',
 }
 
+/** WeThink's own marks, sampled from the company signature footer. */
+const WT = {
+  ink: '#050D2E',
+  cyan: '#03CFF2',
+  blue: '#108FFC',
+  violet: '#983CFC',
+  grey: '#5B6478',
+}
+
 /* ── titles for print ─────────────────────────────────────────
    The site can wrap a 144 character title over four lines on a
    phone. A poster column cannot. These three combined Kai Kaew
@@ -181,7 +190,7 @@ body{font-family:'Jost',sans-serif;color:${C.ink};background:${C.bg}}
 .rule{height:1.1mm;background:linear-gradient(90deg,${C.tealDeep},${C.teal} 34%,${C.tealMid} 68%,${C.tealBright});border-radius:1mm}
 
 header{position:relative;text-align:center}
-.crest{height:46mm;width:auto;display:block;margin:0 auto 6mm}
+.crest{height:52mm;width:auto;display:block;margin:0 auto 7mm}
 .host{font-size:5.4mm;letter-spacing:.62mm;text-transform:uppercase;font-weight:600;color:${C.teal}}
 .fest{font-family:'Fraunces',serif;font-size:23mm;line-height:.98;font-weight:600;color:${C.tealDeep};margin-top:4mm;letter-spacing:-.2mm}
 .tag{font-family:'Fraunces',serif;font-style:italic;font-size:6.6mm;color:${C.inkSoft};margin-top:3mm}
@@ -225,10 +234,14 @@ footer .rule{margin-bottom:8mm}
 .scan .v{font-size:5mm;color:${C.inkSoft};margin-top:2.6mm;line-height:1.32}
 .credit{flex:0 0 auto;text-align:right;padding-left:9mm;border-left:.35mm solid ${C.pale}}
 .credit .l{font-size:3.6mm;letter-spacing:.46mm;text-transform:uppercase;color:${C.inkSoft};font-weight:600}
-.lockup{display:flex;align-items:center;gap:3.6mm;justify-content:flex-end;margin-top:3.4mm}
-.wt{height:26mm;width:auto;display:block}
-.wtname{font-family:'Fraunces',serif;font-size:13mm;font-weight:600;color:${C.tealDeep};line-height:1}
-.credit .u{font-size:4.2mm;color:${C.teal};letter-spacing:.3mm;margin-top:2.2mm;font-weight:500}
+.lockup{display:flex;align-items:center;gap:4mm;justify-content:flex-end;margin-top:3.6mm}
+.wt{height:23mm;width:auto;display:block}
+.wtname{font-size:11.4mm;font-weight:600;color:${WT.ink};line-height:.92;
+  letter-spacing:1.5mm;text-transform:uppercase;padding-left:1.5mm;margin-right:-1.5mm}
+.wttag{font-size:3.5mm;font-weight:500;color:${WT.ink};letter-spacing:.9mm;
+  text-transform:uppercase;margin-top:2.4mm;white-space:nowrap;margin-right:-.9mm}
+.wttag i{font-style:normal;font-size:4.6mm;line-height:0;vertical-align:-.3mm;margin:0 .4mm}
+.credit .u{font-size:4mm;color:${C.inkSoft};letter-spacing:.3mm;margin-top:2.6mm;font-weight:500}
 .reem{height:15mm;display:block;margin:0 0 0 auto;opacity:.9}
 </style></head><body>
 <div class="wash"></div>
@@ -266,7 +279,8 @@ footer .rule{margin-bottom:8mm}
         <img class="wt" src="data:image/png;base64,${WETHINK}" alt="">
         <span class="wtname">WeThink</span>
       </div>
-      <div class="u">wethink.ae</div>
+      <div class="wttag">Think <i style="color:${WT.cyan}">•</i> Plan <i style="color:${WT.violet}">•</i> Grow</div>
+      <div class="u">wethink.ae · info@wethink.ae</div>
     </div>
   </div>
 </footer>
