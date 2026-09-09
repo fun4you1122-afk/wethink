@@ -29,9 +29,17 @@ const CARD = { w: 85, h: 55 }      // mm, trim
 const BLEED = 3
 const SAFE = 4                     // mm, nothing important inside this of the trim
 
-const WT = { ink: '#0B1235', cyan: '#03CFF2', blue: '#108FFC', violet: '#983CFC', grey: '#7A7F92' }
+const WT = {
+  ink: '#141A3C',        // body and headings on the pale ground
+  soft: '#5A5F7D',       // secondary lines
+  cyan: '#0EA5C4',
+  blue: '#3B6BE0',
+  violet: '#7C3AED',
+  rule: 'rgba(20,26,60,.14)',
+}
 const QR_URL = 'https://www.wethink.ae/company-profile'
 const SERVICES = serviceTitles()
+const GAP = 2.0   // mm, the single vertical rhythm on the back
 
 const font = (f) => readFileSync(path.join(ROOT, 'public/fonts', f)).toString('base64')
 const MARK = readFileSync(path.join(ROOT, 'public/wethink-logo.png')).toString('base64')
@@ -67,49 +75,48 @@ html,body{width:${W}mm;font-family:'O',sans-serif}
 .bg svg{width:100%;height:100%;display:block}
 
 /* ── front: the mark at the centre of its own pattern ── */
-.front{display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff}
+.front{display:flex;flex-direction:column;align-items:center;justify-content:center;color:${WT.ink}}
 .fc{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center}
 /* a hairline under the wordmark, not the signature's sweep */
 .hair{margin-top:3.1mm;width:26mm;height:.28mm;border-radius:.28mm;
   background:linear-gradient(90deg,transparent,${WT.cyan} 22%,${WT.violet} 78%,transparent)}
 .mark{height:21mm;width:auto;display:block}
-.name{margin-top:3.8mm;font-family:'P';font-weight:700;font-size:7.2mm;color:#fff;
+.name{margin-top:3.8mm;font-family:'P';font-weight:700;font-size:7.2mm;color:${WT.ink};
   line-height:1;letter-spacing:1.15mm;text-transform:uppercase;padding-left:1.15mm}
-.tag{margin-top:2.8mm;font-family:'P';font-weight:600;font-size:2.4mm;color:rgba(255,255,255,.82);
+.tag{margin-top:2.8mm;font-family:'P';font-weight:600;font-size:2.4mm;color:${WT.soft};
   letter-spacing:.86mm;text-transform:uppercase;padding-left:.86mm}
 .tag i{font-style:normal;font-size:3mm;line-height:0;vertical-align:-.2mm;margin:0 .3mm}
 
-/* ── back: what we do, the code, then how to reach us ── */
-.back{color:#fff;padding:${BLEED + SAFE}mm ${BLEED + SAFE}mm}
-.back .inner,.back .foot{position:relative}
-.back .inner{display:flex;flex-direction:column;height:100%;padding-bottom:4.6mm}
-.top{display:flex;gap:4.4mm;align-items:flex-start}
+/* ── back: one rhythm down the card ──
+   The blocks are laid on a single column with one gap value between them,
+   and the rows inside each block share one gap too, so nothing is spaced
+   by eye. GAP is the only number to change. */
+.back{color:${WT.ink};padding:${BLEED + SAFE}mm ${BLEED + SAFE}mm}
+.back .inner{position:relative;display:flex;flex-direction:column;height:100%;
+  justify-content:center;gap:${GAP}mm}
+.top{display:flex;gap:4mm;align-items:flex-start}
 .svc{flex:1;min-width:0}
 .eyebrow{font-family:'P';font-weight:600;font-size:1.95mm;letter-spacing:.5mm;
-  text-transform:uppercase;color:${WT.cyan};opacity:.95}
-.svc ul{list-style:none;margin:1.7mm 0 0;padding:0;display:flex;flex-direction:column;gap:1.15mm}
-.svc li{display:flex;gap:1.5mm;align-items:baseline;font-size:2.25mm;line-height:1.16;
-  color:rgba(255,255,255,.94)}
-.svc .n{flex:0 0 auto;font-family:'P';font-weight:600;font-size:1.85mm;color:${WT.cyan};opacity:.85}
+  text-transform:uppercase;color:${WT.violet}}
+.svc ul{list-style:none;margin:${GAP}mm 0 0;padding:0;display:flex;flex-direction:column;gap:${GAP}mm}
+.svc li{display:flex;gap:1.6mm;align-items:baseline;font-size:2.3mm;line-height:1.08;color:${WT.ink}}
+.svc .n{flex:0 0 auto;font-family:'P';font-weight:600;font-size:1.85mm;color:${WT.cyan}}
 .qrbox{flex:0 0 auto;text-align:center}
-.qrbox .code{position:relative;width:19mm;height:19mm;background:#fff;
-  padding:1.2mm;border-radius:1.5mm}
+.qrbox .code{position:relative;width:19mm;height:19mm}
 .qrbox .code svg{width:100%;height:100%;display:block}
-.qrbox .cap{margin-top:1.3mm;font-family:'P';font-weight:600;font-size:1.7mm;
-  letter-spacing:.36mm;text-transform:uppercase;color:rgba(255,255,255,.7);white-space:nowrap}
-.rows{margin-top:auto;padding-top:2.6mm;display:grid;grid-template-columns:1fr 1fr;
-  gap:1.5mm 3.6mm;border-top:.16mm solid rgba(255,255,255,.16)}
+.qrbox .cap{margin-top:${GAP}mm;font-family:'P';font-weight:600;font-size:1.7mm;
+  letter-spacing:.36mm;text-transform:uppercase;color:${WT.soft};white-space:nowrap}
+.rule{height:.16mm;background:${WT.rule}}
+.rows{display:grid;grid-template-columns:1fr 1fr;gap:${GAP}mm 3.6mm}
 .row{display:flex;align-items:center;gap:1.7mm;min-width:0}
 .row .gl{flex:0 0 auto;width:2.7mm;height:2.7mm;display:block}
-.row .t{font-size:2.4mm;font-weight:600;white-space:nowrap}
-.back .foot{position:relative}
-.back .foot{position:absolute;left:${BLEED + SAFE}mm;bottom:${BLEED + 4.4}mm;
-  font-family:'P';font-weight:600;font-size:2.2mm;letter-spacing:.5mm;
-  text-transform:uppercase;color:rgba(255,255,255,.6)}
+.row .t{font-size:2.4mm;font-weight:600;white-space:nowrap;color:${WT.ink}}
+.foot{font-family:'P';font-weight:600;font-size:2.1mm;letter-spacing:.46mm;
+  text-transform:uppercase;color:${WT.soft}}
 </style></head><body>
 
 <div class="side front">
-  <div class="bg">${orbitBackdrop({ w: W, h: H, seed: 3 })}</div>
+  <div class="bg">${orbitBackdrop({ w: W, h: H, seed: 3, light: true })}</div>
   <div class="fc">
     <img class="mark" src="data:image/png;base64,${MARK}" alt="">
     <div class="name">WeThink</div>
@@ -119,7 +126,7 @@ html,body{width:${W}mm;font-family:'O',sans-serif}
 </div>
 
 <div class="side back">
-  <div class="bg">${techBackdrop({ w: W, h: H, seed: 23, dense: 0.85 })}</div>
+  <div class="bg">${techBackdrop({ w: W, h: H, seed: 23, dense: 0.85, light: true })}</div>
   <div class="inner">
     <div class="top">
       <div class="svc">
@@ -132,14 +139,19 @@ html,body{width:${W}mm;font-family:'O',sans-serif}
       </div>
     </div>
 
+    <div class="rule"></div>
+
     <div class="rows">
-      <div class="row">${whatsappGlyph({ fill: '#5BE9A6' })}<span class="t">+971 50 312 5078</span></div>
-      <div class="row">${mailGlyph({ fill: '#7FC4FF' })}<span class="t">info@wethink.ae</span></div>
-      <div class="row">${globeGlyph({ fill: '#7FC4FF' })}<span class="t">wethink.ae</span></div>
-      <div class="row">${instagramGlyph({ fill: '#E9A6FF' })}<span class="t">@wethink.ae</span></div>
+      <div class="row">${whatsappGlyph({ fill: '#25A06A' })}<span class="t">+971 50 312 5078</span></div>
+      <div class="row">${mailGlyph({ fill: WT.blue })}<span class="t">info@wethink.ae</span></div>
+      <div class="row">${globeGlyph({ fill: WT.blue })}<span class="t">wethink.ae</span></div>
+      <div class="row">${instagramGlyph({ fill: WT.violet })}<span class="t">@wethink.ae</span></div>
     </div>
+
+    <div class="rule"></div>
+
+    <div class="foot">Abu Dhabi, UAE &nbsp;·&nbsp; Let&rsquo;s build together</div>
   </div>
-  <div class="foot">Abu Dhabi, UAE &nbsp;·&nbsp; Let&rsquo;s build together</div>
 </div>
 
 </body></html>`
@@ -169,6 +181,25 @@ const bleedCheck = await page.evaluate(([bleed, safe, w, h]) => {
 }, [BLEED, SAFE, W, H])
 console.log(bleedCheck.length ? `!! too close to the trim: ${bleedCheck.join(', ')}`
                               : `all content clears the ${SAFE}mm safe margin`)
+
+const rhythm = await page.evaluate(() => {
+  const mm = (px) => (px / 96) * 25.4
+  const blocks = [...document.querySelectorAll('.back .inner > *')]
+  const gaps = []
+  for (let i = 1; i < blocks.length; i++) {
+    gaps.push(+mm(blocks[i].getBoundingClientRect().top -
+                  blocks[i - 1].getBoundingClientRect().bottom).toFixed(2))
+  }
+  const items = [...document.querySelectorAll('.svc li')]
+  const li = []
+  for (let i = 1; i < items.length; i++) {
+    li.push(+mm(items[i].getBoundingClientRect().top -
+                items[i - 1].getBoundingClientRect().bottom).toFixed(2))
+  }
+  return { blocks: gaps, services: li }
+})
+console.log('block gaps (mm):', rhythm.blocks.join(', '))
+console.log('service gaps (mm):', rhythm.services.join(', '))
 
 const shot = await page.locator('.qrbox .code').screenshot()
 const px = await page.evaluate(async (b64) => {

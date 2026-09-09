@@ -30,8 +30,27 @@ export const INK = {
   violet: '#A24BFF',
 }
 
-export function techBackdrop({ w, h, seed = 7, dense = 1 }) {
+/* The light theme is the same drawing in the same ramp, only inverted in
+   value: a pale ground with the linework darkened so it still reads. Line
+   opacities are raised, because a hairline that carries on near-black
+   disappears on near-white. */
+export const LIGHT = {
+  base0: '#FFFFFF',
+  base1: '#F5F2FD',
+  base2: '#E9E3FA',
+  cyan: '#0EA5C4',
+  blue: '#3B6BE0',
+  violet: '#7C3AED',
+  scrim: '#FFFFFF',
+}
+
+const theme = (light) => (light ? LIGHT : INK)
+
+export function techBackdrop({ w, h, seed = 7, dense = 1, light = false }) {
   const r = rng(seed)
+  const T = theme(light)
+  const K = light ? 1.25 : 1  // linework needs a little more weight on a pale
+                              // ground, but not so much that it competes with type
   const id = (n) => `${n}${seed}`
 
   /* constellation: nodes scattered with a margin, joined when close */
@@ -65,27 +84,27 @@ export function techBackdrop({ w, h, seed = 7, dense = 1 }) {
     const a = r() * 360
     return `<g transform="translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${a.toFixed(1)})">
       <path d="M0 0 L${(s * 2).toFixed(2)} ${(s * 0.5).toFixed(2)} L${(s * 1.2).toFixed(2)} ${(s * 1.8).toFixed(2)} Z"
-        fill="url(#${id('sg')})" opacity="${(0.10 + r() * 0.18).toFixed(2)}"/></g>`
+        fill="url(#${id('sg')})" opacity="${((0.10 + r() * 0.18) * K).toFixed(2)}"/></g>`
   }).join('')
 
   return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"
     preserveAspectRatio="none" aria-hidden="true">
   <defs>
     <linearGradient id="${id('bg')}" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="${INK.base0}"/>
-      <stop offset=".55" stop-color="${INK.base1}"/>
-      <stop offset="1" stop-color="${INK.base2}"/>
+      <stop offset="0" stop-color="${T.base0}"/>
+      <stop offset=".55" stop-color="${T.base1}"/>
+      <stop offset="1" stop-color="${T.base2}"/>
     </linearGradient>
     <linearGradient id="${id('sg')}" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="${INK.cyan}"/>
-      <stop offset="1" stop-color="${INK.violet}"/>
+      <stop offset="0" stop-color="${T.cyan}"/>
+      <stop offset="1" stop-color="${T.violet}"/>
     </linearGradient>
     <radialGradient id="${id('glow')}" cx=".22" cy=".18" r=".85">
-      <stop offset="0" stop-color="${INK.blue}" stop-opacity=".34"/>
-      <stop offset="1" stop-color="${INK.blue}" stop-opacity="0"/>
+      <stop offset="0" stop-color="${T.blue}" stop-opacity="${light ? .13 : .34}"/>
+      <stop offset="1" stop-color="${T.blue}" stop-opacity="0"/>
     </radialGradient>
     <pattern id="${id('dots')}" width="2.1" height="2.1" patternUnits="userSpaceOnUse">
-      <circle cx="1.05" cy="1.05" r=".24" fill="${INK.cyan}"/>
+      <circle cx="1.05" cy="1.05" r=".24" fill="${T.cyan}"/>
     </pattern>
     <linearGradient id="${id('fade')}" x1="1" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#fff" stop-opacity=".5"/>
@@ -102,11 +121,11 @@ export function techBackdrop({ w, h, seed = 7, dense = 1 }) {
 
     <!-- the diagonal split, a shade lighter -->
     <path d="M0 ${h * 0.62} L${w * 0.46} ${h * 0.30} L${w} ${h * 0.52} L${w} ${h} L0 ${h} Z"
-      fill="#ffffff" opacity=".030"/>
+      fill="${light ? '#4C1D95' : '#ffffff'}" opacity="${light ? .045 : .030}"/>
 
-    <rect width="${w}" height="${h}" fill="url(#${id('dots')})" mask="url(#${id('dm')})" opacity=".55"/>
+    <rect width="${w}" height="${h}" fill="url(#${id('dots')})" mask="url(#${id('dm')})" opacity="${(0.55 * K).toFixed(2)}"/>
 
-    <g stroke="${INK.cyan}" fill="none" opacity=".18" stroke-width=".22">
+    <g stroke="${T.cyan}" fill="none" opacity="${(0.18 * K * (light ? .45 : 1)).toFixed(2)}" stroke-width=".22">
       ${arcs.map((d) => `<path d="${d}"/>`).join('')}
     </g>
 
@@ -114,13 +133,14 @@ export function techBackdrop({ w, h, seed = 7, dense = 1 }) {
       ${edges.map(([i, j, k]) =>
         `<line x1="${nodes[i].x.toFixed(2)}" y1="${nodes[i].y.toFixed(2)}"
                x2="${nodes[j].x.toFixed(2)}" y2="${nodes[j].y.toFixed(2)}"
-               stroke="${INK.cyan}" stroke-width=".14" opacity="${(k * 0.5).toFixed(2)}"/>`).join('')}
+               stroke="${T.cyan}" stroke-width=".14" opacity="${(k * 0.5 * K).toFixed(2)}"/>`).join('')}
       ${nodes.map((n) =>
         `<circle cx="${n.x.toFixed(2)}" cy="${n.y.toFixed(2)}" r="${n.s.toFixed(2)}"
-                 fill="${INK.cyan}" opacity=".72"/>`).join('')}
+                 fill="${T.cyan}" opacity="${Math.min(1, 0.72 * K).toFixed(2)}"/>`).join('')}
     </g>
 
     ${shards}
+    ${light ? `<rect width="${w}" height="${h}" fill="#FFFFFF" opacity=".42"/>` : ''}
   </g>
 </svg>`
 }
@@ -135,8 +155,10 @@ export function techBackdrop({ w, h, seed = 7, dense = 1 }) {
    it carries none of the signature footer's language.
    ──────────────────────────────────────────────────────────── */
 
-export function orbitBackdrop({ w, h, seed = 3, cx = 0.5, cy = 0.44 }) {
+export function orbitBackdrop({ w, h, seed = 3, cx = 0.5, cy = 0.44, light = false }) {
   const r = rng(seed)
+  const T = theme(light)
+  const K = light ? 1.25 : 1
   const id = (n) => `${n}o${seed}`
   const CX = w * cx
   const CY = h * cy
@@ -147,8 +169,8 @@ export function orbitBackdrop({ w, h, seed = 3, cx = 0.5, cy = 0.44 }) {
     const dash = i % 3 === 2 ? ` stroke-dasharray="${(0.7 + r()).toFixed(2)} ${(1.4 + r()).toFixed(2)}"` : ''
     const op = Math.max(0.05, 0.4 - i * 0.042)
     return `<circle cx="${CX.toFixed(2)}" cy="${CY.toFixed(2)}" r="${rad.toFixed(2)}"
-      fill="none" stroke="${INK.cyan}" stroke-width="${(0.2 - i * 0.012).toFixed(3)}"
-      opacity="${op.toFixed(3)}"${dash}/>`
+      fill="none" stroke="${T.cyan}" stroke-width="${(0.2 - i * 0.012).toFixed(3)}"
+      opacity="${(op * K).toFixed(3)}"${dash}/>`
   }).join('')
 
   /* circuit traces: out from the centre, one right-angle turn, node at the end */
@@ -165,10 +187,10 @@ export function orbitBackdrop({ w, h, seed = 3, cx = 0.5, cy = 0.44 }) {
     const my = horiz ? y0 : y1
     const nx = horiz ? x1 + (Math.cos(a) > 0 ? 1 : -1) * w * 0.06 : x1
     const ny = horiz ? y1 : y1 + (Math.sin(a) > 0 ? 1 : -1) * h * 0.08
-    return `<g opacity="${(0.30 + r() * 0.3).toFixed(2)}">
+    return `<g opacity="${((0.30 + r() * 0.3) * K).toFixed(2)}">
       <path d="M${x0.toFixed(2)} ${y0.toFixed(2)} L${mx.toFixed(2)} ${my.toFixed(2)} L${nx.toFixed(2)} ${ny.toFixed(2)}"
-        fill="none" stroke="${INK.cyan}" stroke-width=".16" stroke-linejoin="round" stroke-linecap="round"/>
-      <circle cx="${nx.toFixed(2)}" cy="${ny.toFixed(2)}" r="${(0.34 + r() * 0.26).toFixed(2)}" fill="${INK.cyan}"/>
+        fill="none" stroke="${T.cyan}" stroke-width=".16" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="${nx.toFixed(2)}" cy="${ny.toFixed(2)}" r="${(0.34 + r() * 0.26).toFixed(2)}" fill="${T.cyan}"/>
     </g>`
   }).join('')
 
@@ -179,26 +201,26 @@ export function orbitBackdrop({ w, h, seed = 3, cx = 0.5, cy = 0.44 }) {
     const d = Math.hypot(x - CX, y - CY) / (w * 0.5)
     if (d < 0.42) return ''
     return `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${(0.12 + r() * 0.22).toFixed(2)}"
-      fill="${INK.cyan}" opacity="${(0.16 + Math.min(0.5, d * 0.34)).toFixed(2)}"/>`
+      fill="${T.cyan}" opacity="${((0.16 + Math.min(0.5, d * 0.34)) * K).toFixed(2)}"/>`
   }).join('')
 
   return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"
     preserveAspectRatio="none" aria-hidden="true">
   <defs>
     <linearGradient id="${id('bg')}" x1="0" y1="0" x2=".85" y2="1">
-      <stop offset="0" stop-color="#070B22"/>
-      <stop offset=".52" stop-color="#111845"/>
-      <stop offset="1" stop-color="#23155E"/>
+      <stop offset="0" stop-color="${T.base0}"/>
+      <stop offset=".52" stop-color="${T.base1}"/>
+      <stop offset="1" stop-color="${T.base2}"/>
     </linearGradient>
     <radialGradient id="${id('halo')}" cx="${cx}" cy="${cy}" r=".62">
-      <stop offset="0" stop-color="${INK.blue}" stop-opacity=".42"/>
-      <stop offset=".45" stop-color="${INK.violet}" stop-opacity=".16"/>
-      <stop offset="1" stop-color="${INK.violet}" stop-opacity="0"/>
+      <stop offset="0" stop-color="${T.blue}" stop-opacity="${light ? .16 : .42}"/>
+      <stop offset=".45" stop-color="${T.violet}" stop-opacity="${light ? .10 : .16}"/>
+      <stop offset="1" stop-color="${T.violet}" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="${id('scrim')}" cx=".5" cy=".5" r=".5">
-      <stop offset="0" stop-color="#070B22" stop-opacity=".62"/>
-      <stop offset=".55" stop-color="#070B22" stop-opacity=".34"/>
-      <stop offset="1" stop-color="#070B22" stop-opacity="0"/>
+      <stop offset="0" stop-color="${light ? '#FFFFFF' : '#070B22'}" stop-opacity="${light ? .78 : .62}"/>
+      <stop offset=".55" stop-color="${light ? '#FFFFFF' : '#070B22'}" stop-opacity="${light ? .46 : .34}"/>
+      <stop offset="1" stop-color="${light ? '#FFFFFF' : '#070B22'}" stop-opacity="0"/>
     </radialGradient>
     <clipPath id="${id('c')}"><rect width="${w}" height="${h}"/></clipPath>
   </defs>
@@ -210,6 +232,7 @@ export function orbitBackdrop({ w, h, seed = 3, cx = 0.5, cy = 0.44 }) {
     ${motes}
     <!-- the pattern recedes where the lockup sits, so traces do not run
          through the wordmark -->
+    ${light ? `<rect width="${w}" height="${h}" fill="#FFFFFF" opacity=".30"/>` : ''}
     <ellipse cx="${(w * cx).toFixed(2)}" cy="${(h * 0.60).toFixed(2)}"
       rx="${(w * 0.46).toFixed(2)}" ry="${(h * 0.34).toFixed(2)}"
       fill="url(#${id('scrim')})"/>
