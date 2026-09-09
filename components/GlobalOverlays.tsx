@@ -4,11 +4,11 @@ import { usePathname } from 'next/navigation'
 import WhatsAppButton from '@/components/WhatsAppButton'
 import ScrollProgress from '@/components/ScrollProgress'
 import AiChat from '@/components/AiChat'
-import GameTab from '@/components/GameTab'
 
-// The card and every Marhaba Thailand page carry their own chrome.
+// The card and every Marhaba Thailand page carry their own chrome, and the
+// deck is a print stage: a floating chat bubble would be printed into the PDF.
 
-const HIDDEN_PREFIXES = ['/card', '/embassy']
+const HIDDEN_PREFIXES = ['/card', '/embassy', '/deck']
 
 export default function GlobalOverlays() {
   const pathname = usePathname()
@@ -18,7 +18,6 @@ export default function GlobalOverlays() {
       <ScrollProgress />
       <WhatsAppButton />
       <AiChat />
-      <GameTab />
     </>
   )
 }

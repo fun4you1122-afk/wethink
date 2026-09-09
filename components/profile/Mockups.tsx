@@ -79,7 +79,7 @@ export function AnalyticsMockup() {
           {[
             { k: 'Throughput', v: '+34%', c: SERIES.violet },
             { k: 'Manual steps', v: '−68%', c: SERIES.green },
-            { k: 'Time to report', v: '4h → 9m', c: SERIES.sky },
+            { k: 'Time to report', v: '4h to 9m', c: SERIES.sky },
           ].map((t) => (
             <div
               key={t.k}
@@ -375,7 +375,7 @@ export function ReportMockup() {
         <div className="mt-4 flex items-center justify-between rounded-xl px-3 py-2"
           style={{ background: 'rgba(14,159,110,0.10)' }}>
           <span className="text-[11px] font-bold" style={{ color: INK }}>Reporting cycle</span>
-          <span className="text-[12px] font-black" style={{ color: SERIES.green }}>Monthly → live</span>
+          <span className="text-[12px] font-black" style={{ color: SERIES.green }}>Monthly to live</span>
         </div>
       </div>
     </Frame>
