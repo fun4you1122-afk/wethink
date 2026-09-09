@@ -31,7 +31,7 @@ or SVG), drop it in and the strip becomes entirely vector.
 
 ---
 
-# Merged: stand + strip as one piece
+# Merged, first attempt: strip replaced (superseded)
 
 `marhaba-stand-with-footer.pdf` is the stand artwork with the new strip laid
 over the old one, as a single page.
@@ -62,3 +62,37 @@ and peeked out from behind the new one.
 - The sign reads **"Marhba Thailand"**. It is missing an "a".
 - The artwork is 72 dpi at this size, against 100–150 for large format.
   Only a higher-resolution re-export fixes that.
+
+
+---
+
+# Final: the stand's own footer, filled in
+
+`marhaba-stand-final.pdf`.
+
+Replacing the strip was the wrong instinct. The one in the artwork is a
+photographed 3D plate with a moulded edge, a shaped cut-out around the
+logo and a shadow; a flat vector rectangle cannot match that and looked
+worse beside it. What the plate lacked was information, not design: its
+icons carried no labels and two of its cells were empty.
+
+So this leaves the plate untouched and lays type and a code into the cells
+that were already there:
+
+| Cell centre (px) | Content |
+|---|---|
+| 1590 | info@wethink.ae |
+| 1937 | +971 50 312 5078 |
+| 2263 | wethink.ae |
+| 2568 | QR to the company profile PDF |
+| 2955 | Let's build together |
+
+Cell centres come from the plate's own divider rules, measured off the
+artwork at x 1421, 1759, 2116, 2411, 2725 and 3185. The page is one point
+per pixel, so those numbers are both.
+
+The added type and the QR are vector and merge onto the original page
+without re-rendering it, so the photograph passes through byte for byte:
+one DCTDecode image in, one out. The QR prints about 7.5 cm across.
+
+    PYLIBS=<path to pypdf> node scripts/standee/fill.mjs
