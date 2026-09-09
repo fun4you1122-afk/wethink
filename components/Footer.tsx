@@ -9,7 +9,7 @@ const footerLinks = {
   Company: [
     { label: 'About Us', href: '/about' },
     { label: 'Company Profile', href: '/company-profile' },
-    { label: 'Profile (PDF)', href: '/WeThink-Company-Profile.pdf' },
+    { label: 'Profile (PDF)', href: '/WeThink-Company-Profile.pdf?download=1' },
     { label: 'Our Services', href: '/services' },
     { label: 'Our Work', href: '/work' },
     { label: 'Blog', href: '/blog' },
@@ -105,7 +105,7 @@ export default function Footer() {
                   <li key={link.label}>
                     {link.href === '#' ? (
                       <span className="text-text-muted/50 text-sm cursor-default">{link.label}</span>
-                    ) : link.href.endsWith('.pdf') ? (
+                    ) : link.href.includes('.pdf') ? (
                       /* a file in /public is not a route, so let the browser
                          fetch it rather than asking the router to navigate */
                       <a

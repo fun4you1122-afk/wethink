@@ -61,6 +61,17 @@ export default function CompanyProfilePage() {
                 style={{ background: 'var(--primary)' }}>
                 What we do
               </Link>
+              {/* ?download=1 forces the save. Without it, in-app browsers show
+                  the PDF with no way to keep it. */}
+              <a href="/WeThink-Company-Profile.pdf?download=1"
+                className="inline-flex items-center gap-2 rounded-full border px-7 py-3.5 text-sm font-bold"
+                style={{ borderColor: 'rgba(109,40,217,0.3)', color: 'var(--primary-dark)' }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 19h16"
+                    stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Download PDF
+              </a>
               <a href={COMPANY.whatsapp} target="_blank" rel="noopener noreferrer"
                 className="rounded-full border px-7 py-3.5 text-sm font-bold"
                 style={{ borderColor: 'rgba(109,40,217,0.3)', color: 'var(--primary-dark)' }}>
