@@ -15,11 +15,15 @@ import WeWordmark from '@/components/WeWordmark'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
+/* Shortened from the five lines of work. The anchors these used to carry
+   pointed at ids the services page does not have, so they all land on the
+   section itself. */
 const TOPICS = [
-  { label: 'Cloud', href: '/services#cloud' },
-  { label: 'Cybersecurity', href: '/services#security' },
-  { label: 'Custom Software', href: '/services#software' },
-  { label: 'Data & AI', href: '/services#data' },
+  { label: 'AI & Automation', href: '/services#services' },
+  { label: 'Data & Analytics', href: '/services#services' },
+  { label: 'Systems & Platforms', href: '/services#services' },
+  { label: 'Strategy', href: '/services#services' },
+  { label: 'Brand & Events', href: '/services#services' },
 ]
 
 export default function HomeHero() {

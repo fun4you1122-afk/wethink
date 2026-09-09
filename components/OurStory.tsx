@@ -75,21 +75,21 @@ export default function OurStory() {
         <hr className="my-[2vw] border-t border-white/20" />
         <div className="flex flex-wrap gap-[3vw]">
           <div className="min-w-[180px] flex-1">
-            <p className="mb-2 text-sm font-bold uppercase tracking-wider text-violet-300">Digital Transformation</p>
+            <p className="mb-2 text-sm font-bold uppercase tracking-wider text-violet-300">Digital Transformation &amp; AI</p>
             <p className="text-[clamp(0.85rem,1.3vw,1.05rem)] leading-relaxed opacity-70">
-              End-to-end overhaul of operations, culture, and technology — aligned with UAE Vision 2031.
+              Practical AI, automation and digital solutions that improve efficiency, agility and service delivery.
             </p>
           </div>
           <div className="min-w-[180px] flex-1">
-            <p className="mb-2 text-sm font-bold uppercase tracking-wider text-violet-300">Strategic Consulting</p>
+            <p className="mb-2 text-sm font-bold uppercase tracking-wider text-violet-300">Strategy &amp; Optimization</p>
             <p className="text-[clamp(0.85rem,1.3vw,1.05rem)] leading-relaxed opacity-70">
-              C-suite advisory and technology roadmaps that align IT investment with business goals.
+              Set direction, prioritise improvements and translate insight into practical execution plans.
             </p>
           </div>
           <div className="min-w-[180px] flex-1">
-            <p className="mb-2 text-sm font-bold uppercase tracking-wider text-violet-300">Data & Analytics</p>
+            <p className="mb-2 text-sm font-bold uppercase tracking-wider text-violet-300">Data &amp; Decision Intelligence</p>
             <p className="text-[clamp(0.85rem,1.3vw,1.05rem)] leading-relaxed opacity-70">
-              BI dashboards, data warehouses, and ML models that turn raw data into revenue.
+              Dashboards, KPI frameworks and reporting that turn information into better decisions.
             </p>
           </div>
         </div>

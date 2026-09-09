@@ -3,13 +3,21 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Send, Bot, User, Sparkles, RotateCcw } from 'lucide-react'
+import { SERVICE_LINES } from '@/lib/services'
+
+/* The overview answer is generated from the canonical list, so a rename
+   there reaches the assistant too. */
+const SERVICE_OVERVIEW =
+  `WeThink works across **five lines** in the UAE and the Gulf:\n\n` +
+  SERVICE_LINES.map((x) => `• **${x.title}** — ${x.summary}`).join('\n') +
+  `\n\nWould you like detail on any of them?`
 
 /* ── Mock knowledge base ─────────────────────────────────── */
 const RESPONSES: { patterns: RegExp[]; reply: string }[] = [
   {
     patterns: [/service/i, /offer/i, /what do you do/i, /capabilities/i],
     reply:
-      'WeThink offers **8 core services** across the UAE and Gulf:\n\n• Digital Transformation\n• Strategic Consulting\n• IT Solutions & Infrastructure\n• Cloud Services (AWS, Azure, GCP)\n• Cybersecurity & Compliance\n• Custom Software Development\n• Project Management\n• Data Analytics & BI\n\nWould you like details on any specific service?',
+      SERVICE_OVERVIEW,
   },
   {
     patterns: [/contact|reach|email|phone|call|whatsapp/i],
@@ -32,14 +40,14 @@ const RESPONSES: { patterns: RegExp[]; reply: string }[] = [
       "Our pricing depends on project scope, timeline, and engagement type (advisory, delivery, or managed services).\n\nThe best next step is a **free consultation call** — no commitment required. You can:\n\n• Fill out the **Contact form** on our home page\n• Email **info@wethink.ae**\n• WhatsApp **+971 50 312 5078**",
   },
   {
-    patterns: [/cloud|aws|azure|gcp|migration/i],
+    patterns: [/cloud|aws|azure|gcp|migration|erp|crm|platform|portal|system/i],
     reply:
-      'Our Cloud Services practice covers:\n\n☁️ **Cloud Strategy & Architecture** — hybrid and multi-cloud design\n🚀 **Migration** — lift-and-shift, re-platform, or cloud-native rebuild\n🔧 **Managed Operations** — 24/7 monitoring and optimisation\n💰 **FinOps** — cost governance and reserved instance planning\n\nWe work across AWS, Microsoft Azure, and Google Cloud.',
+      'That sits under **Business Systems & Digital Platforms**, one of our five lines of work.\n\nWe design, implement and integrate the systems and platforms that support core operations and digital services: ERP and CRM, custom applications, websites and portals, booking platforms, internal systems and digital service design.\n\nThe outcome we aim for is reliable, usable and scalable solutions shaped around your requirements and your users.',
   },
   {
     patterns: [/security|cyber|iso|compliance|soc|zero trust/i],
     reply:
-      "Our Cybersecurity practice includes:\n\n🛡️ Zero-Trust network architecture\n🔍 Penetration testing & vulnerability assessment\n📋 ISO 27001 & NESA compliance programmes\n👁️ 24/7 SOC monitoring\n\nWe build **ISO 27001 and NESA-aligned** security programmes for UAE businesses of every size.",
+      'Security is built into the systems and platforms we deliver rather than sold as a separate line. It sits inside **Business Systems & Digital Platforms**.\n\nTell us what you are running and what you need it to comply with, and we will tell you honestly whether it is something we should take on or something you want a specialist for.',
   },
   {
     patterns: [/project|case study|portfolio|work|achieve/i],

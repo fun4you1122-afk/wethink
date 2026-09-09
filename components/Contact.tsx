@@ -2,6 +2,7 @@
 
 import { useRef, useState, FormEvent } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { SERVICE_TITLES } from '@/lib/services'
 
 const contactInfo = [
   {
@@ -82,16 +83,7 @@ export default function Contact() {
     }
   }
 
-  const services = [
-    'Digital Transformation',
-    'Strategic Consulting',
-    'IT Solutions',
-    'Project Management',
-    'Cloud Services',
-    'Cybersecurity',
-    'Custom Software Development',
-    'Data Analytics',
-  ]
+  const services = SERVICE_TITLES
 
   return (
     <section id="contact" className="section-padding relative overflow-hidden">

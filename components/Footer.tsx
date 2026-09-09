@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Logo from './Logo'
+import { SERVICE_LINES } from '@/lib/services'
 
 const footerLinks = {
   Company: [
@@ -14,14 +15,7 @@ const footerLinks = {
     { label: 'Blog', href: '/blog' },
     { label: 'Contact', href: '/#contact' },
   ],
-  Services: [
-    { label: 'Digital Transformation', href: '/services' },
-    { label: 'Cloud Services', href: '/services' },
-    { label: 'Cybersecurity', href: '/services' },
-    { label: 'Data Analytics', href: '/services' },
-    { label: 'Custom Software', href: '/services' },
-    { label: 'IT Consulting', href: '/services' },
-  ],
+  Services: SERVICE_LINES.map((s) => ({ label: s.title, href: '/services' })),
   Legal: [
     { label: 'Privacy Policy', href: '#' },
     { label: 'Terms of Service', href: '#' },
