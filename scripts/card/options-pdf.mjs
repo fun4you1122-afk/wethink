@@ -21,7 +21,7 @@ import jsQR from 'jsqr'
 import { chromium } from 'playwright-core'
 import { globeGlyph, mailGlyph, whatsappGlyph, instagramGlyph } from '../posters/ornament.mjs'
 import { serviceTitles } from './services.mjs'
-import { ribbons, ghostMark, polyMesh } from './light-bg.mjs'
+import { pixelBurst, ghostMark, polyMesh } from './light-bg.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const OUT = path.join(ROOT, 'public/card-print')
@@ -51,15 +51,16 @@ const qr = await QRCode.toString(QR_URL, {
 
 /* each option supplies a front and a back ground; the layout is identical */
 const OPTIONS = [
-  { k: 'A', front: `<div class="bg">${ribbons({ w: W, h: H, seed: 1 })}</div>`,
-             back:  `<div class="bg">${ribbons({ w: W, h: H, seed: 2 })}</div>` },
+  { k: 'A', dark: true,
+    front: `<div class="bg">${pixelBurst({ w: W, h: H, seed: 4, anchor: 'tr', clear: { cx: W * 0.5, cy: H * 0.44, rx: W * 0.34, ry: H * 0.36 } })}</div>`,
+    back:  `<div class="bg">${pixelBurst({ w: W, h: H, seed: 9, anchor: 'br', spill: 0.6, clear: { cx: W * 0.46, cy: H * 0.5, rx: W * 0.44, ry: H * 0.42 } })}</div>` },
   { k: 'B', front: ghostMark({ w: W, h: H, mark: MARK }),
              back:  ghostMark({ w: W, h: H, mark: MARK }) },
   { k: 'C', front: `<div class="bg">${polyMesh({ w: W, h: H, seed: 5, band: 0.24 })}</div>`,
              back:  `<div class="bg">${polyMesh({ w: W, h: H, seed: 11, band: 0.15, strength: 0.7 })}</div>` },
 ]
 
-const front = (bg) => `<div class="side front">${bg}
+const front = (bg, dark) => `<div class="side front${dark ? ' dark' : ''}">${bg}
   <div class="fc">
     <img class="mark" src="data:image/png;base64,${MARK}" alt="">
     <div class="name">WeThink</div>
@@ -68,7 +69,7 @@ const front = (bg) => `<div class="side front">${bg}
   </div>
 </div>`
 
-const back = (bg) => `<div class="side back">${bg}
+const back = (bg, dark) => `<div class="side back${dark ? ' dark' : ''}">${bg}
   <div class="inner">
     <div class="top">
       <div class="svc">
@@ -106,6 +107,13 @@ html,body{width:${W}mm;font-family:'O',sans-serif;color:${WT.ink}}
   page-break-after:always;break-after:page}
 .side:last-child{page-break-after:auto;break-after:auto}
 .bg{position:absolute;inset:0}.bg svg{width:100%;height:100%;display:block}
+/* option A is the dark one, so its type inverts */
+.side.dark{color:#fff}
+.side.dark .tag,.side.dark .foot,.side.dark .qrbox .cap{color:rgba(255,255,255,.72)}
+.side.dark .eyebrow{color:#9BE3F5}
+.side.dark .svc .n{color:#5BD9F0}
+.side.dark .rule{background:rgba(255,255,255,.18)}
+.side.dark .qrbox .code{background:#fff;padding:1.2mm;border-radius:1.5mm}
 
 .front{display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding-bottom:7mm}
@@ -142,7 +150,7 @@ html,body{width:${W}mm;font-family:'O',sans-serif;color:${WT.ink}}
 .foot{font-family:'P';font-weight:600;font-size:2.1mm;letter-spacing:.46mm;
   text-transform:uppercase;color:${WT.soft}}
 </style></head><body>
-${OPTIONS.map((o) => front(o.front) + back(o.back)).join('')}
+${OPTIONS.map((o) => front(o.front, o.dark) + back(o.back, o.dark)).join('')}
 </body></html>`
 
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' })

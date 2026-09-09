@@ -10,31 +10,76 @@
 
 const RAMP = { cyan: '#00B4BD', blue: '#3B6BE0', violet: '#7C3AED', deep: '#4E11BB' }
 
-/** A: ribbons. Broad translucent sweeps of the brand ramp, bleeding off. */
-export function ribbons({ w, h, seed = 1 }) {
+/** A: a particle burst, dissipating from a corner on a dark ground.
+
+    Squares on a grid, kept or dropped by their distance from an anchor
+    corner plus a little noise, so the cluster is dense at the corner and
+    breaks up as it travels. Coloured along the ramp by position. Seeded,
+    so a rebuild is identical.
+
+    The one dark option of the three. */
+export function pixelBurst({ w, h, seed = 4, anchor = 'tr', cell = 1.55, spill = 1, clear = null }) {
+  let s0 = seed * 2654435761 % 4294967296
+  const rnd = () => {
+    s0 = (s0 * 1664525 + 1013904223) % 4294967296
+    return s0 / 4294967296
+  }
+
+  const ax = anchor.includes('r') ? w : 0
+  const ay = anchor.includes('b') ? h : 0
+  const reach = Math.hypot(w, h) * 0.66
+
+  const bits = []
+  for (let y = 0; y < h; y += cell) {
+    for (let x = 0; x < w; x += cell) {
+      const d = Math.hypot(x - ax, y - ay) / reach
+      // dense at the anchor, breaking up as it travels
+      let p = Math.pow(Math.max(0, 1 - d), 2.1)
+      // keep the type area clear, with a soft edge so the cluster thins
+      // towards it rather than stopping at a hard line
+      if (clear) {
+        const e = Math.hypot((x - clear.cx) / clear.rx, (y - clear.cy) / clear.ry)
+        p *= Math.max(0, Math.min(1, (e - 0.75) / 0.5))
+      }
+      if (rnd() > p * 1.35) continue
+      const t = Math.min(1, d * 1.25 + rnd() * 0.16)
+      const col = t < 0.34 ? '#00C2D6' : t < 0.62 ? '#3B6BE0' : t < 0.84 ? '#7C3AED' : '#B14BE8'
+      const sz = cell * (0.34 + (1 - d) * 0.42)
+      const jx = (rnd() - 0.5) * cell * 0.3
+      const jy = (rnd() - 0.5) * cell * 0.3
+      bits.push(`<rect x="${(x + jx).toFixed(2)}" y="${(y + jy).toFixed(2)}"
+        width="${sz.toFixed(2)}" height="${sz.toFixed(2)}" rx="${(sz * 0.24).toFixed(2)}"
+        fill="${col}" opacity="${(0.35 + (1 - d) * 0.6).toFixed(2)}"/>`)
+    }
+  }
+
+  /* a thin scatter on the far side, as on the reference */
+  const far = []
+  for (let k = 0; k < 90 * spill; k++) {
+    const x = (anchor.includes('r') ? rnd() * w * 0.34 : w - rnd() * w * 0.34)
+    const y = rnd() * h
+    if (clear) {
+      const e = Math.hypot((x - clear.cx) / clear.rx, (y - clear.cy) / clear.ry)
+      if (e < 1) continue
+    }
+    const sz = cell * (0.2 + rnd() * 0.3)
+    far.push(`<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${sz.toFixed(2)}"
+      height="${sz.toFixed(2)}" rx="${(sz * 0.24).toFixed(2)}" fill="#7C3AED"
+      opacity="${(0.10 + rnd() * 0.3).toFixed(2)}"/>`)
+  }
+
   return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"
     preserveAspectRatio="none" aria-hidden="true">
   <defs>
-    <linearGradient id="r${seed}a" x1="0" y1="0" x2="1" y2=".6">
-      <stop offset="0" stop-color="${RAMP.cyan}" stop-opacity=".30"/>
-      <stop offset="1" stop-color="${RAMP.blue}" stop-opacity=".05"/>
+    <linearGradient id="pb${seed}" x1="0" y1="0" x2=".7" y2="1">
+      <stop offset="0" stop-color="#1A0F33"/>
+      <stop offset=".55" stop-color="#150C2A"/>
+      <stop offset="1" stop-color="#211043"/>
     </linearGradient>
-    <linearGradient id="r${seed}b" x1="1" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="${RAMP.violet}" stop-opacity=".26"/>
-      <stop offset="1" stop-color="${RAMP.deep}" stop-opacity=".04"/>
-    </linearGradient>
-    <linearGradient id="r${seed}c" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0" stop-color="${RAMP.blue}" stop-opacity=".16"/>
-      <stop offset="1" stop-color="${RAMP.cyan}" stop-opacity="0"/>
-    </linearGradient>
+    <clipPath id="pbc${seed}"><rect width="${w}" height="${h}"/></clipPath>
   </defs>
-  <rect width="${w}" height="${h}" fill="#FBFAFE"/>
-  <path d="M${-w * 0.1} ${h * 0.86} C ${w * 0.24} ${h * 0.52} ${w * 0.42} ${h * 1.06} ${w * 1.1} ${h * 0.58}
-           L ${w * 1.1} ${h * 1.1} L ${-w * 0.1} ${h * 1.1} Z" fill="url(#r${seed}a)"/>
-  <path d="M${w * 1.1} ${-h * 0.1} C ${w * 0.68} ${h * 0.30} ${w * 0.86} ${h * 0.52} ${w * 0.42} ${-h * 0.08}
-           L ${w * 1.1} ${-h * 0.1} Z" fill="url(#r${seed}b)"/>
-  <path d="M${-w * 0.1} ${h * 0.30} C ${w * 0.3} ${h * 0.06} ${w * 0.52} ${h * 0.46} ${w * 1.1} ${h * 0.14}
-           L ${w * 1.1} ${-h * 0.1} L ${-w * 0.1} ${-h * 0.1} Z" fill="url(#r${seed}c)"/>
+  <rect width="${w}" height="${h}" fill="url(#pb${seed})"/>
+  <g clip-path="url(#pbc${seed})">${far.join('')}${bits.join('')}</g>
 </svg>`
 }
 
