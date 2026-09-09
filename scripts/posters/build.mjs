@@ -318,23 +318,29 @@ footer{position:absolute;left:${BLEED + SAFE}mm;right:${BLEED + SAFE}mm;bottom:$
 footer .rule{margin-bottom:8mm}
 .footsky{position:absolute;left:0;right:0;bottom:0;height:64mm;z-index:1;pointer-events:none}
 .footsky svg{width:100%;height:100%;display:block}
-.foot{display:flex;align-items:center;gap:10mm}
-.qr{flex:0 0 62mm;height:62mm;padding:3.4mm;background:#fff;border-radius:3mm;box-shadow:0 0 0 .4mm ${C.pale}}
+.foot{display:flex;align-items:stretch;gap:8mm}
+.scanblock{flex:1 1 auto;display:flex;align-items:center;gap:7mm;min-width:0}
+.qr{flex:0 0 56mm;height:56mm;padding:3.2mm;background:#fff;border-radius:3mm;box-shadow:0 0 0 .4mm ${C.pale}}
 .qr svg{width:100%;height:100%;display:block}
-.scan{flex:1}
-.scan .k{font-family:'Fraunces',serif;font-size:9mm;font-weight:600;color:${C.tealDeep};line-height:1.08}
-.scan .v{font-size:5mm;color:${C.inkSoft};margin-top:2.6mm;line-height:1.32}
-.credit{flex:0 0 auto;text-align:right;padding-left:9mm;border-left:.35mm solid ${C.pale}}
-.credit .l{font-size:3.6mm;letter-spacing:.46mm;text-transform:uppercase;color:${C.inkSoft};font-weight:600}
-.lockup{display:flex;align-items:center;gap:4mm;justify-content:flex-end;margin-top:3.6mm}
-.wt{height:23mm;width:auto;display:block}
-.wtname{font-size:11.4mm;font-weight:600;color:${WT.ink};line-height:.92;
-  letter-spacing:1.5mm;text-transform:uppercase;padding-left:1.5mm;margin-right:-1.5mm}
-.wttag{font-size:3.5mm;font-weight:500;color:${WT.ink};letter-spacing:.9mm;
-  text-transform:uppercase;margin-top:2.4mm;white-space:nowrap;margin-right:-.9mm}
-.wttag i{font-style:normal;font-size:4.6mm;line-height:0;vertical-align:-.3mm;margin:0 .4mm}
-.credit .u{font-size:4mm;color:${C.inkSoft};letter-spacing:.3mm;margin-top:2.6mm;font-weight:500}
-.reem{height:15mm;display:block;margin:0 0 0 auto;opacity:.9}
+.scan{min-width:0}
+.scan .k{font-family:'Fraunces',serif;font-size:8.2mm;font-weight:600;color:${C.tealDeep};line-height:1.06}
+.scan .v{font-size:4.6mm;color:${C.inkSoft};margin-top:2.2mm;line-height:1.3}
+
+/* WeThink's own board. The Embassy offered the credit, so take it: this is
+   the block a visitor reads once they are done with the timings. */
+.credit{flex:0 0 172mm;text-align:center;padding:6mm 7mm 6.4mm;
+  background:#fff;border-radius:3.5mm;
+  box-shadow:0 0 0 .45mm rgba(201,162,39,.55),0 1.4mm 4mm rgba(1,88,102,.09)}
+.credit .l{font-size:4mm;letter-spacing:.56mm;text-transform:uppercase;color:${C.inkSoft};font-weight:600}
+.lockup{display:flex;align-items:center;gap:5mm;justify-content:center;margin-top:4.4mm}
+.wt{height:37mm;width:auto;display:block}
+.wtname{font-size:18.6mm;font-weight:600;color:${WT.ink};line-height:.9;
+  letter-spacing:2.3mm;text-transform:uppercase;padding-left:2.3mm;margin-right:-2.3mm}
+.wttag{font-size:4.9mm;font-weight:600;color:${WT.ink};letter-spacing:1.3mm;
+  text-transform:uppercase;margin-top:4mm;white-space:nowrap;padding-left:1.15mm}
+.wttag i{font-style:normal;font-size:5.6mm;line-height:0;vertical-align:-.3mm;margin:0 .5mm}
+.credit .u{font-size:5mm;color:${C.teal};letter-spacing:.28mm;margin-top:3.2mm;font-weight:600}
+.reem{height:12mm;display:block;margin:4mm 0 0;opacity:.9}
 </style></head><body>
 <div class="wash"></div>
 
@@ -385,15 +391,16 @@ footer .rule{margin-bottom:8mm}
 <footer>
   <div class="rule"></div>
   <div class="foot">
-    <div class="qr">${qr}</div>
-    <div class="scan">
-      <div class="k">Scan for the live programme</div>
-      <div class="v">See what is on right now across all three stages,
-        on your phone, updated by the Embassy.</div>
+    <div class="scanblock">
+      <div class="qr">${qr}</div>
+      <div class="scan">
+        <div class="k">Scan for the live programme</div>
+        <div class="v">What is on right now, across all three stages.</div>
+        <img class="reem" src="data:image/png;base64,${REEM}" alt="">
+      </div>
     </div>
     <div class="credit">
-      <img class="reem" src="data:image/png;base64,${REEM}" alt="">
-      <div class="l" style="margin-top:6mm">Designed &amp; built by</div>
+      <div class="l">Designed &amp; built by</div>
       <div class="lockup">
         <img class="wt" src="data:image/png;base64,${WETHINK}" alt="">
         <span class="wtname">WeThink</span>
