@@ -5,7 +5,7 @@
    front, then back. A company card rather than a personal one, since it
    goes to attendees in quantity.
 
-   Everything is drawn: the type, the glyphs, the sweep and the QR are
+   Everything is drawn: the type, the glyphs, the pattern and the QR are
    vector, so it prints as sharply as the press can manage.
 
      node scripts/card/print.mjs
@@ -18,7 +18,7 @@ import QRCode from 'qrcode'
 import jsQR from 'jsqr'
 import { chromium } from 'playwright-core'
 import { globeGlyph, mailGlyph, whatsappGlyph, instagramGlyph } from '../posters/ornament.mjs'
-import { techBackdrop } from './backdrop.mjs'
+import { techBackdrop, orbitBackdrop } from './backdrop.mjs'
 import { serviceTitles } from './services.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
@@ -66,20 +66,18 @@ html,body{width:${W}mm;font-family:'O',sans-serif}
 .bg{position:absolute;inset:0}
 .bg svg{width:100%;height:100%;display:block}
 
-/* ── front: the mark on the backdrop, over a smoked plate ── */
+/* ── front: the mark at the centre of its own pattern ── */
 .front{display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff}
-.plate{position:absolute;left:0;right:0;top:${BLEED + 6.5}mm;height:${CARD.h - 15}mm;
-  background:rgba(6,10,32,.55);backdrop-filter:blur(1px);
-  border-top:.18mm solid rgba(3,207,242,.28);border-bottom:.18mm solid rgba(3,207,242,.28)}
-.fc{position:relative;display:flex;flex-direction:column;align-items:center}
+.fc{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center}
+/* a hairline under the wordmark, not the signature's sweep */
+.hair{margin-top:3.1mm;width:26mm;height:.28mm;border-radius:.28mm;
+  background:linear-gradient(90deg,transparent,${WT.cyan} 22%,${WT.violet} 78%,transparent)}
 .mark{height:21mm;width:auto;display:block}
-.name{margin-top:3.4mm;font-family:'P';font-weight:700;font-size:7.2mm;color:#fff;
+.name{margin-top:3.8mm;font-family:'P';font-weight:700;font-size:7.2mm;color:#fff;
   line-height:1;letter-spacing:1.15mm;text-transform:uppercase;padding-left:1.15mm}
-.tag{margin-top:2.1mm;font-family:'P';font-weight:600;font-size:2.4mm;color:rgba(255,255,255,.82);
+.tag{margin-top:2.8mm;font-family:'P';font-weight:600;font-size:2.4mm;color:rgba(255,255,255,.82);
   letter-spacing:.86mm;text-transform:uppercase;padding-left:.86mm}
 .tag i{font-style:normal;font-size:3mm;line-height:0;vertical-align:-.2mm;margin:0 .3mm}
-.sweep{position:absolute;left:${BLEED + 4}mm;right:${BLEED + 4}mm;bottom:${BLEED + 5}mm;height:4mm}
-.sweep svg{width:100%;height:100%;display:block}
 
 /* ── back: what we do, the code, then how to reach us ── */
 .back{color:#fff;padding:${BLEED + SAFE}mm ${BLEED + SAFE}mm}
@@ -111,22 +109,12 @@ html,body{width:${W}mm;font-family:'O',sans-serif}
 </style></head><body>
 
 <div class="side front">
-  <div class="bg">${techBackdrop({ w: W, h: H, seed: 7 })}</div>
-  <div class="plate"></div>
+  <div class="bg">${orbitBackdrop({ w: W, h: H, seed: 3 })}</div>
   <div class="fc">
     <img class="mark" src="data:image/png;base64,${MARK}" alt="">
     <div class="name">WeThink</div>
+    <div class="hair"></div>
     <div class="tag">Think <i style="color:${WT.cyan}">•</i> Plan <i style="color:${WT.violet}">•</i> Grow</div>
-  </div>
-  <div class="sweep">
-    <svg viewBox="0 0 77 4" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs><linearGradient id="s1" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stop-color="${WT.cyan}"/><stop offset=".36" stop-color="${WT.blue}"/>
-        <stop offset=".64" stop-color="#3963FC"/><stop offset="1" stop-color="${WT.violet}"/>
-      </linearGradient></defs>
-      <path d="M.8 .8 V1.8 Q.8 3.4 2.4 3.4 H74.6 Q76.2 3.4 76.2 1.8 V.8"
-        fill="none" stroke="url(#s1)" stroke-width="1.1" stroke-linecap="round"/>
-    </svg>
   </div>
 </div>
 

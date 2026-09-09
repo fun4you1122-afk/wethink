@@ -124,3 +124,95 @@ export function techBackdrop({ w, h, seed = 7, dense = 1 }) {
   </g>
 </svg>`
 }
+
+/* ────────────────────────────────────────────────────────────
+   The logo side.
+
+   Rather than a texture the mark happens to sit on, the pattern starts
+   at the mark and moves outward: rings radiating from its centre, and
+   circuit traces that run to the edge and terminate in a node. It gives
+   the eye somewhere to arrive rather than something to wade through, and
+   it carries none of the signature footer's language.
+   ──────────────────────────────────────────────────────────── */
+
+export function orbitBackdrop({ w, h, seed = 3, cx = 0.5, cy = 0.44 }) {
+  const r = rng(seed)
+  const id = (n) => `${n}o${seed}`
+  const CX = w * cx
+  const CY = h * cy
+
+  /* rings, spaced so they open out rather than march evenly */
+  const rings = Array.from({ length: 9 }, (_, i) => {
+    const rad = w * 0.085 * Math.pow(1.29, i)
+    const dash = i % 3 === 2 ? ` stroke-dasharray="${(0.7 + r()).toFixed(2)} ${(1.4 + r()).toFixed(2)}"` : ''
+    const op = Math.max(0.05, 0.4 - i * 0.042)
+    return `<circle cx="${CX.toFixed(2)}" cy="${CY.toFixed(2)}" r="${rad.toFixed(2)}"
+      fill="none" stroke="${INK.cyan}" stroke-width="${(0.2 - i * 0.012).toFixed(3)}"
+      opacity="${op.toFixed(3)}"${dash}/>`
+  }).join('')
+
+  /* circuit traces: out from the centre, one right-angle turn, node at the end */
+  const traces = Array.from({ length: 7 }, (_, i) => {
+    const a = (i / 7) * Math.PI * 2 + r() * 0.5
+    const r0 = w * 0.13
+    const r1 = w * (0.30 + r() * 0.34)
+    const x0 = CX + Math.cos(a) * r0
+    const y0 = CY + Math.sin(a) * r0
+    const x1 = CX + Math.cos(a) * r1
+    const y1 = CY + Math.sin(a) * r1
+    const horiz = r() > 0.5
+    const mx = horiz ? x1 : x0
+    const my = horiz ? y0 : y1
+    const nx = horiz ? x1 + (Math.cos(a) > 0 ? 1 : -1) * w * 0.06 : x1
+    const ny = horiz ? y1 : y1 + (Math.sin(a) > 0 ? 1 : -1) * h * 0.08
+    return `<g opacity="${(0.30 + r() * 0.3).toFixed(2)}">
+      <path d="M${x0.toFixed(2)} ${y0.toFixed(2)} L${mx.toFixed(2)} ${my.toFixed(2)} L${nx.toFixed(2)} ${ny.toFixed(2)}"
+        fill="none" stroke="${INK.cyan}" stroke-width=".16" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="${nx.toFixed(2)}" cy="${ny.toFixed(2)}" r="${(0.34 + r() * 0.26).toFixed(2)}" fill="${INK.cyan}"/>
+    </g>`
+  }).join('')
+
+  /* a sparse field, thinning towards the centre so the mark stays clean */
+  const motes = Array.from({ length: 46 }, () => {
+    const x = r() * w
+    const y = r() * h
+    const d = Math.hypot(x - CX, y - CY) / (w * 0.5)
+    if (d < 0.42) return ''
+    return `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${(0.12 + r() * 0.22).toFixed(2)}"
+      fill="${INK.cyan}" opacity="${(0.16 + Math.min(0.5, d * 0.34)).toFixed(2)}"/>`
+  }).join('')
+
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"
+    preserveAspectRatio="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="${id('bg')}" x1="0" y1="0" x2=".85" y2="1">
+      <stop offset="0" stop-color="#070B22"/>
+      <stop offset=".52" stop-color="#111845"/>
+      <stop offset="1" stop-color="#23155E"/>
+    </linearGradient>
+    <radialGradient id="${id('halo')}" cx="${cx}" cy="${cy}" r=".62">
+      <stop offset="0" stop-color="${INK.blue}" stop-opacity=".42"/>
+      <stop offset=".45" stop-color="${INK.violet}" stop-opacity=".16"/>
+      <stop offset="1" stop-color="${INK.violet}" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="${id('scrim')}" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#070B22" stop-opacity=".62"/>
+      <stop offset=".55" stop-color="#070B22" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#070B22" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="${id('c')}"><rect width="${w}" height="${h}"/></clipPath>
+  </defs>
+  <g clip-path="url(#${id('c')})">
+    <rect width="${w}" height="${h}" fill="url(#${id('bg')})"/>
+    <rect width="${w}" height="${h}" fill="url(#${id('halo')})"/>
+    ${rings}
+    ${traces}
+    ${motes}
+    <!-- the pattern recedes where the lockup sits, so traces do not run
+         through the wordmark -->
+    <ellipse cx="${(w * cx).toFixed(2)}" cy="${(h * 0.60).toFixed(2)}"
+      rx="${(w * 0.46).toFixed(2)}" ry="${(h * 0.34).toFixed(2)}"
+      fill="url(#${id('scrim')})"/>
+  </g>
+</svg>`
+}

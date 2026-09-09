@@ -8,10 +8,15 @@
   and the build fails if anything does.
 - Everything is vector: type, glyphs, the sweep, the backdrop and the QR.
   Fonts are embedded as TrueType subsets, no Type3.
-- The backdrop is drawn, not placed: a constellation of linked nodes, a
-  fading dot field, arc hatching and a few shards over a dark ground with a
-  soft diagonal split. Its randomness is seeded, so a rebuild produces the
-  identical card rather than a new arrangement.
+- Both backdrops are drawn, not placed, and their randomness is seeded, so a
+  rebuild produces the identical card rather than a new arrangement.
+  - **Front:** the pattern starts at the mark and moves outward — rings
+    radiating from its centre, circuit traces running to the edge and
+    terminating in a node. A soft scrim sits behind the lockup so nothing
+    runs through the wordmark. No sweep: that motif belongs to the email
+    signature and read as a footer here.
+  - **Back:** a constellation of linked nodes, a fading dot field, arc
+    hatching and a few shards over a soft diagonal split.
 - The back carries the five service lines, read at build time from
   `lib/services.ts`, so the card cannot disagree with the website.
 - The QR opens `wethink.ae/company-profile`, at error correction M and printed
