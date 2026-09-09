@@ -21,6 +21,11 @@ const MARK = readFileSync(path.join(ROOT, 'public/wethink-logo.png')).toString('
 const TARGETS = [
   { id: 'company-profile', url: 'https://www.wethink.ae/company-profile', cap: 'Company Profile' },
   { id: 'company-profile-pdf', url: 'https://www.wethink.ae/WeThink-Company-Profile.pdf', cap: 'Profile · PDF' },
+  {
+    id: 'company-profile-download',
+    url: 'https://www.wethink.ae/WeThink-Company-Profile.pdf?download=1',
+    cap: 'Profile · Download',
+  },
 ]
 
 const INK = '#2E1065'
