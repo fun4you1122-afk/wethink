@@ -165,3 +165,9 @@ export function mailGlyph({ size = 6, fill = '#037A8A' } = {}) {
       <path d="M3 7l9 6 9-6"/>
     </g></svg>`
 }
+
+export function phoneGlyph({ size = 6, fill = '#108FFC' } = {}) {
+  return `<svg class="gl" viewBox="0 0 24 24" width="${size}" height="${size}"
+    xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="${fill}"
+    d="M6.6 2.6c.5-.5 1.3-.5 1.8.05l2.2 2.4c.45.5.45 1.25 0 1.75l-1.3 1.4c-.3.35-.37.85-.16 1.26a12.6 12.6 0 0 0 5.4 5.4c.4.2.9.14 1.25-.17l1.4-1.3c.5-.45 1.25-.45 1.75 0l2.4 2.2c.55.5.55 1.3.05 1.8l-1.5 1.5c-.9.9-2.25 1.2-3.44.72A20.6 20.6 0 0 1 4.4 7.55C3.9 6.36 4.2 5 5.1 4.1Z"/></svg>`
+}
