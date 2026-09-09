@@ -20,12 +20,12 @@ import { chromium } from 'playwright-core'
 import { globeGlyph, mailGlyph, phoneGlyph } from '../posters/ornament.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
-const OUT = path.join(ROOT, 'public/standee')
+const OUT = path.join(ROOT, process.env.OUTDIR ?? 'public/standee')
 mkdirSync(OUT, { recursive: true })
 
 const W = Number(process.argv[2] ?? 1200)   // mm, the stand is 120 cm wide
 const H = Number(process.argv[3] ?? 170)    // mm
-const BLEED = 3
+const BLEED = Number(process.env.BLEED ?? 3)
 
 const WT = { ink: '#0B1235', cyan: '#03CFF2', blue: '#108FFC', violet: '#983CFC', grey: '#7A7F92' }
 const QR_URL = 'https://www.wethink.ae/WeThink-Company-Profile.pdf'
@@ -173,12 +173,12 @@ const decoded = jsQR(Uint8ClampedArray.from(px.data), px.w, px.h)
 console.log(decoded ? `QR → ${decoded.data}` : 'QR DID NOT DECODE')
 if (!decoded || decoded.data !== QR_URL) { await browser.close(); process.exit(1) }
 
-writeFileSync(path.join(OUT, 'wethink-footer.html'), html)
+writeFileSync(path.join(OUT, (process.env.NAME ?? 'wethink-footer') + '.html'), html)
 await page.pdf({
-  path: path.join(OUT, 'wethink-footer.pdf'),
+  path: path.join(OUT, (process.env.NAME ?? 'wethink-footer') + '.pdf'),
   width: `${W + BLEED * 2}mm`, height: `${H + BLEED * 2}mm`,
   printBackground: true, preferCSSPageSize: true,
 })
-await page.screenshot({ path: path.join(OUT, 'wethink-footer.png') })
+await page.screenshot({ path: path.join(OUT, (process.env.NAME ?? 'wethink-footer') + '.png') })
 await browser.close()
 console.log(`\n${W} x ${H} mm trim, +${BLEED}mm bleed → public/standee/`)

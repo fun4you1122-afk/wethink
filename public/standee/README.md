@@ -28,3 +28,37 @@ The logo mark is a 640 × 640 PNG, the largest we hold. At 116 mm tall that
 prints at about 140 dpi, which is within normal large-format practice for a
 piece viewed from a metre. If a vector version of the mark exists (AI, EPS
 or SVG), drop it in and the strip becomes entirely vector.
+
+---
+
+# Merged: stand + strip as one piece
+
+`marhaba-stand-with-footer.pdf` is the stand artwork with the new strip laid
+over the old one, as a single page.
+
+- **119.7 × 164.0 cm.** That is the artwork's own size, not the 120 × 180 the
+  stand was described as. Reaching 180 cm needs taller artwork or a base
+  below the print; stretching this file would only spread the same pixels.
+- The strip is laid on with pypdf rather than by re-rendering the page, so
+  the stand's photograph passes through **byte for byte**: one DCTDecode
+  image in, one out, no second JPEG generation on a file already compressed
+  twice.
+- The strip stays vector inside the composite: three embedded TrueType
+  subsets, no Type3. It will out-resolve the artwork it sits on.
+- The QR prints about **9.1 cm** across, far more than a phone needs.
+
+## Rebuilding
+
+    BLEED=0 NAME=strip-for-stand OUTDIR=public/standee \
+      node scripts/standee/footer.mjs 1054.68 160.87
+    PYLIBS=<path to pypdf> node scripts/standee/stand.mjs
+
+The footprint is measured in `stand.mjs`: the old strip's box plus 40 px at
+the top, because the previous logo's white halo rose 33 px above the plate
+and peeked out from behind the new one.
+
+## Still outstanding on the stand artwork
+
+- The sign reads **"Marhba Thailand"**. It is missing an "a".
+- The artwork is 72 dpi at this size, against 100–150 for large format.
+  Only a higher-resolution re-export fixes that.
