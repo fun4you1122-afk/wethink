@@ -357,10 +357,15 @@ footer .rule{display:none}
 
 /* row two: the company signature */
 .sig{margin-top:8mm;padding-top:7mm;border-top:.3mm solid rgba(1,88,102,.16)}
-.sigrow{display:flex;align-items:center;gap:6mm}
-.sigcell{display:flex;align-items:center;gap:6mm;padding-right:6mm;
-  border-right:.3mm solid #D0D1D5}
+.sigrow{display:flex;align-items:center}
+.sigcell{display:flex;align-items:center;justify-content:center;gap:5mm;
+  padding:0 5.5mm;border-right:.3mm solid #D0D1D5}
+.sigcell:first-child{padding-left:0}
 .sigcell:last-child{border-right:none;padding-right:0}
+.sigcell.grow{flex:1 1 0;min-width:0}
+
+.powered{font-size:5mm;font-weight:700;color:${WT.ink};letter-spacing:.72mm;
+  text-transform:uppercase;line-height:1.42;white-space:nowrap;text-align:left}
 .sigmark{height:30mm;width:auto;display:block}
 .signame{font-size:12.6mm;font-weight:600;color:${WT.ink};line-height:.92;
   letter-spacing:1.7mm;text-transform:uppercase;padding-left:1.7mm;margin-right:-1.7mm}
@@ -382,8 +387,8 @@ footer .rule{display:none}
   width:6.4mm;height:6.4mm;background:#fff;border-radius:1mm;padding:.6mm}
 .sigqr .code .mid img{width:100%;height:100%;object-fit:contain;display:block}
 
-.build{font-size:4.2mm;font-weight:600;color:#696B7A;letter-spacing:.62mm;
-  text-transform:uppercase;line-height:1.5;text-align:right;white-space:nowrap}
+.build{font-size:4.4mm;font-weight:600;color:#696B7A;letter-spacing:.66mm;
+  text-transform:uppercase;line-height:1.42;text-align:right;white-space:nowrap}
 
 .sweep{margin-top:5mm;height:9mm}
 .sweep svg{width:100%;height:9mm;display:block}
@@ -452,6 +457,10 @@ footer .rule{display:none}
   <div class="sig">
     <div class="sigrow">
       <div class="sigcell">
+        <div class="powered">Powered<br>by:</div>
+      </div>
+
+      <div class="sigcell">
         <img class="sigmark" src="data:image/png;base64,${WETHINK}" alt="">
         <div>
           <div class="signame">WeThink</div>
@@ -459,25 +468,25 @@ footer .rule{display:none}
         </div>
       </div>
 
-      <div class="sigcell">
+      <div class="sigcell grow">
         <span class="ct">
           <span class="ring">${whatsappGlyph({ fill: WT.blue })}</span>
           <span class="lb">+971 50 312 5078</span>
         </span>
       </div>
-      <div class="sigcell">
+      <div class="sigcell grow">
         <span class="ct">
           <span class="ring">${instagramGlyph({ fill: WT.blue })}</span>
           <span class="lb">@wethink.ae</span>
         </span>
       </div>
-      <div class="sigcell">
+      <div class="sigcell grow">
         <span class="ct">
           <span class="ring">${mailGlyph({ fill: WT.blue })}</span>
           <span class="lb">info@wethink.ae</span>
         </span>
       </div>
-      <div class="sigcell">
+      <div class="sigcell grow">
         <span class="ct">
           <span class="ring">${globeGlyph({ fill: WT.blue })}</span>
           <span class="lb">wethink.ae</span>
@@ -490,7 +499,7 @@ footer .rule{display:none}
         </div></div>
       </div>
 
-      <div class="sigcell" style="margin-left:auto">
+      <div class="sigcell">
         <div class="build">Let&rsquo;s build<br>together</div>
       </div>
     </div>
