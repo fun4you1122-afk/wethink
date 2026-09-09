@@ -40,6 +40,8 @@ const BLEED = 3                      // mm, trim allowance for the printer
 const SAFE = 16                      // mm, kept clear of the glass frame
 const CROWN = 196                    // mm, the deep teal field at the head of the panel
 const CROWN_DENSE = 168              // mm, shallower on the master, which carries 110 rows
+const FOOTER = 122                   // mm, the white band at the foot of the panel;
+                                     // the skyline is anchored to sit just above it
 
 /* ── palette, sampled from the Reem Mall RM mark like the site ── */
 
@@ -279,13 +281,14 @@ header{position:relative;text-align:center;padding-top:20mm;height:${crown}mm}
 
 .days{display:grid;grid-template-columns:1fr 1fr;gap:${z(dense ? 7 : 10)};margin-top:${z(dense ? 8 : 10)}}
 .col{break-inside:avoid}
-.dayhead{display:flex;align-items:center;gap:${z(3)};padding-bottom:${z(3)};margin-bottom:${z(dense ? 3 : 4.5)};
+.dayhead{display:flex;align-items:center;flex-wrap:nowrap;gap:${z(2.6)};padding-bottom:${z(3)};margin-bottom:${z(dense ? 3 : 4.5)};
   border-bottom:.9mm solid ${C.tealDeep};position:relative}
 .dayhead::after{content:'';position:absolute;left:0;right:0;bottom:-1.6mm;height:.4mm;
   background:${GOLD.mid};opacity:.7}
 .dayhead .lotus{flex:0 0 auto}
 .dow{font-family:'Fraunces',serif;font-size:${z(dense ? 8 : 9.6)};font-weight:600;color:${C.tealDeep}}
-.date{font-size:${z(dense ? 5 : 5.8)};text-transform:uppercase;letter-spacing:.34mm;color:${C.teal};font-weight:600}
+.date{font-size:${z(dense ? 4.7 : 5.1)};text-transform:uppercase;letter-spacing:.24mm;
+  color:${C.teal};font-weight:600;white-space:nowrap}
 .trackhead{margin:${z(dense ? 6 : 8)} 0 ${z(2.5)};font-size:${z(4.6)};font-weight:700;text-transform:uppercase;
   letter-spacing:.5mm;color:#fff;background:linear-gradient(90deg,${C.tealDeep},${C.teal});
   padding:${z(2)} ${z(3.5)};border-radius:2mm;border-left:1mm solid ${GOLD.mid}}
@@ -326,47 +329,58 @@ header{position:relative;text-align:center;padding-top:20mm;height:${crown}mm}
 .row.cer .cer-list li::marker{color:${GOLD.light}}
 .cer-list{margin:${z(3)} 0 0 ${z(5)};font-size:${z(4.3)};line-height:1.45;color:${C.ink}}
 
-footer{position:absolute;left:${BLEED + SAFE}mm;right:${BLEED + SAFE}mm;bottom:${BLEED + SAFE}mm;z-index:2}
-footer .rule{margin-bottom:8mm}
-.footsky{position:absolute;left:0;right:0;bottom:0;height:64mm;z-index:1;pointer-events:none}
+/* ── the foot ──────────────────────────────────────────────
+   A white band running the full width of the panel, split in two by a
+   gold hairline: the Embassy and the venue on the left, WeThink on the
+   right. Both halves start on the same line so nothing floats, and the
+   temple skyline sits on the pale ground just above the band rather
+   than behind it. */
+
+footer{position:absolute;left:0;right:0;bottom:0;z-index:2;
+  background:#fff;padding:${BLEED + 9}mm ${BLEED + SAFE}mm ${BLEED + 10}mm;
+  box-shadow:0 -.5mm 0 rgba(201,162,39,.5)}
+footer .rule{display:none}
+.footsky{position:absolute;left:0;right:0;bottom:${FOOTER}mm;height:52mm;z-index:1;pointer-events:none}
 .footsky svg{width:100%;height:100%;display:block}
-.foot{display:flex;align-items:stretch;gap:8mm}
-.scanblock{flex:1 1 auto;display:flex;align-items:center;gap:7mm;min-width:0}
-.qr{flex:0 0 56mm;height:56mm;padding:3.2mm;background:#fff;border-radius:3mm;box-shadow:0 0 0 .4mm ${C.pale}}
+
+.foot{display:flex;align-items:stretch;gap:12mm}
+.half{display:flex;flex-direction:column}
+.half.left{flex:0 0 168mm}
+.half.right{flex:1 1 auto}
+.split{flex:0 0 .35mm;background:linear-gradient(180deg,transparent,rgba(201,162,39,.75) 14%,rgba(201,162,39,.75) 86%,transparent)}
+
+.hl{font-size:4mm;letter-spacing:.56mm;text-transform:uppercase;color:${C.inkSoft};font-weight:700}
+
+.scanblock{display:flex;align-items:center;gap:7mm;margin-top:5mm}
+.qr{flex:0 0 52mm;height:52mm;padding:3mm;background:#fff;border-radius:2.5mm;
+  box-shadow:0 0 0 .4mm ${C.pale}}
 .qr svg{width:100%;height:100%;display:block}
 .scan{min-width:0}
-.scan .k{font-family:'Fraunces',serif;font-size:8.2mm;font-weight:600;color:${C.tealDeep};line-height:1.06}
-.scan .v{font-size:4.6mm;color:${C.inkSoft};margin-top:2.2mm;line-height:1.3}
+.scan .k{font-family:'Fraunces',serif;font-size:8mm;font-weight:600;color:${C.tealDeep};line-height:1.06}
+.scan .v{font-size:4.5mm;color:${C.inkSoft};margin-top:2.4mm;line-height:1.3}
+.venue{display:flex;align-items:center;gap:4mm;margin-top:auto;padding-top:7mm}
+.venue .vl{font-size:3.6mm;letter-spacing:.4mm;text-transform:uppercase;color:${C.inkSoft};font-weight:600}
+.reem{height:12mm;display:block;opacity:.92}
 
-/* WeThink's own board. The Embassy offered the credit, so take it: this is
-   the block a visitor reads once they are done with the timings. */
-.credit{flex:0 0 172mm;text-align:center;padding:6mm 7mm 8.4mm;
-  background:#fff;border-radius:3.5mm;
-  box-shadow:0 0 0 .45mm rgba(201,162,39,.55),0 1.4mm 4mm rgba(1,88,102,.09)}
-.credit .l{font-size:4mm;letter-spacing:.56mm;text-transform:uppercase;color:${C.inkSoft};font-weight:600}
-.lockup{display:flex;align-items:center;gap:5mm;justify-content:center;margin-top:4.4mm}
-.wt{height:37mm;width:auto;display:block}
-.wtname{font-size:18.6mm;font-weight:600;color:${WT.ink};line-height:.9;
-  letter-spacing:2.3mm;text-transform:uppercase;padding-left:2.3mm;margin-right:-2.3mm}
-.wttag{font-size:4.9mm;font-weight:600;color:${WT.ink};letter-spacing:1.3mm;
-  text-transform:uppercase;margin-top:4mm;white-space:nowrap;padding-left:1.15mm}
-.wttag i{font-style:normal;font-size:5.6mm;line-height:0;vertical-align:-.3mm;margin:0 .5mm}
-.base{display:flex;align-items:center;justify-content:center;gap:9mm;
-  margin-top:4.6mm;padding-top:4.4mm;border-top:.3mm solid rgba(201,162,39,.45)}
-.wtqr{flex:0 0 auto;text-align:center}
-.wtqr .code{width:31mm;height:31mm;padding:1.6mm;background:#fff;border-radius:2mm;
-  box-shadow:0 0 0 .35mm rgba(5,13,46,.18)}
-.wtqr .code svg{width:100%;height:100%;display:block}
-.wtqr .cap{font-size:3.3mm;font-weight:700;letter-spacing:.34mm;text-transform:uppercase;
-  color:${WT.ink};margin-top:2.2mm;line-height:1.15;white-space:nowrap}
-.contacts{display:grid;grid-template-columns:auto auto;justify-content:center;
-  gap:3.4mm 8mm}
+.lockup{display:flex;align-items:center;gap:5mm;margin-top:4.6mm}
+.wt{height:34mm;width:auto;display:block}
+.wtname{font-size:17.4mm;font-weight:600;color:${WT.ink};line-height:.9;
+  letter-spacing:2.1mm;text-transform:uppercase;padding-left:2.1mm;margin-right:-2.1mm}
+.wttag{font-size:4.6mm;font-weight:600;color:${WT.ink};letter-spacing:1.25mm;
+  text-transform:uppercase;margin-top:3.6mm;white-space:nowrap;padding-left:1.25mm}
+.wttag i{font-style:normal;font-size:5.4mm;line-height:0;vertical-align:-.3mm;margin:0 .5mm}
+
+.base{display:flex;align-items:center;gap:10mm;margin-top:auto;padding-top:6mm}
+.contacts{display:grid;grid-template-columns:auto auto;gap:3.4mm 9mm}
 .ct{display:flex;align-items:center;gap:2.4mm;font-size:4.8mm;font-weight:600;
   color:${WT.ink};letter-spacing:.14mm;white-space:nowrap}
-/* the glyphs carry unitless width/height attributes, which are CSS pixels;
-   size them here so they land in millimetres like everything else */
 .ct .gl{flex:0 0 auto;display:block;width:6mm;height:6mm}
-.reem{height:12mm;display:block;margin:4mm 0 0;opacity:.9}
+.wtqr{flex:0 0 auto;text-align:center;margin-left:auto}
+.wtqr .code{width:30mm;height:30mm;padding:1.5mm;background:#fff;border-radius:2mm;
+  box-shadow:0 0 0 .35mm rgba(5,13,46,.2)}
+.wtqr .code svg{width:100%;height:100%;display:block}
+.wtqr .cap{font-size:3.2mm;font-weight:700;letter-spacing:.32mm;text-transform:uppercase;
+  color:${WT.ink};margin-top:2mm;line-height:1.15;white-space:nowrap}
 </style></head><body>
 <div class="wash"></div>
 
@@ -415,18 +429,26 @@ footer .rule{margin-bottom:8mm}
 </div>
 
 <footer>
-  <div class="rule"></div>
   <div class="foot">
-    <div class="scanblock">
-      <div class="qr">${qr}</div>
-      <div class="scan">
-        <div class="k">Scan for the live programme</div>
-        <div class="v">What is on right now, across all three stages.</div>
-        <img class="reem" src="data:image/png;base64,${REEM}" alt="">
+    <div class="half left">
+      <div class="hl">The live programme</div>
+      <div class="scanblock">
+        <div class="qr">${qr}</div>
+        <div class="scan">
+          <div class="k">Scan for the live programme</div>
+          <div class="v">What is on right now, across all three stages.</div>
+        </div>
+      </div>
+      <div class="venue">
+        <span class="vl">Hosted at</span>
+        <img class="reem" src="data:image/png;base64,${REEM}" alt="Reem Mall">
       </div>
     </div>
-    <div class="credit">
-      <div class="l">Designed &amp; built by</div>
+
+    <div class="split"></div>
+
+    <div class="half right">
+      <div class="hl">Designed &amp; built by</div>
       <div class="lockup">
         <img class="wt" src="data:image/png;base64,${WETHINK}" alt="">
         <span class="wtname">WeThink</span>
