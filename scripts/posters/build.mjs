@@ -205,7 +205,7 @@ async function html(panel, schedule, scale = 1, air = 0) {
   const qrWt = await QRCode.toString(`${WT_SITE}?from=marhaba`, {
     type: 'svg',
     margin: 0,
-    errorCorrectionLevel: 'M',
+    errorCorrectionLevel: 'H',
     color: { dark: WT.ink, light: '#00000000' },
   })
   const dense = !panel.track
@@ -330,57 +330,63 @@ header{position:relative;text-align:center;padding-top:20mm;height:${crown}mm}
 .cer-list{margin:${z(3)} 0 0 ${z(5)};font-size:${z(4.3)};line-height:1.45;color:${C.ink}}
 
 /* ── the foot ──────────────────────────────────────────────
-   A white band running the full width of the panel, split in two by a
-   gold hairline: the Embassy and the venue on the left, WeThink on the
-   right. Both halves start on the same line so nothing floats, and the
-   temple skyline sits on the pale ground just above the band rather
-   than behind it. */
+   A white band across the full width of the panel, in two rows: the
+   Embassy's live-programme code and the venue on top, and beneath it
+   WeThink's signature strip, set the way the company signs its own
+   documents — mark, wordmark, then the contacts in ruled cells, and the
+   gradient sweep underneath. */
 
-footer{position:absolute;left:0;right:0;bottom:0;z-index:2;
-  background:#fff;padding:${BLEED + 9}mm ${BLEED + SAFE}mm ${BLEED + 10}mm;
+footer{position:absolute;left:0;right:0;bottom:0;z-index:2;background:#fff;
+  padding:${BLEED + 8}mm ${BLEED + SAFE}mm ${BLEED + 7}mm;
   box-shadow:0 -.5mm 0 rgba(201,162,39,.5)}
 footer .rule{display:none}
 .footsky{position:absolute;left:0;right:0;bottom:${FOOTER}mm;height:52mm;z-index:1;pointer-events:none}
 .footsky svg{width:100%;height:100%;display:block}
 
-.foot{display:flex;align-items:stretch;gap:12mm}
-.half{display:flex;flex-direction:column}
-.half.left{flex:0 0 168mm}
-.half.right{flex:1 1 auto}
-.split{flex:0 0 .35mm;background:linear-gradient(180deg,transparent,rgba(201,162,39,.75) 14%,rgba(201,162,39,.75) 86%,transparent)}
-
-.hl{font-size:4mm;letter-spacing:.56mm;text-transform:uppercase;color:${C.inkSoft};font-weight:700}
-
-.scanblock{display:flex;align-items:center;gap:7mm;margin-top:5mm}
-.qr{flex:0 0 52mm;height:52mm;padding:3mm;background:#fff;border-radius:2.5mm;
+/* row one: the Embassy and the venue */
+.foot{display:flex;align-items:center;justify-content:space-between;gap:10mm}
+.scanblock{display:flex;align-items:center;gap:6mm}
+.qr{flex:0 0 42mm;height:42mm;padding:2.4mm;background:#fff;border-radius:2.2mm;
   box-shadow:0 0 0 .4mm ${C.pale}}
 .qr svg{width:100%;height:100%;display:block}
-.scan{min-width:0}
-.scan .k{font-family:'Fraunces',serif;font-size:8mm;font-weight:600;color:${C.tealDeep};line-height:1.06}
-.scan .v{font-size:4.5mm;color:${C.inkSoft};margin-top:2.4mm;line-height:1.3}
-.venue{display:flex;align-items:center;gap:4mm;margin-top:auto;padding-top:7mm}
-.venue .vl{font-size:3.6mm;letter-spacing:.4mm;text-transform:uppercase;color:${C.inkSoft};font-weight:600}
-.reem{height:12mm;display:block;opacity:.92}
+.scan .k{font-family:'Fraunces',serif;font-size:7.4mm;font-weight:600;color:${C.tealDeep};line-height:1.06}
+.scan .v{font-size:4.3mm;color:${C.inkSoft};margin-top:2.2mm;line-height:1.3}
+.venue{display:flex;align-items:center;gap:4mm}
+.venue .vl{font-size:3.5mm;letter-spacing:.4mm;text-transform:uppercase;color:${C.inkSoft};font-weight:600}
+.reem{height:11mm;display:block;opacity:.92}
 
-.lockup{display:flex;align-items:center;gap:5mm;margin-top:4.6mm}
-.wt{height:34mm;width:auto;display:block}
-.wtname{font-size:17.4mm;font-weight:600;color:${WT.ink};line-height:.9;
-  letter-spacing:2.1mm;text-transform:uppercase;padding-left:2.1mm;margin-right:-2.1mm}
-.wttag{font-size:4.6mm;font-weight:600;color:${WT.ink};letter-spacing:1.25mm;
-  text-transform:uppercase;margin-top:3.6mm;white-space:nowrap;padding-left:1.25mm}
-.wttag i{font-style:normal;font-size:5.4mm;line-height:0;vertical-align:-.3mm;margin:0 .5mm}
+/* row two: the company signature */
+.sig{margin-top:8mm;padding-top:7mm;border-top:.3mm solid rgba(1,88,102,.16)}
+.sigrow{display:flex;align-items:center;gap:6mm}
+.sigcell{display:flex;align-items:center;gap:6mm;padding-right:6mm;
+  border-right:.3mm solid #D0D1D5}
+.sigcell:last-child{border-right:none;padding-right:0}
+.sigmark{height:30mm;width:auto;display:block}
+.signame{font-size:12.6mm;font-weight:600;color:${WT.ink};line-height:.92;
+  letter-spacing:1.7mm;text-transform:uppercase;padding-left:1.7mm;margin-right:-1.7mm}
+.sigtag{font-size:3.6mm;font-weight:600;color:${WT.ink};letter-spacing:1mm;
+  text-transform:uppercase;margin-top:2.6mm;white-space:nowrap;padding-left:1mm}
+.sigtag i{font-style:normal;font-size:4.4mm;line-height:0;vertical-align:-.25mm;margin:0 .4mm}
 
-.base{display:flex;align-items:center;gap:10mm;margin-top:auto;padding-top:6mm}
-.contacts{display:grid;grid-template-columns:auto auto;gap:3.4mm 9mm}
-.ct{display:flex;align-items:center;gap:2.4mm;font-size:4.8mm;font-weight:600;
-  color:${WT.ink};letter-spacing:.14mm;white-space:nowrap}
-.ct .gl{flex:0 0 auto;display:block;width:6mm;height:6mm}
-.wtqr{flex:0 0 auto;text-align:center;margin-left:auto}
-.wtqr .code{width:30mm;height:30mm;padding:1.5mm;background:#fff;border-radius:2mm;
-  box-shadow:0 0 0 .35mm rgba(5,13,46,.2)}
-.wtqr .code svg{width:100%;height:100%;display:block}
-.wtqr .cap{font-size:3.2mm;font-weight:700;letter-spacing:.32mm;text-transform:uppercase;
-  color:${WT.ink};margin-top:2mm;line-height:1.15;white-space:nowrap}
+.ct{display:flex;flex-direction:column;align-items:center;gap:2.4mm;min-width:0}
+.ct .ring{width:12.4mm;height:12.4mm;border-radius:50%;background:#F1F3F8;
+  display:flex;align-items:center;justify-content:center}
+.ct .gl{display:block;width:6.4mm;height:6.4mm}
+.ct .lb{font-size:3.9mm;font-weight:500;color:${WT.ink};letter-spacing:.06mm;white-space:nowrap}
+
+.sigqr{flex:0 0 auto;padding:.9mm;border-radius:2.6mm;
+  background:linear-gradient(140deg,${WT.cyan},${WT.blue} 45%,${WT.violet})}
+.sigqr .code{position:relative;width:26mm;height:26mm;padding:1.4mm;background:#fff;border-radius:1.9mm}
+.sigqr .code svg{width:100%;height:100%;display:block}
+.sigqr .code .mid{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:6.4mm;height:6.4mm;background:#fff;border-radius:1mm;padding:.6mm}
+.sigqr .code .mid img{width:100%;height:100%;object-fit:contain;display:block}
+
+.build{font-size:4.2mm;font-weight:600;color:#696B7A;letter-spacing:.62mm;
+  text-transform:uppercase;line-height:1.5;text-align:right;white-space:nowrap}
+
+.sweep{margin-top:5mm;height:9mm}
+.sweep svg{width:100%;height:9mm;display:block}
 </style></head><body>
 <div class="wash"></div>
 
@@ -430,42 +436,74 @@ footer .rule{display:none}
 
 <footer>
   <div class="foot">
-    <div class="half left">
-      <div class="hl">The live programme</div>
-      <div class="scanblock">
-        <div class="qr">${qr}</div>
-        <div class="scan">
-          <div class="k">Scan for the live programme</div>
-          <div class="v">What is on right now, across all three stages.</div>
-        </div>
-      </div>
-      <div class="venue">
-        <span class="vl">Hosted at</span>
-        <img class="reem" src="data:image/png;base64,${REEM}" alt="Reem Mall">
+    <div class="scanblock">
+      <div class="qr">${qr}</div>
+      <div class="scan">
+        <div class="k">Scan for the live programme</div>
+        <div class="v">What is on right now, across all three stages.</div>
       </div>
     </div>
+    <div class="venue">
+      <span class="vl">Hosted at</span>
+      <img class="reem" src="data:image/png;base64,${REEM}" alt="Reem Mall">
+    </div>
+  </div>
 
-    <div class="split"></div>
-
-    <div class="half right">
-      <div class="hl">Designed &amp; built by</div>
-      <div class="lockup">
-        <img class="wt" src="data:image/png;base64,${WETHINK}" alt="">
-        <span class="wtname">WeThink</span>
-      </div>
-      <div class="wttag">Think <i style="color:${WT.cyan}">•</i> Plan <i style="color:${WT.violet}">•</i> Grow</div>
-      <div class="base">
-        <div class="contacts">
-          <span class="ct">${whatsappGlyph({ size: 6.4 })}+971 50 312 5078</span>
-          <span class="ct">${instagramGlyph({ size: 6.4 })}@wethink.ae</span>
-          <span class="ct">${globeGlyph({ size: 6.2, fill: WT.blue })}wethink.ae</span>
-          <span class="ct">${mailGlyph({ size: 6.2, fill: WT.blue })}info@wethink.ae</span>
-        </div>
-        <div class="wtqr">
-          <div class="code">${qrWt}</div>
-          <div class="cap">See our work</div>
+  <div class="sig">
+    <div class="sigrow">
+      <div class="sigcell">
+        <img class="sigmark" src="data:image/png;base64,${WETHINK}" alt="">
+        <div>
+          <div class="signame">WeThink</div>
+          <div class="sigtag">Think <i style="color:${WT.cyan}">•</i> Plan <i style="color:${WT.violet}">•</i> Grow</div>
         </div>
       </div>
+
+      <div class="sigcell">
+        <span class="ct">
+          <span class="ring">${whatsappGlyph({ fill: WT.blue })}</span>
+          <span class="lb">+971 50 312 5078</span>
+        </span>
+      </div>
+      <div class="sigcell">
+        <span class="ct">
+          <span class="ring">${instagramGlyph({ fill: WT.blue })}</span>
+          <span class="lb">@wethink.ae</span>
+        </span>
+      </div>
+      <div class="sigcell">
+        <span class="ct">
+          <span class="ring">${mailGlyph({ fill: WT.blue })}</span>
+          <span class="lb">info@wethink.ae</span>
+        </span>
+      </div>
+      <div class="sigcell">
+        <span class="ct">
+          <span class="ring">${globeGlyph({ fill: WT.blue })}</span>
+          <span class="lb">wethink.ae</span>
+        </span>
+      </div>
+
+      <div class="sigcell">
+        <div class="sigqr"><div class="code">${qrWt}
+          <span class="mid"><img src="data:image/png;base64,${WETHINK}" alt=""></span>
+        </div></div>
+      </div>
+
+      <div class="sigcell" style="margin-left:auto">
+        <div class="build">Let&rsquo;s build<br>together</div>
+      </div>
+    </div>
+    <div class="sweep">
+      <svg viewBox="0 0 418 9" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs><linearGradient id="sw" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="${WT.cyan}"/><stop offset=".34" stop-color="${WT.blue}"/>
+          <stop offset=".58" stop-color="#3963FC"/><stop offset=".78" stop-color="#6949FC"/>
+          <stop offset="1" stop-color="${WT.violet}"/>
+        </linearGradient></defs>
+        <path d="M1.1 0.6 V3.9 Q1.1 7.9 5.1 7.9 H412.9 Q416.9 7.9 416.9 3.9 V0.6"
+          fill="none" stroke="url(#sw)" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
     </div>
   </div>
 </footer>
