@@ -4,7 +4,7 @@ import { readFileSync, mkdirSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright-core'
-import { ribbons, ghostMark, halftone } from './light-bg.mjs'
+import { ribbons, ghostMark, chevrons } from './light-bg.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const OUT = path.join(ROOT, 'public/card-print')
@@ -19,7 +19,7 @@ const INK = '#141A3C', SOFT = '#5A5F7D', CY = '#0EA5C4', VI = '#7C3AED'
 const OPTIONS = {
   a: { label: 'A · Ribbons', bg: `<div class="bg">${ribbons({ w: W, h: H })}</div>` },
   b: { label: 'B · Ghost mark', bg: ghostMark({ w: W, h: H, mark: MARK }) },
-  c: { label: 'C · Halftone wave', bg: `<div class="bg">${halftone({ w: W, h: H })}</div>` },
+  c: { label: 'C · Chevrons', bg: `<div class="bg">${chevrons({ w: W, h: H })}</div>` },
 }
 
 const page = (bg) => `<!doctype html><html><head><meta charset="utf-8"><style>

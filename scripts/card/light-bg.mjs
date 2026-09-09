@@ -5,7 +5,7 @@
    as glowing lines on near-black and read as scratchy scaffolding on
    near-white. These three are built the other way round, from things
    that print well on paper — soft washes of colour, one oversized mark,
-   and a halftone that resolves into a wave.
+   and the mark's own chevron repeated as a rhythm.
    ──────────────────────────────────────────────────────────── */
 
 const RAMP = { cyan: '#00B4BD', blue: '#3B6BE0', violet: '#7C3AED', deep: '#4E11BB' }
@@ -50,25 +50,44 @@ export function ghostMark({ w, h, mark }) {
   </div>`
 }
 
-/** C: halftone. A dot field whose radius swells along a diagonal wave. */
-export function halftone({ w, h, step = 2.4 }) {
-  const dots = []
-  for (let y = step / 2; y < h; y += step) {
-    for (let x = step / 2; x < w; x += step) {
-      const t = (x / w) * 1.4 + (y / h) * 0.6
-      const wave = Math.sin(t * Math.PI * 1.15 - 0.5)
-      const k = Math.max(0, wave)
-      if (k < 0.04) continue
-      const r = 0.14 + k * 0.46
-      const hue = x / w
-      const col = hue < 0.42 ? RAMP.cyan : hue < 0.72 ? RAMP.blue : RAMP.violet
-      dots.push(`<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${r.toFixed(2)}"
-        fill="${col}" opacity="${(0.10 + k * 0.34).toFixed(2)}"/>`)
+/** C: chevrons. The W's own stroke, repeated as a rhythm.
+
+    Flat rounded strokes rather than a field of small dots: there is
+    nothing here for a press to smudge, and the shape is the mark's, so
+    the pattern is owned rather than borrowed. */
+export function chevrons({ w, h, pitch = 9, weight = 1.0 }) {
+  const rows = []
+  const rise = pitch * 0.52
+  for (let ry = -rise, i = 0; ry < h + rise * 2; ry += rise * 1.55, i++) {
+    const off = (i % 2) * pitch * 0.5
+    const pts = []
+    for (let x = -pitch + off; x < w + pitch; x += pitch) {
+      pts.push(`${x.toFixed(2)} ${(ry + rise).toFixed(2)}`)
+      pts.push(`${(x + pitch / 2).toFixed(2)} ${ry.toFixed(2)}`)
     }
+    rows.push(`<polyline points="${pts.join(' ')}" fill="none"
+      stroke="url(#cvg)" stroke-width="${weight}" stroke-linecap="round" stroke-linejoin="round"/>`)
   }
+
   return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"
     preserveAspectRatio="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="cvg" x1="0" y1="0" x2="1" y2=".35">
+      <stop offset="0" stop-color="${RAMP.cyan}"/>
+      <stop offset=".5" stop-color="${RAMP.blue}"/>
+      <stop offset="1" stop-color="${RAMP.violet}"/>
+    </linearGradient>
+    <!-- the pattern clears the middle, where the lockup and the service
+         list sit, and gathers towards the edges -->
+    <radialGradient id="cvf" cx=".5" cy=".46" r=".78">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".42" stop-color="#fff" stop-opacity=".06"/>
+      <stop offset=".72" stop-color="#fff" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#fff" stop-opacity=".62"/>
+    </radialGradient>
+    <mask id="cvm"><rect width="${w}" height="${h}" fill="url(#cvf)"/></mask>
+  </defs>
   <rect width="${w}" height="${h}" fill="#FCFBFE"/>
-  ${dots.join('')}
+  <g mask="url(#cvm)">${rows.join('')}</g>
 </svg>`
 }

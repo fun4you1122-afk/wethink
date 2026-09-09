@@ -21,7 +21,7 @@ import jsQR from 'jsqr'
 import { chromium } from 'playwright-core'
 import { globeGlyph, mailGlyph, whatsappGlyph, instagramGlyph } from '../posters/ornament.mjs'
 import { serviceTitles } from './services.mjs'
-import { ribbons, ghostMark, halftone } from './light-bg.mjs'
+import { ribbons, ghostMark, chevrons } from './light-bg.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const OUT = path.join(ROOT, 'public/card-print')
@@ -55,8 +55,8 @@ const OPTIONS = [
              back:  `<div class="bg">${ribbons({ w: W, h: H, seed: 2 })}</div>` },
   { k: 'B', front: ghostMark({ w: W, h: H, mark: MARK }),
              back:  ghostMark({ w: W, h: H, mark: MARK }) },
-  { k: 'C', front: `<div class="bg">${halftone({ w: W, h: H })}</div>`,
-             back:  `<div class="bg">${halftone({ w: W, h: H, step: 2.8 })}</div>` },
+  { k: 'C', front: `<div class="bg">${chevrons({ w: W, h: H })}</div>`,
+             back:  `<div class="bg">${chevrons({ w: W, h: H, pitch: 11, weight: 1.0 })}</div>` },
 ]
 
 const front = (bg) => `<div class="side front">${bg}
