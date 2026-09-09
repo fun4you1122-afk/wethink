@@ -7,6 +7,8 @@ import Logo from './Logo'
 const footerLinks = {
   Company: [
     { label: 'About Us', href: '/about' },
+    { label: 'Company Profile', href: '/company-profile' },
+    { label: 'Profile (PDF)', href: '/WeThink-Company-Profile.pdf' },
     { label: 'Our Services', href: '/services' },
     { label: 'Our Work', href: '/work' },
     { label: 'Blog', href: '/blog' },
@@ -109,6 +111,17 @@ export default function Footer() {
                   <li key={link.label}>
                     {link.href === '#' ? (
                       <span className="text-text-muted/50 text-sm cursor-default">{link.label}</span>
+                    ) : link.href.endsWith('.pdf') ? (
+                      /* a file in /public is not a route, so let the browser
+                         fetch it rather than asking the router to navigate */
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-text-muted text-sm hover:text-violet-400 transition-colors text-left"
+                      >
+                        {link.label}
+                      </a>
                     ) : (
                       <Link
                         href={link.href}
