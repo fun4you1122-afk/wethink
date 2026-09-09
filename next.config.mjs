@@ -15,16 +15,18 @@ const nextConfig = {
   async headers() {
     return [
       {
-        // The profile PDF previews inline by default, which is what you want
-        // when someone taps a link on a phone. But in-app browsers, the ones
-        // inside WhatsApp and Instagram, render it with no save control at
-        // all, so ?download=1 on the same URL forces it to the file system.
-        source: '/WeThink-Company-Profile.pdf',
+        // Any PDF on the site previews inline by default, which is what you
+        // want when someone taps a link on a phone. But in-app browsers, the
+        // ones inside WhatsApp and Instagram, render it with no save control
+        // at all, so ?download=1 on the same URL forces it to the file
+        // system. The filename is left to the server, which takes it from
+        // the path, so this rule works for any PDF we publish.
+        source: '/:path*.pdf',
         has: [{ type: 'query', key: 'download' }],
         headers: [
           {
             key: 'Content-Disposition',
-            value: 'attachment; filename="WeThink-Company-Profile.pdf"',
+            value: 'attachment',
           },
         ],
       },

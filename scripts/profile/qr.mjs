@@ -26,6 +26,16 @@ const TARGETS = [
     url: 'https://www.wethink.ae/WeThink-Company-Profile.pdf?download=1',
     cap: 'Profile · Download',
   },
+  {
+    id: 'marhaba-panels',
+    url: 'https://www.wethink.ae/embassy/print/all-panels.pdf',
+    cap: 'Marhaba Panels',
+  },
+  {
+    id: 'marhaba-panels-download',
+    url: 'https://www.wethink.ae/embassy/print/all-panels.pdf?download=1',
+    cap: 'Marhaba Panels · Download',
+  },
 ]
 
 const INK = '#2E1065'
