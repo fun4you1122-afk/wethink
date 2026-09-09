@@ -52,5 +52,6 @@ printer in one go; the individual files are what the quantities above refer to.
     node scripts/posters/build.mjs --preview   # markup only, no PDFs
     node scripts/posters/preview.mjs main      # small proof of one panel
     node scripts/posters/verify-qr.mjs         # decode every QR
+    PYLIBS=<path> node scripts/posters/merge.mjs   # the four in one file
 
 Re-run after any change to the schedule.

@@ -353,7 +353,11 @@ footer .rule{display:none}
 .scan .v{font-size:4.3mm;color:${C.inkSoft};margin-top:2.2mm;line-height:1.3}
 .venue{display:flex;align-items:center;gap:4mm}
 .venue .vl{font-size:3.5mm;letter-spacing:.4mm;text-transform:uppercase;color:${C.inkSoft};font-weight:600}
-.reem{height:11mm;display:block;opacity:.92}
+/* Sized by the ink, not the canvas. The Reem Mall file carries a lot of
+   whitespace: its artwork fills 51% of the file's height against 59% for
+   the WeThink mark, so equal canvas heights put the two marks 3x apart.
+   34.6mm of canvas here gives the same 17.7mm of visible mark. */
+.reem{height:34.6mm;display:block;opacity:.95}
 
 /* row two: the company signature */
 .sig{margin-top:8mm;padding-top:7mm;border-top:.3mm solid rgba(1,88,102,.16)}
