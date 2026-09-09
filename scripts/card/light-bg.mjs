@@ -50,44 +50,79 @@ export function ghostMark({ w, h, mark }) {
   </div>`
 }
 
-/** C: chevrons. The W's own stroke, repeated as a rhythm.
+/** C: a triangulated mesh along the bottom edge.
 
-    Flat rounded strokes rather than a field of small dots: there is
-    nothing here for a press to smudge, and the shape is the mark's, so
-    the pattern is owned rather than borrowed. */
-export function chevrons({ w, h, pitch = 9, weight = 1.0 }) {
-  const rows = []
-  const rise = pitch * 0.52
-  for (let ry = -rise, i = 0; ry < h + rise * 2; ry += rise * 1.55, i++) {
-    const off = (i % 2) * pitch * 0.5
-    const pts = []
-    for (let x = -pitch + off; x < w + pitch; x += pitch) {
-      pts.push(`${x.toFixed(2)} ${(ry + rise).toFixed(2)}`)
-      pts.push(`${(x + pitch / 2).toFixed(2)} ${ry.toFixed(2)}`)
-    }
-    rows.push(`<polyline points="${pts.join(' ')}" fill="none"
-      stroke="url(#cvg)" stroke-width="${weight}" stroke-linecap="round" stroke-linejoin="round"/>`)
+    Points are laid on jittered rows and joined across them, which gives
+    real triangles rather than the scattered lines a random constellation
+    produces. It is confined to a band so the card stays mostly clean, and
+    a few spikes reach up out of it, as on the reference.
+
+    Seeded, so a rebuild is identical. */
+export function polyMesh({ w, h, seed = 5, band = 0.28, line = '#2E6BE6', node = '#2E6BE6', strength = 1 }) {
+  let s0 = seed
+  const rnd = () => {
+    s0 = (s0 * 1664525 + 1013904223) % 4294967296
+    return s0 / 4294967296
   }
+
+  const top = h * (1 - band)
+  const rows = [
+    { y: top + h * 0.02, n: 9, jit: h * 0.055 },
+    { y: top + h * 0.16, n: 11, jit: h * 0.05 },
+    { y: top + h * 0.30, n: 10, jit: h * 0.045 },
+    { y: h + h * 0.02, n: 8, jit: h * 0.04 },
+  ].map((r) =>
+    Array.from({ length: r.n }, (_, i) => ({
+      x: (-0.06 + (i / (r.n - 1)) * 1.12) * w + (rnd() - 0.5) * (w / r.n) * 0.8,
+      y: r.y + (rnd() - 0.5) * r.jit,
+    })),
+  )
+
+  const edges = []
+  rows.forEach((row, ri) => {
+    for (let i = 0; i < row.length - 1; i++) edges.push([row[i], row[i + 1], ri])
+    const next = rows[ri + 1]
+    if (!next) return
+    row.forEach((p) => {
+      const near = [...next].sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y))
+      edges.push([p, near[0], ri], [p, near[1], ri])
+    })
+  })
+
+  /* a few long spikes out of the band, each ending in a node */
+  const spikes = Array.from({ length: 4 }, () => {
+    const from = rows[0][Math.floor(rnd() * rows[0].length)]
+    const x = from.x + (rnd() - 0.5) * w * 0.12
+    const y = top - h * (0.06 + rnd() * 0.30)
+    return { from, to: { x, y } }
+  })
+
+  const fade = (y) => strength * Math.max(0.12, Math.min(0.8, (y - top + h * 0.12) / (h * 0.5)))
 
   return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"
     preserveAspectRatio="none" aria-hidden="true">
   <defs>
-    <linearGradient id="cvg" x1="0" y1="0" x2="1" y2=".35">
-      <stop offset="0" stop-color="${RAMP.cyan}"/>
-      <stop offset=".5" stop-color="${RAMP.blue}"/>
-      <stop offset="1" stop-color="${RAMP.violet}"/>
+    <linearGradient id="pm${seed}" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset=".55" stop-color="#FBFAFE"/>
+      <stop offset="1" stop-color="#F3EFFC"/>
     </linearGradient>
-    <!-- the pattern clears the middle, where the lockup and the service
-         list sit, and gathers towards the edges -->
-    <radialGradient id="cvf" cx=".5" cy=".46" r=".78">
-      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
-      <stop offset=".42" stop-color="#fff" stop-opacity=".06"/>
-      <stop offset=".72" stop-color="#fff" stop-opacity=".34"/>
-      <stop offset="1" stop-color="#fff" stop-opacity=".62"/>
-    </radialGradient>
-    <mask id="cvm"><rect width="${w}" height="${h}" fill="url(#cvf)"/></mask>
+    <clipPath id="pc${seed}"><rect width="${w}" height="${h}"/></clipPath>
   </defs>
-  <rect width="${w}" height="${h}" fill="#FCFBFE"/>
-  <g mask="url(#cvm)">${rows.join('')}</g>
+  <rect width="${w}" height="${h}" fill="url(#pm${seed})"/>
+  <g clip-path="url(#pc${seed})">
+    ${spikes.map((sp) => `<g opacity="${(0.5 * strength).toFixed(2)}">
+      <line x1="${sp.from.x.toFixed(2)}" y1="${sp.from.y.toFixed(2)}"
+            x2="${sp.to.x.toFixed(2)}" y2="${sp.to.y.toFixed(2)}"
+            stroke="${line}" stroke-width=".16"/>
+      <circle cx="${sp.to.x.toFixed(2)}" cy="${sp.to.y.toFixed(2)}" r=".42" fill="${node}"/>
+    </g>`).join('')}
+    ${edges.map(([a, b]) => `<line x1="${a.x.toFixed(2)}" y1="${a.y.toFixed(2)}"
+      x2="${b.x.toFixed(2)}" y2="${b.y.toFixed(2)}" stroke="${line}" stroke-width=".17"
+      opacity="${fade((a.y + b.y) / 2).toFixed(2)}"/>`).join('')}
+    ${rows.flat().map((p) => `<circle cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}"
+      r="${(0.3 + (p.x * 7919 % 100) / 100 * 0.34).toFixed(2)}" fill="${node}"
+      opacity="${Math.min(0.95, fade(p.y) + 0.2 * strength).toFixed(2)}"/>`).join('')}
+  </g>
 </svg>`
 }

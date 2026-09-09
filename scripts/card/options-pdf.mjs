@@ -21,7 +21,7 @@ import jsQR from 'jsqr'
 import { chromium } from 'playwright-core'
 import { globeGlyph, mailGlyph, whatsappGlyph, instagramGlyph } from '../posters/ornament.mjs'
 import { serviceTitles } from './services.mjs'
-import { ribbons, ghostMark, chevrons } from './light-bg.mjs'
+import { ribbons, ghostMark, polyMesh } from './light-bg.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const OUT = path.join(ROOT, 'public/card-print')
@@ -55,8 +55,8 @@ const OPTIONS = [
              back:  `<div class="bg">${ribbons({ w: W, h: H, seed: 2 })}</div>` },
   { k: 'B', front: ghostMark({ w: W, h: H, mark: MARK }),
              back:  ghostMark({ w: W, h: H, mark: MARK }) },
-  { k: 'C', front: `<div class="bg">${chevrons({ w: W, h: H })}</div>`,
-             back:  `<div class="bg">${chevrons({ w: W, h: H, pitch: 11, weight: 1.0 })}</div>` },
+  { k: 'C', front: `<div class="bg">${polyMesh({ w: W, h: H, seed: 5, band: 0.24 })}</div>`,
+             back:  `<div class="bg">${polyMesh({ w: W, h: H, seed: 11, band: 0.15, strength: 0.7 })}</div>` },
 ]
 
 const front = (bg) => `<div class="side front">${bg}
@@ -107,9 +107,10 @@ html,body{width:${W}mm;font-family:'O',sans-serif;color:${WT.ink}}
 .side:last-child{page-break-after:auto;break-after:auto}
 .bg{position:absolute;inset:0}.bg svg{width:100%;height:100%;display:block}
 
-.front{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.front{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding-bottom:7mm}
 .fc{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center}
-.mark{height:21mm;width:auto;display:block}
+.mark{height:18mm;width:auto;display:block}
 .name{margin-top:3.8mm;font-family:'P';font-weight:700;font-size:7.2mm;line-height:1;
   letter-spacing:1.15mm;text-transform:uppercase;padding-left:1.15mm}
 .hair{margin-top:3.1mm;width:26mm;height:.28mm;border-radius:.28mm;

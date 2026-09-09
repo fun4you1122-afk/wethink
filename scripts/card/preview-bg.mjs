@@ -4,7 +4,7 @@ import { readFileSync, mkdirSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright-core'
-import { ribbons, ghostMark, chevrons } from './light-bg.mjs'
+import { ribbons, ghostMark, polyMesh } from './light-bg.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const OUT = path.join(ROOT, 'public/card-print')
@@ -19,7 +19,7 @@ const INK = '#141A3C', SOFT = '#5A5F7D', CY = '#0EA5C4', VI = '#7C3AED'
 const OPTIONS = {
   a: { label: 'A · Ribbons', bg: `<div class="bg">${ribbons({ w: W, h: H })}</div>` },
   b: { label: 'B · Ghost mark', bg: ghostMark({ w: W, h: H, mark: MARK }) },
-  c: { label: 'C · Chevrons', bg: `<div class="bg">${chevrons({ w: W, h: H })}</div>` },
+  c: { label: 'C · Polygon mesh', bg: `<div class="bg">${polyMesh({ w: W, h: H, seed: 5, band: 0.24 })}</div>` },
 }
 
 const page = (bg) => `<!doctype html><html><head><meta charset="utf-8"><style>
@@ -28,10 +28,11 @@ const page = (bg) => `<!doctype html><html><head><meta charset="utf-8"><style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 html,body{width:${W}mm;height:${H}mm}
 .side{position:relative;width:${W}mm;height:${H}mm;overflow:hidden;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;color:${INK}}
+  display:flex;flex-direction:column;align-items:center;justify-content:center;color:${INK};
+  padding-bottom:7mm}
 .bg{position:absolute;inset:0}.bg svg{width:100%;height:100%;display:block}
 .fc{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center}
-.mark{height:21mm;width:auto;display:block}
+.mark{height:18mm;width:auto;display:block}
 .name{margin-top:3.8mm;font-family:'P';font-weight:700;font-size:7.2mm;line-height:1;
   letter-spacing:1.15mm;text-transform:uppercase;padding-left:1.15mm}
 .hair{margin-top:3.1mm;width:26mm;height:.28mm;border-radius:.28mm;
