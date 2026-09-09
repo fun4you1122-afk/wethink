@@ -75,6 +75,12 @@ for (const t of TARGETS) {
   if (!res || res.data !== t.url) { await browser.close(); process.exit(1) }
 
   await page.locator('.card').screenshot({ path: path.join(OUT, `${t.id}.png`) })
+  // JPEG too: some phone galleries and older mail clients still prefer it.
+  // Quality 96 on a white ground keeps the modules crisp; a QR is exactly the
+  // kind of hard-edged art JPEG smears if you push the compression.
+  await page.locator('.card').screenshot({
+    path: path.join(OUT, `${t.id}.jpg`), type: 'jpeg', quality: 96,
+  })
   await page.close()
 }
 
