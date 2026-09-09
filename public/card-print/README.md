@@ -12,8 +12,11 @@
   fading dot field, arc hatching and a few shards over a dark ground with a
   soft diagonal split. Its randomness is seeded, so a rebuild produces the
   identical card rather than a new arrangement.
-- The QR opens `wethink.ae/company-profile`, at error correction H, printed
-  **23 mm** across. Dark modules on a white ground rather than the reverse:
+- The back carries the five service lines, read at build time from
+  `lib/services.ts`, so the card cannot disagree with the website.
+- The QR opens `wethink.ae/company-profile`, at error correction M and printed
+  **19 mm** across. M rather than H because nothing is overlaid on it: H would
+  pack in far more modules at the same size, making each one harder to read. Dark modules on a white ground rather than the reverse:
   inverted codes are not universally read, and dark ink spreads on press.
   Decoded out of the rendered artwork on every build.
 - Colour is RGB. Let the printer convert to their own CMYK profile; the

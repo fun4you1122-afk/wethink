@@ -19,6 +19,7 @@ import jsQR from 'jsqr'
 import { chromium } from 'playwright-core'
 import { globeGlyph, mailGlyph, whatsappGlyph, instagramGlyph } from '../posters/ornament.mjs'
 import { techBackdrop } from './backdrop.mjs'
+import { serviceTitles } from './services.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const OUT = path.join(ROOT, 'public/card-print')
@@ -30,12 +31,16 @@ const SAFE = 4                     // mm, nothing important inside this of the t
 
 const WT = { ink: '#0B1235', cyan: '#03CFF2', blue: '#108FFC', violet: '#983CFC', grey: '#7A7F92' }
 const QR_URL = 'https://www.wethink.ae/company-profile'
+const SERVICES = serviceTitles()
 
 const font = (f) => readFileSync(path.join(ROOT, 'public/fonts', f)).toString('base64')
 const MARK = readFileSync(path.join(ROOT, 'public/wethink-logo.png')).toString('base64')
 
 const qr = await QRCode.toString(QR_URL, {
-  type: 'svg', margin: 0, errorCorrectionLevel: 'H',
+  type: 'svg', margin: 0,
+  // M, not H: nothing is overlaid on this code, and H would pack in far
+  // more modules for the same 19mm, making each one smaller to read
+  errorCorrectionLevel: 'M',
   // dark modules on a light ground: inverted codes are not universally
   // read, and on press the dark ink spreads and closes the gap further
   color: { dark: '#0B1235', light: '#00000000' },
@@ -76,20 +81,30 @@ html,body{width:${W}mm;font-family:'O',sans-serif}
 .sweep{position:absolute;left:${BLEED + 4}mm;right:${BLEED + 4}mm;bottom:${BLEED + 5}mm;height:4mm}
 .sweep svg{width:100%;height:100%;display:block}
 
-/* ── back: contacts and the code, on the brand gradient ── */
+/* ── back: what we do, the code, then how to reach us ── */
 .back{color:#fff;padding:${BLEED + SAFE}mm ${BLEED + SAFE}mm}
 .back .inner,.back .foot{position:relative}
-.back .inner{display:flex;height:100%;gap:5mm;align-items:center}
-.rows{flex:1;display:flex;flex-direction:column;gap:2.9mm;min-width:0}
-.row{display:flex;align-items:center;gap:2.6mm}
-.row .gl{flex:0 0 auto;width:3.6mm;height:3.6mm;display:block}
-.row .t{font-size:3.05mm;font-weight:600;letter-spacing:.02mm;white-space:nowrap}
+.back .inner{display:flex;flex-direction:column;height:100%;padding-bottom:4.6mm}
+.top{display:flex;gap:4.4mm;align-items:flex-start}
+.svc{flex:1;min-width:0}
+.eyebrow{font-family:'P';font-weight:600;font-size:1.95mm;letter-spacing:.5mm;
+  text-transform:uppercase;color:${WT.cyan};opacity:.95}
+.svc ul{list-style:none;margin:1.7mm 0 0;padding:0;display:flex;flex-direction:column;gap:1.15mm}
+.svc li{display:flex;gap:1.5mm;align-items:baseline;font-size:2.25mm;line-height:1.16;
+  color:rgba(255,255,255,.94)}
+.svc .n{flex:0 0 auto;font-family:'P';font-weight:600;font-size:1.85mm;color:${WT.cyan};opacity:.85}
 .qrbox{flex:0 0 auto;text-align:center}
-.qrbox .code{position:relative;width:23mm;height:23mm;background:#fff;
-  padding:1.5mm;border-radius:1.8mm}
+.qrbox .code{position:relative;width:19mm;height:19mm;background:#fff;
+  padding:1.2mm;border-radius:1.5mm}
 .qrbox .code svg{width:100%;height:100%;display:block}
-.qrbox .cap{margin-top:1.7mm;font-family:'P';font-weight:600;font-size:1.85mm;
-  letter-spacing:.42mm;text-transform:uppercase;color:rgba(255,255,255,.72);white-space:nowrap}
+.qrbox .cap{margin-top:1.3mm;font-family:'P';font-weight:600;font-size:1.7mm;
+  letter-spacing:.36mm;text-transform:uppercase;color:rgba(255,255,255,.7);white-space:nowrap}
+.rows{margin-top:auto;padding-top:2.6mm;display:grid;grid-template-columns:1fr 1fr;
+  gap:1.5mm 3.6mm;border-top:.16mm solid rgba(255,255,255,.16)}
+.row{display:flex;align-items:center;gap:1.7mm;min-width:0}
+.row .gl{flex:0 0 auto;width:2.7mm;height:2.7mm;display:block}
+.row .t{font-size:2.4mm;font-weight:600;white-space:nowrap}
+.back .foot{position:relative}
 .back .foot{position:absolute;left:${BLEED + SAFE}mm;bottom:${BLEED + 4.4}mm;
   font-family:'P';font-weight:600;font-size:2.2mm;letter-spacing:.5mm;
   text-transform:uppercase;color:rgba(255,255,255,.6)}
@@ -118,15 +133,22 @@ html,body{width:${W}mm;font-family:'O',sans-serif}
 <div class="side back">
   <div class="bg">${techBackdrop({ w: W, h: H, seed: 23, dense: 0.85 })}</div>
   <div class="inner">
+    <div class="top">
+      <div class="svc">
+        <div class="eyebrow">What we do</div>
+        <ul>${SERVICES.map((t, i) => `<li><span class="n">${String(i + 1).padStart(2, '0')}</span>${t}</li>`).join('')}</ul>
+      </div>
+      <div class="qrbox">
+        <div class="code">${qr}</div>
+        <div class="cap">Our profile</div>
+      </div>
+    </div>
+
     <div class="rows">
       <div class="row">${whatsappGlyph({ fill: '#5BE9A6' })}<span class="t">+971 50 312 5078</span></div>
       <div class="row">${mailGlyph({ fill: '#7FC4FF' })}<span class="t">info@wethink.ae</span></div>
       <div class="row">${globeGlyph({ fill: '#7FC4FF' })}<span class="t">wethink.ae</span></div>
       <div class="row">${instagramGlyph({ fill: '#E9A6FF' })}<span class="t">@wethink.ae</span></div>
-    </div>
-    <div class="qrbox">
-      <div class="code">${qr}</div>
-      <div class="cap">Our profile</div>
     </div>
   </div>
   <div class="foot">Abu Dhabi, UAE &nbsp;·&nbsp; Let&rsquo;s build together</div>
@@ -136,7 +158,9 @@ html,body{width:${W}mm;font-family:'O',sans-serif}
 
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' })
 const PX = (mm) => Math.round((mm / 25.4) * 96)
-const page = await browser.newPage({ viewport: { width: PX(W), height: PX(H) } })
+// a high device scale so the QR check reads the code rather than a
+// 70px thumbnail of it; the PDF is rendered from print layout regardless
+const page = await browser.newPage({ viewport: { width: PX(W), height: PX(H) }, deviceScaleFactor: 5 })
 await page.setContent(html, { waitUntil: 'load' })
 await page.evaluate(() => document.fonts.ready)
 await page.waitForTimeout(300)
