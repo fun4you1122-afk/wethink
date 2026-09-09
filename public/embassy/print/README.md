@@ -21,6 +21,10 @@ live programme for that stage, and a small one in the WeThink block opening
 `wethink.ae/?from=marhaba`, tagged so scans off these panels can be told apart
 from other traffic.
 
+`all-panels.pdf` is the same four panels in one four-page file, in the order
+master, main, second, workshop. Convenient for review or for handing to the
+printer in one go; the individual files are what the quantities above refer to.
+
 `proof-*.png` are small on-screen proofs for review, not for printing.
 
 ## For the printer
