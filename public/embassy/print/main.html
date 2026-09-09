@@ -61,54 +61,54 @@ header{position:relative;text-align:center;padding-top:20mm;height:196mm}
 .where{font-size:5mm;letter-spacing:.4mm;text-transform:uppercase;color:#46707A;margin-top:6mm;font-weight:500}
 .when{font-size:5.8mm;letter-spacing:.34mm;text-transform:uppercase;color:#037A8A;margin-top:2.5mm;font-weight:700}
 
-.days{display:grid;grid-template-columns:1fr 1fr;gap:13.62mm;margin-top:13.62mm}
+.days{display:grid;grid-template-columns:1fr 1fr;gap:13.23mm;margin-top:13.23mm}
 .col{break-inside:avoid}
-.dayhead{display:flex;align-items:center;gap:4.09mm;padding-bottom:4.09mm;margin-bottom:6.13mm;
+.dayhead{display:flex;align-items:center;gap:3.97mm;padding-bottom:3.97mm;margin-bottom:5.96mm;
   border-bottom:.9mm solid #015866;position:relative}
 .dayhead::after{content:'';position:absolute;left:0;right:0;bottom:-1.6mm;height:.4mm;
   background:#C9A227;opacity:.7}
 .dayhead .lotus{flex:0 0 auto}
-.dow{font-family:'Fraunces',serif;font-size:13.08mm;font-weight:600;color:#015866}
-.date{font-size:7.90mm;text-transform:uppercase;letter-spacing:.34mm;color:#037A8A;font-weight:600}
-.trackhead{margin:10.90mm 0 3.41mm;font-size:6.27mm;font-weight:700;text-transform:uppercase;
+.dow{font-family:'Fraunces',serif;font-size:12.70mm;font-weight:600;color:#015866}
+.date{font-size:7.68mm;text-transform:uppercase;letter-spacing:.34mm;color:#037A8A;font-weight:600}
+.trackhead{margin:10.59mm 0 3.31mm;font-size:6.09mm;font-weight:700;text-transform:uppercase;
   letter-spacing:.5mm;color:#fff;background:linear-gradient(90deg,#015866,#037A8A);
-  padding:2.72mm 4.77mm;border-radius:2mm;border-left:1mm solid #C9A227}
+  padding:2.65mm 4.63mm;border-radius:2mm;border-left:1mm solid #C9A227}
 .trackhead:first-child{margin-top:0}
 
-.row{display:flex;gap:3.81mm;padding:2.86mm 2.18mm;
+.row{display:flex;gap:3.71mm;padding:2.78mm 2.12mm;
   border-bottom:.25mm solid rgba(3,122,138,.16);position:relative;align-items:stretch}
 .row:nth-child(even){background:rgba(3,122,138,.05);border-radius:1.6mm}
 
 /* the timeline: one continuous rail down the column with a stop per slot */
-.rail{flex:0 0 5.99mm;position:relative}
-.rail::before{content:'';position:absolute;left:50%;top:-3.27mm;bottom:-3.27mm;
+.rail{flex:0 0 5.82mm;position:relative}
+.rail::before{content:'';position:absolute;left:50%;top:-3.18mm;bottom:-3.18mm;
   width:.5mm;margin-left:-.25mm;background:rgba(3,122,138,.28)}
-.rail .dot{position:absolute;left:50%;top:3.27mm;width:3.95mm;height:3.95mm;
-  margin-left:-1.98mm;border-radius:50%;box-shadow:0 0 0 1.23mm #F2FAFB}
-.rail .dot.hollow{background:#F2FAFB;box-shadow:0 0 0 .45mm rgba(3,122,138,.4),0 0 0 1.23mm #F2FAFB}
-.col .row:first-of-type .rail::before{top:3.27mm}
-.col .row:last-child .rail::before{bottom:auto;height:6.54mm}
+.rail .dot{position:absolute;left:50%;top:3.18mm;width:3.84mm;height:3.84mm;
+  margin-left:-1.92mm;border-radius:50%;box-shadow:0 0 0 1.19mm #F2FAFB}
+.rail .dot.hollow{background:#F2FAFB;box-shadow:0 0 0 .45mm rgba(3,122,138,.4),0 0 0 1.19mm #F2FAFB}
+.col .row:first-of-type .rail::before{top:3.18mm}
+.col .row:last-child .rail::before{bottom:auto;height:6.35mm}
 
-.kind{display:block;font-size:3.81mm;font-weight:700;
-  text-transform:uppercase;letter-spacing:.2mm;margin-top:1.36mm;line-height:1;white-space:nowrap}
-.t{flex:0 0 28.60mm;font-size:8.72mm;font-weight:700;color:#015866;
-  font-variant-numeric:tabular-nums;padding-top:0.54mm;line-height:1}
-.ap{font-size:4.63mm;margin-left:.7mm;letter-spacing:.2mm}
+.kind{display:block;font-size:3.71mm;font-weight:700;
+  text-transform:uppercase;letter-spacing:.2mm;margin-top:1.32mm;line-height:1;white-space:nowrap}
+.t{flex:0 0 27.79mm;font-size:8.47mm;font-weight:700;color:#015866;
+  font-variant-numeric:tabular-nums;padding-top:0.53mm;line-height:1}
+.ap{font-size:4.50mm;margin-left:.7mm;letter-spacing:.2mm}
 .b{flex:1;min-width:0}
-.act{font-size:8.17mm;line-height:1.18;font-weight:600;color:#0C3A42;letter-spacing:-.02mm}
-.act.big{font-family:'Fraunces',serif;font-size:10.35mm;font-weight:600;color:#015866}
-.by{font-size:6.40mm;line-height:1.18;color:#46707A;margin-top:1.09mm;letter-spacing:.06mm}
+.act{font-size:7.94mm;line-height:1.18;font-weight:600;color:#0C3A42;letter-spacing:-.02mm}
+.act.big{font-family:'Fraunces',serif;font-size:10.06mm;font-weight:600;color:#015866}
+.by{font-size:6.22mm;line-height:1.18;color:#46707A;margin-top:1.06mm;letter-spacing:.06mm}
 .row.rest{opacity:.5}
-.row.rest .act{font-size:6.40mm;font-weight:500;letter-spacing:.12mm}
+.row.rest .act{font-size:6.22mm;font-weight:500;letter-spacing:.12mm}
 .row.cer{background:linear-gradient(150deg,#015866,#02414D);color:#fff;
-  border-radius:2.5mm;padding:6.27mm;border-bottom:none;margin:3.27mm 0;
+  border-radius:2.5mm;padding:6.09mm;border-bottom:none;margin:3.18mm 0;
   box-shadow:0 0 0 .5mm #C9A227}
 .row.cer .t{color:#E3C15A}
 .row.cer .act.big{color:#fff}
 .row.cer .by{color:rgba(255,255,255,.7)}
 .row.cer .cer-list{color:rgba(255,255,255,.9)}
 .row.cer .cer-list li::marker{color:#E3C15A}
-.cer-list{margin:4.09mm 0 0 6.81mm;font-size:5.86mm;line-height:1.45;color:#0C3A42}
+.cer-list{margin:3.97mm 0 0 6.62mm;font-size:5.69mm;line-height:1.45;color:#0C3A42}
 
 footer{position:absolute;left:19mm;right:19mm;bottom:19mm;z-index:2}
 footer .rule{margin-bottom:8mm}
@@ -124,7 +124,7 @@ footer .rule{margin-bottom:8mm}
 
 /* WeThink's own board. The Embassy offered the credit, so take it: this is
    the block a visitor reads once they are done with the timings. */
-.credit{flex:0 0 172mm;text-align:center;padding:6mm 7mm 6.4mm;
+.credit{flex:0 0 172mm;text-align:center;padding:6mm 7mm 8.4mm;
   background:#fff;border-radius:3.5mm;
   box-shadow:0 0 0 .45mm rgba(201,162,39,.55),0 1.4mm 4mm rgba(1,88,102,.09)}
 .credit .l{font-size:4mm;letter-spacing:.56mm;text-transform:uppercase;color:#46707A;font-weight:600}
@@ -135,8 +135,16 @@ footer .rule{margin-bottom:8mm}
 .wttag{font-size:4.9mm;font-weight:600;color:#050D2E;letter-spacing:1.3mm;
   text-transform:uppercase;margin-top:4mm;white-space:nowrap;padding-left:1.15mm}
 .wttag i{font-style:normal;font-size:5.6mm;line-height:0;vertical-align:-.3mm;margin:0 .5mm}
+.base{display:flex;align-items:center;justify-content:center;gap:9mm;
+  margin-top:4.6mm;padding-top:4.4mm;border-top:.3mm solid rgba(201,162,39,.45)}
+.wtqr{flex:0 0 auto;text-align:center}
+.wtqr .code{width:31mm;height:31mm;padding:1.6mm;background:#fff;border-radius:2mm;
+  box-shadow:0 0 0 .35mm rgba(5,13,46,.18)}
+.wtqr .code svg{width:100%;height:100%;display:block}
+.wtqr .cap{font-size:3.3mm;font-weight:700;letter-spacing:.34mm;text-transform:uppercase;
+  color:#050D2E;margin-top:2.2mm;line-height:1.15;white-space:nowrap}
 .contacts{display:grid;grid-template-columns:auto auto;justify-content:center;
-  gap:3.4mm 8mm;margin-top:4.6mm;padding-top:4.4mm;border-top:.3mm solid rgba(201,162,39,.45)}
+  gap:3.4mm 8mm}
 .ct{display:flex;align-items:center;gap:2.4mm;font-size:4.8mm;font-weight:600;
   color:#050D2E;letter-spacing:.14mm;white-space:nowrap}
 /* the glyphs carry unitless width/height attributes, which are CSS pixels;
@@ -894,28 +902,35 @@ footer .rule{margin-bottom:8mm}
         <span class="wtname">WeThink</span>
       </div>
       <div class="wttag">Think <i style="color:#03CFF2">•</i> Plan <i style="color:#983CFC">•</i> Grow</div>
-      <div class="contacts">
-        <span class="ct"><svg class="gl" viewBox="0 0 24 24" width="6.4" height="6.4"
+      <div class="base">
+        <div class="contacts">
+          <span class="ct"><svg class="gl" viewBox="0 0 24 24" width="6.4" height="6.4"
     xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#25D366" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 1.67c2.2 0 4.27.86 5.83 2.42a8.2 8.2 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.25 8.24a8.23 8.23 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.26-8.24Zm-2.6 4.2c-.16 0-.42.06-.64.3-.22.24-.85.83-.85 2.02s.87 2.34.99 2.5c.12.16 1.7 2.6 4.13 3.64.58.25 1.03.4 1.38.51.58.19 1.11.16 1.53.1.47-.07 1.43-.58 1.63-1.15.2-.57.2-1.05.14-1.15-.06-.1-.22-.16-.46-.28-.24-.12-1.43-.71-1.65-.79-.22-.08-.38-.12-.54.12-.16.24-.62.79-.76.95-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.53-1.32-.75-1.8-.19-.44-.38-.38-.53-.39l-.45-.01Z"/></svg>+971 50 312 5078</span>
-        <span class="ct"><svg class="gl" viewBox="0 0 24 24" width="6.4" height="6.4"
+          <span class="ct"><svg class="gl" viewBox="0 0 24 24" width="6.4" height="6.4"
     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <g fill="none" stroke="#C13584" stroke-width="2">
       <rect x="3" y="3" width="18" height="18" rx="5.2"/>
       <circle cx="12" cy="12" r="4"/>
     </g>
     <circle cx="17.3" cy="6.7" r="1.25" fill="#C13584"/></svg>@wethink.ae</span>
-        <span class="ct"><svg class="gl" viewBox="0 0 24 24" width="6.2" height="6.2"
+          <span class="ct"><svg class="gl" viewBox="0 0 24 24" width="6.2" height="6.2"
     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <g fill="none" stroke="#108FFC" stroke-width="1.9">
       <circle cx="12" cy="12" r="9"/>
       <path d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18"/>
     </g></svg>wethink.ae</span>
-        <span class="ct"><svg class="gl" viewBox="0 0 24 24" width="6.2" height="6.2"
+          <span class="ct"><svg class="gl" viewBox="0 0 24 24" width="6.2" height="6.2"
     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <g fill="none" stroke="#108FFC" stroke-width="1.9" stroke-linejoin="round">
       <rect x="2.5" y="5" width="19" height="14" rx="2.4"/>
       <path d="M3 7l9 6 9-6"/>
     </g></svg>info@wethink.ae</span>
+        </div>
+        <div class="wtqr">
+          <div class="code"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges"><path stroke="#050D2E" d="M0 0.5h7m1 0h1m3 0h2m1 0h1m1 0h3m2 0h7M0 1.5h1m5 0h1m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1m3 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m3 0h3m3 0h1m1 0h3m1 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h2m1 0h2m3 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m3 0h1m3 0h3m1 0h2m2 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m3 0h1m2 0h1m2 0h5m1 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M8 7.5h1m2 0h2m2 0h1m1 0h2m1 0h1M0 8.5h1m1 0h2m1 0h3m2 0h1m2 0h1m2 0h4m2 0h1m2 0h1m1 0h2M2 9.5h1m4 0h2m1 0h2m1 0h2m1 0h1m1 0h3m1 0h3m3 0h1M0 10.5h7m3 0h2m1 0h1m2 0h1m1 0h1m1 0h2m1 0h2m1 0h2M1 11.5h5m1 0h1m2 0h1m1 0h1m3 0h1m3 0h2m1 0h2m3 0h1M1 12.5h1m2 0h4m6 0h2m1 0h1m1 0h1m5 0h2M0 13.5h1m2 0h3m2 0h1m1 0h1m1 0h1m1 0h7m1 0h2m2 0h3M0 14.5h8m1 0h1m1 0h1m1 0h1m2 0h2m1 0h6m1 0h3M2 15.5h1m2 0h1m1 0h2m5 0h2m2 0h2m3 0h2m2 0h1M4 16.5h4m6 0h2m2 0h4m2 0h2m1 0h1M2 17.5h1m4 0h2m1 0h1m1 0h1m1 0h2m1 0h1m2 0h2m1 0h1m1 0h3M0 18.5h1m1 0h1m1 0h1m1 0h3m4 0h3m1 0h1m5 0h1m2 0h1M5 19.5h1m1 0h2m1 0h1m1 0h4m1 0h3m6 0h1M1 20.5h1m1 0h1m2 0h5m2 0h2m2 0h2m1 0h7M8 21.5h1m1 0h3m3 0h3m1 0h1m3 0h5M0 22.5h7m1 0h2m2 0h1m1 0h1m1 0h5m1 0h1m1 0h2m1 0h1M0 23.5h1m5 0h1m1 0h7m1 0h1m1 0h1m1 0h1m3 0h2m2 0h1M0 24.5h1m1 0h3m1 0h1m3 0h2m3 0h1m1 0h2m1 0h5m1 0h1M0 25.5h1m1 0h3m1 0h1m1 0h2m2 0h1m2 0h2m1 0h4m2 0h2m2 0h1M0 26.5h1m1 0h3m1 0h1m1 0h1m3 0h1m5 0h3m2 0h1m2 0h1m1 0h1M0 27.5h1m5 0h1m2 0h1m3 0h4m3 0h4m1 0h1m1 0h1M0 28.5h7m1 0h1m1 0h4m1 0h1m2 0h3m4 0h1m1 0h1"/></svg>
+</div>
+          <div class="cap">See our work</div>
+        </div>
       </div>
     </div>
   </div>

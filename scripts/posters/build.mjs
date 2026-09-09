@@ -120,6 +120,7 @@ const REEM = b64('public/embassy/reem-mall.png')
 const WETHINK = b64('public/wethink-logo.png')
 
 const SITE = 'https://www.wethink.ae/embassy/programme'
+const WT_SITE = 'https://www.wethink.ae/'
 
 /* ── the panels ───────────────────────────────────────────── */
 
@@ -196,6 +197,14 @@ async function html(panel, schedule, scale = 1, air = 0) {
     margin: 0,
     errorCorrectionLevel: 'M',
     color: { dark: C.tealDeep, light: '#00000000' },
+  })
+  // The big code belongs to the Embassy. This one is ours, tagged so the
+  // scans coming off these five panels can be told apart from other traffic.
+  const qrWt = await QRCode.toString(`${WT_SITE}?from=marhaba`, {
+    type: 'svg',
+    margin: 0,
+    errorCorrectionLevel: 'M',
+    color: { dark: WT.ink, light: '#00000000' },
   })
   const dense = !panel.track
   /** schedule type, scaled to fill the column on this particular panel */
@@ -331,7 +340,7 @@ footer .rule{margin-bottom:8mm}
 
 /* WeThink's own board. The Embassy offered the credit, so take it: this is
    the block a visitor reads once they are done with the timings. */
-.credit{flex:0 0 172mm;text-align:center;padding:6mm 7mm 6.4mm;
+.credit{flex:0 0 172mm;text-align:center;padding:6mm 7mm 8.4mm;
   background:#fff;border-radius:3.5mm;
   box-shadow:0 0 0 .45mm rgba(201,162,39,.55),0 1.4mm 4mm rgba(1,88,102,.09)}
 .credit .l{font-size:4mm;letter-spacing:.56mm;text-transform:uppercase;color:${C.inkSoft};font-weight:600}
@@ -342,8 +351,16 @@ footer .rule{margin-bottom:8mm}
 .wttag{font-size:4.9mm;font-weight:600;color:${WT.ink};letter-spacing:1.3mm;
   text-transform:uppercase;margin-top:4mm;white-space:nowrap;padding-left:1.15mm}
 .wttag i{font-style:normal;font-size:5.6mm;line-height:0;vertical-align:-.3mm;margin:0 .5mm}
+.base{display:flex;align-items:center;justify-content:center;gap:9mm;
+  margin-top:4.6mm;padding-top:4.4mm;border-top:.3mm solid rgba(201,162,39,.45)}
+.wtqr{flex:0 0 auto;text-align:center}
+.wtqr .code{width:31mm;height:31mm;padding:1.6mm;background:#fff;border-radius:2mm;
+  box-shadow:0 0 0 .35mm rgba(5,13,46,.18)}
+.wtqr .code svg{width:100%;height:100%;display:block}
+.wtqr .cap{font-size:3.3mm;font-weight:700;letter-spacing:.34mm;text-transform:uppercase;
+  color:${WT.ink};margin-top:2.2mm;line-height:1.15;white-space:nowrap}
 .contacts{display:grid;grid-template-columns:auto auto;justify-content:center;
-  gap:3.4mm 8mm;margin-top:4.6mm;padding-top:4.4mm;border-top:.3mm solid rgba(201,162,39,.45)}
+  gap:3.4mm 8mm}
 .ct{display:flex;align-items:center;gap:2.4mm;font-size:4.8mm;font-weight:600;
   color:${WT.ink};letter-spacing:.14mm;white-space:nowrap}
 /* the glyphs carry unitless width/height attributes, which are CSS pixels;
@@ -415,11 +432,17 @@ footer .rule{margin-bottom:8mm}
         <span class="wtname">WeThink</span>
       </div>
       <div class="wttag">Think <i style="color:${WT.cyan}">•</i> Plan <i style="color:${WT.violet}">•</i> Grow</div>
-      <div class="contacts">
-        <span class="ct">${whatsappGlyph({ size: 6.4 })}+971 50 312 5078</span>
-        <span class="ct">${instagramGlyph({ size: 6.4 })}@wethink.ae</span>
-        <span class="ct">${globeGlyph({ size: 6.2, fill: WT.blue })}wethink.ae</span>
-        <span class="ct">${mailGlyph({ size: 6.2, fill: WT.blue })}info@wethink.ae</span>
+      <div class="base">
+        <div class="contacts">
+          <span class="ct">${whatsappGlyph({ size: 6.4 })}+971 50 312 5078</span>
+          <span class="ct">${instagramGlyph({ size: 6.4 })}@wethink.ae</span>
+          <span class="ct">${globeGlyph({ size: 6.2, fill: WT.blue })}wethink.ae</span>
+          <span class="ct">${mailGlyph({ size: 6.2, fill: WT.blue })}info@wethink.ae</span>
+        </div>
+        <div class="wtqr">
+          <div class="code">${qrWt}</div>
+          <div class="cap">See our work</div>
+        </div>
       </div>
     </div>
   </div>

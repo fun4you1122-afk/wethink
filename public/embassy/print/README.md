@@ -16,6 +16,11 @@ Each panel is double sided and carries the same artwork on both faces, and the
 glass unscrews so a poster can be laid in behind it. That means ten separate
 single sided sheets, not five printed back to back.
 
+Each panel carries two QR codes: the large one is the Embassy's, opening the
+live programme for that stage, and a small one in the WeThink block opening
+`wethink.ae/?from=marhaba`, tagged so scans off these panels can be told apart
+from other traffic.
+
 `proof-*.png` are small on-screen proofs for review, not for printing.
 
 ## For the printer

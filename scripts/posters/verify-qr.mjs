@@ -12,7 +12,8 @@ for (const id of ['main', 'second', 'workshop', 'master']) {
   const p = await b.newPage({ viewport: { width: 1723, height: 4369 } })
   await p.goto('file://' + path.join(OUT, `${id}.html`))
   await p.evaluate(() => document.fonts.ready)
-  const el = p.locator('.qr')
+  for (const sel of ['.qr', '.wtqr .code']) {
+  const el = p.locator(sel)
   const buf = await el.screenshot()
   const { data, width, height } = await p.evaluate(async (b64) => {
     const img = new Image()
@@ -28,7 +29,8 @@ for (const id of ['main', 'second', 'workshop', 'master']) {
   const res = jsQR(Uint8ClampedArray.from(data), width, height)
   const ok = Boolean(res)
   if (!ok) bad++
-  console.log(`${id.padEnd(9)} ${width}x${height}px  ${ok ? '→ ' + res.data : '→ DID NOT DECODE'}`)
+  console.log(`${id.padEnd(9)} ${sel.padEnd(12)} ${width}x${height}px  ${ok ? '→ ' + res.data : '→ DID NOT DECODE'}`)
+  }
   await p.close()
 }
 await b.close()
