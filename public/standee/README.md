@@ -95,4 +95,16 @@ The added type and the QR are vector and merge onto the original page
 without re-rendering it, so the photograph passes through byte for byte:
 one DCTDecode image in, one out. The QR prints about 7.5 cm across.
 
-    PYLIBS=<path to pypdf> node scripts/standee/fill.mjs
+    PYLIBS=<path to pypdf + pypdfium2> node scripts/standee/fill.mjs
+
+## Why positions are in millimetres
+
+A browser lays out in CSS pixels and prints them at 0.75 pt each. The
+artwork is one point per pixel, so positioning the overlay in pixels put
+every label and the code at three-quarter scale and off the plate: in the
+file, and findable by text extraction, but invisible on the page. Every
+position is therefore converted from its measured pixel to millimetres
+once, at the top of the script.
+
+The build now rasterises the finished page and asserts that the QR cell and
+the label row actually carry ink, rather than trusting the markup.
