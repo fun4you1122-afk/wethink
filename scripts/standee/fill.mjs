@@ -17,6 +17,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { execFileSync } from 'node:child_process'
 import QRCode from 'qrcode'
+import { globeGlyph, mailGlyph, phoneGlyph } from '../posters/ornament.mjs'
 import jsQR from 'jsqr'
 import { chromium } from 'playwright-core'
 
@@ -27,11 +28,18 @@ mkdirSync(OUT, { recursive: true })
 const SRC = '/root/.claude/uploads/439b44da-b9ba-5210-9045-911a288ff5d9/94421fdb-EDT_180a_compressed.pdf'
 const PAGE = { w: 3392, h: 4650 }
 
-/* the plate's own cells, from the divider rules in the artwork */
-const CELL = { mail: 1590, phone: 1937, globe: 2263, qr: 2568, build: 2955 }
-const ICON_Y = 4330          // centre of the icon discs
-const LABEL_Y = 4432         // centre of the label line, clear of the discs
-const MID_Y = 4372           // vertical centre of the cell block
+/* The plate's printed dividers sit at x 1421, 1759, 2116, 2411, 2725 and
+   3185, which spaces the cells unevenly and crowds the labels. The face is
+   flat white there (sampled 247-253), so the band right of the wordmark is
+   covered and relaid in five even columns instead. */
+const BAND = { x0: 1432, x1: 3186, y0: 4196, y1: 4506 }
+const COLS = 5
+const COL_W = (BAND.x1 - BAND.x0) / COLS
+const centre = (i) => BAND.x0 + COL_W * (i + 0.5)
+
+const ICON_Y = 4292          // centre of the icon discs
+const LABEL_Y = 4408         // centre of the label line beneath them
+const MID_Y = 4340           // vertical centre of the taller cells
 
 const QR_URL = 'https://www.wethink.ae/WeThink-Company-Profile.pdf'
 
@@ -60,23 +68,44 @@ const html = `<!doctype html><html><head><meta charset="utf-8"><style>
 @page{size:${(PAGE.w / 72 * 25.4).toFixed(3)}mm ${(PAGE.h / 72 * 25.4).toFixed(3)}mm;margin:0}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 html,body{width:${MM(PAGE.w)};height:${MM(PAGE.h)};background:transparent;position:relative}
+.band{position:absolute;left:${MM(BAND.x0)};top:${MM(BAND.y0)};
+  width:${MM(BAND.x1 - BAND.x0)};height:${MM(BAND.y1 - BAND.y0)};
+  background:linear-gradient(180deg,#FDFDFD 0%,#F8F8F8 34%,#F8F8F8 100%)}
+.rule{position:absolute;top:${MM(BAND.y0 + 30)};height:${MM(BAND.y1 - BAND.y0 - 60)};
+  width:${MM(1.6)};background:#E2E4EA}
+.col{position:absolute;transform:translateX(-50%);text-align:center}
+.disc{width:${MM(96)};height:${MM(96)};border-radius:50%;background:#EDEFF5;
+  display:flex;align-items:center;justify-content:center;margin:0 auto}
+.disc .gl{display:block;width:${MM(50)};height:${MM(50)}}
 .lb{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;
-  font-family:'O';font-weight:600;font-size:${MM(40)};color:${INK};letter-spacing:${MM(0.6)}}
-.qr{position:absolute;transform:translate(-50%,-50%);left:${MM(CELL.qr)};top:${MM(MID_Y)};
-  width:${MM(252)};height:${MM(252)};padding:${MM(10)};background:#fff;border-radius:${MM(18)}}
+  font-family:'O';font-weight:600;font-size:${MM(36)};color:${INK};letter-spacing:${MM(0.4)}}
+.qr{position:absolute;transform:translate(-50%,-50%);
+  width:${MM(236)};height:${MM(236)};padding:${MM(9)};background:#fff;border-radius:${MM(16)}}
 .qr svg{width:100%;height:100%;display:block}
 .qr .mid{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:${MM(58)};height:${MM(58)};background:#fff;border-radius:${MM(10)};padding:${MM(6)}}
+  width:${MM(54)};height:${MM(54)};background:#fff;border-radius:${MM(9)};padding:${MM(5)}}
 .qr .mid img{width:100%;height:100%;object-fit:contain;display:block}
-.build{position:absolute;transform:translate(-50%,-50%);left:${MM(CELL.build)};
-  top:${MM(MID_Y)};text-align:center;font-family:'P';font-weight:600;
-  font-size:${MM(40)};line-height:1.42;letter-spacing:${MM(3.4)};text-transform:uppercase;color:#6E7488}
+.build{position:absolute;transform:translate(-50%,-50%);text-align:center;
+  font-family:'P';font-weight:600;font-size:${MM(36)};line-height:1.45;
+  letter-spacing:${MM(3)};text-transform:uppercase;color:#6E7488}
 </style></head><body>
-${label(CELL.mail, 'info@wethink.ae')}
-${label(CELL.phone, '+971 50 312 5078')}
-${label(CELL.globe, 'wethink.ae')}
-<div class="qr">${qr}<span class="mid"><img src="data:image/png;base64,${MARK}" alt=""></span></div>
-<div class="build">Let&rsquo;s build<br>together</div>
+<div class="band"></div>
+${[1, 2, 3, 4].map((i) => `<div class="rule" style="left:${MM(BAND.x0 + COL_W * i)}"></div>`).join('')}
+
+${[
+  [mailGlyph({ fill: '#2B7FF5' }), 'info@wethink.ae'],
+  [phoneGlyph({ fill: '#2B7FF5' }), '+971 50 312 5078'],
+  [globeGlyph({ fill: '#3730C4' }), 'wethink.ae'],
+].map(([glyph, text], i) => `
+  <div class="col" style="left:${MM(centre(i))};top:${MM(ICON_Y - 48)}">
+    <span class="disc">${glyph}</span>
+  </div>
+  <div class="lb" style="left:${MM(centre(i))};top:${MM(LABEL_Y)}">${text}</div>`).join('')}
+
+<div class="qr" style="left:${MM(centre(3))};top:${MM(MID_Y)}">${qr}
+  <span class="mid"><img src="data:image/png;base64,${MARK}" alt=""></span>
+</div>
+<div class="build" style="left:${MM(centre(4))};top:${MM(MID_Y)}">Let&rsquo;s build<br>together</div>
 </body></html>`
 
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' })

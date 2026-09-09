@@ -79,17 +79,22 @@ icons carried no labels and two of its cells were empty.
 So this leaves the plate untouched and lays type and a code into the cells
 that were already there:
 
-| Cell centre (px) | Content |
-|---|---|
-| 1590 | info@wethink.ae |
-| 1937 | +971 50 312 5078 |
-| 2263 | wethink.ae |
-| 2568 | QR to the company profile PDF |
-| 2955 | Let's build together |
+The plate's printed dividers sit at x 1421, 1759, 2116, 2411, 2725 and 3185,
+which spaces the cells unevenly and crowds the labels against each other. The
+face is flat white there, sampled at 247-253, so the band right of the
+wordmark (x 1432 to 3186) is covered with a matching gradient and relaid as
+five even columns:
 
-Cell centres come from the plate's own divider rules, measured off the
-artwork at x 1421, 1759, 2116, 2411, 2725 and 3185. The page is one point
-per pixel, so those numbers are both.
+| Column | Content |
+|---|---|
+| 1 | mail · info@wethink.ae |
+| 2 | phone · +971 50 312 5078 |
+| 3 | globe · wethink.ae |
+| 4 | QR to the company profile PDF |
+| 5 | Let's build together |
+
+Dividers are redrawn on the new boundaries. The page is one point per pixel,
+so every measurement above is both.
 
 The added type and the QR are vector and merge onto the original page
 without re-rendering it, so the photograph passes through byte for byte:
