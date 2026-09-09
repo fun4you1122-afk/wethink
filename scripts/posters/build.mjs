@@ -24,7 +24,7 @@ import path from 'node:path'
 import QRCode from 'qrcode'
 import { chromium } from 'playwright-core'
 import { loadSchedule, clock } from './schedule-data.mjs'
-import { GOLD, kanokBand, skyline, petal, lotus, corner } from './ornament.mjs'
+import { GOLD, kanokBand, skyline, petal, lotus, corner, sideChain } from './ornament.mjs'
 
 const HERE = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(HERE, '../..')
@@ -82,6 +82,23 @@ const SHORTEN = new Map([
   ],
 ])
 
+/* What kind of thing is it? Read off the act itself, so a new schedule from
+   the Embassy needs no tagging by hand. Order matters: first match wins. */
+const KINDS = [
+  [/ceremony/i,                          'Ceremony',  GOLD.mid],
+  [/muay thai/i,                         'Muay Thai', '#C2564B'],
+  [/workshop|colouring|registration/i,   'Workshop',  '#0E8F7E'],
+  [/demonstration/i,                     'Demo',      '#2E7DA6'],
+  [/music|instrument|\bkim\b|sun der/i,  'Music',     '#6A5AC0'],
+  [/dance|puppet|nora|hanuman|kipas|celestial|heritage|journey/i, 'Show', '#B0722B'],
+  [/trivia|quiz|talent|games|panel|kiosks|mc /i, 'Live', '#3E7C8C'],
+]
+
+function kind(title) {
+  for (const [re, label, colour] of KINDS) if (re.test(title)) return { label, colour }
+  return { label: 'Stage', colour: '#4E7A85' }
+}
+
 /** "Music performance by Sun Der" becomes act + performer on its own line. */
 function split(title) {
   const t = SHORTEN.get(title) ?? title
@@ -124,11 +141,16 @@ const esc = (s) =>
 
 function slotRow(s, dense) {
   if (s.rest) {
-    return `<div class="row rest"><div class="t">${clock(s.start).time}</div>
+    return `<div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">${clock(s.start).time}</div>
       <div class="b"><div class="act">${esc(s.title)}</div></div></div>`
   }
   if (s.ceremony) {
-    return `<div class="row cer"><div class="t">${clock(s.start).time}<span class="ap">PM</span></div>
+    return `<div class="row cer">
+      <div class="rail"><span class="dot" style="background:${GOLD.light}"></span></div>
+      <div class="t">${clock(s.start).time}<span class="ap">PM</span>
+        <span class="kind" style="color:${GOLD.light}">Ceremony</span></div>
       <div class="b">
         <div class="act big">Opening Ceremony</div>
         <div class="by">Main Atrium, Ground Floor</div>
@@ -137,7 +159,11 @@ function slotRow(s, dense) {
   }
   const { act, by } = split(s.title)
   const { time, ampm } = clock(s.start)
-  return `<div class="row"><div class="t">${time}<span class="ap">${ampm}</span></div>
+  const k = kind(s.title)
+  return `<div class="row">
+    <div class="rail"><span class="dot" style="background:${k.colour}"></span></div>
+    <div class="t">${time}<span class="ap">${ampm}</span>
+      <span class="kind" style="color:${k.colour}">${k.label}</span></div>
     <div class="b"><div class="act">${esc(act)}</div>${by ? `<div class="by">${esc(by)}</div>` : ''}</div></div>`
 }
 
@@ -204,6 +230,12 @@ body{font-family:'Jost',sans-serif;color:${C.ink};background:${C.bg}}
 .goldline{position:absolute;left:0;right:0;height:.6mm;background:
   linear-gradient(90deg,transparent,${GOLD.mid} 12%,${GOLD.pale} 50%,${GOLD.mid} 88%,transparent)}
 
+.sidepat{position:absolute;top:${crown + 6}mm;bottom:${BLEED + 8}mm;width:${SAFE - 4}mm;
+  overflow:hidden;pointer-events:none}
+.sidepat.l{left:${BLEED + 1}mm}
+.sidepat.r{right:${BLEED + 1}mm}
+.sidepat svg{width:100%;height:100%;display:block}
+
 .frame{position:absolute;inset:${BLEED + 7}mm;pointer-events:none;
   border:.4mm solid rgba(201,162,39,.42);border-radius:2mm}
 .frame .corner{position:absolute}
@@ -247,18 +279,31 @@ header{position:relative;text-align:center;padding-top:20mm;height:${crown}mm}
   padding:${z(2)} ${z(3.5)};border-radius:2mm;border-left:1mm solid ${GOLD.mid}}
 .trackhead:first-child{margin-top:0}
 
-.row{display:flex;gap:${z(dense ? 3 : 4)};padding:${pad(dense ? 2.1 : 3.1)} ${z(2)};
-  border-bottom:.25mm solid rgba(3,122,138,.18);position:relative}
-.row:nth-child(even){background:rgba(3,122,138,.045);border-radius:1.6mm}
-.t{flex:0 0 ${z(dense ? 15 : 18)};font-size:${z(dense ? 4.7 : 5.6)};font-weight:600;color:${C.teal};
-  font-variant-numeric:tabular-nums;padding-top:${z(dense ? 0.3 : 0.5)}}
+.row{display:flex;gap:${z(dense ? 2.2 : 2.8)};padding:${pad(dense ? 1.5 : 2.1)} ${z(1.6)};
+  border-bottom:.25mm solid rgba(3,122,138,.16);position:relative;align-items:stretch}
+.row:nth-child(even){background:rgba(3,122,138,.05);border-radius:1.6mm}
+
+/* the timeline: one continuous rail down the column with a stop per slot */
+.rail{flex:0 0 ${z(4.4)};position:relative}
+.rail::before{content:'';position:absolute;left:50%;top:${z(-2.4)};bottom:${z(-2.4)};
+  width:.5mm;margin-left:-.25mm;background:rgba(3,122,138,.28)}
+.rail .dot{position:absolute;left:50%;top:${z(2.4)};width:${z(2.9)};height:${z(2.9)};
+  margin-left:-${z(1.45)};border-radius:50%;box-shadow:0 0 0 ${z(.9)} ${C.bg}}
+.rail .dot.hollow{background:${C.bg};box-shadow:0 0 0 .45mm rgba(3,122,138,.4),0 0 0 ${z(.9)} ${C.bg}}
+.col .row:first-of-type .rail::before{top:${z(2.4)}}
+.col .row:last-child .rail::before{bottom:auto;height:${z(4.8)}}
+
+.kind{display:${dense ? 'none' : 'block'};font-size:${z(2.8)};font-weight:700;
+  text-transform:uppercase;letter-spacing:.2mm;margin-top:${z(1)};line-height:1;white-space:nowrap}
+.t{flex:0 0 ${z(dense ? 15 : 21)};font-size:${z(dense ? 5.4 : 6.4)};font-weight:700;color:${C.tealDeep};
+  font-variant-numeric:tabular-nums;padding-top:${z(dense ? 0.2 : 0.4)};line-height:1}
 .ap{font-size:${z(dense ? 2.9 : 3.4)};margin-left:.7mm;letter-spacing:.2mm}
 .b{flex:1;min-width:0}
-.act{font-size:${z(dense ? 4.5 : 5.3)};line-height:1.22;font-weight:500;color:${C.ink}}
+.act{font-size:${z(dense ? 5 : 6)};line-height:1.18;font-weight:600;color:${C.ink};letter-spacing:-.02mm}
 .act.big{font-family:'Fraunces',serif;font-size:${z(dense ? 6 : 7.6)};font-weight:600;color:${C.tealDeep}}
-.by{font-size:${z(dense ? 3.9 : 4.5)};line-height:1.2;color:${C.inkSoft};margin-top:.9mm;letter-spacing:.08mm}
+.by{font-size:${z(dense ? 4 : 4.7)};line-height:1.18;color:${C.inkSoft};margin-top:${z(.8)};letter-spacing:.06mm}
 .row.rest{opacity:.5}
-.row.rest .act{font-size:${z(dense ? 4 : 4.6)};font-weight:400;letter-spacing:.12mm}
+.row.rest .act{font-size:${z(dense ? 4.1 : 4.7)};font-weight:500;letter-spacing:.12mm}
 .row.cer{background:linear-gradient(150deg,${C.tealDeep},#02414D);color:#fff;
   border-radius:2.5mm;padding:${z(dense ? 3.4 : 4.6)};border-bottom:none;margin:${z(2.4)} 0;
   box-shadow:0 0 0 .5mm ${GOLD.mid}}
@@ -303,6 +348,9 @@ footer .rule{margin-bottom:8mm}
   <div class="goldline" style="top:7mm"></div>
   <div class="goldline" style="bottom:0"></div>
 </div>
+
+<div class="sidepat l">${sideChain({ height: PANEL.h, fill: GOLD.mid, opacity: 0.34 })}</div>
+<div class="sidepat r">${sideChain({ height: PANEL.h, fill: GOLD.mid, opacity: 0.34 })}</div>
 
 <div class="frame">
   ${['tl', 'tr', 'bl', 'br'].map((k) => `<span class="corner ${k}">${corner({ size: 26 })}</span>`).join('')}
@@ -401,7 +449,7 @@ for (const panel of PANELS) {
   for (let pass = 0; pass < 4; pass++) {
     const available = m.footerTop - GAP - m.top
     const used = m.bottom - m.top
-    const next = Math.min(1.55, Math.max(dense ? 0.74 : 0.9, scale * (available / used)))
+    const next = Math.min(2.3, Math.max(dense ? 0.74 : 0.9, scale * (available / used)))
     if (Math.abs(next - scale) < 0.01) break
     scale = next
     markup = await html(panel, schedule, scale)

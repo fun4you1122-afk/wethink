@@ -26,6 +26,12 @@ body{font-family:'Jost',sans-serif;color:#0C3A42;background:#F2FAFB}
 .goldline{position:absolute;left:0;right:0;height:.6mm;background:
   linear-gradient(90deg,transparent,#C9A227 12%,#F0DDA0 50%,#C9A227 88%,transparent)}
 
+.sidepat{position:absolute;top:174mm;bottom:11mm;width:12mm;
+  overflow:hidden;pointer-events:none}
+.sidepat.l{left:4mm}
+.sidepat.r{right:4mm}
+.sidepat svg{width:100%;height:100%;display:block}
+
 .frame{position:absolute;inset:10mm;pointer-events:none;
   border:.4mm solid rgba(201,162,39,.42);border-radius:2mm}
 .frame .corner{position:absolute}
@@ -55,41 +61,54 @@ header{position:relative;text-align:center;padding-top:20mm;height:168mm}
 .where{font-size:5mm;letter-spacing:.4mm;text-transform:uppercase;color:#46707A;margin-top:6mm;font-weight:500}
 .when{font-size:5.8mm;letter-spacing:.34mm;text-transform:uppercase;color:#037A8A;margin-top:2.5mm;font-weight:700}
 
-.days{display:grid;grid-template-columns:1fr 1fr;gap:6.44mm;margin-top:7.37mm}
+.days{display:grid;grid-template-columns:1fr 1fr;gap:7.00mm;margin-top:8.00mm}
 .col{break-inside:avoid}
-.dayhead{display:flex;align-items:center;gap:2.76mm;padding-bottom:2.76mm;margin-bottom:2.76mm;
+.dayhead{display:flex;align-items:center;gap:3.00mm;padding-bottom:3.00mm;margin-bottom:3.00mm;
   border-bottom:.9mm solid #015866;position:relative}
 .dayhead::after{content:'';position:absolute;left:0;right:0;bottom:-1.6mm;height:.4mm;
   background:#C9A227;opacity:.7}
 .dayhead .lotus{flex:0 0 auto}
-.dow{font-family:'Fraunces',serif;font-size:7.37mm;font-weight:600;color:#015866}
-.date{font-size:4.60mm;text-transform:uppercase;letter-spacing:.34mm;color:#037A8A;font-weight:600}
-.trackhead{margin:5.52mm 0 2.30mm;font-size:4.24mm;font-weight:700;text-transform:uppercase;
+.dow{font-family:'Fraunces',serif;font-size:8.00mm;font-weight:600;color:#015866}
+.date{font-size:5.00mm;text-transform:uppercase;letter-spacing:.34mm;color:#037A8A;font-weight:600}
+.trackhead{margin:6.00mm 0 2.50mm;font-size:4.60mm;font-weight:700;text-transform:uppercase;
   letter-spacing:.5mm;color:#fff;background:linear-gradient(90deg,#015866,#037A8A);
-  padding:1.84mm 3.22mm;border-radius:2mm;border-left:1mm solid #C9A227}
+  padding:2.00mm 3.50mm;border-radius:2mm;border-left:1mm solid #C9A227}
 .trackhead:first-child{margin-top:0}
 
-.row{display:flex;gap:2.76mm;padding:2.00mm 1.84mm;
-  border-bottom:.25mm solid rgba(3,122,138,.18);position:relative}
-.row:nth-child(even){background:rgba(3,122,138,.045);border-radius:1.6mm}
-.t{flex:0 0 13.81mm;font-size:4.33mm;font-weight:600;color:#037A8A;
-  font-variant-numeric:tabular-nums;padding-top:0.28mm}
-.ap{font-size:2.67mm;margin-left:.7mm;letter-spacing:.2mm}
+.row{display:flex;gap:2.20mm;padding:1.52mm 1.60mm;
+  border-bottom:.25mm solid rgba(3,122,138,.16);position:relative;align-items:stretch}
+.row:nth-child(even){background:rgba(3,122,138,.05);border-radius:1.6mm}
+
+/* the timeline: one continuous rail down the column with a stop per slot */
+.rail{flex:0 0 4.40mm;position:relative}
+.rail::before{content:'';position:absolute;left:50%;top:-2.40mm;bottom:-2.40mm;
+  width:.5mm;margin-left:-.25mm;background:rgba(3,122,138,.28)}
+.rail .dot{position:absolute;left:50%;top:2.40mm;width:2.90mm;height:2.90mm;
+  margin-left:-1.45mm;border-radius:50%;box-shadow:0 0 0 0.90mm #F2FAFB}
+.rail .dot.hollow{background:#F2FAFB;box-shadow:0 0 0 .45mm rgba(3,122,138,.4),0 0 0 0.90mm #F2FAFB}
+.col .row:first-of-type .rail::before{top:2.40mm}
+.col .row:last-child .rail::before{bottom:auto;height:4.80mm}
+
+.kind{display:none;font-size:2.80mm;font-weight:700;
+  text-transform:uppercase;letter-spacing:.2mm;margin-top:1.00mm;line-height:1;white-space:nowrap}
+.t{flex:0 0 15.00mm;font-size:5.40mm;font-weight:700;color:#015866;
+  font-variant-numeric:tabular-nums;padding-top:0.20mm;line-height:1}
+.ap{font-size:2.90mm;margin-left:.7mm;letter-spacing:.2mm}
 .b{flex:1;min-width:0}
-.act{font-size:4.14mm;line-height:1.22;font-weight:500;color:#0C3A42}
-.act.big{font-family:'Fraunces',serif;font-size:5.52mm;font-weight:600;color:#015866}
-.by{font-size:3.59mm;line-height:1.2;color:#46707A;margin-top:.9mm;letter-spacing:.08mm}
+.act{font-size:5.00mm;line-height:1.18;font-weight:600;color:#0C3A42;letter-spacing:-.02mm}
+.act.big{font-family:'Fraunces',serif;font-size:6.00mm;font-weight:600;color:#015866}
+.by{font-size:4.00mm;line-height:1.18;color:#46707A;margin-top:0.80mm;letter-spacing:.06mm}
 .row.rest{opacity:.5}
-.row.rest .act{font-size:3.68mm;font-weight:400;letter-spacing:.12mm}
+.row.rest .act{font-size:4.10mm;font-weight:500;letter-spacing:.12mm}
 .row.cer{background:linear-gradient(150deg,#015866,#02414D);color:#fff;
-  border-radius:2.5mm;padding:3.13mm;border-bottom:none;margin:2.21mm 0;
+  border-radius:2.5mm;padding:3.40mm;border-bottom:none;margin:2.40mm 0;
   box-shadow:0 0 0 .5mm #C9A227}
 .row.cer .t{color:#E3C15A}
 .row.cer .act.big{color:#fff}
 .row.cer .by{color:rgba(255,255,255,.7)}
 .row.cer .cer-list{color:rgba(255,255,255,.9)}
 .row.cer .cer-list li::marker{color:#E3C15A}
-.cer-list{margin:2.76mm 0 0 4.60mm;font-size:3.96mm;line-height:1.45;color:#0C3A42}
+.cer-list{margin:3.00mm 0 0 5.00mm;font-size:4.30mm;line-height:1.45;color:#0C3A42}
 
 footer{position:absolute;left:19mm;right:19mm;bottom:19mm;z-index:2}
 footer .rule{margin-bottom:8mm}
@@ -378,6 +397,37 @@ footer .rule{margin-bottom:8mm}
   <div class="goldline" style="bottom:0"></div>
 </div>
 
+<div class="sidepat l"><svg class="orn chain" viewBox="0 0 12 1150" preserveAspectRatio="xMidYMin slice"
+    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="ch" x="0" y="0" width="12" height="34" patternUnits="userSpaceOnUse">
+        <g fill="#C9A227" opacity="0.34">
+          <path d="M6 2 L9.4 7 L6 12 L2.6 7 Z"/>
+          <circle cx="6" cy="17" r="1.15"/>
+          <path d="M6 22 C 8.4 25 8.4 27.6 6 30.6 C 3.6 27.6 3.6 25 6 22 Z"/>
+        </g>
+        <g stroke="#C9A227" stroke-width=".55" opacity="0.20400000000000001" fill="none">
+          <path d="M6 12 L6 15.6 M6 18.4 L6 22"/>
+        </g>
+      </pattern>
+    </defs>
+    <rect x="0" y="0" width="12" height="1150" fill="url(#ch)"/></svg></div>
+<div class="sidepat r"><svg class="orn chain" viewBox="0 0 12 1150" preserveAspectRatio="xMidYMin slice"
+    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="ch" x="0" y="0" width="12" height="34" patternUnits="userSpaceOnUse">
+        <g fill="#C9A227" opacity="0.34">
+          <path d="M6 2 L9.4 7 L6 12 L2.6 7 Z"/>
+          <circle cx="6" cy="17" r="1.15"/>
+          <path d="M6 22 C 8.4 25 8.4 27.6 6 30.6 C 3.6 27.6 3.6 25 6 22 Z"/>
+        </g>
+        <g stroke="#C9A227" stroke-width=".55" opacity="0.20400000000000001" fill="none">
+          <path d="M6 12 L6 15.6 M6 18.4 L6 22"/>
+        </g>
+      </pattern>
+    </defs>
+    <rect x="0" y="0" width="12" height="1150" fill="url(#ch)"/></svg></div>
+
 <div class="frame">
   <span class="corner tl"><svg class="orn corner" viewBox="0 0 40 40" width="26" height="26"
     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -573,63 +623,212 @@ footer .rule{margin-bottom:8mm}
        transform="rotate(225 12 12)"/><path d="M12 12 C 9.6 8 9.6 5 12 1.6 C 14.4 5 14.4 8 12 12 Z"
        transform="rotate(270 12 12)"/><path d="M12 12 C 9.6 8 9.6 5 12 1.6 C 14.4 5 14.4 8 12 12 Z"
        transform="rotate(315 12 12)"/></g>
-    <circle cx="12" cy="12" r="1.6" fill="#C9A227"/></svg><span class="dow">Friday</span><span class="date">11 September</span></div><div class="trackhead">Main Stage</div><div class="row"><div class="t">10.00<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Day One opens · MC opening</div></div></div><div class="row"><div class="t">10.20<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der</div></div></div><div class="row"><div class="t">11.00<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Floral garland demonstration</div><div class="by">Thai Women’s Circle</div></div></div><div class="row"><div class="t">11.30<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Bamboo weaving demonstration</div><div class="by">SACIT</div></div></div><div class="row"><div class="t">12.00<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Celestial Bird Dance · Silver &amp; Golden Branches · Thai Puppet Theatre</div><div class="by">Kai Kaew</div></div></div><div class="row rest"><div class="t">12.20</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">12.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Muay Thai demonstration</div><div class="by">UAE Muay Thai and Kickboxing Federation</div></div></div><div class="row"><div class="t">1.10<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Pin making demonstration</div><div class="by">SACIT</div></div></div><div class="row"><div class="t">1.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der</div></div></div><div class="row"><div class="t">2.10<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Celestial Bird Dance · Silver &amp; Golden Branches · Thai Puppet Theatre</div><div class="by">Kai Kaew</div></div></div><div class="row"><div class="t">2.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Fruit and soap carving demonstration</div><div class="by">Thai Women’s Circle</div></div></div><div class="row"><div class="t">3.20<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Influencer panel</div><div class="by">@sallyelazab</div></div></div><div class="row rest"><div class="t">3.45</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">4.05<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Muay Thai demonstration</div><div class="by">UAE Muay Thai and Kickboxing Federation</div></div></div><div class="row"><div class="t">4.30<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der</div></div></div><div class="row cer"><div class="t">5.00<span class="ap">PM</span></div>
+    <circle cx="12" cy="12" r="1.6" fill="#C9A227"/></svg><span class="dow">Friday</span><span class="date">11 September</span></div><div class="trackhead">Main Stage</div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">10.00<span class="ap">AM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Day One opens · MC opening</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">10.20<span class="ap">AM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">11.00<span class="ap">AM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Floral garland demonstration</div><div class="by">Thai Women’s Circle</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">11.30<span class="ap">AM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Bamboo weaving demonstration</div><div class="by">SACIT</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#B0722B"></span></div>
+    <div class="t">12.00<span class="ap">PM</span>
+      <span class="kind" style="color:#B0722B">Show</span></div>
+    <div class="b"><div class="act">Celestial Bird Dance · Silver &amp; Golden Branches · Thai Puppet Theatre</div><div class="by">Kai Kaew</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">12.20</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#C2564B"></span></div>
+    <div class="t">12.40<span class="ap">PM</span>
+      <span class="kind" style="color:#C2564B">Muay Thai</span></div>
+    <div class="b"><div class="act">Muay Thai demonstration</div><div class="by">UAE Muay Thai and Kickboxing Federation</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">1.10<span class="ap">PM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Pin making demonstration</div><div class="by">SACIT</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">1.40<span class="ap">PM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#B0722B"></span></div>
+    <div class="t">2.10<span class="ap">PM</span>
+      <span class="kind" style="color:#B0722B">Show</span></div>
+    <div class="b"><div class="act">Celestial Bird Dance · Silver &amp; Golden Branches · Thai Puppet Theatre</div><div class="by">Kai Kaew</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">2.40<span class="ap">PM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Fruit and soap carving demonstration</div><div class="by">Thai Women’s Circle</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">3.20<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Influencer panel</div><div class="by">@sallyelazab</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">3.45</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#C2564B"></span></div>
+    <div class="t">4.05<span class="ap">PM</span>
+      <span class="kind" style="color:#C2564B">Muay Thai</span></div>
+    <div class="b"><div class="act">Muay Thai demonstration</div><div class="by">UAE Muay Thai and Kickboxing Federation</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">4.30<span class="ap">PM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der</div></div></div><div class="row cer">
+      <div class="rail"><span class="dot" style="background:#E3C15A"></span></div>
+      <div class="t">5.00<span class="ap">PM</span>
+        <span class="kind" style="color:#E3C15A">Ceremony</span></div>
       <div class="b">
         <div class="act big">Opening Ceremony</div>
         <div class="by">Main Atrium, Ground Floor</div>
         
-      </div></div><div class="row rest"><div class="t">6.25</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">6.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Kiosks introduced</div><div class="by">MC</div></div></div><div class="row"><div class="t">7.00<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der</div></div></div><div class="row"><div class="t">7.20<span class="ap">PM</span></div>
-    <div class="b"><div class="act">MC quiz</div></div></div><div class="row"><div class="t">7.30<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Hanuman &amp; the Mermaid Princess · Nora · Thailand’s Heritage</div><div class="by">Kai Kaew</div></div></div><div class="row rest"><div class="t">8.00</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">8.15<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Thailand trivia</div><div class="by">Kru Aom</div></div></div><div class="row"><div class="t">9.15<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Nora beading demonstration</div><div class="by">SACIT</div></div></div><div class="row"><div class="t">10.00<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der x Kany</div></div></div><div class="row"><div class="t">10.30<span class="ap">PM</span></div>
-    <div class="b"><div class="act">A Journey Through Thailand’s Four Regions · Kipas Renang Fan Dance · Isan Long-Drum Dance</div><div class="by">Kai Kaew</div></div></div><div class="row"><div class="t">10.50<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Quiz game</div><div class="by">MC</div></div></div><div class="trackhead">Secondary Stage</div><div class="row"><div class="t">10.30<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="row"><div class="t">11.20<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Youth talent show</div></div></div><div class="row rest"><div class="t">12.20</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">12.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Thai Dance Class</div><div class="by">Yasothara Thai Dance</div></div></div><div class="row"><div class="t">2.30<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Thai Games</div><div class="by">Royal Thai Embassy</div></div></div><div class="row"><div class="t">3.30<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="row rest"><div class="t">3.45</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">4.05<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Thai dance demonstration</div><div class="by">Kai Kaew &amp; Yasothara Thai Dance</div></div></div><div class="row"><div class="t">4.30<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="row rest"><div class="t">6.25</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">6.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Thai Dance Class</div><div class="by">Yasothara Thai Dance</div></div></div><div class="row rest"><div class="t">8.00</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">8.15<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Thai musical instrument demonstration</div><div class="by">Sun Der</div></div></div><div class="row"><div class="t">9.10<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Thai Games</div><div class="by">Royal Thai Embassy</div></div></div><div class="row"><div class="t">10.20<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="trackhead">Workshops</div><div class="row"><div class="t">10.00<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Registration and preparation</div></div></div><div class="row"><div class="t">10.20<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Tote bag decoration + Thai art colouring</div><div class="by">Royal Thai Embassy</div></div></div><div class="row"><div class="t">11.20<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Floral garland making workshop</div><div class="by">Thai Women’s Circle</div></div></div><div class="row"><div class="t">12.30<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Umbrella painting workshop</div><div class="by">Kai Kaew</div></div></div><div class="row"><div class="t">2.00<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Bamboo weaving workshop</div><div class="by">SACIT</div></div></div><div class="row"><div class="t">3.30<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Pin making workshop</div><div class="by">SACIT</div></div></div><div class="row rest"><div class="t">6.25</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">6.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Nora beading workshop</div><div class="by">SACIT</div></div></div><div class="row rest"><div class="t">8.00</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">8.15<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Tote bag decoration + Thai art colouring</div><div class="by">Royal Thai Embassy</div></div></div><div class="row"><div class="t">9.55<span class="ap">PM</span></div>
+      </div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">6.25</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">6.40<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Kiosks introduced</div><div class="by">MC</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">7.00<span class="ap">PM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">7.20<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">MC quiz</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#B0722B"></span></div>
+    <div class="t">7.30<span class="ap">PM</span>
+      <span class="kind" style="color:#B0722B">Show</span></div>
+    <div class="b"><div class="act">Hanuman &amp; the Mermaid Princess · Nora · Thailand’s Heritage</div><div class="by">Kai Kaew</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">8.00</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">8.15<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Thailand trivia</div><div class="by">Kru Aom</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">9.15<span class="ap">PM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Nora beading demonstration</div><div class="by">SACIT</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">10.00<span class="ap">PM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der x Kany</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#B0722B"></span></div>
+    <div class="t">10.30<span class="ap">PM</span>
+      <span class="kind" style="color:#B0722B">Show</span></div>
+    <div class="b"><div class="act">A Journey Through Thailand’s Four Regions · Kipas Renang Fan Dance · Isan Long-Drum Dance</div><div class="by">Kai Kaew</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">10.50<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Quiz game</div><div class="by">MC</div></div></div><div class="trackhead">Secondary Stage</div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">10.30<span class="ap">AM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">11.20<span class="ap">AM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Youth talent show</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">12.20</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#B0722B"></span></div>
+    <div class="t">12.40<span class="ap">PM</span>
+      <span class="kind" style="color:#B0722B">Show</span></div>
+    <div class="b"><div class="act">Thai Dance Class</div><div class="by">Yasothara Thai Dance</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">2.30<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Thai Games</div><div class="by">Royal Thai Embassy</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">3.30<span class="ap">PM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">3.45</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">4.05<span class="ap">PM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Thai dance demonstration</div><div class="by">Kai Kaew &amp; Yasothara Thai Dance</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">4.30<span class="ap">PM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">6.25</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#B0722B"></span></div>
+    <div class="t">6.40<span class="ap">PM</span>
+      <span class="kind" style="color:#B0722B">Show</span></div>
+    <div class="b"><div class="act">Thai Dance Class</div><div class="by">Yasothara Thai Dance</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">8.00</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">8.15<span class="ap">PM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Thai musical instrument demonstration</div><div class="by">Sun Der</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">9.10<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Thai Games</div><div class="by">Royal Thai Embassy</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">10.20<span class="ap">PM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="trackhead">Workshops</div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">10.00<span class="ap">AM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Registration and preparation</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">10.20<span class="ap">AM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Tote bag decoration + Thai art colouring</div><div class="by">Royal Thai Embassy</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">11.20<span class="ap">AM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Floral garland making workshop</div><div class="by">Thai Women’s Circle</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">12.30<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Umbrella painting workshop</div><div class="by">Kai Kaew</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">2.00<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Bamboo weaving workshop</div><div class="by">SACIT</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">3.30<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Pin making workshop</div><div class="by">SACIT</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">6.25</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">6.40<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Nora beading workshop</div><div class="by">SACIT</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">8.00</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">8.15<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Tote bag decoration + Thai art colouring</div><div class="by">Royal Thai Embassy</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">9.55<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
     <div class="b"><div class="act">Umbrella painting workshop</div><div class="by">Kai Kaew</div></div></div></section>
     <section class="col"><div class="dayhead"><svg class="orn lotus" viewBox="0 0 24 24" width="26" height="26"
     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -642,63 +841,224 @@ footer .rule{margin-bottom:8mm}
        transform="rotate(225 12 12)"/><path d="M12 12 C 9.6 8 9.6 5 12 1.6 C 14.4 5 14.4 8 12 12 Z"
        transform="rotate(270 12 12)"/><path d="M12 12 C 9.6 8 9.6 5 12 1.6 C 14.4 5 14.4 8 12 12 Z"
        transform="rotate(315 12 12)"/></g>
-    <circle cx="12" cy="12" r="1.6" fill="#C9A227"/></svg><span class="dow">Saturday</span><span class="date">12 September</span></div><div class="trackhead">Main Stage</div><div class="row"><div class="t">10.00<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Day Two opens · MC opening</div></div></div><div class="row"><div class="t">10.20<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der x Kany</div></div></div><div class="row"><div class="t">11.00<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Fruit and soap carving demonstration</div><div class="by">Thai Women’s Circle</div></div></div><div class="row"><div class="t">11.30<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Bamboo weaving demonstration</div><div class="by">SACIT</div></div></div><div class="row"><div class="t">12.00<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Celestial Bird Dance · Silver &amp; Golden Branches · Thai Puppet Theatre</div><div class="by">Kai Kaew</div></div></div><div class="row rest"><div class="t">12.20</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">12.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Muay Thai demonstration</div><div class="by">UAE Muay Thai and Kickboxing Federation</div></div></div><div class="row"><div class="t">1.10<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Pin making demonstration</div><div class="by">SACIT</div></div></div><div class="row"><div class="t">1.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der x Kany</div></div></div><div class="row"><div class="t">2.10<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Celestial Bird Dance · Silver &amp; Golden Branches · Thai Puppet Theatre</div><div class="by">Kai Kaew</div></div></div><div class="row"><div class="t">2.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Floral garland making demonstration</div><div class="by">Thai Women’s Circle</div></div></div><div class="row"><div class="t">3.20<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Thailand trivia</div><div class="by">Kru Aom</div></div></div><div class="row rest"><div class="t">3.45</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">4.05<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Muay Thai demonstration</div><div class="by">UAE Muay Thai and Kickboxing Federation</div></div></div><div class="row"><div class="t">4.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der x Kany</div></div></div><div class="row"><div class="t">5.10<span class="ap">PM</span></div>
-    <div class="b"><div class="act">A Journey Through Thailand’s Four Regions · Kipas Renang Fan Dance · Isan Long-Drum Dance</div><div class="by">Kai Kaew</div></div></div><div class="row"><div class="t">5.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Influencer panel</div><div class="by">@boscoandsharon</div></div></div><div class="row"><div class="t">6.05<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Thailand trivia</div><div class="by">Kru Aom</div></div></div><div class="row rest"><div class="t">6.25</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">6.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der x Kany</div></div></div><div class="row"><div class="t">7.10<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Muay Thai demonstration</div><div class="by">UAE Muay Thai and Kickboxing Federation</div></div></div><div class="row"><div class="t">7.30<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Kiosks introduced</div><div class="by">MC</div></div></div><div class="row"><div class="t">7.45<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Quiz game</div><div class="by">MC</div></div></div><div class="row rest"><div class="t">8.00</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">8.15<span class="ap">PM</span></div>
-    <div class="b"><div class="act">A Journey Through Thailand’s Four Regions · Kipas Renang Fan Dance · Isan Long-Drum Dance</div><div class="by">Kai Kaew</div></div></div><div class="row"><div class="t">9.00<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Nora beading demonstration</div><div class="by">SACIT</div></div></div><div class="row"><div class="t">9.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der x Kany</div></div></div><div class="row"><div class="t">10.10<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Hanuman &amp; the Mermaid Princess · Nora · Thailand’s Heritage</div><div class="by">Kai Kaew</div></div></div><div class="row"><div class="t">10.30<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Lucky Draw</div></div></div><div class="row"><div class="t">10.45<span class="ap">PM</span></div>
-    <div class="b"><div class="act">The MC closes the festival</div></div></div><div class="trackhead">Secondary Stage</div><div class="row"><div class="t">10.30<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="row"><div class="t">11.20<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Youth talent show</div></div></div><div class="row rest"><div class="t">12.20</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">12.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Thai Dance Class</div><div class="by">Yasothara Thai Dance</div></div></div><div class="row"><div class="t">2.20<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Thai Games</div><div class="by">Royal Thai Embassy</div></div></div><div class="row"><div class="t">3.20<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="row rest"><div class="t">3.45</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">4.05<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Thai dance demonstration</div><div class="by">Kai Kaew</div></div></div><div class="row"><div class="t">4.55<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="row"><div class="t">5.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Instrument demonstration</div><div class="by">Sun Der</div></div></div><div class="row rest"><div class="t">6.25</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">6.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Thai Dance Class</div><div class="by">Yasothara Thai Dance</div></div></div><div class="row rest"><div class="t">8.00</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">8.15<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Instrument demonstration</div><div class="by">Sun Der</div></div></div><div class="row"><div class="t">9.25<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Thailand trivia and Thai language</div><div class="by">Kru Aom</div></div></div><div class="row"><div class="t">10.10<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="trackhead">Workshops</div><div class="row"><div class="t">10.00<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Registration and preparation</div></div></div><div class="row"><div class="t">10.20<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Tote bag decoration + Thai art colouring</div><div class="by">Royal Thai Embassy</div></div></div><div class="row"><div class="t">12.00<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Fruit and soap carving workshop</div><div class="by">Thai Women’s Circle</div></div></div><div class="row"><div class="t">1.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Bamboo weaving workshop</div><div class="by">SACIT</div></div></div><div class="row"><div class="t">3.20<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Umbrella painting workshop</div><div class="by">Kai Kaew</div></div></div><div class="row"><div class="t">5.00<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Pin making workshop</div><div class="by">SACIT</div></div></div><div class="row rest"><div class="t">6.25</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">6.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Nora beading workshop</div><div class="by">SACIT</div></div></div><div class="row rest"><div class="t">8.00</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">8.15<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Umbrella painting workshop</div><div class="by">Kai Kaew</div></div></div><div class="row"><div class="t">9.40<span class="ap">PM</span></div>
+    <circle cx="12" cy="12" r="1.6" fill="#C9A227"/></svg><span class="dow">Saturday</span><span class="date">12 September</span></div><div class="trackhead">Main Stage</div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">10.00<span class="ap">AM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Day Two opens · MC opening</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">10.20<span class="ap">AM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der x Kany</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">11.00<span class="ap">AM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Fruit and soap carving demonstration</div><div class="by">Thai Women’s Circle</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">11.30<span class="ap">AM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Bamboo weaving demonstration</div><div class="by">SACIT</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#B0722B"></span></div>
+    <div class="t">12.00<span class="ap">PM</span>
+      <span class="kind" style="color:#B0722B">Show</span></div>
+    <div class="b"><div class="act">Celestial Bird Dance · Silver &amp; Golden Branches · Thai Puppet Theatre</div><div class="by">Kai Kaew</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">12.20</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#C2564B"></span></div>
+    <div class="t">12.40<span class="ap">PM</span>
+      <span class="kind" style="color:#C2564B">Muay Thai</span></div>
+    <div class="b"><div class="act">Muay Thai demonstration</div><div class="by">UAE Muay Thai and Kickboxing Federation</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">1.10<span class="ap">PM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Pin making demonstration</div><div class="by">SACIT</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">1.40<span class="ap">PM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der x Kany</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#B0722B"></span></div>
+    <div class="t">2.10<span class="ap">PM</span>
+      <span class="kind" style="color:#B0722B">Show</span></div>
+    <div class="b"><div class="act">Celestial Bird Dance · Silver &amp; Golden Branches · Thai Puppet Theatre</div><div class="by">Kai Kaew</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">2.40<span class="ap">PM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Floral garland making demonstration</div><div class="by">Thai Women’s Circle</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">3.20<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Thailand trivia</div><div class="by">Kru Aom</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">3.45</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#C2564B"></span></div>
+    <div class="t">4.05<span class="ap">PM</span>
+      <span class="kind" style="color:#C2564B">Muay Thai</span></div>
+    <div class="b"><div class="act">Muay Thai demonstration</div><div class="by">UAE Muay Thai and Kickboxing Federation</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">4.40<span class="ap">PM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der x Kany</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#B0722B"></span></div>
+    <div class="t">5.10<span class="ap">PM</span>
+      <span class="kind" style="color:#B0722B">Show</span></div>
+    <div class="b"><div class="act">A Journey Through Thailand’s Four Regions · Kipas Renang Fan Dance · Isan Long-Drum Dance</div><div class="by">Kai Kaew</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">5.40<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Influencer panel</div><div class="by">@boscoandsharon</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">6.05<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Thailand trivia</div><div class="by">Kru Aom</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">6.25</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">6.40<span class="ap">PM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der x Kany</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#C2564B"></span></div>
+    <div class="t">7.10<span class="ap">PM</span>
+      <span class="kind" style="color:#C2564B">Muay Thai</span></div>
+    <div class="b"><div class="act">Muay Thai demonstration</div><div class="by">UAE Muay Thai and Kickboxing Federation</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">7.30<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Kiosks introduced</div><div class="by">MC</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">7.45<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Quiz game</div><div class="by">MC</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">8.00</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#B0722B"></span></div>
+    <div class="t">8.15<span class="ap">PM</span>
+      <span class="kind" style="color:#B0722B">Show</span></div>
+    <div class="b"><div class="act">A Journey Through Thailand’s Four Regions · Kipas Renang Fan Dance · Isan Long-Drum Dance</div><div class="by">Kai Kaew</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">9.00<span class="ap">PM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Nora beading demonstration</div><div class="by">SACIT</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">9.40<span class="ap">PM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Music performance</div><div class="by">Sun Der x Kany</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#B0722B"></span></div>
+    <div class="t">10.10<span class="ap">PM</span>
+      <span class="kind" style="color:#B0722B">Show</span></div>
+    <div class="b"><div class="act">Hanuman &amp; the Mermaid Princess · Nora · Thailand’s Heritage</div><div class="by">Kai Kaew</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#4E7A85"></span></div>
+    <div class="t">10.30<span class="ap">PM</span>
+      <span class="kind" style="color:#4E7A85">Stage</span></div>
+    <div class="b"><div class="act">Lucky Draw</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">10.45<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">The MC closes the festival</div></div></div><div class="trackhead">Secondary Stage</div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">10.30<span class="ap">AM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">11.20<span class="ap">AM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Youth talent show</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">12.20</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#B0722B"></span></div>
+    <div class="t">12.40<span class="ap">PM</span>
+      <span class="kind" style="color:#B0722B">Show</span></div>
+    <div class="b"><div class="act">Thai Dance Class</div><div class="by">Yasothara Thai Dance</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">2.20<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Thai Games</div><div class="by">Royal Thai Embassy</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">3.20<span class="ap">PM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">3.45</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">4.05<span class="ap">PM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Thai dance demonstration</div><div class="by">Kai Kaew</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">4.55<span class="ap">PM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">5.40<span class="ap">PM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Instrument demonstration</div><div class="by">Sun Der</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">6.25</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#B0722B"></span></div>
+    <div class="t">6.40<span class="ap">PM</span>
+      <span class="kind" style="color:#B0722B">Show</span></div>
+    <div class="b"><div class="act">Thai Dance Class</div><div class="by">Yasothara Thai Dance</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">8.00</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#2E7DA6"></span></div>
+    <div class="t">8.15<span class="ap">PM</span>
+      <span class="kind" style="color:#2E7DA6">Demo</span></div>
+    <div class="b"><div class="act">Instrument demonstration</div><div class="by">Sun Der</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#3E7C8C"></span></div>
+    <div class="t">9.25<span class="ap">PM</span>
+      <span class="kind" style="color:#3E7C8C">Live</span></div>
+    <div class="b"><div class="act">Thailand trivia and Thai language</div><div class="by">Kru Aom</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#6A5AC0"></span></div>
+    <div class="t">10.10<span class="ap">PM</span>
+      <span class="kind" style="color:#6A5AC0">Music</span></div>
+    <div class="b"><div class="act">Kim instrument</div><div class="by">Dusit Thani Abu Dhabi</div></div></div><div class="trackhead">Workshops</div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">10.00<span class="ap">AM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Registration and preparation</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">10.20<span class="ap">AM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Tote bag decoration + Thai art colouring</div><div class="by">Royal Thai Embassy</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">12.00<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Fruit and soap carving workshop</div><div class="by">Thai Women’s Circle</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">1.40<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Bamboo weaving workshop</div><div class="by">SACIT</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">3.20<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Umbrella painting workshop</div><div class="by">Kai Kaew</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">5.00<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Pin making workshop</div><div class="by">SACIT</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">6.25</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">6.40<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Nora beading workshop</div><div class="by">SACIT</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">8.00</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">8.15<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Umbrella painting workshop</div><div class="by">Kai Kaew</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">9.40<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
     <div class="b"><div class="act">Tote bag decoration + Thai art colouring</div><div class="by">Royal Thai Embassy</div></div></div></section>
   </div>
 </div>

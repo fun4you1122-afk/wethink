@@ -109,3 +109,23 @@ export function corner({ size = 30, fill = GOLD.mid, opacity = 0.85 } = {}) {
       <circle cx="4" cy="4" r="1.9"/>
     </g></svg>`
 }
+
+/** A vertical chain of diamonds and lotus buds, for the panel's side margins.
+    Drawn as a tiling pattern so it repeats cleanly at any panel height. */
+export function sideChain({ width = 13, height = 1150, fill = GOLD.mid, opacity = 0.3 } = {}) {
+  return `<svg class="orn chain" viewBox="0 0 12 ${height}" preserveAspectRatio="xMidYMin slice"
+    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="ch" x="0" y="0" width="12" height="34" patternUnits="userSpaceOnUse">
+        <g fill="${fill}" opacity="${opacity}">
+          <path d="M6 2 L9.4 7 L6 12 L2.6 7 Z"/>
+          <circle cx="6" cy="17" r="1.15"/>
+          <path d="M6 22 C 8.4 25 8.4 27.6 6 30.6 C 3.6 27.6 3.6 25 6 22 Z"/>
+        </g>
+        <g stroke="${fill}" stroke-width=".55" opacity="${opacity * 0.6}" fill="none">
+          <path d="M6 12 L6 15.6 M6 18.4 L6 22"/>
+        </g>
+      </pattern>
+    </defs>
+    <rect x="0" y="0" width="12" height="${height}" fill="url(#ch)"/></svg>`
+}

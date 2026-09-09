@@ -26,6 +26,12 @@ body{font-family:'Jost',sans-serif;color:#0C3A42;background:#F2FAFB}
 .goldline{position:absolute;left:0;right:0;height:.6mm;background:
   linear-gradient(90deg,transparent,#C9A227 12%,#F0DDA0 50%,#C9A227 88%,transparent)}
 
+.sidepat{position:absolute;top:202mm;bottom:11mm;width:12mm;
+  overflow:hidden;pointer-events:none}
+.sidepat.l{left:4mm}
+.sidepat.r{right:4mm}
+.sidepat svg{width:100%;height:100%;display:block}
+
 .frame{position:absolute;inset:10mm;pointer-events:none;
   border:.4mm solid rgba(201,162,39,.42);border-radius:2mm}
 .frame .corner{position:absolute}
@@ -55,41 +61,54 @@ header{position:relative;text-align:center;padding-top:20mm;height:196mm}
 .where{font-size:5mm;letter-spacing:.4mm;text-transform:uppercase;color:#46707A;margin-top:6mm;font-weight:500}
 .when{font-size:5.8mm;letter-spacing:.34mm;text-transform:uppercase;color:#037A8A;margin-top:2.5mm;font-weight:700}
 
-.days{display:grid;grid-template-columns:1fr 1fr;gap:15.50mm;margin-top:15.50mm}
+.days{display:grid;grid-template-columns:1fr 1fr;gap:23.00mm;margin-top:23.00mm}
 .col{break-inside:avoid}
-.dayhead{display:flex;align-items:center;gap:4.65mm;padding-bottom:4.65mm;margin-bottom:6.98mm;
+.dayhead{display:flex;align-items:center;gap:6.90mm;padding-bottom:6.90mm;margin-bottom:10.35mm;
   border-bottom:.9mm solid #015866;position:relative}
 .dayhead::after{content:'';position:absolute;left:0;right:0;bottom:-1.6mm;height:.4mm;
   background:#C9A227;opacity:.7}
 .dayhead .lotus{flex:0 0 auto}
-.dow{font-family:'Fraunces',serif;font-size:14.88mm;font-weight:600;color:#015866}
-.date{font-size:8.99mm;text-transform:uppercase;letter-spacing:.34mm;color:#037A8A;font-weight:600}
-.trackhead{margin:12.40mm 0 3.88mm;font-size:7.13mm;font-weight:700;text-transform:uppercase;
+.dow{font-family:'Fraunces',serif;font-size:22.08mm;font-weight:600;color:#015866}
+.date{font-size:13.34mm;text-transform:uppercase;letter-spacing:.34mm;color:#037A8A;font-weight:600}
+.trackhead{margin:18.40mm 0 5.75mm;font-size:10.58mm;font-weight:700;text-transform:uppercase;
   letter-spacing:.5mm;color:#fff;background:linear-gradient(90deg,#015866,#037A8A);
-  padding:3.10mm 5.42mm;border-radius:2mm;border-left:1mm solid #C9A227}
+  padding:4.60mm 8.05mm;border-radius:2mm;border-left:1mm solid #C9A227}
 .trackhead:first-child{margin-top:0}
 
-.row{display:flex;gap:6.20mm;padding:26.09mm 3.10mm;
-  border-bottom:.25mm solid rgba(3,122,138,.18);position:relative}
-.row:nth-child(even){background:rgba(3,122,138,.045);border-radius:1.6mm}
-.t{flex:0 0 27.90mm;font-size:8.68mm;font-weight:600;color:#037A8A;
-  font-variant-numeric:tabular-nums;padding-top:0.78mm}
-.ap{font-size:5.27mm;margin-left:.7mm;letter-spacing:.2mm}
+.row{display:flex;gap:6.44mm;padding:11.86mm 3.68mm;
+  border-bottom:.25mm solid rgba(3,122,138,.16);position:relative;align-items:stretch}
+.row:nth-child(even){background:rgba(3,122,138,.05);border-radius:1.6mm}
+
+/* the timeline: one continuous rail down the column with a stop per slot */
+.rail{flex:0 0 10.12mm;position:relative}
+.rail::before{content:'';position:absolute;left:50%;top:-5.52mm;bottom:-5.52mm;
+  width:.5mm;margin-left:-.25mm;background:rgba(3,122,138,.28)}
+.rail .dot{position:absolute;left:50%;top:5.52mm;width:6.67mm;height:6.67mm;
+  margin-left:-3.33mm;border-radius:50%;box-shadow:0 0 0 2.07mm #F2FAFB}
+.rail .dot.hollow{background:#F2FAFB;box-shadow:0 0 0 .45mm rgba(3,122,138,.4),0 0 0 2.07mm #F2FAFB}
+.col .row:first-of-type .rail::before{top:5.52mm}
+.col .row:last-child .rail::before{bottom:auto;height:11.04mm}
+
+.kind{display:block;font-size:6.44mm;font-weight:700;
+  text-transform:uppercase;letter-spacing:.2mm;margin-top:2.30mm;line-height:1;white-space:nowrap}
+.t{flex:0 0 48.30mm;font-size:14.72mm;font-weight:700;color:#015866;
+  font-variant-numeric:tabular-nums;padding-top:0.92mm;line-height:1}
+.ap{font-size:7.82mm;margin-left:.7mm;letter-spacing:.2mm}
 .b{flex:1;min-width:0}
-.act{font-size:8.21mm;line-height:1.22;font-weight:500;color:#0C3A42}
-.act.big{font-family:'Fraunces',serif;font-size:11.78mm;font-weight:600;color:#015866}
-.by{font-size:6.98mm;line-height:1.2;color:#46707A;margin-top:.9mm;letter-spacing:.08mm}
+.act{font-size:13.80mm;line-height:1.18;font-weight:600;color:#0C3A42;letter-spacing:-.02mm}
+.act.big{font-family:'Fraunces',serif;font-size:17.48mm;font-weight:600;color:#015866}
+.by{font-size:10.81mm;line-height:1.18;color:#46707A;margin-top:1.84mm;letter-spacing:.06mm}
 .row.rest{opacity:.5}
-.row.rest .act{font-size:7.13mm;font-weight:400;letter-spacing:.12mm}
+.row.rest .act{font-size:10.81mm;font-weight:500;letter-spacing:.12mm}
 .row.cer{background:linear-gradient(150deg,#015866,#02414D);color:#fff;
-  border-radius:2.5mm;padding:7.13mm;border-bottom:none;margin:3.72mm 0;
+  border-radius:2.5mm;padding:10.58mm;border-bottom:none;margin:5.52mm 0;
   box-shadow:0 0 0 .5mm #C9A227}
 .row.cer .t{color:#E3C15A}
 .row.cer .act.big{color:#fff}
 .row.cer .by{color:rgba(255,255,255,.7)}
 .row.cer .cer-list{color:rgba(255,255,255,.9)}
 .row.cer .cer-list li::marker{color:#E3C15A}
-.cer-list{margin:4.65mm 0 0 7.75mm;font-size:6.67mm;line-height:1.45;color:#0C3A42}
+.cer-list{margin:6.90mm 0 0 11.50mm;font-size:9.89mm;line-height:1.45;color:#0C3A42}
 
 footer{position:absolute;left:19mm;right:19mm;bottom:19mm;z-index:2}
 footer .rule{margin-bottom:8mm}
@@ -378,6 +397,37 @@ footer .rule{margin-bottom:8mm}
   <div class="goldline" style="bottom:0"></div>
 </div>
 
+<div class="sidepat l"><svg class="orn chain" viewBox="0 0 12 1150" preserveAspectRatio="xMidYMin slice"
+    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="ch" x="0" y="0" width="12" height="34" patternUnits="userSpaceOnUse">
+        <g fill="#C9A227" opacity="0.34">
+          <path d="M6 2 L9.4 7 L6 12 L2.6 7 Z"/>
+          <circle cx="6" cy="17" r="1.15"/>
+          <path d="M6 22 C 8.4 25 8.4 27.6 6 30.6 C 3.6 27.6 3.6 25 6 22 Z"/>
+        </g>
+        <g stroke="#C9A227" stroke-width=".55" opacity="0.20400000000000001" fill="none">
+          <path d="M6 12 L6 15.6 M6 18.4 L6 22"/>
+        </g>
+      </pattern>
+    </defs>
+    <rect x="0" y="0" width="12" height="1150" fill="url(#ch)"/></svg></div>
+<div class="sidepat r"><svg class="orn chain" viewBox="0 0 12 1150" preserveAspectRatio="xMidYMin slice"
+    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <pattern id="ch" x="0" y="0" width="12" height="34" patternUnits="userSpaceOnUse">
+        <g fill="#C9A227" opacity="0.34">
+          <path d="M6 2 L9.4 7 L6 12 L2.6 7 Z"/>
+          <circle cx="6" cy="17" r="1.15"/>
+          <path d="M6 22 C 8.4 25 8.4 27.6 6 30.6 C 3.6 27.6 3.6 25 6 22 Z"/>
+        </g>
+        <g stroke="#C9A227" stroke-width=".55" opacity="0.20400000000000001" fill="none">
+          <path d="M6 12 L6 15.6 M6 18.4 L6 22"/>
+        </g>
+      </pattern>
+    </defs>
+    <rect x="0" y="0" width="12" height="1150" fill="url(#ch)"/></svg></div>
+
 <div class="frame">
   <span class="corner tl"><svg class="orn corner" viewBox="0 0 40 40" width="26" height="26"
     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -573,17 +623,48 @@ footer .rule{margin-bottom:8mm}
        transform="rotate(225 12 12)"/><path d="M12 12 C 9.6 8 9.6 5 12 1.6 C 14.4 5 14.4 8 12 12 Z"
        transform="rotate(270 12 12)"/><path d="M12 12 C 9.6 8 9.6 5 12 1.6 C 14.4 5 14.4 8 12 12 Z"
        transform="rotate(315 12 12)"/></g>
-    <circle cx="12" cy="12" r="1.6" fill="#C9A227"/></svg><span class="dow">Friday</span><span class="date">11 September</span></div><div class="row"><div class="t">10.00<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Registration and preparation</div></div></div><div class="row"><div class="t">10.20<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Tote bag decoration + Thai art colouring</div><div class="by">Royal Thai Embassy</div></div></div><div class="row"><div class="t">11.20<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Floral garland making workshop</div><div class="by">Thai Women’s Circle</div></div></div><div class="row"><div class="t">12.30<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Umbrella painting workshop</div><div class="by">Kai Kaew</div></div></div><div class="row"><div class="t">2.00<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Bamboo weaving workshop</div><div class="by">SACIT</div></div></div><div class="row"><div class="t">3.30<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Pin making workshop</div><div class="by">SACIT</div></div></div><div class="row rest"><div class="t">6.25</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">6.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Nora beading workshop</div><div class="by">SACIT</div></div></div><div class="row rest"><div class="t">8.00</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">8.15<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Tote bag decoration + Thai art colouring</div><div class="by">Royal Thai Embassy</div></div></div><div class="row"><div class="t">9.55<span class="ap">PM</span></div>
+    <circle cx="12" cy="12" r="1.6" fill="#C9A227"/></svg><span class="dow">Friday</span><span class="date">11 September</span></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">10.00<span class="ap">AM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Registration and preparation</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">10.20<span class="ap">AM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Tote bag decoration + Thai art colouring</div><div class="by">Royal Thai Embassy</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">11.20<span class="ap">AM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Floral garland making workshop</div><div class="by">Thai Women’s Circle</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">12.30<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Umbrella painting workshop</div><div class="by">Kai Kaew</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">2.00<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Bamboo weaving workshop</div><div class="by">SACIT</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">3.30<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Pin making workshop</div><div class="by">SACIT</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">6.25</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">6.40<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Nora beading workshop</div><div class="by">SACIT</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">8.00</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">8.15<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Tote bag decoration + Thai art colouring</div><div class="by">Royal Thai Embassy</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">9.55<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
     <div class="b"><div class="act">Umbrella painting workshop</div><div class="by">Kai Kaew</div></div></div></section>
     <section class="col"><div class="dayhead"><svg class="orn lotus" viewBox="0 0 24 24" width="26" height="26"
     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -596,17 +677,48 @@ footer .rule{margin-bottom:8mm}
        transform="rotate(225 12 12)"/><path d="M12 12 C 9.6 8 9.6 5 12 1.6 C 14.4 5 14.4 8 12 12 Z"
        transform="rotate(270 12 12)"/><path d="M12 12 C 9.6 8 9.6 5 12 1.6 C 14.4 5 14.4 8 12 12 Z"
        transform="rotate(315 12 12)"/></g>
-    <circle cx="12" cy="12" r="1.6" fill="#C9A227"/></svg><span class="dow">Saturday</span><span class="date">12 September</span></div><div class="row"><div class="t">10.00<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Registration and preparation</div></div></div><div class="row"><div class="t">10.20<span class="ap">AM</span></div>
-    <div class="b"><div class="act">Tote bag decoration + Thai art colouring</div><div class="by">Royal Thai Embassy</div></div></div><div class="row"><div class="t">12.00<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Fruit and soap carving workshop</div><div class="by">Thai Women’s Circle</div></div></div><div class="row"><div class="t">1.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Bamboo weaving workshop</div><div class="by">SACIT</div></div></div><div class="row"><div class="t">3.20<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Umbrella painting workshop</div><div class="by">Kai Kaew</div></div></div><div class="row"><div class="t">5.00<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Pin making workshop</div><div class="by">SACIT</div></div></div><div class="row rest"><div class="t">6.25</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">6.40<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Nora beading workshop</div><div class="by">SACIT</div></div></div><div class="row rest"><div class="t">8.00</div>
-      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row"><div class="t">8.15<span class="ap">PM</span></div>
-    <div class="b"><div class="act">Umbrella painting workshop</div><div class="by">Kai Kaew</div></div></div><div class="row"><div class="t">9.40<span class="ap">PM</span></div>
+    <circle cx="12" cy="12" r="1.6" fill="#C9A227"/></svg><span class="dow">Saturday</span><span class="date">12 September</span></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">10.00<span class="ap">AM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Registration and preparation</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">10.20<span class="ap">AM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Tote bag decoration + Thai art colouring</div><div class="by">Royal Thai Embassy</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">12.00<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Fruit and soap carving workshop</div><div class="by">Thai Women’s Circle</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">1.40<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Bamboo weaving workshop</div><div class="by">SACIT</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">3.20<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Umbrella painting workshop</div><div class="by">Kai Kaew</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">5.00<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Pin making workshop</div><div class="by">SACIT</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">6.25</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">6.40<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Nora beading workshop</div><div class="by">SACIT</div></div></div><div class="row rest">
+      <div class="rail"><span class="dot hollow"></span></div>
+      <div class="t">8.00</div>
+      <div class="b"><div class="act">Prayer time / Break</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">8.15<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
+    <div class="b"><div class="act">Umbrella painting workshop</div><div class="by">Kai Kaew</div></div></div><div class="row">
+    <div class="rail"><span class="dot" style="background:#0E8F7E"></span></div>
+    <div class="t">9.40<span class="ap">PM</span>
+      <span class="kind" style="color:#0E8F7E">Workshop</span></div>
     <div class="b"><div class="act">Tote bag decoration + Thai art colouring</div><div class="by">Royal Thai Embassy</div></div></div></section>
   </div>
 </div>
