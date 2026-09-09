@@ -24,7 +24,10 @@ import path from 'node:path'
 import QRCode from 'qrcode'
 import { chromium } from 'playwright-core'
 import { loadSchedule, clock } from './schedule-data.mjs'
-import { GOLD, kanokBand, skyline, petal, lotus, corner, sideChain } from './ornament.mjs'
+import {
+  GOLD, kanokBand, skyline, petal, lotus, corner, sideChain,
+  whatsappGlyph, instagramGlyph, globeGlyph, mailGlyph,
+} from './ornament.mjs'
 
 const HERE = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(HERE, '../..')
@@ -339,7 +342,13 @@ footer .rule{margin-bottom:8mm}
 .wttag{font-size:4.9mm;font-weight:600;color:${WT.ink};letter-spacing:1.3mm;
   text-transform:uppercase;margin-top:4mm;white-space:nowrap;padding-left:1.15mm}
 .wttag i{font-style:normal;font-size:5.6mm;line-height:0;vertical-align:-.3mm;margin:0 .5mm}
-.credit .u{font-size:5mm;color:${C.teal};letter-spacing:.28mm;margin-top:3.2mm;font-weight:600}
+.contacts{display:grid;grid-template-columns:auto auto;justify-content:center;
+  gap:3.4mm 8mm;margin-top:4.6mm;padding-top:4.4mm;border-top:.3mm solid rgba(201,162,39,.45)}
+.ct{display:flex;align-items:center;gap:2.4mm;font-size:4.8mm;font-weight:600;
+  color:${WT.ink};letter-spacing:.14mm;white-space:nowrap}
+/* the glyphs carry unitless width/height attributes, which are CSS pixels;
+   size them here so they land in millimetres like everything else */
+.ct .gl{flex:0 0 auto;display:block;width:6mm;height:6mm}
 .reem{height:12mm;display:block;margin:4mm 0 0;opacity:.9}
 </style></head><body>
 <div class="wash"></div>
@@ -406,7 +415,12 @@ footer .rule{margin-bottom:8mm}
         <span class="wtname">WeThink</span>
       </div>
       <div class="wttag">Think <i style="color:${WT.cyan}">•</i> Plan <i style="color:${WT.violet}">•</i> Grow</div>
-      <div class="u">wethink.ae · info@wethink.ae</div>
+      <div class="contacts">
+        <span class="ct">${whatsappGlyph({ size: 6.4 })}+971 50 312 5078</span>
+        <span class="ct">${instagramGlyph({ size: 6.4 })}@wethink.ae</span>
+        <span class="ct">${globeGlyph({ size: 6.2, fill: WT.blue })}wethink.ae</span>
+        <span class="ct">${mailGlyph({ size: 6.2, fill: WT.blue })}info@wethink.ae</span>
+      </div>
     </div>
   </div>
 </footer>
