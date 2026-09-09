@@ -23,6 +23,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: 'https://www.wethink.ae/company-profile',
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
       url: 'https://www.wethink.ae/blog',
       changeFrequency: 'weekly',
       priority: 0.7,
