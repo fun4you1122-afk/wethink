@@ -26,7 +26,7 @@ import { chromium } from 'playwright-core'
 import { loadSchedule, clock } from './schedule-data.mjs'
 import {
   GOLD, kanokBand, skyline, petal, lotus, corner, sideChain,
-  globeGlyph, mailGlyph, phoneLineGlyph, instagramGlyph,
+  appTile,
 } from './ornament.mjs'
 
 const HERE = path.dirname(fileURLToPath(import.meta.url))
@@ -128,10 +128,14 @@ const WT_SITE = 'https://www.wethink.ae/'
    the brand's three colours, an edge a shade deeper, and the glyph deeper
    again, so the row reads as one pastel family rather than four badges. */
 const CONTACTS = [
-  { tint: '#E4F7FD', edge: '#B4E6F4', ink: '#0C9CC2', glyph: mailGlyph, label: 'info@wethink.ae' },
-  { tint: '#E7F1FE', edge: '#BBD7FB', ink: '#2A79E4', glyph: phoneLineGlyph, label: '+971 50 312 5078' },
-  { tint: '#F2E9FE', edge: '#DBC8F8', ink: '#7943D3', glyph: globeGlyph, label: 'wethink.ae' },
-  { tint: '#FDE9F5', edge: '#F6C8E1', ink: '#CB4590', glyph: instagramGlyph, label: '@wethink.ae' },
+  { id: 'mail', glyph: 'mail', label: 'info@wethink.ae',
+    stops: [[0, '#63CBFF'], [1, '#1470E8']] },
+  { id: 'tel', glyph: 'phone', label: '+971 50 312 5078',
+    stops: [[0, '#7BE88C'], [1, '#0D9C46']] },
+  { id: 'web', glyph: 'globe', label: 'wethink.ae',
+    stops: [[0, '#B98CFF'], [1, '#6220CE']] },
+  { id: 'ig', glyph: 'instagram', label: '@wethink.ae', radial: true,
+    stops: [[0, '#FEDA75'], [.28, '#FA7E1E'], [.56, '#D62976'], [.8, '#962FBF'], [1, '#4F5BD5']] },
 ]
 
 /* ── the panels ───────────────────────────────────────────── */
@@ -396,9 +400,8 @@ footer .rule{display:none}
    thin-line glyph. Bigger than the brand footer runs them, because the
    band has the room and these are read from across a concourse. */
 .ct{display:flex;flex-direction:column;align-items:center;gap:3.4mm;min-width:0}
-.ct .ring{width:21mm;height:21mm;border-radius:6.4mm;
-  display:flex;align-items:center;justify-content:center}
-.ct .gl{display:block;width:10.4mm;height:10.4mm}
+.ct .tile{width:22mm;height:22mm;display:block;border-radius:6.3mm;
+  box-shadow:0 1mm 2.4mm rgba(12,58,66,.2)}
 .ct .lb{font-size:4.4mm;font-weight:500;color:${WT.ink};letter-spacing:.06mm;white-space:nowrap}
 
 .sigqr{flex:0 0 auto;padding:1.6mm;border-radius:4.4mm;
@@ -478,11 +481,11 @@ footer .rule{display:none}
         </div>
       </div>
 
-      ${CONTACTS.map(({ tint, edge, ink, glyph, label }) => `
+      ${CONTACTS.map((c) => `
       <div class="sigcell grow">
         <span class="ct">
-          <span class="ring" style="background:${tint};box-shadow:inset 0 0 0 .45mm ${edge}">${glyph({ fill: ink })}</span>
-          <span class="lb">${label}</span>
+          ${appTile({ id: c.id, size: 22, stops: c.stops, radial: c.radial, glyph: c.glyph })}
+          <span class="lb">${c.label}</span>
         </span>
       </div>`).join('')}
 

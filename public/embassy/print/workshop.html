@@ -164,9 +164,8 @@ footer .rule{display:none}
    thin-line glyph. Bigger than the brand footer runs them, because the
    band has the room and these are read from across a concourse. */
 .ct{display:flex;flex-direction:column;align-items:center;gap:3.4mm;min-width:0}
-.ct .ring{width:21mm;height:21mm;border-radius:6.4mm;
-  display:flex;align-items:center;justify-content:center}
-.ct .gl{display:block;width:10.4mm;height:10.4mm}
+.ct .tile{width:22mm;height:22mm;display:block;border-radius:6.3mm;
+  box-shadow:0 1mm 2.4mm rgba(12,58,66,.2)}
 .ct .lb{font-size:4.4mm;font-weight:500;color:#050D2E;letter-spacing:.06mm;white-space:nowrap}
 
 .sigqr{flex:0 0 auto;padding:1.6mm;border-radius:4.4mm;
@@ -795,45 +794,96 @@ footer .rule{display:none}
       
       <div class="sigcell grow">
         <span class="ct">
-          <span class="ring" style="background:#E4F7FD;box-shadow:inset 0 0 0 .45mm #B4E6F4"><svg class="gl" viewBox="0 0 24 24" width="6" height="6"
+          <svg class="tile" viewBox="0 0 24 24" width="22" height="22"
     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <g fill="none" stroke="#0C9CC2" stroke-width="1.9" stroke-linejoin="round">
-      <rect x="2.5" y="5" width="19" height="14" rx="2.4"/>
-      <path d="M3 7l9 6 9-6"/>
-    </g></svg></span>
+    <defs><linearGradient id="tg-mail" x1="0" y1="0" x2="0" y2="1">
+         <stop offset="0" stop-color="#63CBFF"/><stop offset="1" stop-color="#1470E8"/>
+       </linearGradient>
+      <linearGradient id="th-mail" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".36"/>
+        <stop offset=".52" stop-color="#fff" stop-opacity=".04"/>
+        <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <rect width="24" height="24" rx="6.84" fill="url(#tg-mail)"/>
+    <rect width="24" height="24" rx="6.84" fill="url(#th-mail)"/>
+    <rect x=".4" y=".4" width="23.2" height="23.2" rx="6.44"
+      fill="none" stroke="#fff" stroke-opacity=".3" stroke-width=".8"/>
+    <g transform="translate(4.7 4.7) scale(.608)"><g fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+      <rect x="2.6" y="5" width="18.8" height="14" rx="2.8"/>
+      <path d="M3.5 7.6 12 13.5l8.5-5.9"/></g></g>
+  </svg>
           <span class="lb">info@wethink.ae</span>
         </span>
       </div>
       <div class="sigcell grow">
         <span class="ct">
-          <span class="ring" style="background:#E7F1FE;box-shadow:inset 0 0 0 .45mm #BBD7FB"><svg class="gl" viewBox="0 0 24 24" width="6" height="6"
+          <svg class="tile" viewBox="0 0 24 24" width="22" height="22"
     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path fill="none" stroke="#2A79E4" stroke-width="1.9"
-      stroke-linecap="round" stroke-linejoin="round"
-      d="M7.1 3.4 5.6 4.9c-.9.9-1.2 2.25-.7 3.44a20.6 20.6 0 0 0 10.76 10.76c1.19.5 2.54.2 3.44-.7l1.5-1.5a1.2 1.2 0 0 0-.05-1.8l-2.4-2.2a1.2 1.2 0 0 0-1.75 0l-1.4 1.3c-.35.31-.85.37-1.25.17a12.6 12.6 0 0 1-5.4-5.4c-.21-.41-.14-.91.16-1.26l1.3-1.4c.45-.5.45-1.25 0-1.75l-2.2-2.4a1.2 1.2 0 0 0-1.8-.05Z"/></svg></span>
+    <defs><linearGradient id="tg-tel" x1="0" y1="0" x2="0" y2="1">
+         <stop offset="0" stop-color="#7BE88C"/><stop offset="1" stop-color="#0D9C46"/>
+       </linearGradient>
+      <linearGradient id="th-tel" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".36"/>
+        <stop offset=".52" stop-color="#fff" stop-opacity=".04"/>
+        <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <rect width="24" height="24" rx="6.84" fill="url(#tg-tel)"/>
+    <rect width="24" height="24" rx="6.84" fill="url(#th-tel)"/>
+    <rect x=".4" y=".4" width="23.2" height="23.2" rx="6.44"
+      fill="none" stroke="#fff" stroke-opacity=".3" stroke-width=".8"/>
+    <g transform="translate(4.7 4.7) scale(.608)"><path fill="#fff" d="M6.6 2.6c.5-.5 1.3-.5 1.8.05l2.2 2.4c.45.5.45 1.25 0 1.75l-1.3 1.4c-.3.35-.37.85-.16 1.26a12.6 12.6 0 0 0 5.4 5.4c.4.2.9.14 1.25-.17l1.4-1.3c.5-.45 1.25-.45 1.75 0l2.4 2.2c.55.5.55 1.3.05 1.8l-1.5 1.5c-.9.9-2.25 1.2-3.44.72A20.6 20.6 0 0 1 4.4 7.55C3.9 6.36 4.2 5 5.1 4.1Z"/></g>
+  </svg>
           <span class="lb">+971 50 312 5078</span>
         </span>
       </div>
       <div class="sigcell grow">
         <span class="ct">
-          <span class="ring" style="background:#F2E9FE;box-shadow:inset 0 0 0 .45mm #DBC8F8"><svg class="gl" viewBox="0 0 24 24" width="6" height="6"
+          <svg class="tile" viewBox="0 0 24 24" width="22" height="22"
     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <g fill="none" stroke="#7943D3" stroke-width="1.9">
-      <circle cx="12" cy="12" r="9"/>
-      <path d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18"/>
-    </g></svg></span>
+    <defs><linearGradient id="tg-web" x1="0" y1="0" x2="0" y2="1">
+         <stop offset="0" stop-color="#B98CFF"/><stop offset="1" stop-color="#6220CE"/>
+       </linearGradient>
+      <linearGradient id="th-web" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".36"/>
+        <stop offset=".52" stop-color="#fff" stop-opacity=".04"/>
+        <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <rect width="24" height="24" rx="6.84" fill="url(#tg-web)"/>
+    <rect width="24" height="24" rx="6.84" fill="url(#th-web)"/>
+    <rect x=".4" y=".4" width="23.2" height="23.2" rx="6.44"
+      fill="none" stroke="#fff" stroke-opacity=".3" stroke-width=".8"/>
+    <g transform="translate(4.7 4.7) scale(.608)"><g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+      <circle cx="12" cy="12" r="8.6"/>
+      <path d="M3.4 12h17.2M12 3.4c2.5 2.6 2.5 14.6 0 17.2M12 3.4c-2.5 2.6-2.5 14.6 0 17.2"/></g></g>
+  </svg>
           <span class="lb">wethink.ae</span>
         </span>
       </div>
       <div class="sigcell grow">
         <span class="ct">
-          <span class="ring" style="background:#FDE9F5;box-shadow:inset 0 0 0 .45mm #F6C8E1"><svg class="gl" viewBox="0 0 24 24" width="6" height="6"
+          <svg class="tile" viewBox="0 0 24 24" width="22" height="22"
     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <g fill="none" stroke="#CB4590" stroke-width="2">
-      <rect x="3" y="3" width="18" height="18" rx="5.2"/>
-      <circle cx="12" cy="12" r="4"/>
-    </g>
-    <circle cx="17.3" cy="6.7" r="1.25" fill="#CB4590"/></svg></span>
+    <defs><radialGradient id="tg-ig" cx=".3" cy="1" r="1.25">
+         <stop offset="0" stop-color="#FEDA75"/><stop offset="0.28" stop-color="#FA7E1E"/><stop offset="0.56" stop-color="#D62976"/><stop offset="0.8" stop-color="#962FBF"/><stop offset="1" stop-color="#4F5BD5"/>
+       </radialGradient>
+      <linearGradient id="th-ig" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".36"/>
+        <stop offset=".52" stop-color="#fff" stop-opacity=".04"/>
+        <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <rect width="24" height="24" rx="6.84" fill="url(#tg-ig)"/>
+    <rect width="24" height="24" rx="6.84" fill="url(#th-ig)"/>
+    <rect x=".4" y=".4" width="23.2" height="23.2" rx="6.44"
+      fill="none" stroke="#fff" stroke-opacity=".3" stroke-width=".8"/>
+    <g transform="translate(4.7 4.7) scale(.608)"><g fill="none" stroke="#fff" stroke-width="2">
+      <rect x="3.4" y="3.4" width="17.2" height="17.2" rx="5.2"/>
+      <circle cx="12" cy="12" r="4.1"/></g>
+    <circle cx="17.3" cy="6.7" r="1.35" fill="#fff"/></g>
+  </svg>
           <span class="lb">@wethink.ae</span>
         </span>
       </div>

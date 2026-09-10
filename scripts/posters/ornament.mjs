@@ -180,3 +180,53 @@ export function phoneGlyph({ size = 6, fill = '#108FFC' } = {}) {
     xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="${fill}"
     d="M6.6 2.6c.5-.5 1.3-.5 1.8.05l2.2 2.4c.45.5.45 1.25 0 1.75l-1.3 1.4c-.3.35-.37.85-.16 1.26a12.6 12.6 0 0 0 5.4 5.4c.4.2.9.14 1.25-.17l1.4-1.3c.5-.45 1.25-.45 1.75 0l2.4 2.2c.55.5.55 1.3.05 1.8l-1.5 1.5c-.9.9-2.25 1.2-3.44.72A20.6 20.6 0 0 1 4.4 7.55C3.9 6.36 4.2 5 5.1 4.1Z"/></svg>`
 }
+
+
+/* ── contact tiles ─────────────────────────────────────────
+   The contact marks are drawn as small app tiles: a squircle carrying a
+   vertical gradient, a highlight falling off across the top half, a hairline
+   rim, and a white glyph. All of it is vector, so it stays crisp at any
+   panel size — no raster, no filters.
+
+   Gradient ids are suffixed per channel because every tile lands in the same
+   document and duplicate ids would cross-wire the fills. */
+
+const TILE_GLYPH = {
+  mail: `<g fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+      <rect x="2.6" y="5" width="18.8" height="14" rx="2.8"/>
+      <path d="M3.5 7.6 12 13.5l8.5-5.9"/></g>`,
+  phone: `<path fill="#fff" d="M6.6 2.6c.5-.5 1.3-.5 1.8.05l2.2 2.4c.45.5.45 1.25 0 1.75l-1.3 1.4c-.3.35-.37.85-.16 1.26a12.6 12.6 0 0 0 5.4 5.4c.4.2.9.14 1.25-.17l1.4-1.3c.5-.45 1.25-.45 1.75 0l2.4 2.2c.55.5.55 1.3.05 1.8l-1.5 1.5c-.9.9-2.25 1.2-3.44.72A20.6 20.6 0 0 1 4.4 7.55C3.9 6.36 4.2 5 5.1 4.1Z"/>`,
+  globe: `<g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+      <circle cx="12" cy="12" r="8.6"/>
+      <path d="M3.4 12h17.2M12 3.4c2.5 2.6 2.5 14.6 0 17.2M12 3.4c-2.5 2.6-2.5 14.6 0 17.2"/></g>`,
+  instagram: `<g fill="none" stroke="#fff" stroke-width="2">
+      <rect x="3.4" y="3.4" width="17.2" height="17.2" rx="5.2"/>
+      <circle cx="12" cy="12" r="4.1"/></g>
+    <circle cx="17.3" cy="6.7" r="1.35" fill="#fff"/>`,
+}
+
+export function appTile({ id, size = 22, stops, radial = false, glyph }) {
+  const rim = (24 * 0.285).toFixed(2)
+  const paint = radial
+    ? `<radialGradient id="tg-${id}" cx=".3" cy="1" r="1.25">
+         ${stops.map(([o, c]) => `<stop offset="${o}" stop-color="${c}"/>`).join('')}
+       </radialGradient>`
+    : `<linearGradient id="tg-${id}" x1="0" y1="0" x2="0" y2="1">
+         ${stops.map(([o, c]) => `<stop offset="${o}" stop-color="${c}"/>`).join('')}
+       </linearGradient>`
+  return `<svg class="tile" viewBox="0 0 24 24" width="${size}" height="${size}"
+    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>${paint}
+      <linearGradient id="th-${id}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".36"/>
+        <stop offset=".52" stop-color="#fff" stop-opacity=".04"/>
+        <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <rect width="24" height="24" rx="${rim}" fill="url(#tg-${id})"/>
+    <rect width="24" height="24" rx="${rim}" fill="url(#th-${id})"/>
+    <rect x=".4" y=".4" width="23.2" height="23.2" rx="${(rim - 0.4).toFixed(2)}"
+      fill="none" stroke="#fff" stroke-opacity=".3" stroke-width=".8"/>
+    <g transform="translate(4.7 4.7) scale(.608)">${TILE_GLYPH[glyph]}</g>
+  </svg>`
+}
