@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { QRCodeSVG } from 'qrcode.react'
-import { ArrowUpRight, X } from 'lucide-react'
+import { ArrowUpRight, Mail, X } from 'lucide-react'
 import { C, sans, serif } from './ui'
 
 /**
@@ -18,21 +18,22 @@ import { C, sans, serif } from './ui'
  *   · one card at a time, at the top, clear of the concierge and the dock;
  *   · four in a whole visit, spaced further and further apart;
  *   · each folds itself away after a few seconds, untouched;
- *   · closing one ends the series for the visit, and so does following a link;
+ *   · closing one ends the series, and so does following a link;
  *   · the clock only runs while the page is actually on screen, so a phone in
  *     a pocket does not burn through all four;
- *   · nothing shows in the first twenty seconds, and nothing shows at all if
- *     the guest has already opened the WeThink card at the foot of the page.
+ *   · nothing shows until the signature intro has cleared.
  *
- * Nothing is remembered between visits — sessionStorage, not localStorage —
- * which matches the dock's behaviour on the same page.
+ * Ending the series ends it for that page view only. Nothing is written down,
+ * so opening the link again — a reload, a new tab, coming back tomorrow —
+ * starts it over. Guests arrive at this page once and read it in a minute;
+ * a dismissal that outlived them would only mean the next person to pick up
+ * the phone sees nothing.
  */
 
 const WT = { cyan: '#03CFF2', blue: '#108FFC', violet: '#983CFC', ink: '#050D2E' }
 const GRADIENT = `linear-gradient(120deg, ${WT.cyan}, ${WT.blue} 48%, ${WT.violet})`
 
 const PROFILE = 'https://www.wethink.ae/company-profile'
-const DONE_KEY = 'wt-promo-done'
 
 type Pop = {
   id: string
@@ -43,9 +44,36 @@ type Pop = {
   body: string
   cta: string
   href: string
+  /** the mark that rides in the button, where the channel has one */
+  icon?: 'whatsapp' | 'instagram' | 'mail'
   /** the closing card carries the profile QR */
   qr?: boolean
 }
+
+/** lucide dropped its brand icons at v1, so these two are drawn here. */
+function WhatsAppGlyph({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 1.83c2.16 0 4.19.84 5.72 2.37a8.03 8.03 0 0 1 2.37 5.72c0 4.46-3.63 8.08-8.09 8.08a8.2 8.2 0 0 1-4.14-1.13l-.3-.18-3.07.81.82-3-.19-.31a8.03 8.03 0 0 1-1.23-4.28c0-4.46 3.63-8.08 8.11-8.08Zm-2.6 4.02c-.2 0-.52.08-.8.38-.28.3-1.05 1.02-1.05 2.49s1.08 2.89 1.23 3.09c.15.2 2.08 3.18 5.06 4.34 2.47.96 2.98.77 3.51.72.53-.05 1.72-.7 1.96-1.38.24-.68.24-1.26.17-1.38-.07-.12-.27-.2-.57-.35-.3-.15-1.72-.85-1.99-.95-.27-.1-.46-.15-.66.15-.2.3-.75.95-.92 1.15-.17.2-.34.22-.63.07-.3-.15-1.24-.46-2.37-1.46-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.65-1.62-.9-2.22-.23-.57-.47-.49-.65-.5h-.55Z"/>
+    </svg>
+  )
+}
+
+function InstagramGlyph({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className} aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
+    </svg>
+  )
+}
+
+const GLYPH = {
+  whatsapp: WhatsAppGlyph,
+  instagram: InstagramGlyph,
+  mail: Mail,
+} as const
 
 const POPS: Pop[] = [
   {
@@ -54,8 +82,9 @@ const POPS: Pop[] = [
     kicker: 'Powered by WeThink',
     title: 'This programme is ours.',
     body: 'The live schedule you are reading was designed and built by WeThink, here in Abu Dhabi.',
-    cta: 'See our work',
-    href: 'https://www.wethink.ae/work',
+    cta: '+971 50 312 5078',
+    href: 'https://wa.me/971503125078?text=Hi%20WeThink%2C%20I%20saw%20the%20Marhaba%20Thailand%20programme.',
+    icon: 'whatsapp',
   },
   {
     id: 'follow',
@@ -65,6 +94,7 @@ const POPS: Pop[] = [
     body: 'Reem Island, Makers District. AI, data, systems, strategy and brand work for teams across the UAE.',
     cta: '@wethink.ae',
     href: 'https://www.instagram.com/wethink.ae/',
+    icon: 'instagram',
   },
   {
     id: 'talk',
@@ -72,8 +102,9 @@ const POPS: Pop[] = [
     kicker: 'Have an event of your own?',
     title: 'We can build you one.',
     body: 'Invitations, live programmes, dashboards and the systems behind them. Tell us what you need.',
-    cta: 'Message us on WhatsApp',
-    href: 'https://wa.me/971503125078?text=Hi%20WeThink%2C%20I%20saw%20the%20Marhaba%20Thailand%20programme.',
+    cta: 'info@wethink.ae',
+    href: 'mailto:info@wethink.ae?subject=Marhaba%20Thailand%20%C2%B7%20WeThink',
+    icon: 'mail',
   },
   {
     id: 'profile',
@@ -99,19 +130,9 @@ export default function PromoPops() {
   const stop = useCallback(() => {
     finished.current = true
     setShown(null)
-    try {
-      sessionStorage.setItem(DONE_KEY, '1')
-    } catch {
-      /* private mode: the series simply runs again next visit */
-    }
   }, [])
 
   useEffect(() => {
-    try {
-      if (sessionStorage.getItem(DONE_KEY)) finished.current = true
-    } catch {
-      /* ignore */
-    }
     if (finished.current) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
@@ -198,8 +219,14 @@ export default function PromoPops() {
                     className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[12px] font-medium text-white"
                     style={{ background: GRADIENT, fontFamily: sans }}
                   >
+                    {shown.icon
+                      ? (() => {
+                          const G = GLYPH[shown.icon]
+                          return <G className="h-4 w-4" />
+                        })()
+                      : null}
                     {shown.cta}
-                    <ArrowUpRight className="h-3.5 w-3.5" />
+                    <ArrowUpRight className="h-3.5 w-3.5 opacity-70" />
                   </a>
 
                   {shown.qr && (
