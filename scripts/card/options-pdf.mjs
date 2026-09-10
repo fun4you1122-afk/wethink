@@ -62,8 +62,7 @@ const OPTIONS = [
              back:  `<div class="bg">${polyMesh({ w: W, h: H, seed: 11, band: 0.15, strength: 0.7 })}</div>` },
 ]
 
-const front = (bg, dark, slogan) => `<div class="side front${dark ? ' dark' : ''}">${bg}
-  ${slogan ? `<div class="slogan">${SLOGAN}</div>` : ''}
+const front = (bg, dark) => `<div class="side front${dark ? ' dark' : ''}">${bg}
   <div class="fc">
     <img class="mark" src="data:image/png;base64,${MARK}" alt="">
     <div class="name">WeThink</div>
@@ -92,7 +91,10 @@ const back = (bg, dark) => `<div class="side back${dark ? ' dark' : ''}">${bg}
       <div class="row">${instagramGlyph({ fill: WT.violet })}<span class="t">@wethink.ae</span></div>
     </div>
     <div class="rule"></div>
-    <div class="foot">Abu Dhabi &nbsp;·&nbsp; United Arab Emirates</div>
+    <div class="foot">
+      <span>Abu Dhabi, Makers District</span>
+      <span class="slogan">${SLOGAN}</span>
+    </div>
   </div>
 </div>`
 
@@ -129,10 +131,9 @@ html,body{width:${W}mm;font-family:'O',sans-serif;color:${WT.ink}}
 .tag{margin-top:2.8mm;font-family:'P';font-weight:600;font-size:2.4mm;color:${WT.soft};
   letter-spacing:.86mm;text-transform:uppercase;padding-left:.86mm}
 .tag i{font-style:normal;font-size:3mm;line-height:0;vertical-align:-.2mm;margin:0 .3mm}
-.slogan{position:absolute;right:${BLEED + SAFE}mm;bottom:${BLEED + SAFE}mm;
-  font-family:'P';font-weight:600;font-size:2.5mm;letter-spacing:.16mm;
-  color:rgba(255,255,255,.62);text-align:right}
-.side:not(.dark) .slogan{color:${WT.soft}}
+.slogan{font-family:'P';font-weight:600;font-size:2.05mm;letter-spacing:.06mm;line-height:1.15;
+  text-transform:none;white-space:nowrap;color:rgba(255,255,255,.66)}
+.side:not(.dark) .slogan{color:${WT.ink};opacity:.72}
 
 .back{padding:${BLEED + SAFE}mm ${BLEED + SAFE}mm}
 .back .inner{position:relative;display:flex;flex-direction:column;height:100%;
@@ -154,10 +155,11 @@ html,body{width:${W}mm;font-family:'O',sans-serif;color:${WT.ink}}
 .row{display:flex;align-items:center;gap:1.7mm;min-width:0}
 .row .gl{flex:0 0 auto;width:2.7mm;height:2.7mm;display:block}
 .row .t{font-size:2.4mm;font-weight:600;white-space:nowrap}
-.foot{font-family:'P';font-weight:600;font-size:2.1mm;letter-spacing:.46mm;
-  text-transform:uppercase;color:${WT.soft}}
+.foot{display:flex;align-items:baseline;justify-content:space-between;gap:4mm;
+  font-family:'P';font-weight:600;font-size:1.95mm;letter-spacing:.26mm;line-height:1.15;
+  text-transform:uppercase;color:${WT.soft};white-space:nowrap}
 </style></head><body>
-${OPTIONS.map((o) => front(o.front, o.dark, o.k === 'A') + back(o.back, o.dark)).join('')}
+${OPTIONS.map((o) => front(o.front, o.dark) + back(o.back, o.dark)).join('')}
 </body></html>`
 
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' })

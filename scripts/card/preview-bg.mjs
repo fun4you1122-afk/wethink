@@ -50,7 +50,7 @@ html,body{width:${W}mm;height:${H}mm}
   font-size:2.5mm;letter-spacing:.16mm;color:rgba(255,255,255,.62);text-align:right}
 </style></head><body>
 <div class="side${dark ? ' dark' : ''}">${bg}
-  ${dark ? '<div class="slogan">Let&rsquo;s build what works better.</div>' : ''}
+
   <div class="fc">
     <img class="mark" src="data:image/png;base64,${MARK}" alt="">
     <div class="name">WeThink</div>
