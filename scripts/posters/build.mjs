@@ -40,7 +40,7 @@ const BLEED = 3                      // mm, trim allowance for the printer
 const SAFE = 16                      // mm, kept clear of the glass frame
 const CROWN = 196                    // mm, the deep teal field at the head of the panel
 const CROWN_DENSE = 168              // mm, shallower on the master, which carries 110 rows
-const FOOTER = 122                   // mm, the white band at the foot of the panel;
+const FOOTER = 142                   // mm, the white band at the foot of the panel;
                                      // the skyline is anchored to sit just above it
 
 /* ── palette, sampled from the Reem Mall RM mark like the site ── */
@@ -372,31 +372,28 @@ footer .rule{display:none}
 .sigcell:last-child{border-right:none;padding-right:0}
 .sigcell.grow{flex:1 1 0;min-width:0}
 
-.powered{font-size:5mm;font-weight:700;color:${WT.ink};letter-spacing:.72mm;
-  text-transform:uppercase;line-height:1.42;white-space:nowrap;text-align:left}
-.sigmark{height:30mm;width:auto;display:block}
+.sigmark{height:78mm;width:auto;display:block;margin:-13mm 0;margin-right:2mm}
 .signame{font-size:12.6mm;font-weight:600;color:${WT.ink};line-height:.92;
   letter-spacing:1.7mm;text-transform:uppercase;padding-left:1.7mm;margin-right:-1.7mm}
 .sigtag{font-size:3.6mm;font-weight:600;color:${WT.ink};letter-spacing:1mm;
-  text-transform:uppercase;margin-top:2.6mm;white-space:nowrap;padding-left:1mm}
+  text-transform:uppercase;margin-top:2.6mm;padding-top:2.4mm;white-space:nowrap;padding-left:1mm;
+  border-top:.3mm solid rgba(15,23,42,.22)}
 .sigtag i{font-style:normal;font-size:4.4mm;line-height:0;vertical-align:-.25mm;margin:0 .4mm}
 
 .ct{display:flex;flex-direction:column;align-items:center;gap:2.4mm;min-width:0}
-.ct .ring{width:12.4mm;height:12.4mm;border-radius:50%;background:#F1F3F8;
+.ct .ring{width:12.4mm;height:12.4mm;border-radius:3.4mm;background:${WT.blue};
   display:flex;align-items:center;justify-content:center}
 .ct .gl{display:block;width:6.4mm;height:6.4mm}
 .ct .lb{font-size:3.9mm;font-weight:500;color:${WT.ink};letter-spacing:.06mm;white-space:nowrap}
 
-.sigqr{flex:0 0 auto;padding:.9mm;border-radius:2.6mm;
+.sigqr{flex:0 0 auto;padding:1.6mm;border-radius:4.4mm;
   background:linear-gradient(140deg,${WT.cyan},${WT.blue} 45%,${WT.violet})}
-.sigqr .code{position:relative;width:26mm;height:26mm;padding:1.4mm;background:#fff;border-radius:1.9mm}
+.sigqr .code{position:relative;width:50mm;height:50mm;padding:2.4mm;background:#fff;border-radius:3.2mm}
 .sigqr .code svg{width:100%;height:100%;display:block}
 .sigqr .code .mid{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:6.4mm;height:6.4mm;background:#fff;border-radius:1mm;padding:.6mm}
+  width:12mm;height:12mm;background:#fff;border-radius:1.8mm;padding:1mm}
 .sigqr .code .mid img{width:100%;height:100%;object-fit:contain;display:block}
 
-.build{font-size:4.4mm;font-weight:600;color:#696B7A;letter-spacing:.66mm;
-  text-transform:uppercase;line-height:1.42;text-align:right;white-space:nowrap}
 
 .sweep{margin-top:5mm;height:9mm}
 .sweep svg{width:100%;height:9mm;display:block}
@@ -465,10 +462,6 @@ footer .rule{display:none}
   <div class="sig">
     <div class="sigrow">
       <div class="sigcell">
-        <div class="powered">Powered<br>by:</div>
-      </div>
-
-      <div class="sigcell">
         <img class="sigmark" src="data:image/png;base64,${WETHINK}" alt="">
         <div>
           <div class="signame">WeThink</div>
@@ -478,25 +471,25 @@ footer .rule{display:none}
 
       <div class="sigcell grow">
         <span class="ct">
-          <span class="ring">${whatsappGlyph({ fill: WT.blue })}</span>
+          <span class="ring">${whatsappGlyph({ fill: '#FFFFFF' })}</span>
           <span class="lb">+971 50 312 5078</span>
         </span>
       </div>
       <div class="sigcell grow">
         <span class="ct">
-          <span class="ring">${instagramGlyph({ fill: WT.blue })}</span>
+          <span class="ring">${instagramGlyph({ fill: '#FFFFFF' })}</span>
           <span class="lb">@wethink.ae</span>
         </span>
       </div>
       <div class="sigcell grow">
         <span class="ct">
-          <span class="ring">${mailGlyph({ fill: WT.blue })}</span>
+          <span class="ring">${mailGlyph({ fill: '#FFFFFF' })}</span>
           <span class="lb">info@wethink.ae</span>
         </span>
       </div>
       <div class="sigcell grow">
         <span class="ct">
-          <span class="ring">${globeGlyph({ fill: WT.blue })}</span>
+          <span class="ring">${globeGlyph({ fill: '#FFFFFF' })}</span>
           <span class="lb">wethink.ae</span>
         </span>
       </div>
@@ -505,10 +498,6 @@ footer .rule{display:none}
         <div class="sigqr"><div class="code">${qrWt}
           <span class="mid"><img src="data:image/png;base64,${WETHINK}" alt=""></span>
         </div></div>
-      </div>
-
-      <div class="sigcell">
-        <div class="build">Let&rsquo;s build<br>together</div>
       </div>
     </div>
     <div class="sweep">
