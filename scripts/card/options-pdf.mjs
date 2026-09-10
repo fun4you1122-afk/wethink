@@ -40,6 +40,8 @@ const WT = {
 }
 const QR_URL = 'https://www.wethink.ae/company-profile'
 const SERVICES = serviceTitles()
+/* the closing line of the company profile, so the card says what the deck says */
+const SLOGAN = 'Let\u2019s build what works better.'
 
 const font = (f) => readFileSync(path.join(ROOT, 'public/fonts', f)).toString('base64')
 const MARK = readFileSync(path.join(ROOT, 'public/wethink-logo.png')).toString('base64')
@@ -52,15 +54,16 @@ const qr = await QRCode.toString(QR_URL, {
 /* each option supplies a front and a back ground; the layout is identical */
 const OPTIONS = [
   { k: 'A', dark: true,
-    front: `<div class="bg">${pixelBurst({ w: W, h: H, seed: 4, anchor: 'tr', ground: ['#33204D', '#2C1B43', '#3A2559'], light: false, density: 0.5, cell: 2.15, spill: 0.35, clear: { cx: W * 0.5, cy: H * 0.44, rx: W * 0.34, ry: H * 0.36 } })}</div>`,
-    back:  `<div class="bg">${pixelBurst({ w: W, h: H, seed: 9, anchor: 'br', ground: ['#33204D', '#2C1B43', '#3A2559'], light: false, density: 0.5, cell: 2.15, spill: 0.25, clear: { cx: W * 0.46, cy: H * 0.5, rx: W * 0.44, ry: H * 0.42 } })}</div>` },
+    front: `<div class="bg">${pixelBurst({ w: W, h: H, seed: 4, anchor: 'tr', ground: ['#33204D', '#2C1B43', '#3A2559'], light: false, density: 0, cell: 2.15, spill: 0, clear: { cx: W * 0.5, cy: H * 0.44, rx: W * 0.34, ry: H * 0.36 } })}</div>`,
+    back:  `<div class="bg">${pixelBurst({ w: W, h: H, seed: 9, anchor: 'br', ground: ['#33204D', '#2C1B43', '#3A2559'], light: false, density: 0, cell: 2.15, spill: 0, clear: { cx: W * 0.46, cy: H * 0.5, rx: W * 0.44, ry: H * 0.42 } })}</div>` },
   { k: 'B', front: ghostMark({ w: W, h: H, mark: MARK }),
              back:  ghostMark({ w: W, h: H, mark: MARK }) },
   { k: 'C', front: `<div class="bg">${polyMesh({ w: W, h: H, seed: 5, band: 0.24 })}</div>`,
              back:  `<div class="bg">${polyMesh({ w: W, h: H, seed: 11, band: 0.15, strength: 0.7 })}</div>` },
 ]
 
-const front = (bg, dark) => `<div class="side front${dark ? ' dark' : ''}">${bg}
+const front = (bg, dark, slogan) => `<div class="side front${dark ? ' dark' : ''}">${bg}
+  ${slogan ? `<div class="slogan">${SLOGAN}</div>` : ''}
   <div class="fc">
     <img class="mark" src="data:image/png;base64,${MARK}" alt="">
     <div class="name">WeThink</div>
@@ -89,7 +92,7 @@ const back = (bg, dark) => `<div class="side back${dark ? ' dark' : ''}">${bg}
       <div class="row">${instagramGlyph({ fill: WT.violet })}<span class="t">@wethink.ae</span></div>
     </div>
     <div class="rule"></div>
-    <div class="foot">Abu Dhabi, UAE &nbsp;·&nbsp; Let&rsquo;s build together</div>
+    <div class="foot">Abu Dhabi &nbsp;·&nbsp; United Arab Emirates</div>
   </div>
 </div>`
 
@@ -126,6 +129,10 @@ html,body{width:${W}mm;font-family:'O',sans-serif;color:${WT.ink}}
 .tag{margin-top:2.8mm;font-family:'P';font-weight:600;font-size:2.4mm;color:${WT.soft};
   letter-spacing:.86mm;text-transform:uppercase;padding-left:.86mm}
 .tag i{font-style:normal;font-size:3mm;line-height:0;vertical-align:-.2mm;margin:0 .3mm}
+.slogan{position:absolute;right:${BLEED + SAFE}mm;bottom:${BLEED + SAFE}mm;
+  font-family:'P';font-weight:600;font-size:2.5mm;letter-spacing:.16mm;
+  color:rgba(255,255,255,.62);text-align:right}
+.side:not(.dark) .slogan{color:${WT.soft}}
 
 .back{padding:${BLEED + SAFE}mm ${BLEED + SAFE}mm}
 .back .inner{position:relative;display:flex;flex-direction:column;height:100%;
@@ -150,7 +157,7 @@ html,body{width:${W}mm;font-family:'O',sans-serif;color:${WT.ink}}
 .foot{font-family:'P';font-weight:600;font-size:2.1mm;letter-spacing:.46mm;
   text-transform:uppercase;color:${WT.soft}}
 </style></head><body>
-${OPTIONS.map((o) => front(o.front, o.dark) + back(o.back, o.dark)).join('')}
+${OPTIONS.map((o) => front(o.front, o.dark, o.k === 'A') + back(o.back, o.dark)).join('')}
 </body></html>`
 
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' })

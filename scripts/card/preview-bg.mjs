@@ -17,7 +17,7 @@ const MARK = readFileSync(path.join(ROOT, 'public/wethink-logo.png')).toString('
 const INK = '#141A3C', SOFT = '#5A5F7D', CY = '#0EA5C4', VI = '#7C3AED'
 
 const OPTIONS = {
-  a: { label: 'A · Particle burst', dark: true, bg: `<div class="bg">${pixelBurst({ w: W, h: H, seed: 4, anchor: 'tr', ground: ['#33204D', '#2C1B43', '#3A2559'], light: false, density: 0.5, cell: 2.15, spill: 0.35, clear: { cx: W * 0.5, cy: H * 0.44, rx: W * 0.34, ry: H * 0.36 } })}</div>` },
+  a: { label: 'A · Particle burst', dark: true, bg: `<div class="bg">${pixelBurst({ w: W, h: H, seed: 4, anchor: 'tr', ground: ['#33204D', '#2C1B43', '#3A2559'], light: false, density: 0, cell: 2.15, spill: 0, clear: { cx: W * 0.5, cy: H * 0.44, rx: W * 0.34, ry: H * 0.36 } })}</div>` },
   b: { label: 'B · Ghost mark', bg: ghostMark({ w: W, h: H, mark: MARK }) },
   c: { label: 'C · Polygon mesh', bg: `<div class="bg">${polyMesh({ w: W, h: H, seed: 5, band: 0.24 })}</div>` },
 }
@@ -46,8 +46,11 @@ html,body{width:${W}mm;height:${H}mm}
   background:linear-gradient(90deg,transparent,${CY} 22%,${VI} 78%,transparent)}
 .tag{margin-top:2.8mm;font-family:'P';font-weight:600;font-size:2.4mm;color:${SOFT};
   letter-spacing:.86mm;text-transform:uppercase;padding-left:.86mm}
+.slogan{position:absolute;right:7mm;bottom:7mm;font-family:'P';font-weight:600;
+  font-size:2.5mm;letter-spacing:.16mm;color:rgba(255,255,255,.62);text-align:right}
 </style></head><body>
 <div class="side${dark ? ' dark' : ''}">${bg}
+  ${dark ? '<div class="slogan">Let&rsquo;s build what works better.</div>' : ''}
   <div class="fc">
     <img class="mark" src="data:image/png;base64,${MARK}" alt="">
     <div class="name">WeThink</div>
