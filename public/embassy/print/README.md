@@ -4,6 +4,12 @@ Five panels for the Reem Mall info stands, carrying four designs, generated from
 `app/embassy/programme/schedule.ts` so the wall and the page behind the QR
 code cannot disagree.
 
+**The Embassy cut the order to two panels.** Reem Mall had fewer stands
+available than expected, so Main Stage and the Full Programme are dropped and
+the QR carries them. `info-panels.pdf` is the pair the Embassy is printing:
+`second.pdf` then `workshop.pdf`, **2 sheets of each, 4 in total**, since each
+stand is glazed on both faces.
+
 | File | Goes on | Panels | Sheets | QR opens |
 |---|---|---|---|---|
 | `master.pdf` | The two entrance panels | 2 | 4 | `/embassy/programme` |
