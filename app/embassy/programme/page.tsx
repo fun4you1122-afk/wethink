@@ -14,6 +14,7 @@ import ThreadRail from '@/components/embassy/ThreadRail'
 import Masthead from '@/components/embassy/Masthead'
 import Concierge from '@/components/embassy/Concierge'
 import StudioDock from '@/components/embassy/StudioDock'
+import PromoPops from '@/components/embassy/PromoPops'
 import {
   C,
   Heading,
@@ -527,6 +528,7 @@ export default function Programme() {
 
         <Concierge />
         <StudioDock />
+        <PromoPops />
       </div>
     </MotionConfig>
   )
