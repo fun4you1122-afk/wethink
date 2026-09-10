@@ -35,9 +35,10 @@
 
 ## Suggested stock
 
-350–400 gsm, **matt or soft-touch**. The card is light, so fingerprints are
-far less of a worry than they were on the dark version, but matt suits the
-pale ground and a spot UV on the mark would catch the light against it.
+350–400 gsm, **soft-touch or matt**, and on option A that is not optional:
+the purple ground is what the design is, and a gloss laminate would turn it
+into a mirror that shows every fingerprint. Soft-touch is the right finish
+here. A spot UV on the mark would catch the light against it.
 
 Ask the printer for a proof anyway. The pattern is drawn at 0.14–0.2 mm and
 sits at low opacity on a near-white ground: too light a press and it

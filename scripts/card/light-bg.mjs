@@ -18,7 +18,8 @@ const RAMP = { cyan: '#00B4BD', blue: '#3B6BE0', violet: '#7C3AED', deep: '#4E11
     so a rebuild is identical.
 
     Takes a light or a dark ground. */
-export function pixelBurst({ w, h, seed = 4, anchor = 'tr', cell = 1.55, spill = 1, clear = null, light = true }) {
+export function pixelBurst({ w, h, seed = 4, anchor = 'tr', cell = 1.55, spill = 1,
+                            clear = null, light = true, density = 1, ground = null }) {
   let s0 = seed * 2654435761 % 4294967296
   const rnd = () => {
     s0 = (s0 * 1664525 + 1013904223) % 4294967296
@@ -41,7 +42,7 @@ export function pixelBurst({ w, h, seed = 4, anchor = 'tr', cell = 1.55, spill =
         const e = Math.hypot((x - clear.cx) / clear.rx, (y - clear.cy) / clear.ry)
         p *= Math.max(0, Math.min(1, (e - 0.75) / 0.5))
       }
-      if (rnd() > p * 1.35) continue
+      if (rnd() > p * 1.35 * density) continue
       const t = Math.min(1, d * 1.25 + rnd() * 0.16)
       // on a pale ground the ramp is deepened, or the far end of the
       // cluster fades into the paper before it has finished dissipating
@@ -76,9 +77,9 @@ export function pixelBurst({ w, h, seed = 4, anchor = 'tr', cell = 1.55, spill =
     preserveAspectRatio="none" aria-hidden="true">
   <defs>
     <linearGradient id="pb${seed}" x1="0" y1="0" x2=".7" y2="1">
-      <stop offset="0" stop-color="${light ? '#FFFFFF' : '#1A0F33'}"/>
-      <stop offset=".55" stop-color="${light ? '#FBFAFE' : '#150C2A'}"/>
-      <stop offset="1" stop-color="${light ? '#F2EDFC' : '#211043'}"/>
+      <stop offset="0" stop-color="${ground ? ground[0] : light ? '#FFFFFF' : '#1A0F33'}"/>
+      <stop offset=".55" stop-color="${ground ? ground[1] : light ? '#FBFAFE' : '#150C2A'}"/>
+      <stop offset="1" stop-color="${ground ? ground[2] : light ? '#F2EDFC' : '#211043'}"/>
     </linearGradient>
     <clipPath id="pbc${seed}"><rect width="${w}" height="${h}"/></clipPath>
   </defs>
