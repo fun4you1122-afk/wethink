@@ -12,7 +12,7 @@ for (const id of ['main', 'second', 'workshop', 'master']) {
   const p = await b.newPage({ viewport: { width: 1723, height: 4369 } })
   await p.goto('file://' + path.join(OUT, `${id}.html`))
   await p.evaluate(() => document.fonts.ready)
-  for (const sel of ['.qr', '.sigqr .code']) {
+  for (const sel of ['.hplate svg', '.sigqr .code']) {
   const el = p.locator(sel)
   const buf = await el.screenshot()
   const { data, width, height } = await p.evaluate(async (b64) => {

@@ -22,10 +22,16 @@ Each panel is double sided and carries the same artwork on both faces, and the
 glass unscrews so a poster can be laid in behind it. That means ten separate
 single sided sheets, not five printed back to back.
 
-Each panel carries two QR codes: the large one is the Embassy's, opening the
-live programme for that stage, and a small one in the WeThink block opening
+Each panel carries two QR codes. The large one sits in the header beside the
+crest, opposite the Reem Mall mark, and opens the live programme for that
+stage. The small one sits in the WeThink footer and opens
 `wethink.ae/?from=marhaba`, tagged so scans off these panels can be told apart
 from other traffic.
+
+The foot of the panel is the WeThink brand footer and nothing else: the mark,
+the wordmark, email, phone, website and the company QR. Everything the Embassy
+and the mall need — the programme QR and the Reem Mall mark — is in the header,
+which had the room for it.
 
 `all-panels.pdf` is the same four panels in one four-page file, in the order
 master, main, second, workshop. Convenient for review or for handing to the

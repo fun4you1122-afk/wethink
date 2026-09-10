@@ -26,7 +26,7 @@ import { chromium } from 'playwright-core'
 import { loadSchedule, clock } from './schedule-data.mjs'
 import {
   GOLD, kanokBand, skyline, petal, lotus, corner, sideChain,
-  whatsappGlyph, instagramGlyph, globeGlyph, mailGlyph,
+  globeGlyph, mailGlyph, phoneGlyph,
 } from './ornament.mjs'
 
 const HERE = path.dirname(fileURLToPath(import.meta.url))
@@ -40,7 +40,7 @@ const BLEED = 3                      // mm, trim allowance for the printer
 const SAFE = 16                      // mm, kept clear of the glass frame
 const CROWN = 196                    // mm, the deep teal field at the head of the panel
 const CROWN_DENSE = 168              // mm, shallower on the master, which carries 110 rows
-const FOOTER = 142                   // mm, the white band at the foot of the panel;
+const FOOTER = 88                   // mm, the white band at the foot of the panel;
                                      // the skyline is anchored to sit just above it
 
 /* ── palette, sampled from the Reem Mall RM mark like the site ── */
@@ -270,6 +270,20 @@ header{position:relative;text-align:center;padding-top:20mm;height:${crown}mm}
 .host{font-size:5.2mm;letter-spacing:.62mm;text-transform:uppercase;font-weight:600;color:${GOLD.light}}
 .fest{font-family:'Fraunces',serif;font-size:24mm;line-height:.98;font-weight:600;color:#fff;margin-top:4mm;letter-spacing:-.2mm}
 .tag{font-family:'Fraunces',serif;font-style:italic;font-size:6.6mm;color:rgba(255,255,255,.72);margin-top:3mm}
+/* The header carried nothing but the crest and the title, with two wide
+   empty flanks. The programme QR and the venue mark live there now, which
+   frees the whole foot of the panel for WeThink alone. */
+.hbadge{position:absolute;top:15mm;display:flex;flex-direction:column;
+  align-items:center;gap:3.2mm}
+.hbadge.l{left:0}
+.hbadge.r{right:0}
+.hplate{background:#fff;border-radius:3.4mm;padding:2.8mm;
+  box-shadow:0 0 0 .5mm rgba(201,162,39,.5)}
+.hplate svg{width:44mm;height:44mm;display:block}
+.hplate .reem{height:25mm;display:block;margin:7.5mm 3mm}
+.hcap{font-size:3.5mm;letter-spacing:.52mm;text-transform:uppercase;font-weight:600;
+  color:${GOLD.light};text-align:center;line-height:1.35;max-width:56mm}
+
 .crestwrap{position:relative;display:inline-block}
 .crestwrap .lotus{position:absolute;top:50%;margin-top:-4mm}
 .crestwrap .lotus.l{left:-19mm}
@@ -347,24 +361,8 @@ footer .rule{display:none}
 .footsky{position:absolute;left:0;right:0;bottom:${FOOTER}mm;height:52mm;z-index:1;pointer-events:none}
 .footsky svg{width:100%;height:100%;display:block}
 
-/* row one: the Embassy and the venue */
-.foot{display:flex;align-items:center;justify-content:space-between;gap:10mm}
-.scanblock{display:flex;align-items:center;gap:6mm}
-.qr{flex:0 0 42mm;height:42mm;padding:2.4mm;background:#fff;border-radius:2.2mm;
-  box-shadow:0 0 0 .4mm ${C.pale}}
-.qr svg{width:100%;height:100%;display:block}
-.scan .k{font-family:'Fraunces',serif;font-size:7.4mm;font-weight:600;color:${C.tealDeep};line-height:1.06}
-.scan .v{font-size:4.3mm;color:${C.inkSoft};margin-top:2.2mm;line-height:1.3}
-.venue{display:flex;align-items:center;gap:4mm}
-.venue .vl{font-size:3.5mm;letter-spacing:.4mm;text-transform:uppercase;color:${C.inkSoft};font-weight:600}
-/* Sized by the ink, not the canvas. The Reem Mall file carries a lot of
-   whitespace: its artwork fills 51% of the file's height against 59% for
-   the WeThink mark, so equal canvas heights put the two marks 3x apart.
-   34.6mm of canvas here gives the same 17.7mm of visible mark. */
-.reem{height:34.6mm;display:block;opacity:.95}
-
-/* row two: the company signature */
-.sig{margin-top:8mm;padding-top:7mm;border-top:.3mm solid rgba(1,88,102,.16)}
+/* the company signature, alone at the foot of the panel */
+.sig{margin-top:0}
 .sigrow{display:flex;align-items:center}
 .sigcell{display:flex;align-items:center;justify-content:center;gap:5mm;
   padding:0 5.5mm;border-right:.3mm solid #D0D1D5}
@@ -422,6 +420,14 @@ footer .rule{display:none}
 
 <div class="sheet">
   <header>
+    <span class="hbadge l">
+      <span class="hplate">${qr}</span>
+      <span class="hcap">Scan for the<br>live programme</span>
+    </span>
+    <span class="hbadge r">
+      <span class="hplate"><img class="reem" src="data:image/png;base64,${REEM}" alt="Reem Mall"></span>
+      <span class="hcap">Hosted at</span>
+    </span>
     <span class="crestwrap">
       <span class="lotus l">${lotus({ size: 8.5 * 3.78, fill: GOLD.mid, opacity: 0.55 })}</span>
       <img class="crest" src="data:image/png;base64,${CREST}" alt="">
@@ -445,46 +451,26 @@ footer .rule{display:none}
 </div>
 
 <footer>
-  <div class="foot">
-    <div class="scanblock">
-      <div class="qr">${qr}</div>
-      <div class="scan">
-        <div class="k">Scan for the live programme</div>
-        <div class="v">What is on right now, across all three stages.</div>
-      </div>
-    </div>
-    <div class="venue">
-      <span class="vl">Hosted at</span>
-      <img class="reem" src="data:image/png;base64,${REEM}" alt="Reem Mall">
-    </div>
-  </div>
-
   <div class="sig">
     <div class="sigrow">
       <div class="sigcell">
         <img class="sigmark" src="data:image/png;base64,${WETHINK}" alt="">
         <div>
           <div class="signame">WeThink</div>
-          <div class="sigtag">Think <i style="color:${WT.cyan}">•</i> Plan <i style="color:${WT.violet}">•</i> Grow</div>
+          <div class="sigtag">Think <i style="color:${WT.cyan}">&bull;</i> Plan <i style="color:${WT.violet}">&bull;</i> Grow</div>
         </div>
       </div>
 
       <div class="sigcell grow">
         <span class="ct">
-          <span class="ring">${whatsappGlyph({ fill: '#FFFFFF' })}</span>
-          <span class="lb">+971 50 312 5078</span>
-        </span>
-      </div>
-      <div class="sigcell grow">
-        <span class="ct">
-          <span class="ring">${instagramGlyph({ fill: '#FFFFFF' })}</span>
-          <span class="lb">@wethink.ae</span>
-        </span>
-      </div>
-      <div class="sigcell grow">
-        <span class="ct">
           <span class="ring">${mailGlyph({ fill: '#FFFFFF' })}</span>
           <span class="lb">info@wethink.ae</span>
+        </span>
+      </div>
+      <div class="sigcell grow">
+        <span class="ct">
+          <span class="ring">${phoneGlyph({ fill: '#FFFFFF' })}</span>
+          <span class="lb">+971 50 312 5078</span>
         </span>
       </div>
       <div class="sigcell grow">
