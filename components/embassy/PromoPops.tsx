@@ -50,7 +50,7 @@ type Pop = {
 const POPS: Pop[] = [
   {
     id: 'built',
-    at: 22,
+    at: 7,
     kicker: 'Powered by WeThink',
     title: 'This programme is ours.',
     body: 'The live schedule you are reading was designed and built by WeThink, here in Abu Dhabi.',
