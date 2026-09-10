@@ -15,8 +15,8 @@ const MOCKUPS = {
   event: EventMockup,
 } as const
 
-const INK = '#241546'
-const MUTED = '#6B6480'
+const INK = '#14121C'
+const MUTED = '#55506A'
 const VIOLET = '#6D28D9'
 
 function Slide({
@@ -51,13 +51,17 @@ export default function DeckPage() {
 
 
       {/* 01 — cover */}
-      <Slide n={1} dark label={COMPANY.site}>
+      <Slide n={1} label={COMPANY.site}>
         <div className="stack">
           <Eyebrow>Company Profile</Eyebrow>
-          <h1 style={{ marginTop: '6mm' }}>
-            Building smarter,<br />more efficient<br />businesses
+          <h1 style={{ marginTop: '7mm', maxWidth: '250mm' }}>
+            Building smarter,<br />more efficient businesses
           </h1>
-          <p className="lead" style={{ marginTop: '7mm' }}>{COMPANY.legal}</p>
+          <div className="dash">
+            <p className="lead" style={{ maxWidth: '170mm' }}>
+              {COMPANY.legal} &middot; {COMPANY.base}
+            </p>
+          </div>
           <div className="contact">
             <span>{COMPANY.phone}</span>
             <span>{COMPANY.email}</span>
@@ -101,10 +105,10 @@ export default function DeckPage() {
       {/* 04 — what the solutions support */}
       <Slide n={4}>
         <Eyebrow>Our solutions are designed to support</Eyebrow>
-        <div className="grid2" style={{ marginTop: '8mm' }}>
+        <div className="grid2 fill" style={{ marginTop: '8mm' }}>
           {SUPPORTS.map((s, i) => (
-            <div key={s} className="card" style={{ display: 'flex', gap: '4mm', alignItems: 'baseline' }}>
-              <span style={{ fontFamily: 'PoppinsD', fontWeight: 700, color: VIOLET, fontSize: '4.4mm' }}>
+            <div key={s} className="card" style={{ display: 'flex', gap: '5mm', alignItems: 'baseline' }}>
+              <span style={{ fontFamily: 'SerifD', color: VIOLET, fontSize: '6mm', lineHeight: 1 }}>
                 {String(i + 1).padStart(2, '0')}
               </span>
               <span style={{ fontSize: '4.6mm', fontWeight: 600 }}>{s}</span>
@@ -115,7 +119,7 @@ export default function DeckPage() {
 
       {/* 05 — vision, mission, values */}
       <Slide n={5}>
-        <div className="grid2">
+        <div className="grid2" style={{ flexGrow: 1, alignContent: 'center' }}>
           {[['Vision', VISION], ['Mission', MISSION]].map(([k, v]) => (
             <div key={k}>
               <Eyebrow>{k}</Eyebrow>
@@ -134,12 +138,12 @@ export default function DeckPage() {
       {/* 06 — what we do */}
       <Slide n={6}>
         <Eyebrow>What we do</Eyebrow>
-        <ul className="num-list" style={{ marginTop: '7mm' }}>
+        <ul className="num-list spread" style={{ marginTop: '7mm' }}>
           {SERVICES.map((s) => (
             <li key={s.n}>
               <span className="n">{s.n}</span>
               <span className="t">
-                <strong style={{ fontFamily: 'PoppinsD', fontWeight: 700 }}>{s.title}</strong>
+                <strong style={{ fontFamily: 'SansD', fontWeight: 700 }}>{s.title}</strong>
                 <span className="d">{s.summary}</span>
               </span>
             </li>
@@ -179,10 +183,10 @@ export default function DeckPage() {
       {/* 12 — why */}
       <Slide n={12}>
         <Eyebrow>Why WeThink</Eyebrow>
-        <div className="grid3" style={{ marginTop: '7mm' }}>
+        <div className="grid3 fill" style={{ marginTop: '7mm' }}>
           {WHY.map(([k, v], i) => (
             <div className="card" key={k}>
-              <span style={{ fontFamily: 'PoppinsD', fontWeight: 700, color: VIOLET, fontSize: '3.6mm' }}>
+              <span style={{ fontFamily: 'SerifD', color: VIOLET, fontSize: '5.4mm', lineHeight: 1 }}>
                 {String(i + 1).padStart(2, '0')}
               </span>
               <div className="k" style={{ marginTop: '1.6mm', color: INK, fontSize: '4.4mm' }}>{k}</div>
@@ -196,10 +200,10 @@ export default function DeckPage() {
       {/* 13 — how we work */}
       <Slide n={13}>
         <Eyebrow>How we work</Eyebrow>
-        <div className="grid3" style={{ marginTop: '7mm' }}>
+        <div className="grid3 fill" style={{ marginTop: '7mm' }}>
           {HOW.map(([k, v], i) => (
             <div className="card" key={k}>
-              <span style={{ fontFamily: 'PoppinsD', fontWeight: 700, color: VIOLET, fontSize: '3.6mm' }}>
+              <span style={{ fontFamily: 'SerifD', color: VIOLET, fontSize: '5.4mm', lineHeight: 1 }}>
                 {String(i + 1).padStart(2, '0')}
               </span>
               <div className="k" style={{ marginTop: '1.6mm', color: INK, fontSize: '4.6mm' }}>{k}</div>
@@ -214,14 +218,14 @@ export default function DeckPage() {
         <div className="cols c-split">
           <div>
             <Eyebrow>Our core areas</Eyebrow>
-            <p className="pull" style={{ fontSize: '6.4mm' }}>{CORE_NOTE}</p>
+            <p className="pull" style={{ fontSize: '8.5mm' }}>{CORE_NOTE}</p>
           </div>
           <ul className="num-list">
             {CORE.map(([k, v], i) => (
               <li key={k}>
                 <span className="n">{String(i + 1).padStart(2, '0')}</span>
                 <span className="t">
-                  <strong style={{ fontFamily: 'PoppinsD', fontWeight: 700, fontSize: '4.3mm' }}>{k}</strong>
+                  <strong style={{ fontFamily: 'SansD', fontWeight: 700, fontSize: '4.3mm' }}>{k}</strong>
                   <span className="d">{v}</span>
                 </span>
               </li>

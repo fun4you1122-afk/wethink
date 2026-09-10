@@ -1,81 +1,105 @@
 /* Print stage for the 16:9 company profile deck. Kept in a stylesheet
    rather than an inline <style>: the quoted font names escape differently
    on the server and the client, which broke hydration and printed Next's
-   error badge onto the cover slide. */
+   error badge onto the cover slide.
 
-@font-face{font-family:'PoppinsD';src:url('/fonts/Poppins-SemiBold.ttf') format('truetype');font-weight:600;font-display:block}
-@font-face{font-family:'PoppinsD';src:url('/fonts/Poppins-Bold.ttf') format('truetype');font-weight:700;font-display:block}
-@font-face{font-family:'OpenSansD';src:url('/fonts/OpenSans-Regular.ttf') format('truetype');font-weight:400;font-display:block}
-@font-face{font-family:'OpenSansD';src:url('/fonts/OpenSans-SemiBold.ttf') format('truetype');font-weight:600;font-display:block}
-@font-face{font-family:'OpenSansD';src:url('/fonts/OpenSans-Bold.ttf') format('truetype');font-weight:700;font-display:block}
+   The deck reads as an editorial document rather than a slide pack: an
+   ivory ground throughout, a serif display face against a grotesque for
+   everything else, hairline rules doing the work that filled cards used
+   to, and violet kept for numbers, eyebrows and one rule at a time. Only
+   the closing slide goes to ink, so the deck ends on something. */
+
+@font-face{font-family:'SerifD';src:url('/fonts/InstrumentSerif-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:'SerifD';src:url('/fonts/InstrumentSerif-Italic.ttf') format('truetype');font-weight:400;font-style:italic;font-display:block}
+@font-face{font-family:'SansD';src:url('/fonts/Karla-Regular.ttf') format('truetype');font-weight:400;font-display:block}
+@font-face{font-family:'SansD';src:url('/fonts/Karla-Medium.ttf') format('truetype');font-weight:500;font-display:block}
+@font-face{font-family:'SansD';src:url('/fonts/Karla-SemiBold.ttf') format('truetype');font-weight:600;font-display:block}
+@font-face{font-family:'SansD';src:url('/fonts/Karla-Bold.ttf') format('truetype');font-weight:700;font-display:block}
 
 @page{size:338.667mm 190.5mm;margin:0}
 html,body{background:#DDD;margin:0;padding:0}
-.deck-root{font-family:'OpenSansD',system-ui,sans-serif;color:#241546}
+.deck-root{font-family:'SansD',system-ui,sans-serif;color:#14121C}
 
-.slide{position:relative;width:338.667mm;height:190.5mm;overflow:hidden;background:#fff;
+.slide{position:relative;width:338.667mm;height:190.5mm;overflow:hidden;background:#FBFAF7;
   page-break-after:always;break-after:page;margin:0 auto 8mm;
   -webkit-print-color-adjust:exact;print-color-adjust:exact}
 .slide:last-child{page-break-after:auto;break-after:auto;margin-bottom:0}
-.slide::before{content:'';position:absolute;left:0;right:0;top:0;height:2.4mm;
-  background:linear-gradient(90deg,#00B4BD,#006FA3 24%,#4474E3 52%,#4E11BB 78%,#7840CF)}
-.slide.dark{background:linear-gradient(150deg,#170D33 0%,#2A1259 52%,#4E11BB 100%);color:#fff}
+.slide::before{content:'';position:absolute;left:0;right:0;top:0;height:1.6mm;
+  background:linear-gradient(90deg,#03CFF2,#108FFC 46%,#983CFC)}
+.slide.dark{background:#14121C;color:#FBFAF7}
 
-.slide-body{position:absolute;inset:16mm 18mm 20mm}
-.slide-foot{position:absolute;left:18mm;right:18mm;bottom:9mm;display:flex;
-  align-items:center;justify-content:space-between;font-size:3.1mm;letter-spacing:.28mm;
-  text-transform:uppercase;font-weight:600;color:#6B6480}
-.slide.dark .slide-foot{color:rgba(255,255,255,.6)}
+.slide-body{position:absolute;inset:20mm 22mm 29mm;display:flex;flex-direction:column}
+/* Two ways of using the whole frame rather than stacking at the top.
+   A ruled list spaces its rows into the leftover height; a grid of cards
+   grows the cards instead, because spacing two rows apart leaves a hole
+   down the middle of the slide. */
+.spread{flex-grow:1;align-content:space-between}
+.fill{flex-grow:1;grid-auto-rows:1fr}
+.slide-foot{position:absolute;left:22mm;right:22mm;bottom:11mm;display:flex;
+  align-items:center;justify-content:space-between;font-size:2.9mm;letter-spacing:.34mm;
+  text-transform:uppercase;font-weight:700;color:#8B8598;
+  border-top:.25mm solid #E0DBD0;padding-top:4mm}
+.slide.dark .slide-foot{color:rgba(251,250,247,.5);border-top-color:rgba(251,250,247,.18)}
 .foot-n{font-variant-numeric:tabular-nums}
 
-.eyebrow{font-family:'PoppinsD';font-size:3.4mm;font-weight:700;letter-spacing:.9mm;
+.eyebrow{font-family:'SansD';font-size:3.1mm;font-weight:700;letter-spacing:.8mm;
   text-transform:uppercase;color:#6D28D9}
-.slide.dark .eyebrow{color:#C4A6FF}
-h1,h2,h3{font-family:'PoppinsD';font-weight:700;margin:0;line-height:1.06}
-h1{font-size:20mm;letter-spacing:-.3mm}
-h2{font-size:12.5mm;letter-spacing:-.2mm;margin-top:5mm}
-h3{font-size:6.2mm}
-p{margin:0;line-height:1.5}
-.lead{font-size:5mm;color:#6B6480;max-width:190mm}
-.slide.dark .lead{color:rgba(255,255,255,.75)}
-.pull{font-family:'PoppinsD';font-weight:600;font-size:8mm;line-height:1.2;margin-top:4mm}
+.slide.dark .eyebrow{color:#C4B5FD}
 
-.cols{display:grid;gap:12mm;height:100%}
+h1,h2{font-family:'SerifD',Georgia,serif;font-weight:400;margin:0;line-height:.99}
+h3{font-family:'SansD';font-weight:700;margin:0;line-height:1.15}
+h1{font-size:25mm;letter-spacing:-.4mm}
+h2{font-size:14.5mm;letter-spacing:-.25mm;margin-top:4mm}
+h3{font-size:6mm}
+p{margin:0;line-height:1.5}
+.lead{font-size:4.5mm;color:#55506A;max-width:190mm}
+.slide.dark .lead{color:rgba(251,250,247,.72)}
+.pull{font-family:'SerifD',Georgia,serif;font-weight:400;font-size:9.5mm;line-height:1.14;
+  letter-spacing:-.16mm;margin-top:4mm}
+
+/* A hairline and a short violet dash, the deck's one recurring ornament. */
+.dash{display:flex;align-items:center;gap:4mm;margin-top:6mm}
+.dash::before{content:'';width:14mm;height:.6mm;background:#6D28D9;flex:0 0 auto}
+
+.cols{display:grid;gap:14mm;flex-grow:1;min-height:0}
 .c2{grid-template-columns:1fr 1fr}
-.c-split{grid-template-columns:1.02fr 1fr;align-items:center}
+.c-split{grid-template-columns:1.06fr 1fr;align-items:center}
 .stack{display:flex;flex-direction:column;justify-content:center;height:100%}
 
-.card{background:#F7F3FB;border-radius:4mm;padding:6mm 6.5mm}
-.card .k{font-family:'PoppinsD';font-weight:700;font-size:4.6mm;color:#6D28D9}
-.card .v{margin-top:2mm;font-size:4mm;color:#6B6480;line-height:1.45}
+.card{background:#FFFFFF;border:.25mm solid #E6E1D6;border-radius:2mm;padding:6mm 6.5mm}
+.slide.dark .card{background:rgba(255,255,255,.05);border-color:rgba(251,250,247,.16)}
+.card .k{font-family:'SansD';font-weight:700;font-size:4.4mm;color:#14121C}
+.card .v{margin-top:2mm;font-size:3.8mm;color:#55506A;line-height:1.45}
 
-.num-list{list-style:none;margin:0;padding:0;display:grid;gap:3.4mm}
-.num-list li{display:flex;gap:3.5mm;align-items:baseline}
-.num-list .n{font-family:'PoppinsD';font-weight:700;font-size:3.8mm;color:#6D28D9;
-  font-variant-numeric:tabular-nums;flex:0 0 8mm}
-.num-list .t{font-size:4.4mm;line-height:1.3}
-.num-list .d{display:block;font-size:3.7mm;color:#6B6480;margin-top:.8mm;line-height:1.35}
+.num-list{list-style:none;margin:0;padding:0;display:grid;gap:4.4mm}
+.num-list li{display:flex;gap:5mm;align-items:baseline;
+  border-top:.25mm solid #E0DBD0;padding-top:3.6mm}
+.num-list .n{font-family:'SerifD',Georgia,serif;font-weight:400;font-size:6mm;color:#6D28D9;
+  font-variant-numeric:tabular-nums;flex:0 0 11mm;line-height:1}
+.num-list .t{font-size:4.4mm;line-height:1.28}
+.num-list .d{display:block;font-size:3.6mm;color:#55506A;margin-top:1.2mm;line-height:1.38}
 
-.chips{display:flex;flex-wrap:wrap;gap:2.4mm;margin-top:3.5mm}
-.chip{background:#F0E9FB;border-radius:2.4mm;padding:1.9mm 3.4mm;font-size:3.7mm;font-weight:600}
-.slide.dark .chip{background:rgba(255,255,255,.12);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:2.2mm;margin-top:3.6mm}
+.chip{background:#FFFFFF;border:.25mm solid #E0DBD0;border-radius:1.6mm;
+  padding:1.7mm 3.2mm;font-size:3.5mm;font-weight:500;color:#3C3752}
+.slide.dark .chip{background:rgba(255,255,255,.08);border-color:rgba(251,250,247,.2);color:#FBFAF7}
 
-.outcome{margin-top:6mm;border-left:1mm solid #6D28D9;padding-left:4.5mm}
-.outcome .k{font-family:'PoppinsD';font-weight:700;font-size:3.2mm;letter-spacing:.6mm;
+.outcome{margin-top:6mm;border-left:.8mm solid #6D28D9;padding-left:5mm}
+.outcome .k{font-family:'SansD';font-weight:700;font-size:2.9mm;letter-spacing:.7mm;
   text-transform:uppercase;color:#6D28D9}
-.outcome .v{margin-top:1.4mm;font-size:4.1mm;line-height:1.35}
+.outcome .v{margin-top:1.6mm;font-size:4mm;line-height:1.38}
 
 .mock{width:100%}
 /* The product screens come from the web page, where Tailwind's black weight
-   is available from the CDN faces. Only 400/600/700 are self-hosted for
-   print, so map the heavier weights onto 700 and nothing falls back to a
-   system font halfway through a slide. */
-.mock,.mock *{font-family:'OpenSansD',system-ui,sans-serif}
+   is available from the CDN faces. Only 400-700 are self-hosted for print,
+   so map the heavier weights onto 700 and nothing falls back to a system
+   font halfway through a slide. */
+.mock,.mock *{font-family:'SansD',system-ui,sans-serif}
 .mock .font-black{font-weight:700}
 .mock .font-bold{font-weight:700}
 .mock .font-semibold{font-weight:600}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6mm}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
 
-.contact{display:flex;gap:9mm;flex-wrap:wrap;margin-top:8mm;font-size:4.2mm;font-weight:600}
-.slide.dark .contact{color:rgba(255,255,255,.9)}
+.contact{display:flex;gap:10mm;flex-wrap:wrap;margin-top:8mm;font-size:4mm;font-weight:600}
+.slide.dark .contact{color:rgba(251,250,247,.9)}
