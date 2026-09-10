@@ -52,7 +52,11 @@ const qr = await QRCode.toString(QR_URL, {
 })
 
 /* each option supplies a front and a back ground; the layout is identical */
-const OPTIONS = [
+/* CARD_OPTION=A emits that option alone as the print file; unset emits all
+   three for review. One source, so the chosen card is byte for byte the one
+   that was approved rather than a rebuild of it. */
+const ONLY = process.env.CARD_OPTION
+const ALL = [
   { k: 'A', dark: true,
     front: `<div class="bg">${pixelBurst({ w: W, h: H, seed: 4, anchor: 'tr', ground: ['#33204D', '#2C1B43', '#3A2559'], light: false, density: 0, cell: 2.15, spill: 0, clear: { cx: W * 0.5, cy: H * 0.44, rx: W * 0.34, ry: H * 0.36 } })}</div>`,
     back:  `<div class="bg">${pixelBurst({ w: W, h: H, seed: 9, anchor: 'br', ground: ['#33204D', '#2C1B43', '#3A2559'], light: false, density: 0, cell: 2.15, spill: 0, clear: { cx: W * 0.46, cy: H * 0.5, rx: W * 0.44, ry: H * 0.42 } })}</div>` },
@@ -61,6 +65,8 @@ const OPTIONS = [
   { k: 'C', front: `<div class="bg">${polyMesh({ w: W, h: H, seed: 5, band: 0.24 })}</div>`,
              back:  `<div class="bg">${polyMesh({ w: W, h: H, seed: 11, band: 0.15, strength: 0.7 })}</div>` },
 ]
+const OPTIONS = ONLY ? ALL.filter((o) => o.k === ONLY) : ALL
+if (!OPTIONS.length) throw new Error(`no such option: ${ONLY}`)
 
 const front = (bg, dark) => `<div class="side front${dark ? ' dark' : ''}">${bg}
   <div class="fc">
@@ -185,7 +191,7 @@ const safe = await page.evaluate(([bleed, safeMm]) => {
   return bad
 }, [BLEED, SAFE])
 console.log(safe.length ? `!! inside the safe margin: ${safe.join(' | ')}`
-                        : `all six sides clear the ${SAFE}mm safe margin`)
+                        : `all ${OPTIONS.length * 2} sides clear the ${SAFE}mm safe margin`)
 
 const codes = await page.locator('.qrbox .code').all()
 for (const [i, c] of codes.entries()) {
@@ -203,10 +209,11 @@ for (const [i, c] of codes.entries()) {
   if (!r || r.data !== QR_URL) { await browser.close(); process.exit(1) }
 }
 
-writeFileSync(path.join(OUT, 'wethink-card-options.html'), html)
+writeFileSync(path.join(OUT, ONLY ? `wethink-card-${ONLY.toLowerCase()}.html` : 'wethink-card-options.html'), html)
 await page.pdf({
-  path: path.join(OUT, 'wethink-card-options.pdf'),
+  path: path.join(OUT, ONLY ? `wethink-card-${ONLY.toLowerCase()}.pdf` : 'wethink-card-options.pdf'),
   width: `${W}mm`, height: `${H}mm`, printBackground: true, preferCSSPageSize: true,
 })
 await browser.close()
-console.log(`\n6 pages, ${CARD.w} x ${CARD.h} mm trim + ${BLEED}mm bleed → public/card-print/wethink-card-options.pdf`)
+console.log(`\n${OPTIONS.length * 2} pages, ${CARD.w} x ${CARD.h} mm trim + ${BLEED}mm bleed → public/card-print/` +
+  (ONLY ? `wethink-card-${ONLY.toLowerCase()}.pdf` : 'wethink-card-options.pdf'))

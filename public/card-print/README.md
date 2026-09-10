@@ -1,49 +1,48 @@
-# WeThink business card
+# WeThink business card — print file
 
-`wethink-card.pdf` — two pages, front then back.
+`wethink-card-a.pdf` — **page 1 front, page 2 back.**
 
-- **85 × 55 mm trim**, the international standard, plus **3 mm bleed**
-  (the PDF measures 91 × 61 mm).
-- **4 mm safe margin.** Nothing important sits closer to the trim than that,
-  and the build fails if anything does.
-- **One rhythm on the back.** A single `GAP` value spaces the blocks and the
-  rows inside them, and the build prints the measured gaps so the evenness is
-  checked rather than assumed.
-- Everything is vector: type, glyphs, the sweep, the backdrop and the QR.
-  Fonts are embedded as TrueType subsets, no Type3.
-- Both backdrops are drawn, not placed, and their randomness is seeded, so a
-  rebuild produces the identical card rather than a new arrangement.
-  Both are the **light** theme: the same drawing in the same ramp, inverted
-  in value, with the line weights raised because a hairline that reads on
-  near-black vanishes on near-white.
-  - **Front:** the pattern starts at the mark and moves outward — rings
-    radiating from its centre, circuit traces running to the edge and
-    terminating in a node. A soft scrim sits behind the lockup so nothing
-    runs through the wordmark. No sweep: that motif belongs to the email
-    signature and read as a footer here.
-  - **Back:** a constellation of linked nodes, a fading dot field, arc
-    hatching and a few shards over a soft diagonal split.
-- The back carries the five service lines, read at build time from
-  `lib/services.ts`, so the card cannot disagree with the website.
-- The QR opens `wethink.ae/company-profile`, at error correction M and printed
-  **19 mm** across. M rather than H because nothing is overlaid on it: H would
-  pack in far more modules at the same size, making each one harder to read. Dark modules on a white ground rather than the reverse:
-  inverted codes are not universally read, and dark ink spreads on press.
-  Decoded out of the rendered artwork on every build.
-- Colour is RGB. Let the printer convert to their own CMYK profile; the
-  gradient on the back is the one thing worth a proof.
+## Specification
 
-## Suggested stock
+| | |
+|---|---|
+| Trim | **85 × 55 mm** (international standard) |
+| Document | 91 × 61 mm — trim plus **3 mm bleed** on every edge |
+| Pages | 2, front then back |
+| Colour | RGB — convert to your own CMYK profile |
+| Fonts | embedded TrueType subsets, no Type3, nothing to supply |
+| Safe margin | 4 mm — no text or mark sits closer to the trim |
 
-350–400 gsm, **soft-touch or matt**, and on option A that is not optional:
-the purple ground is what the design is, and a gloss laminate would turn it
-into a mirror that shows every fingerprint. Soft-touch is the right finish
-here. A spot UV on the mark would catch the light against it.
+## Stock and finish
 
-Ask the printer for a proof anyway. The pattern is drawn at 0.14–0.2 mm and
-sits at low opacity on a near-white ground: too light a press and it
-disappears, too heavy and it competes with the type.
+**350–400 gsm, soft-touch or matt laminate. Not gloss.**
+
+This is not a preference. The card is a deep purple across both sides, and a
+gloss laminate on a dark ground behaves like a mirror: every fingerprint
+shows, and the first person to hand one over leaves a thumbprint on it.
+Soft-touch suits it best and feels the part. A spot UV on the logo mark
+would catch the light against the matt if the budget allows.
+
+Please send a proof before the run. The purple is the design, and dark
+solids are where presses differ most.
+
+## What is on it
+
+- **Front:** the mark, WETHINK, and Think · Plan · Grow.
+- **Back:** the five service lines, a QR to the company profile, WhatsApp,
+  email, website and Instagram, then the location and the slogan.
+
+The QR opens `wethink.ae/company-profile`, is generated at error correction
+M and prints **19 mm** across, dark on a white plate so it reads against the
+purple. It is decoded back out of the rendered artwork on every build.
+
+The service lines are read from `lib/services.ts` at build time, so the card
+cannot drift from the website.
 
 ## Rebuilding
 
-    node scripts/card/print.mjs
+    CARD_OPTION=A node scripts/card/options-pdf.mjs   # this file
+    node scripts/card/options-pdf.mjs                 # all three options
+
+The build refuses to write a file if anything strays inside the safe margin
+or if the QR does not decode back to its own URL.
