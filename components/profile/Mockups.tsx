@@ -381,3 +381,147 @@ export function ReportMockup() {
     </Frame>
   )
 }
+
+/* ── CRM: a pipeline, its numbers and the week's activity ──
+   The screens above stand for single capabilities. This one and the ERP
+   below stand for the two systems clients ask for by name, so they are
+   drawn denser: a board, its measures and a live queue, the way a sales
+   or service team actually reads one. */
+
+export function CrmMockup() {
+  const stages = [
+    { k: 'Qualified', n: 18, v: 'AED 2.4M', c: SERIES.violet, h: 100 },
+    { k: 'Proposal', n: 11, v: 'AED 1.6M', c: SERIES.sky, h: 72 },
+    { k: 'Negotiation', n: 6, v: 'AED 0.9M', c: SERIES.amber, h: 46 },
+    { k: 'Won', n: 4, v: 'AED 0.6M', c: SERIES.green, h: 30 },
+  ]
+  /* Deliberately generic: a screen that stands for the kind of thing we
+     build should not read as a list of who we are talking to. */
+  const activity = [
+    ['Government entity', 'Proposal', SERIES.sky],
+    ['Retail group', 'Site visit', SERIES.violet],
+    ['Embassy programme', 'Signed', SERIES.green],
+    ['Contracting firm', 'Awaiting', SERIES.amber],
+  ] as const
+
+  return (
+    <Frame title="CRM · Pipeline">
+      <div className="p-4 sm:p-5">
+        <div className="grid gap-2.5 sm:grid-cols-3">
+          {[
+            ['Open pipeline', 'AED 5.5M', SERIES.violet],
+            ['Win rate', '38%', SERIES.green],
+            ['First response', '2.4 h', SERIES.sky],
+          ].map(([k, v, c]) => (
+            <div key={k as string} className="rounded-xl px-3 py-2.5" style={{ background: 'rgba(243,232,255,0.5)' }}>
+              <div className="text-[9.5px] font-semibold uppercase tracking-wider" style={{ color: MUTED }}>{k as string}</div>
+              <div className="mt-1 text-[16px] font-black leading-none" style={{ color: c as string }}>{v as string}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-3 grid gap-3 sm:grid-cols-[1.15fr_1fr]">
+          <div className="rounded-xl p-3" style={{ background: 'rgba(243,232,255,0.5)' }}>
+            <div className="text-[9.5px] font-semibold uppercase tracking-wider" style={{ color: MUTED }}>Stages</div>
+            <div className="mt-2.5 flex items-end gap-2" style={{ height: 108 }}>
+              {stages.map((s) => (
+                <div key={s.k} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-1.5">
+                  <span className="text-[10px] font-black leading-none" style={{ color: s.c }}>{s.n}</span>
+                  <span className="w-full rounded-t-md" style={{ height: s.h, background: s.c, opacity: 0.88 }} />
+                </div>
+              ))}
+            </div>
+            <div className="mt-2 flex gap-2">
+              {stages.map((s) => (
+                <div key={s.k} className="min-w-0 flex-1 text-center">
+                  <div className="truncate text-[9px] font-bold" style={{ color: INK }}>{s.k}</div>
+                  <div className="truncate text-[8.5px]" style={{ color: MUTED }}>{s.v}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-xl p-3" style={{ background: 'rgba(243,232,255,0.5)' }}>
+            <div className="text-[9.5px] font-semibold uppercase tracking-wider" style={{ color: MUTED }}>This week</div>
+            <ul className="mt-2 flex list-none flex-col gap-1.5 p-0">
+              {activity.map(([who, what, c]) => (
+                <li key={who} className="flex items-center gap-2 rounded-lg px-2 py-1.5" style={{ background: 'var(--surface)' }}>
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: c }} aria-hidden="true" />
+                  <span className="min-w-0 flex-1 truncate text-[10px] font-semibold" style={{ color: INK }}>{who}</span>
+                  <span className="shrink-0 text-[9px] font-bold uppercase tracking-wide" style={{ color: MUTED }}>{what}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-2 flex items-center justify-between rounded-lg px-2.5 py-2" style={{ background: 'rgba(14,159,110,0.10)' }}>
+              <span className="text-[10px] font-bold" style={{ color: INK }}>Follow-ups on time</span>
+              <span className="text-[12px] font-black" style={{ color: SERIES.green }}>94%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Frame>
+  )
+}
+
+/* ── ERP: the modules, the ledger and what is waiting ─────── */
+
+export function ErpMockup() {
+  const modules = ['Finance', 'Procurement', 'Inventory', 'HR', 'Assets', 'Projects']
+  const ledger = [
+    ['PO-2481', 'Procurement', 'AED 184,000', 'Approved', SERIES.green],
+    ['INV-9013', 'Finance', 'AED 62,400', 'Posted', SERIES.sky],
+    ['REQ-3320', 'Inventory', 'AED 9,180', 'Waiting', SERIES.amber],
+    ['ASS-1147', 'Assets', 'AED 240,000', 'In review', SERIES.violet],
+  ] as const
+  const spend = [62, 74, 58, 81, 69, 88]
+
+  return (
+    <Frame title="ERP · Operations">
+      <div className="p-4 sm:p-5">
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+          {modules.map((m, i) => (
+            <div key={m} className="rounded-lg px-2 py-2 text-center"
+              style={{ background: i === 0 ? SERIES.violet : 'rgba(243,232,255,0.6)' }}>
+              <div className="text-[9.5px] font-bold" style={{ color: i === 0 ? '#fff' : INK }}>{m}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-3 grid gap-3 sm:grid-cols-[1.35fr_1fr]">
+          <div className="rounded-xl p-3" style={{ background: 'rgba(243,232,255,0.5)' }}>
+            <div className="text-[9.5px] font-semibold uppercase tracking-wider" style={{ color: MUTED }}>Ledger</div>
+            <ul className="mt-2 flex list-none flex-col gap-1.5 p-0">
+              {ledger.map(([id, mod, amt, st, c]) => (
+                <li key={id} className="flex items-center gap-2 rounded-lg px-2 py-1.5" style={{ background: 'var(--surface)' }}>
+                  <span className="shrink-0 text-[9.5px] font-black tabular-nums" style={{ color: SERIES.violet }}>{id}</span>
+                  <span className="min-w-0 flex-1 truncate text-[9.5px]" style={{ color: MUTED }}>{mod}</span>
+                  <span className="shrink-0 text-[9.5px] font-bold tabular-nums" style={{ color: INK }}>{amt}</span>
+                  <span className="shrink-0 rounded px-1.5 py-0.5 text-[8.5px] font-bold uppercase tracking-wide"
+                    style={{ background: `${c}1F`, color: c }}>{st}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="rounded-xl p-3" style={{ background: 'rgba(243,232,255,0.5)' }}>
+            <div className="text-[9.5px] font-semibold uppercase tracking-wider" style={{ color: MUTED }}>Spend vs budget</div>
+            <div className="mt-2.5 flex items-end gap-1.5" style={{ height: 62 }}>
+              {spend.map((v, i) => (
+                <span key={i} className="min-w-0 flex-1 rounded-t"
+                  style={{ height: `${v}%`, background: i === spend.length - 1 ? SERIES.violet : 'rgba(109,40,217,0.32)' }} />
+              ))}
+            </div>
+            <div className="mt-2 flex items-center justify-between">
+              <span className="text-[9px] font-semibold uppercase tracking-wider" style={{ color: MUTED }}>Jan — Jun</span>
+              <span className="text-[9px] font-bold" style={{ color: INK }}>88% of budget</span>
+            </div>
+            <div className="mt-2 flex items-center justify-between rounded-lg px-2.5 py-2" style={{ background: 'rgba(14,159,110,0.10)' }}>
+              <span className="text-[10px] font-bold" style={{ color: INK }}>Month-end close</span>
+              <span className="text-[12px] font-black" style={{ color: SERIES.green }}>4 days</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Frame>
+  )
+}

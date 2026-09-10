@@ -26,7 +26,22 @@ html,body{background:#DDD;margin:0;padding:0}
 .slide:last-child{page-break-after:auto;break-after:auto;margin-bottom:0}
 .slide::before{content:'';position:absolute;left:0;right:0;top:0;height:1.6mm;
   background:linear-gradient(90deg,#03CFF2,#108FFC 46%,#983CFC)}
+/* The ground is not a flat fill: a 14 mm field grid at 3% and one soft
+   brand wash in the upper right give the page depth without costing ink. */
+.slide::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(58% 46% at 92% 4%, rgba(152,60,252,.09), rgba(152,60,252,0) 68%),
+    radial-gradient(46% 40% at 4% 98%, rgba(3,207,242,.08), rgba(3,207,242,0) 66%),
+    repeating-linear-gradient(0deg, rgba(20,18,28,.032) 0 .18mm, rgba(20,18,28,0) .18mm 14mm),
+    repeating-linear-gradient(90deg, rgba(20,18,28,.032) 0 .18mm, rgba(20,18,28,0) .18mm 14mm)}
+.slide-body,.slide-foot{z-index:1}
+
 .slide.dark{background:#14121C;color:#FBFAF7}
+.slide.dark::after{background:
+  radial-gradient(58% 48% at 90% 2%, rgba(152,60,252,.30), rgba(152,60,252,0) 66%),
+  radial-gradient(44% 38% at 2% 100%, rgba(3,207,242,.16), rgba(3,207,242,0) 62%),
+  repeating-linear-gradient(0deg, rgba(255,255,255,.045) 0 .18mm, rgba(255,255,255,0) .18mm 14mm),
+  repeating-linear-gradient(90deg, rgba(255,255,255,.045) 0 .18mm, rgba(255,255,255,0) .18mm 14mm)}
 
 .slide-body{position:absolute;inset:20mm 22mm 29mm;display:flex;flex-direction:column}
 /* Two ways of using the whole frame rather than stacking at the top.
@@ -41,6 +56,30 @@ html,body{background:#DDD;margin:0;padding:0}
   border-top:.25mm solid #E0DBD0;padding-top:4mm}
 .slide.dark .slide-foot{color:rgba(251,250,247,.5);border-top-color:rgba(251,250,247,.18)}
 .foot-n{font-variant-numeric:tabular-nums}
+.foot-left{display:flex;align-items:center;gap:4mm;min-width:0}
+
+/* ── the company signature ─────────────────────────────── */
+.lockup{display:flex;align-items:center}
+.lockup-mark{width:auto;display:block}
+.lockup-name{font-family:'SansD';font-weight:700;text-transform:uppercase;line-height:1;
+  color:#14121C}
+.slide.dark .lockup-name{color:#FBFAF7}
+.slide-foot .lockup-name{color:#8B8598}
+.slide.dark .slide-foot .lockup-name{color:rgba(251,250,247,.55)}
+.lockup-tag{font-family:'SansD';font-weight:600;font-size:2.9mm;letter-spacing:1mm;
+  text-transform:uppercase;color:#6D28D9;margin-top:2.4mm;padding-top:2.2mm;
+  border-top:.25mm solid #DCD6CA}
+.slide.dark .lockup-tag{color:#C4B5FD;border-top-color:rgba(251,250,247,.22)}
+
+/* ── the cover ─────────────────────────────────────────── */
+.cover{display:flex;flex-direction:column;justify-content:space-between;flex-grow:1;min-height:0}
+.creds{border-left:.8mm solid #6D28D9;padding-left:6mm;max-width:224mm}
+.creds-line{font-family:'SerifD',Georgia,serif;font-size:7.2mm;line-height:1.2;
+  letter-spacing:-.12mm;color:#14121C}
+.creds-sub{margin-top:3mm;font-size:3.9mm;line-height:1.5;color:#55506A;max-width:200mm}
+.cover-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:12mm;
+  border-top:.25mm solid #E0DBD0;padding-top:5mm}
+.slogan{font-family:'SerifD',Georgia,serif;font-size:6.4mm;color:#6D28D9;white-space:nowrap}
 
 .eyebrow{font-family:'SansD';font-size:3.1mm;font-weight:700;letter-spacing:.8mm;
   text-transform:uppercase;color:#6D28D9}
@@ -90,6 +129,7 @@ p{margin:0;line-height:1.5}
 .outcome .v{margin-top:1.6mm;font-size:4mm;line-height:1.38}
 
 .mock{width:100%}
+.mock-cap{margin-top:4mm;font-size:3.5mm;line-height:1.42;color:#55506A}
 /* The product screens come from the web page, where Tailwind's black weight
    is available from the CDN faces. Only 400-700 are self-hosted for print,
    so map the heavier weights onto 700 and nothing falls back to a system

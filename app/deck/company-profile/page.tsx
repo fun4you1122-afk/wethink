@@ -1,6 +1,7 @@
 import './deck.css'
 import {
   AnalyticsMockup, AutomationMockup, PlatformMockup, RoadmapMockup, EventMockup, ReportMockup,
+  CrmMockup, ErpMockup,
 } from '@/components/profile/Mockups'
 import {
   ABOUT, CLOSING, COMPANY, CORE, CORE_NOTE, HOW, MISSION, PURPOSE,
@@ -18,6 +19,23 @@ const MOCKUPS = {
 const INK = '#14121C'
 const MUTED = '#55506A'
 const VIOLET = '#6D28D9'
+const SLIDES = 16
+
+/** The company signature: the gradient mark, the wordmark, the slogan. */
+function Lockup({ size = 'lg' }: { size?: 'lg' | 'sm' }) {
+  const big = size === 'lg'
+  return (
+    <div className="lockup" style={{ gap: big ? '5mm' : '2.4mm' }}>
+      <img className="lockup-mark" src="/wethink-logo.png" alt=""
+        style={{ height: big ? '17mm' : '5.4mm' }} />
+      <div>
+        <div className="lockup-name" style={{ fontSize: big ? '7.4mm' : '3.2mm',
+          letterSpacing: big ? '1.6mm' : '.7mm' }}>WeThink</div>
+        {big && <div className="lockup-tag">Think &middot; Plan &middot; Grow</div>}
+      </div>
+    </div>
+  )
+}
 
 function Slide({
   n,
@@ -34,8 +52,11 @@ function Slide({
     <section className={`slide${dark ? ' dark' : ''}`}>
       <div className="slide-body">{children}</div>
       <div className="slide-foot">
-        <span className="foot-label">{label ?? 'WeThink · Company Profile'}</span>
-        <span className="foot-n">{String(n).padStart(2, '0')} / 15</span>
+        <span className="foot-left">
+          <Lockup size="sm" />
+          <span className="foot-label">{label ?? 'Company Profile'}</span>
+        </span>
+        <span className="foot-n">{String(n).padStart(2, '0')} / {SLIDES}</span>
       </div>
     </section>
   )
@@ -52,21 +73,33 @@ export default function DeckPage() {
 
       {/* 01 — cover */}
       <Slide n={1} label={COMPANY.site}>
-        <div className="stack">
-          <Eyebrow>Company Profile</Eyebrow>
-          <h1 style={{ marginTop: '7mm', maxWidth: '250mm' }}>
-            Building smarter,<br />more efficient businesses
-          </h1>
-          <div className="dash">
-            <p className="lead" style={{ maxWidth: '170mm' }}>
-              {COMPANY.legal} &middot; {COMPANY.base}
+        <div className="cover">
+          <Lockup />
+          <div>
+            <Eyebrow>Company Profile</Eyebrow>
+            <h1 style={{ marginTop: '6mm', maxWidth: '250mm' }}>
+              Building smarter,<br />more efficient businesses
+            </h1>
+          </div>
+          <div className="creds">
+            <p className="creds-line">
+              We work with government entities, embassies and private organizations
+              across the United Arab Emirates.
+            </p>
+            <p className="creds-sub">
+              Official events, national programmes and the systems behind them &mdash;
+              delivered to institutional standards of accuracy, presentation and
+              confidentiality.
             </p>
           </div>
-          <div className="contact">
-            <span>{COMPANY.phone}</span>
-            <span>{COMPANY.email}</span>
-            <span>{COMPANY.site}</span>
-            <span>@wethink.ae</span>
+          <div className="cover-foot">
+            <div className="contact" style={{ marginTop: 0 }}>
+              <span>{COMPANY.phone}</span>
+              <span>{COMPANY.email}</span>
+              <span>{COMPANY.site}</span>
+              <span>@wethink.ae</span>
+            </div>
+            <span className="slogan">{CLOSING.title}</span>
           </div>
         </div>
       </Slide>
@@ -180,8 +213,26 @@ export default function DeckPage() {
         )
       })}
 
-      {/* 12 — why */}
-      <Slide n={12}>
+      {/* 12 — the systems we build */}
+      <Slide n={12} label="Systems we build">
+        <Eyebrow>Systems we build</Eyebrow>
+        <h2 style={{ fontSize: '10mm', maxWidth: '210mm' }}>
+          The two clients ask for by name, built to fit how they already work.
+        </h2>
+        <div className="grid2" style={{ marginTop: '7mm', flexGrow: 1, alignContent: 'center' }}>
+          <div>
+            <div className="mock"><CrmMockup /></div>
+            <p className="mock-cap">Pipeline, activity and follow-ups in one place, so nothing waits on a memory.</p>
+          </div>
+          <div>
+            <div className="mock"><ErpMockup /></div>
+            <p className="mock-cap">Finance, procurement, inventory and assets on one ledger, closing in days rather than weeks.</p>
+          </div>
+        </div>
+      </Slide>
+
+      {/* 13 — why */}
+      <Slide n={13}>
         <Eyebrow>Why WeThink</Eyebrow>
         <div className="grid3 fill" style={{ marginTop: '7mm' }}>
           {WHY.map(([k, v], i) => (
@@ -197,8 +248,8 @@ export default function DeckPage() {
         <p style={{ marginTop: '7mm', fontSize: '4.2mm', fontWeight: 600 }}>{WHY_NOTE}</p>
       </Slide>
 
-      {/* 13 — how we work */}
-      <Slide n={13}>
+      {/* 14 — how we work */}
+      <Slide n={14}>
         <Eyebrow>How we work</Eyebrow>
         <div className="grid3 fill" style={{ marginTop: '7mm' }}>
           {HOW.map(([k, v], i) => (
@@ -213,8 +264,8 @@ export default function DeckPage() {
         </div>
       </Slide>
 
-      {/* 14 — core areas */}
-      <Slide n={14}>
+      {/* 15 — core areas */}
+      <Slide n={15}>
         <div className="cols c-split">
           <div>
             <Eyebrow>Our core areas</Eyebrow>
@@ -234,10 +285,11 @@ export default function DeckPage() {
         </div>
       </Slide>
 
-      {/* 15 — closing */}
-      <Slide n={15} dark label={COMPANY.site}>
+      {/* 16 — closing */}
+      <Slide n={16} dark label={COMPANY.site}>
         <div className="stack">
-          <h1 style={{ fontSize: '17mm' }}>{CLOSING.title}</h1>
+          <Lockup />
+          <h1 style={{ fontSize: '17mm', marginTop: '9mm' }}>{CLOSING.title}</h1>
           <p className="lead" style={{ marginTop: '5mm', fontSize: '5.4mm' }}>{CLOSING.sub}</p>
           <div className="contact">
             <span>{COMPANY.phone}</span>
