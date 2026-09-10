@@ -1,0 +1,85 @@
+/* The web company profile, in the same clothes as the PDF.
+
+   Everything here is scoped under .cp so the editorial palette and the two
+   faces stay on this page and nothing leaks into the rest of the site. The
+   faces are the same files the deck prints with, under their own family
+   names so the two never collide. */
+
+@font-face{font-family:'CPSerif';src:url('/fonts/InstrumentSerif-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'CPSerif';src:url('/fonts/InstrumentSerif-Italic.ttf') format('truetype');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'CPSans';src:url('/fonts/Karla-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:'CPSans';src:url('/fonts/Karla-Medium.ttf') format('truetype');font-weight:500;font-display:swap}
+@font-face{font-family:'CPSans';src:url('/fonts/Karla-SemiBold.ttf') format('truetype');font-weight:600;font-display:swap}
+@font-face{font-family:'CPSans';src:url('/fonts/Karla-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+
+.cp{
+  --cp-ground:#FBFAF7;
+  --cp-ink:#14121C;
+  --cp-muted:#55506A;
+  --cp-rule:#E0DBD0;
+  --cp-violet:#6D28D9;
+  position:relative;
+  background:var(--cp-ground);
+  color:var(--cp-ink);
+  font-family:'CPSans',system-ui,sans-serif;
+}
+
+/* The ground, as on the printed page: a field grid at 3% and two soft brand
+   washes. Fixed, so it stays put while the page scrolls past it. */
+.cp-ground{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(48% 34% at 92% 6%, rgba(152,60,252,.10), rgba(152,60,252,0) 68%),
+    radial-gradient(40% 30% at 4% 94%, rgba(3,207,242,.09), rgba(3,207,242,0) 66%),
+    repeating-linear-gradient(0deg, rgba(20,18,28,.034) 0 1px, rgba(20,18,28,0) 1px 54px),
+    repeating-linear-gradient(90deg, rgba(20,18,28,.034) 0 1px, rgba(20,18,28,0) 1px 54px)}
+.cp > section{position:relative;z-index:1}
+
+.cp-gradbar{position:absolute;left:0;right:0;top:0;height:5px;z-index:2;
+  background:linear-gradient(90deg,#03CFF2,#108FFC 46%,#983CFC)}
+
+/* ── the signature ─────────────────────────────────────── */
+.cp-lockup{display:flex;align-items:center;gap:16px}
+.cp-lockup img{height:52px;width:auto;display:block}
+.cp-lockup .n{font-family:'CPSans';font-weight:700;font-size:26px;line-height:1;
+  letter-spacing:.19em;text-transform:uppercase;color:var(--cp-ink)}
+.cp-lockup .t{font-family:'CPSans';font-weight:600;font-size:10.5px;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--cp-violet);margin-top:9px;padding-top:8px;
+  border-top:1px solid var(--cp-rule)}
+.cp-dark .cp-lockup .n{color:var(--cp-ground)}
+.cp-dark .cp-lockup .t{color:#C4B5FD;border-top-color:rgba(251,250,247,.24)}
+
+/* ── type ──────────────────────────────────────────────── */
+.cp-eyebrow{display:inline-block;font-family:'CPSans';font-weight:700;font-size:11.5px;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--cp-violet)}
+.cp-dark .cp-eyebrow{color:#C4B5FD}
+.cp h1,.cp h2,.cp .cp-serif{font-family:'CPSerif',Georgia,serif;font-weight:400;
+  letter-spacing:-.012em;line-height:1.02}
+.cp h3{font-family:'CPSans';font-weight:700;letter-spacing:-.01em}
+.cp .cp-lead{color:var(--cp-muted);line-height:1.6}
+
+/* ── the pieces the deck uses ──────────────────────────── */
+.cp-creds{border-left:4px solid var(--cp-violet);padding-left:26px;max-width:760px}
+.cp-creds .a{font-family:'CPSerif',Georgia,serif;font-size:clamp(22px,2.5vw,31px);
+  line-height:1.22;letter-spacing:-.01em}
+.cp-creds .b{margin-top:14px;font-size:15px;line-height:1.6;color:var(--cp-muted)}
+
+.cp-rule{border-top:1px solid var(--cp-rule)}
+
+/* A ruled row, the page's answer to the deck's numbered lists. */
+.cp-row{display:flex;gap:24px;align-items:baseline;border-top:1px solid var(--cp-rule);
+  padding-top:18px}
+.cp-row .n{flex:0 0 46px;font-family:'CPSerif',Georgia,serif;font-size:26px;line-height:1;
+  color:var(--cp-violet);font-variant-numeric:tabular-nums}
+
+.cp-card{background:#fff;border:1px solid #E6E1D6;border-radius:8px;padding:22px 24px}
+.cp-chip{display:inline-block;background:#fff;border:1px solid var(--cp-rule);border-radius:6px;
+  padding:7px 13px;font-size:13px;font-weight:500;color:#3C3752}
+.cp-outcome{border-left:3px solid var(--cp-violet);padding-left:18px}
+
+.cp-btn{display:inline-flex;align-items:center;gap:9px;border-radius:999px;
+  padding:14px 28px;font-size:14px;font-weight:700;line-height:1}
+.cp-btn-solid{background:var(--cp-ink);color:var(--cp-ground)}
+.cp-btn-ghost{border:1px solid var(--cp-rule);color:var(--cp-ink);background:#fff}
+
+.cp-dark{background:var(--cp-ink);color:var(--cp-ground)}
+.cp-dark .cp-lead{color:rgba(251,250,247,.72)}
