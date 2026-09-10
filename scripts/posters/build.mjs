@@ -26,7 +26,7 @@ import { chromium } from 'playwright-core'
 import { loadSchedule, clock } from './schedule-data.mjs'
 import {
   GOLD, kanokBand, skyline, petal, lotus, corner, sideChain,
-  globeGlyph, mailGlyph, phoneGlyph,
+  globeGlyph, mailGlyph, phoneLineGlyph, instagramGlyph,
 } from './ornament.mjs'
 
 const HERE = path.dirname(fileURLToPath(import.meta.url))
@@ -123,6 +123,16 @@ const WETHINK = b64('public/wethink-logo.png')
 
 const SITE = 'https://www.wethink.ae/embassy/programme'
 const WT_SITE = 'https://www.wethink.ae/'
+
+/* The WeThink footer's contact marks. Each channel gets a tint of one of
+   the brand's three colours, an edge a shade deeper, and the glyph deeper
+   again, so the row reads as one pastel family rather than four badges. */
+const CONTACTS = [
+  { tint: '#E4F7FD', edge: '#B4E6F4', ink: '#0C9CC2', glyph: mailGlyph, label: 'info@wethink.ae' },
+  { tint: '#E7F1FE', edge: '#BBD7FB', ink: '#2A79E4', glyph: phoneLineGlyph, label: '+971 50 312 5078' },
+  { tint: '#F2E9FE', edge: '#DBC8F8', ink: '#7943D3', glyph: globeGlyph, label: 'wethink.ae' },
+  { tint: '#FDE9F5', edge: '#F6C8E1', ink: '#CB4590', glyph: instagramGlyph, label: '@wethink.ae' },
+]
 
 /* ── the panels ───────────────────────────────────────────── */
 
@@ -369,7 +379,7 @@ footer .rule{display:none}
 .sig{margin-top:0}
 .sigrow{display:flex;align-items:center}
 .sigcell{display:flex;align-items:center;justify-content:center;gap:5mm;
-  padding:0 5.5mm;border-right:.3mm solid #D0D1D5}
+  padding:0 4.2mm;border-right:.3mm solid #D0D1D5}
 .sigcell:first-child{padding-left:0}
 .sigcell:last-child{border-right:none;padding-right:0}
 .sigcell.grow{flex:1 1 0;min-width:0}
@@ -382,11 +392,14 @@ footer .rule{display:none}
   border-top:.3mm solid rgba(15,23,42,.22)}
 .sigtag i{font-style:normal;font-size:4.4mm;line-height:0;vertical-align:-.25mm;margin:0 .4mm}
 
-.ct{display:flex;flex-direction:column;align-items:center;gap:2.4mm;min-width:0}
-.ct .ring{width:12.4mm;height:12.4mm;border-radius:3.4mm;background:${WT.blue};
+/* The contact marks: a pastel tint per channel, a hairline edge, and a
+   thin-line glyph. Bigger than the brand footer runs them, because the
+   band has the room and these are read from across a concourse. */
+.ct{display:flex;flex-direction:column;align-items:center;gap:3.4mm;min-width:0}
+.ct .ring{width:21mm;height:21mm;border-radius:6.4mm;
   display:flex;align-items:center;justify-content:center}
-.ct .gl{display:block;width:6.4mm;height:6.4mm}
-.ct .lb{font-size:3.9mm;font-weight:500;color:${WT.ink};letter-spacing:.06mm;white-space:nowrap}
+.ct .gl{display:block;width:10.4mm;height:10.4mm}
+.ct .lb{font-size:4.4mm;font-weight:500;color:${WT.ink};letter-spacing:.06mm;white-space:nowrap}
 
 .sigqr{flex:0 0 auto;padding:1.6mm;border-radius:4.4mm;
   background:linear-gradient(140deg,${WT.cyan},${WT.blue} 45%,${WT.violet})}
@@ -465,24 +478,13 @@ footer .rule{display:none}
         </div>
       </div>
 
+      ${CONTACTS.map(({ tint, edge, ink, glyph, label }) => `
       <div class="sigcell grow">
         <span class="ct">
-          <span class="ring">${mailGlyph({ fill: '#FFFFFF' })}</span>
-          <span class="lb">info@wethink.ae</span>
+          <span class="ring" style="background:${tint};box-shadow:inset 0 0 0 .45mm ${edge}">${glyph({ fill: ink })}</span>
+          <span class="lb">${label}</span>
         </span>
-      </div>
-      <div class="sigcell grow">
-        <span class="ct">
-          <span class="ring">${phoneGlyph({ fill: '#FFFFFF' })}</span>
-          <span class="lb">+971 50 312 5078</span>
-        </span>
-      </div>
-      <div class="sigcell grow">
-        <span class="ct">
-          <span class="ring">${globeGlyph({ fill: '#FFFFFF' })}</span>
-          <span class="lb">wethink.ae</span>
-        </span>
-      </div>
+      </div>`).join('')}
 
       <div class="sigcell">
         <div class="sigqr"><div class="code">${qrWt}

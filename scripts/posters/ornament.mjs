@@ -166,6 +166,15 @@ export function mailGlyph({ size = 6, fill = '#037A8A' } = {}) {
     </g></svg>`
 }
 
+/** A thin-line handset, to sit beside the stroked mail and globe marks. */
+export function phoneLineGlyph({ size = 6, fill = '#108FFC' } = {}) {
+  return `<svg class="gl" viewBox="0 0 24 24" width="${size}" height="${size}"
+    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path fill="none" stroke="${fill}" stroke-width="1.9"
+      stroke-linecap="round" stroke-linejoin="round"
+      d="M7.1 3.4 5.6 4.9c-.9.9-1.2 2.25-.7 3.44a20.6 20.6 0 0 0 10.76 10.76c1.19.5 2.54.2 3.44-.7l1.5-1.5a1.2 1.2 0 0 0-.05-1.8l-2.4-2.2a1.2 1.2 0 0 0-1.75 0l-1.4 1.3c-.35.31-.85.37-1.25.17a12.6 12.6 0 0 1-5.4-5.4c-.21-.41-.14-.91.16-1.26l1.3-1.4c.45-.5.45-1.25 0-1.75l-2.2-2.4a1.2 1.2 0 0 0-1.8-.05Z"/></svg>`
+}
+
 export function phoneGlyph({ size = 6, fill = '#108FFC' } = {}) {
   return `<svg class="gl" viewBox="0 0 24 24" width="${size}" height="${size}"
     xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="${fill}"
