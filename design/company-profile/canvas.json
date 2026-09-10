@@ -1,0 +1,22 @@
+{
+  "artboards": [
+    { "file": "Current.dc.html",        "title": "Today · Cover",        "x": 0,    "y": 0,    "w": 1280, "h": 720 },
+    { "file": "CurrentWhatWeDo.dc.html","title": "Today · What we do",   "x": 1400, "y": 0,    "w": 1280, "h": 720 },
+
+    { "file": "Main.dc.html",           "title": "A · Editorial · Cover","x": 0,    "y": 960,  "w": 1280, "h": 720 },
+    { "file": "AWhatWeDo.dc.html",      "title": "A · Editorial · What we do", "x": 1400, "y": 960, "w": 1280, "h": 720 },
+
+    { "file": "BCover.dc.html",         "title": "B · Signal · Cover",   "x": 0,    "y": 1920, "w": 1280, "h": 720 },
+    { "file": "BWhatWeDo.dc.html",      "title": "B · Signal · What we do", "x": 1400, "y": 1920, "w": 1280, "h": 720 },
+
+    { "file": "CCover.dc.html",         "title": "C · Blocks · Cover",   "x": 0,    "y": 2880, "w": 1280, "h": 720 },
+    { "file": "CWhatWeDo.dc.html",      "title": "C · Blocks · What we do", "x": 1400, "y": 2880, "w": 1280, "h": 720 }
+  ],
+  "annotations": [
+    { "id": "row-today", "x": -520, "y": 0,    "w": 440, "text": "TODAY\nThe deck as it stands: Poppins over a violet gradient cover, a plain numbered list inside. Everything below is an alternative to this." },
+    { "id": "row-a",     "x": -520, "y": 960,  "w": 440, "text": "A · EDITORIAL\nIvory ground, a serif display face, hairline rules, violet only as an accent.\nReads as a consultancy document. Calm and credible with government clients.\nTrade-off: quiet. Less obviously a technology company." },
+    { "id": "row-b",     "x": -520, "y": 1920, "w": 440, "text": "B · SIGNAL\nDark cover with the brand gradient as a structural spine, geometric sans, tinted cards inside.\nModern and clearly technical.\nTrade-off: the dark cover drinks ink in print, and tinted cards can crowd." },
+    { "id": "row-c",     "x": -520, "y": 2880, "w": 440, "text": "C · BLOCKS\nFlat colour fields on a strict grid, condensed uppercase display type, oversized numerals.\nConfident and memorable at a glance.\nTrade-off: the boldest of the three. Some official audiences may read it as loud." }
+  ],
+  "launch": { "view": "canvas" }
+}
