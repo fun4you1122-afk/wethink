@@ -264,30 +264,34 @@ body{font-family:'Jost',sans-serif;color:${C.ink};background:${C.bg}}
 
 .rule{height:1.1mm;background:linear-gradient(90deg,${C.tealDeep},${C.teal} 34%,${C.tealMid} 68%,${C.tealBright});border-radius:1mm}
 
-header{position:relative;text-align:center;padding-top:20mm;height:${crown}mm}
-.crest{height:52mm;width:auto;display:block;margin:0 auto 6mm;
+header{position:relative;text-align:center;padding-top:${dense ? 20 : 23}mm;height:${crown}mm}
+.crest{height:${dense ? 52 : 76}mm;width:auto;display:block;margin:0 auto ${dense ? 6 : 9}mm;
   filter:drop-shadow(0 1.6mm 3mm rgba(0,0,0,.35))}
-.host{font-size:5.2mm;letter-spacing:.62mm;text-transform:uppercase;font-weight:600;color:${GOLD.light}}
-.fest{font-family:'Fraunces',serif;font-size:24mm;line-height:.98;font-weight:600;color:#fff;margin-top:4mm;letter-spacing:-.2mm}
-.tag{font-family:'Fraunces',serif;font-style:italic;font-size:6.6mm;color:rgba(255,255,255,.72);margin-top:3mm}
+.host{font-size:${dense ? 5.2 : 6.6}mm;letter-spacing:${dense ? 0.62 : 0.82}mm;text-transform:uppercase;font-weight:600;color:${GOLD.light}}
+.fest{font-family:'Fraunces',serif;font-size:${dense ? 24 : 32}mm;line-height:.98;font-weight:600;color:#fff;
+  margin-top:${dense ? 4 : 6}mm;letter-spacing:-.2mm}
+.tag{font-family:'Fraunces',serif;font-style:italic;font-size:${dense ? 6.6 : 8.4}mm;color:rgba(255,255,255,.74);margin-top:${dense ? 3 : 4.5}mm}
 /* The header carried nothing but the crest and the title, with two wide
    empty flanks. The programme QR and the venue mark live there now, which
    frees the whole foot of the panel for WeThink alone. */
-.hbadge{position:absolute;top:15mm;display:flex;flex-direction:column;
-  align-items:center;gap:3.2mm}
+.hbadge{position:absolute;top:${dense ? 17 : 26}mm;display:flex;flex-direction:column;
+  align-items:center;gap:${dense ? 3.2 : 4.4}mm}
 .hbadge.l{left:0}
 .hbadge.r{right:0}
-.hplate{background:#fff;border-radius:3.4mm;padding:2.8mm;
+.hplate{background:#fff;border-radius:4mm;padding:${dense ? 2.8 : 3.6}mm;
   box-shadow:0 0 0 .5mm rgba(201,162,39,.5)}
-.hplate svg{width:44mm;height:44mm;display:block}
-.hplate .reem{height:25mm;display:block;margin:7.5mm 3mm}
-.hcap{font-size:3.5mm;letter-spacing:.52mm;text-transform:uppercase;font-weight:600;
-  color:${GOLD.light};text-align:center;line-height:1.35;max-width:56mm}
+.hplate svg{width:${dense ? 44 : 56}mm;height:${dense ? 44 : 56}mm;display:block}
+/* The mall's mark is dark ink on a transparent ground, so on the teal it is
+   knocked out to white rather than sat on a plate of its own. */
+.reem{height:${dense ? 26 : 45}mm;width:auto;display:block;
+  filter:brightness(0) invert(1);opacity:.94}
+.hcap{font-size:${dense ? 3.5 : 4.4}mm;letter-spacing:${dense ? 0.52 : 0.66}mm;text-transform:uppercase;
+  font-weight:600;color:${GOLD.light};text-align:center;line-height:1.35;max-width:64mm}
 
 .crestwrap{position:relative;display:inline-block}
-.crestwrap .lotus{position:absolute;top:50%;margin-top:-4mm}
-.crestwrap .lotus.l{left:-19mm}
-.crestwrap .lotus.r{right:-19mm}
+.crestwrap .lotus{position:absolute;top:50%;margin-top:${dense ? -4 : -5.5}mm}
+.crestwrap .lotus.l{left:${dense ? -19 : -27}mm}
+.crestwrap .lotus.r{right:${dense ? -19 : -27}mm}
 
 .plate{position:relative;margin-top:-14mm;text-align:center}
 .stage{display:inline-block;padding:5mm 13mm;border-radius:40mm;
@@ -425,13 +429,13 @@ footer .rule{display:none}
       <span class="hcap">Scan for the<br>live programme</span>
     </span>
     <span class="hbadge r">
-      <span class="hplate"><img class="reem" src="data:image/png;base64,${REEM}" alt="Reem Mall"></span>
+      <img class="reem" src="data:image/png;base64,${REEM}" alt="Reem Mall">
       <span class="hcap">Hosted at</span>
     </span>
     <span class="crestwrap">
-      <span class="lotus l">${lotus({ size: 8.5 * 3.78, fill: GOLD.mid, opacity: 0.55 })}</span>
+      <span class="lotus l">${lotus({ size: (dense ? 8.5 : 12) * 3.78, fill: GOLD.mid, opacity: 0.55 })}</span>
       <img class="crest" src="data:image/png;base64,${CREST}" alt="">
-      <span class="lotus r">${lotus({ size: 8.5 * 3.78, fill: GOLD.mid, opacity: 0.55 })}</span>
+      <span class="lotus r">${lotus({ size: (dense ? 8.5 : 12) * 3.78, fill: GOLD.mid, opacity: 0.55 })}</span>
     </span>
     <div class="host">The Royal Thai Embassy, Abu Dhabi</div>
     <div class="fest">Marhaba Thailand</div>
