@@ -96,7 +96,7 @@ const day1Main = build('Main Stage', [
   [13, 40, 14, 0, 'Music performance by Sun Der'],
   [14, 10, 14, 30, KAI_KAEW_A],
   [14, 40, 15, 10, 'Fruit and soap carving demonstration by the Thai Women’s Circle'],
-  [15, 20, 15, 45, 'Influencer panel with @sallyelazab'],
+  [15, 20, 15, 45, 'Influencer panel with @sallyelazab and @boscoandsharon'],
   [15, 45, 16, 5, BREAK, 'rest'],
   [16, 5, 16, 20, MUAY_THAI],
   [16, 30, 16, 50, 'Music performance by Sun Der'],

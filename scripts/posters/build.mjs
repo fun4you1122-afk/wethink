@@ -126,12 +126,16 @@ const WT_SITE = 'https://www.wethink.ae/'
 
 /* ── the panels ───────────────────────────────────────────── */
 
-const PANELS = [
+/* PANELS=second,workshop builds only those; unset builds all four. */
+const WANTED = (process.env.PANELS || '').split(',').map((x) => x.trim()).filter(Boolean)
+const ALL_PANELS = [
   { id: 'main', track: 'main', name: 'Main Stage', where: 'Main Atrium, Ground Floor' },
   { id: 'second', track: 'second', name: 'Secondary Stage', where: 'Secondary Stage' },
   { id: 'workshop', track: 'workshop', name: 'Workshops', where: 'Workshop Area' },
   { id: 'master', track: null, name: 'Full Programme', where: 'All three stages' },
 ]
+const PANELS = WANTED.length ? ALL_PANELS.filter((p) => WANTED.includes(p.id)) : ALL_PANELS
+if (!PANELS.length) throw new Error(`no such panel: ${WANTED.join(',')}`)
 
 const DAYS = [
   { n: 1, dow: 'Friday', date: '11 September' },
