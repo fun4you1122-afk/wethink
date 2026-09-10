@@ -17,8 +17,8 @@ const RAMP = { cyan: '#00B4BD', blue: '#3B6BE0', violet: '#7C3AED', deep: '#4E11
     breaks up as it travels. Coloured along the ramp by position. Seeded,
     so a rebuild is identical.
 
-    The one dark option of the three. */
-export function pixelBurst({ w, h, seed = 4, anchor = 'tr', cell = 1.55, spill = 1, clear = null }) {
+    Takes a light or a dark ground. */
+export function pixelBurst({ w, h, seed = 4, anchor = 'tr', cell = 1.55, spill = 1, clear = null, light = true }) {
   let s0 = seed * 2654435761 % 4294967296
   const rnd = () => {
     s0 = (s0 * 1664525 + 1013904223) % 4294967296
@@ -43,13 +43,17 @@ export function pixelBurst({ w, h, seed = 4, anchor = 'tr', cell = 1.55, spill =
       }
       if (rnd() > p * 1.35) continue
       const t = Math.min(1, d * 1.25 + rnd() * 0.16)
-      const col = t < 0.34 ? '#00C2D6' : t < 0.62 ? '#3B6BE0' : t < 0.84 ? '#7C3AED' : '#B14BE8'
+      // on a pale ground the ramp is deepened, or the far end of the
+      // cluster fades into the paper before it has finished dissipating
+      const col = light
+        ? (t < 0.34 ? '#00A0B4' : t < 0.62 ? '#2F5FD6' : t < 0.84 ? '#6D28D9' : '#9333C7')
+        : (t < 0.34 ? '#00C2D6' : t < 0.62 ? '#3B6BE0' : t < 0.84 ? '#7C3AED' : '#B14BE8')
       const sz = cell * (0.34 + (1 - d) * 0.42)
       const jx = (rnd() - 0.5) * cell * 0.3
       const jy = (rnd() - 0.5) * cell * 0.3
       bits.push(`<rect x="${(x + jx).toFixed(2)}" y="${(y + jy).toFixed(2)}"
         width="${sz.toFixed(2)}" height="${sz.toFixed(2)}" rx="${(sz * 0.24).toFixed(2)}"
-        fill="${col}" opacity="${(0.35 + (1 - d) * 0.6).toFixed(2)}"/>`)
+        fill="${col}" opacity="${(light ? 0.30 + (1 - d) * 0.62 : 0.35 + (1 - d) * 0.6).toFixed(2)}"/>`)
     }
   }
 
@@ -64,17 +68,17 @@ export function pixelBurst({ w, h, seed = 4, anchor = 'tr', cell = 1.55, spill =
     }
     const sz = cell * (0.2 + rnd() * 0.3)
     far.push(`<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${sz.toFixed(2)}"
-      height="${sz.toFixed(2)}" rx="${(sz * 0.24).toFixed(2)}" fill="#7C3AED"
-      opacity="${(0.10 + rnd() * 0.3).toFixed(2)}"/>`)
+      height="${sz.toFixed(2)}" rx="${(sz * 0.24).toFixed(2)}" fill="${light ? '#6D28D9' : '#7C3AED'}"
+      opacity="${((light ? 0.12 : 0.10) + rnd() * 0.3).toFixed(2)}"/>`)
   }
 
   return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"
     preserveAspectRatio="none" aria-hidden="true">
   <defs>
     <linearGradient id="pb${seed}" x1="0" y1="0" x2=".7" y2="1">
-      <stop offset="0" stop-color="#1A0F33"/>
-      <stop offset=".55" stop-color="#150C2A"/>
-      <stop offset="1" stop-color="#211043"/>
+      <stop offset="0" stop-color="${light ? '#FFFFFF' : '#1A0F33'}"/>
+      <stop offset=".55" stop-color="${light ? '#FBFAFE' : '#150C2A'}"/>
+      <stop offset="1" stop-color="${light ? '#F2EDFC' : '#211043'}"/>
     </linearGradient>
     <clipPath id="pbc${seed}"><rect width="${w}" height="${h}"/></clipPath>
   </defs>

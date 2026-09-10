@@ -51,7 +51,7 @@ const qr = await QRCode.toString(QR_URL, {
 
 /* each option supplies a front and a back ground; the layout is identical */
 const OPTIONS = [
-  { k: 'A', dark: true,
+  { k: 'A',
     front: `<div class="bg">${pixelBurst({ w: W, h: H, seed: 4, anchor: 'tr', clear: { cx: W * 0.5, cy: H * 0.44, rx: W * 0.34, ry: H * 0.36 } })}</div>`,
     back:  `<div class="bg">${pixelBurst({ w: W, h: H, seed: 9, anchor: 'br', spill: 0.6, clear: { cx: W * 0.46, cy: H * 0.5, rx: W * 0.44, ry: H * 0.42 } })}</div>` },
   { k: 'B', front: ghostMark({ w: W, h: H, mark: MARK }),

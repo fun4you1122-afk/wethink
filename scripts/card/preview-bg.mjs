@@ -17,7 +17,7 @@ const MARK = readFileSync(path.join(ROOT, 'public/wethink-logo.png')).toString('
 const INK = '#141A3C', SOFT = '#5A5F7D', CY = '#0EA5C4', VI = '#7C3AED'
 
 const OPTIONS = {
-  a: { label: 'A · Particle burst', dark: true, bg: `<div class="bg">${pixelBurst({ w: W, h: H, seed: 4, anchor: 'tr', clear: { cx: W * 0.5, cy: H * 0.44, rx: W * 0.34, ry: H * 0.36 } })}</div>` },
+  a: { label: 'A · Particle burst', bg: `<div class="bg">${pixelBurst({ w: W, h: H, seed: 4, anchor: 'tr', clear: { cx: W * 0.5, cy: H * 0.44, rx: W * 0.34, ry: H * 0.36 } })}</div>` },
   b: { label: 'B · Ghost mark', bg: ghostMark({ w: W, h: H, mark: MARK }) },
   c: { label: 'C · Polygon mesh', bg: `<div class="bg">${polyMesh({ w: W, h: H, seed: 5, band: 0.24 })}</div>` },
 }
