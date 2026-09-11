@@ -1,145 +1,165 @@
-/* Print stage for the 16:9 company profile deck. Kept in a stylesheet
-   rather than an inline <style>: the quoted font names escape differently
-   on the server and the client, which broke hydration and printed Next's
-   error badge onto the cover slide.
+/* Print stage for the 16:9 company profile deck.
 
-   The deck reads as an editorial document rather than a slide pack: an
-   ivory ground throughout, a serif display face against a grotesque for
-   everything else, hairline rules doing the work that filled cards used
-   to, and violet kept for numbers, eyebrows and one rule at a time. Only
-   the closing slide goes to ink, so the deck ends on something. */
+   The language follows the sample profile the client supplied: a gradient
+   sweep cutting in from one corner, a numbered ring at the top, a heavy
+   uppercase section title, and capability grids where every item is an icon
+   badge with a chevron beside a bold label. Everything is redrawn in
+   WeThink's own colours and geometry — the badge is the squircle the panels
+   use, not the sample's hexagon, and the icons are our own line set.
 
-@font-face{font-family:'SerifD';src:url('/fonts/InstrumentSerif-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:block}
-@font-face{font-family:'SerifD';src:url('/fonts/InstrumentSerif-Italic.ttf') format('truetype');font-weight:400;font-style:italic;font-display:block}
+   Kept in a stylesheet rather than an inline <style>: the quoted font names
+   escape differently on the server and the client, which broke hydration and
+   printed Next's error badge onto the cover slide. */
+
+@font-face{font-family:'DispD';src:url('/fonts/Poppins-Bold.ttf') format('truetype');font-weight:700;font-display:block}
+@font-face{font-family:'DispD';src:url('/fonts/Poppins-SemiBold.ttf') format('truetype');font-weight:600;font-display:block}
 @font-face{font-family:'SansD';src:url('/fonts/Karla-Regular.ttf') format('truetype');font-weight:400;font-display:block}
 @font-face{font-family:'SansD';src:url('/fonts/Karla-Medium.ttf') format('truetype');font-weight:500;font-display:block}
 @font-face{font-family:'SansD';src:url('/fonts/Karla-SemiBold.ttf') format('truetype');font-weight:600;font-display:block}
 @font-face{font-family:'SansD';src:url('/fonts/Karla-Bold.ttf') format('truetype');font-weight:700;font-display:block}
 
+:root{
+  --ink:#0A1130;
+  --blue:#1163E8;
+  --deep:#0C3BA8;
+  --muted:#5B6478;
+  --cyan:#03CFF2;
+  --violet:#983CFC;
+  --hair:rgba(10,17,48,.12);
+}
+
 @page{size:338.667mm 190.5mm;margin:0}
 html,body{background:#DDD;margin:0;padding:0}
-.deck-root{font-family:'SansD',system-ui,sans-serif;color:#14121C}
+.deck-root{font-family:'SansD',system-ui,sans-serif;color:var(--ink)}
 
-.slide{position:relative;width:338.667mm;height:190.5mm;overflow:hidden;background:#FBFAF7;
+.slide{position:relative;width:338.667mm;height:190.5mm;overflow:hidden;background:#fff;
   page-break-after:always;break-after:page;margin:0 auto 8mm;
   -webkit-print-color-adjust:exact;print-color-adjust:exact}
 .slide:last-child{page-break-after:auto;break-after:auto;margin-bottom:0}
-.slide::before{content:'';position:absolute;left:0;right:0;top:0;height:1.6mm;
-  background:linear-gradient(90deg,#03CFF2,#108FFC 46%,#983CFC)}
-/* The ground is not a flat fill: a 14 mm field grid at 3% and one soft
-   brand wash in the upper right give the page depth without costing ink. */
-.slide::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
-  background:
-    radial-gradient(58% 46% at 92% 4%, rgba(152,60,252,.09), rgba(152,60,252,0) 68%),
-    radial-gradient(46% 40% at 4% 98%, rgba(3,207,242,.08), rgba(3,207,242,0) 66%),
-    repeating-linear-gradient(0deg, rgba(20,18,28,.032) 0 .18mm, rgba(20,18,28,0) .18mm 14mm),
-    repeating-linear-gradient(90deg, rgba(20,18,28,.032) 0 .18mm, rgba(20,18,28,0) .18mm 14mm)}
-.slide-body,.slide-foot{z-index:1}
 
-.slide.dark{background:#14121C;color:#FBFAF7}
-.slide.dark::after{background:
-  radial-gradient(58% 48% at 90% 2%, rgba(152,60,252,.30), rgba(152,60,252,0) 66%),
-  radial-gradient(44% 38% at 2% 100%, rgba(3,207,242,.16), rgba(3,207,242,0) 62%),
-  repeating-linear-gradient(0deg, rgba(255,255,255,.045) 0 .18mm, rgba(255,255,255,0) .18mm 14mm),
-  repeating-linear-gradient(90deg, rgba(255,255,255,.045) 0 .18mm, rgba(255,255,255,0) .18mm 14mm)}
+/* the sweep and its echo, drawn per slide */
+.sweep{position:absolute;inset:0;z-index:0;pointer-events:none}
+.sweep svg{width:100%;height:100%;display:block}
+/* the faint chevron field in the far corner */
+.wm{position:absolute;z-index:0;pointer-events:none;opacity:.5}
+.wm svg{display:block}
 
-.slide-body{position:absolute;inset:20mm 22mm 29mm;display:flex;flex-direction:column}
-/* Two ways of using the whole frame rather than stacking at the top.
-   A ruled list spaces its rows into the leftover height; a grid of cards
-   grows the cards instead, because spacing two rows apart leaves a hole
-   down the middle of the slide. */
-.spread{flex-grow:1;align-content:space-between}
-.fill{flex-grow:1;grid-auto-rows:1fr}
-.slide-foot{position:absolute;left:22mm;right:22mm;bottom:11mm;display:flex;
-  align-items:center;justify-content:space-between;font-size:2.9mm;letter-spacing:.34mm;
-  text-transform:uppercase;font-weight:700;color:#8B8598;
-  border-top:.25mm solid #E0DBD0;padding-top:4mm}
-.slide.dark .slide-foot{color:rgba(251,250,247,.5);border-top-color:rgba(251,250,247,.18)}
-.foot-n{font-variant-numeric:tabular-nums}
+.slide-body{position:absolute;inset:24mm 24mm 24mm;z-index:2;display:flex;flex-direction:column}
+.slide.svc .slide-body{inset:22mm 22mm 23mm}
+.slide.svc h2{font-size:10mm}
+.slide.svc .cap .k{font-size:3.4mm}
+.slide.svc .caps{gap:3.6mm 6mm}
+.slide.svc .c-split{grid-template-columns:1.3fr 1fr}
+.slide.svc .ring{max-width:152mm;margin-left:auto}
+.slide.svc .outcome .v{font-size:3.5mm}
+.slide.svc .cap .badge{width:10.8mm;height:10.8mm;border-radius:3.3mm}
+.slide.svc .cap .badge svg{width:5.8mm;height:5.8mm}
+.slide.svc .cap .chev{width:4.2mm;height:5.8mm}
+.slide-foot{position:absolute;left:24mm;right:24mm;bottom:11mm;z-index:2;display:flex;
+  align-items:center;justify-content:space-between;font-size:2.9mm;letter-spacing:.32mm;
+  text-transform:uppercase;font-weight:700;color:#8E93A6}
+.slide.dark .slide-foot{color:rgba(255,255,255,.62)}
 .foot-left{display:flex;align-items:center;gap:4mm;min-width:0}
 
-/* ── the company signature ─────────────────────────────── */
+/* the numbered ring, as on the sample's pages */
+.pagebadge{position:absolute;top:9mm;left:50%;transform:translateX(-50%);z-index:3;
+  width:15mm;height:15mm;border-radius:50%;background:#fff;border:.3mm solid var(--hair);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DispD';font-weight:600;font-size:4.6mm;color:var(--blue);
+  box-shadow:0 1.6mm 4mm rgba(10,17,48,.08)}
+.slide.dark .pagebadge{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.4);color:#fff;
+  box-shadow:none}
+
+/* ── the signature ─────────────────────────────────────── */
 .lockup{display:flex;align-items:center}
 .lockup-mark{width:auto;display:block}
-.lockup-name{font-family:'SansD';font-weight:700;text-transform:uppercase;line-height:1;
-  color:#14121C}
-.slide.dark .lockup-name{color:#FBFAF7}
-.slide-foot .lockup-name{color:#8B8598}
-.slide.dark .slide-foot .lockup-name{color:rgba(251,250,247,.55)}
-.lockup-tag{font-family:'SansD';font-weight:600;font-size:2.9mm;letter-spacing:1mm;
-  text-transform:uppercase;color:#6D28D9;margin-top:2.4mm;padding-top:2.2mm;
-  border-top:.25mm solid #DCD6CA}
-.slide.dark .lockup-tag{color:#C4B5FD;border-top-color:rgba(251,250,247,.22)}
+.lockup-name{font-family:'DispD';font-weight:700;text-transform:uppercase;line-height:1;color:var(--ink)}
+.slide.dark .lockup-name{color:#fff}
+.slide-foot .lockup-name{color:#8E93A6}
+.slide.dark .slide-foot .lockup-name{color:rgba(255,255,255,.62)}
+.lockup-tag{font-family:'SansD';font-weight:700;font-size:2.9mm;letter-spacing:1mm;
+  text-transform:uppercase;color:var(--blue);margin-top:2.4mm;padding-top:2.2mm;
+  border-top:.25mm solid var(--hair)}
+.slide.dark .lockup-tag{color:#8FE3FF;border-top-color:rgba(255,255,255,.26)}
 
-/* ── the cover ─────────────────────────────────────────── */
-.cover{display:flex;flex-direction:column;justify-content:space-between;flex-grow:1;min-height:0}
-.creds{border-left:.8mm solid #6D28D9;padding-left:6mm;max-width:224mm}
-.creds-line{font-family:'SerifD',Georgia,serif;font-size:7.2mm;line-height:1.2;
-  letter-spacing:-.12mm;color:#14121C}
-.creds-sub{margin-top:3mm;font-size:3.9mm;line-height:1.5;color:#55506A;max-width:200mm}
-.cover-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:12mm;
-  border-top:.25mm solid #E0DBD0;padding-top:5mm}
-.slogan{font-family:'SerifD',Georgia,serif;font-size:6.4mm;color:#6D28D9;white-space:nowrap}
-
-.eyebrow{font-family:'SansD';font-size:3.1mm;font-weight:700;letter-spacing:.8mm;
-  text-transform:uppercase;color:#6D28D9}
-.slide.dark .eyebrow{color:#C4B5FD}
-
-h1,h2{font-family:'SerifD',Georgia,serif;font-weight:400;margin:0;line-height:.99}
-h3{font-family:'SansD';font-weight:700;margin:0;line-height:1.15}
-h1{font-size:25mm;letter-spacing:-.4mm}
-h2{font-size:14.5mm;letter-spacing:-.25mm;margin-top:4mm}
-h3{font-size:6mm}
+/* ── type ──────────────────────────────────────────────── */
+.eyebrow{font-family:'SansD';font-size:3.1mm;font-weight:700;letter-spacing:.9mm;
+  text-transform:uppercase;color:var(--violet)}
+.slide.dark .eyebrow{color:#C9B6FF}
+h1,h2,h3{font-family:'DispD';font-weight:700;margin:0;line-height:1.04}
+h1{font-size:19mm;letter-spacing:-.4mm}
+h2{font-size:11.4mm;letter-spacing:-.2mm;text-transform:uppercase;color:var(--deep)}
+.slide.dark h2{color:#fff}
+h3{font-size:5.6mm}
 p{margin:0;line-height:1.5}
-.lead{font-size:4.5mm;color:#55506A;max-width:190mm}
-.slide.dark .lead{color:rgba(251,250,247,.72)}
-.pull{font-family:'SerifD',Georgia,serif;font-weight:400;font-size:9.5mm;line-height:1.14;
-  letter-spacing:-.16mm;margin-top:4mm}
+.lead{font-size:4.4mm;color:var(--muted);max-width:180mm}
+.slide.dark .lead{color:rgba(255,255,255,.78)}
+.pull{font-family:'DispD';font-weight:600;font-size:8mm;line-height:1.18;margin-top:4mm;color:var(--ink)}
 
-/* A hairline and a short violet dash, the deck's one recurring ornament. */
-.dash{display:flex;align-items:center;gap:4mm;margin-top:6mm}
-.dash::before{content:'';width:14mm;height:.6mm;background:#6D28D9;flex:0 0 auto}
+/* ── the capability item: badge, chevron, label ────────── */
+.caps{display:grid;gap:5mm 9mm;flex-grow:1;align-content:start}
+.caps.c2{grid-template-columns:1fr 1fr}
+.caps.c3{grid-template-columns:repeat(3,1fr)}
+.cap{display:flex;align-items:center;gap:0}
+.cap .badge{position:relative;flex:0 0 auto;width:11.4mm;height:11.4mm;border-radius:3.5mm;
+  background:#fff;border:.3mm solid var(--hair);display:flex;align-items:center;justify-content:center;
+  box-shadow:0 1.4mm 3.4mm rgba(10,17,48,.09)}
+.cap .badge svg{width:6.1mm;height:6.1mm;color:var(--blue)}
+.cap .chev{flex:0 0 auto;width:4.4mm;height:6.1mm;margin-left:-.6mm;
+  clip-path:polygon(0 0,58% 0,100% 50%,58% 100%,0 100%);
+  background:linear-gradient(120deg,var(--cyan),var(--blue) 55%,var(--violet))}
+.cap .txt{min-width:0;padding-left:4.2mm;display:flex;flex-direction:column}
+.cap .k{display:block;font-family:'DispD';font-weight:700;font-size:3.5mm;line-height:1.16;
+  color:var(--deep);text-transform:uppercase;letter-spacing:.08mm}
+.cap .v{display:block;font-size:3.4mm;line-height:1.36;color:var(--muted);margin-top:1.2mm}
+.slide.dark .cap .k{color:#fff}
+.slide.dark .cap .v{color:rgba(255,255,255,.74)}
 
-.cols{display:grid;gap:14mm;flex-grow:1;min-height:0}
+/* ── the illustration ring ─────────────────────────────── */
+.ring{position:relative;display:flex;align-items:center;justify-content:center}
+/* A gradient plate offset behind the screen. Only the sliver at the top and
+   right shows, which reads as a deliberate edge rather than the broken loop a
+   circle makes behind a wide card. */
+.ring .plate{position:absolute;inset:0;z-index:0;border-radius:4mm;
+  transform:translate(4.6mm,-4.6mm);
+  background:linear-gradient(118deg,var(--cyan),var(--blue) 52%,var(--violet))}
+.ring .dot{position:absolute;z-index:0;width:2.6mm;height:2.6mm;border-radius:50%}
+.ring .inner{position:relative;z-index:1;width:100%}
+
+.cols{display:grid;gap:12mm;flex-grow:1;min-height:0}
 .c2{grid-template-columns:1fr 1fr}
-.c-split{grid-template-columns:1.06fr 1fr;align-items:center}
-.stack{display:flex;flex-direction:column;justify-content:center;height:100%}
-
-.card{background:#FFFFFF;border:.25mm solid #E6E1D6;border-radius:2mm;padding:6mm 6.5mm}
-.slide.dark .card{background:rgba(255,255,255,.05);border-color:rgba(251,250,247,.16)}
-.card .k{font-family:'SansD';font-weight:700;font-size:4.4mm;color:#14121C}
-.card .v{margin-top:2mm;font-size:3.8mm;color:#55506A;line-height:1.45}
-
-.num-list{list-style:none;margin:0;padding:0;display:grid;gap:4.4mm}
-.num-list li{display:flex;gap:5mm;align-items:baseline;
-  border-top:.25mm solid #E0DBD0;padding-top:3.6mm}
-.num-list .n{font-family:'SerifD',Georgia,serif;font-weight:400;font-size:6mm;color:#6D28D9;
-  font-variant-numeric:tabular-nums;flex:0 0 11mm;line-height:1}
-.num-list .t{font-size:4.4mm;line-height:1.28}
-.num-list .d{display:block;font-size:3.6mm;color:#55506A;margin-top:1.2mm;line-height:1.38}
+.c-split{grid-template-columns:1.18fr 1fr;align-items:center}
+.stack{display:flex;flex-direction:column;justify-content:center;flex-grow:1}
 
 .chips{display:flex;flex-wrap:wrap;gap:2.2mm;margin-top:3.6mm}
-.chip{background:#FFFFFF;border:.25mm solid #E0DBD0;border-radius:1.6mm;
-  padding:1.7mm 3.2mm;font-size:3.5mm;font-weight:500;color:#3C3752}
-.slide.dark .chip{background:rgba(255,255,255,.08);border-color:rgba(251,250,247,.2);color:#FBFAF7}
+.chip{background:#F2F5FC;border-radius:1.8mm;padding:1.8mm 3.4mm;font-size:3.5mm;
+  font-weight:600;color:var(--deep)}
+.slide.dark .chip{background:rgba(255,255,255,.14);color:#fff}
 
-.outcome{margin-top:6mm;border-left:.8mm solid #6D28D9;padding-left:5mm}
+.outcome{margin-top:6mm;border-left:.9mm solid var(--blue);padding-left:5mm}
 .outcome .k{font-family:'SansD';font-weight:700;font-size:2.9mm;letter-spacing:.7mm;
-  text-transform:uppercase;color:#6D28D9}
-.outcome .v{margin-top:1.6mm;font-size:4mm;line-height:1.38}
+  text-transform:uppercase;color:var(--blue)}
+.outcome .v{margin-top:1.4mm;font-size:3.6mm;line-height:1.34}
 
 .mock{width:100%}
-.mock-cap{margin-top:4mm;font-size:3.5mm;line-height:1.42;color:#55506A}
 /* The product screens come from the web page, where Tailwind's black weight
    is available from the CDN faces. Only 400-700 are self-hosted for print,
    so map the heavier weights onto 700 and nothing falls back to a system
    font halfway through a slide. */
 .mock,.mock *{font-family:'SansD',system-ui,sans-serif}
-.mock .font-black{font-weight:700}
-.mock .font-bold{font-weight:700}
+.mock .font-black,.mock .font-bold{font-weight:700}
 .mock .font-semibold{font-weight:600}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6mm}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
 
-.contact{display:flex;gap:10mm;flex-wrap:wrap;margin-top:8mm;font-size:4mm;font-weight:600}
-.slide.dark .contact{color:rgba(251,250,247,.9)}
+.contact{display:flex;gap:10mm;flex-wrap:wrap;margin-top:8mm;font-size:4mm;font-weight:700}
+.slide.dark .contact{color:rgba(255,255,255,.92)}
+
+/* ── the cover and the closing page ────────────────────── */
+.slide.dark{background:linear-gradient(128deg,#071B4F 0%,#0C3BA8 46%,#5B18C9 100%);color:#fff}
+.cover{display:flex;flex-direction:column;justify-content:space-between;flex-grow:1;min-height:0}
+.creds{border-left:.9mm solid #8FE3FF;padding-left:6mm;max-width:216mm}
+.creds-line{font-family:'DispD';font-weight:600;font-size:6.4mm;line-height:1.22}
+.creds-sub{margin-top:3mm;font-size:3.8mm;line-height:1.5;color:rgba(255,255,255,.76);max-width:200mm}
+.cover-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:12mm;
+  border-top:.25mm solid rgba(255,255,255,.26);padding-top:5mm}
+.slogan{font-family:'DispD';font-weight:600;font-size:5.4mm;color:#8FE3FF;white-space:nowrap}
