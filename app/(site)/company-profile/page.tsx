@@ -8,7 +8,7 @@ import {
 } from '@/components/profile/Mockups'
 import { CapIcon, iconFor } from '@/components/profile/icons'
 import {
-  ABOUT, CLOSING, COMPANY, CORE, CORE_NOTE, HOW, MISSION, PURPOSE,
+  ABOUT, CLOSING, COMPANY, CORE, CORE_NOTE, HOW, MISSION, PROFILE_PDF, PURPOSE,
   SERVICES, SUPPORTS, VALUES, VISION, WHY, WHY_NOTE,
 } from './profile-data'
 
@@ -112,9 +112,7 @@ export default function CompanyProfilePage() {
 
             <div className="mt-10 flex flex-wrap gap-3">
               <Link href="#services" className="cp-btn cp-btn-solid">What we do</Link>
-              {/* ?download=1 forces the save. Without it, in-app browsers show
-                  the PDF with no way to keep it. */}
-              <a href="/WeThink-Company-Profile.pdf?download=1" className="cp-btn cp-btn-ghost">
+              <a href={PROFILE_PDF} className="cp-btn cp-btn-ghost">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 19h16"
                     stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -294,7 +292,7 @@ export default function CompanyProfilePage() {
                 WhatsApp {COMPANY.phone}
               </a>
               <a href={`mailto:${COMPANY.email}`} className="cp-btn cp-btn-ghost">{COMPANY.email}</a>
-              <a href="/WeThink-Company-Profile.pdf?download=1" className="cp-btn cp-btn-ghost">
+              <a href={PROFILE_PDF} className="cp-btn cp-btn-ghost">
                 Download the PDF
               </a>
             </div>

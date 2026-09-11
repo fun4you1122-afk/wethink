@@ -9,7 +9,7 @@ const footerLinks = {
   Company: [
     { label: 'About Us', href: '/about' },
     { label: 'Company Profile', href: '/company-profile' },
-    { label: 'Profile (PDF)', href: '/WeThink-Company-Profile.pdf?download=1' },
+    { label: 'Profile (PDF)', href: '/WeThink-Company-Profile.pdf?download=1&v=2' },
     { label: 'Our Services', href: '/services' },
     { label: 'Our Work', href: '/work' },
     { label: 'Blog', href: '/blog' },

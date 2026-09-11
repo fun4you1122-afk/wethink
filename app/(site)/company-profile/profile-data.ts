@@ -16,6 +16,13 @@ export const COMPANY = {
   instagram: 'https://www.instagram.com/wethink.ae/',
 }
 
+/* The published profile. `download` forces the save, which in-app browsers
+   otherwise refuse; `v` is bumped whenever the file is replaced, so a click
+   never hands anyone the copy their browser kept from last time. The bare
+   path stays the canonical one, because that is what the printed QR codes
+   point at. */
+export const PROFILE_PDF = '/WeThink-Company-Profile.pdf?download=1&v=2'
+
 export const ABOUT = {
   lead:
     'WeThink is an Abu Dhabi-based technology and business solutions company. We help organizations simplify operations, reduce manual work, control costs and make better decisions.',
