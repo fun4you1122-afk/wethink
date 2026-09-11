@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import './profile.css'
+import Rings from './rings'
 import {
   AnalyticsMockup, AutomationMockup, PlatformMockup, RoadmapMockup, EventMockup, ReportMockup,
   CrmMockup, ErpMockup,
 } from '@/components/profile/Mockups'
+import { CapIcon, iconFor } from '@/components/profile/icons'
 import {
   ABOUT, CLOSING, COMPANY, CORE, CORE_NOTE, HOW, MISSION, PURPOSE,
   SERVICES, SUPPORTS, VALUES, VISION, WHY, WHY_NOTE,
@@ -30,10 +32,10 @@ const MOCKUPS = {
   event: EventMockup,
 } as const
 
-function Lockup({ dark = false }: { dark?: boolean }) {
+function Lockup() {
   return (
     <div className="cp-lockup">
-      <img src="/wethink-logo.png" alt="" width={104} height={104} />
+      <img src="/wethink-logo.png" alt="" width={92} height={92} />
       <div>
         <div className="n">WeThink</div>
         <div className="t">Think &middot; Plan &middot; Grow</div>
@@ -42,66 +44,80 @@ function Lockup({ dark = false }: { dark?: boolean }) {
   )
 }
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return <span className="cp-eyebrow">{children}</span>
+/** A numbered, ruled row: the deck's list unit. */
+function Row({ n, k, v }: { n?: number; k: string; v?: string }) {
+  return (
+    <div className="cp-row">
+      <span className="n">{n === undefined ? '' : String(n).padStart(2, '0')}</span>
+      <span className="i"><CapIcon name={iconFor(k)} /></span>
+      <span>
+        <span className="k">{k}</span>
+        {v && <span className="v">{v}</span>}
+      </span>
+    </div>
+  )
 }
 
-/** A ruled section head: the eyebrow, then the serif line under it. */
-function Head({ label, title }: { label: string; title: React.ReactNode }) {
+/** A section head: the small label on the right, the large line on the left. */
+function Head({ label, title, note }: { label: string; title: string; note?: string }) {
   return (
-    <div>
-      <Eyebrow>{label}</Eyebrow>
-      <h2 className="mt-4 text-[34px] leading-[1.04] md:text-[46px]">{title}</h2>
+    <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr] lg:items-end">
+      <div>
+        <h2>{title}</h2>
+        {note && <p className="lead mt-6 max-w-xl text-[17px]">{note}</p>}
+      </div>
+      <div className="cp-tag">{label}</div>
     </div>
   )
 }
 
 export default function CompanyProfilePage() {
   return (
-    <div className="cp pt-24">
-      <div className="cp-ground" aria-hidden="true" />
-      <div className="cp-gradbar" aria-hidden="true" />
+    <div className="cp">
+      <div className="cp-glow" aria-hidden="true" />
 
       {/* ── cover ── */}
-      <section className="px-6 pb-20 pt-10 md:pb-28 md:pt-16">
+      <section className="px-6 pb-24 pt-10 md:pb-32">
         <div className="mx-auto max-w-7xl">
-          <Lockup />
-
-          <div className="mt-14">
-            <Eyebrow>Company Profile</Eyebrow>
-            <h1 className="mt-5 max-w-[16ch] text-[46px] leading-[0.99] md:text-[86px]">
-              Building smarter, more efficient businesses
-            </h1>
+          <div className="flex justify-end">
+            <span className="cp-tag">Company profile</span>
           </div>
 
-          <div className="cp-creds mt-12">
-            <p className="a">
-              We work with government entities, embassies and private organizations
-              across the United Arab Emirates.
-            </p>
-            <p className="b">
-              Official events, national programmes and the systems behind them &mdash;
-              delivered to institutional standards of accuracy, presentation and
-              confidentiality.
-            </p>
+          <div className="relative mt-10 grid items-center gap-10 lg:mt-14 lg:grid-cols-[1.15fr_0.85fr]">
+            <div>
+              <h1 className="max-w-[13ch]">Building smarter, more efficient businesses</h1>
+              <p className="lead mt-10 max-w-2xl text-[19px] md:text-[21px]">
+                We work with government entities, embassies and private organizations
+                across the United Arab Emirates.
+              </p>
+              <p className="dim mt-5 max-w-2xl">
+                Official events, national programmes and the systems behind them,
+                delivered to institutional standards of accuracy, presentation and
+                confidentiality.
+              </p>
+            </div>
+            <Rings className="pointer-events-none mx-auto w-full max-w-[560px] opacity-90" />
           </div>
 
-          {/* The slogan sits here rather than beside the buttons: at desktop
-              widths the floating chat buttons hover over the right end of
-              that row. */}
-          <p className="cp-serif mt-8 text-[24px]" style={{ color: 'var(--cp-violet)' }}>
-            {CLOSING.title}
-          </p>
+          <div className="mt-16 border-t pt-8" style={{ borderColor: 'var(--rule)' }}>
+            <div className="flex flex-wrap items-center justify-between gap-8">
+              <div className="flex flex-wrap gap-x-10 gap-y-3 text-[15px]" style={{ fontWeight: 400 }}>
+                <span>{COMPANY.phone}</span>
+                <span>{COMPANY.email}</span>
+                <span>{COMPANY.site}</span>
+                <span>@wethink.ae</span>
+              </div>
+              <span className="cp-slogan">{CLOSING.title}</span>
+            </div>
 
-          <div className="cp-rule mt-10 pt-8">
-            <div className="flex flex-wrap gap-3">
+            <div className="mt-10 flex flex-wrap gap-3">
               <Link href="#services" className="cp-btn cp-btn-solid">What we do</Link>
               {/* ?download=1 forces the save. Without it, in-app browsers show
                   the PDF with no way to keep it. */}
               <a href="/WeThink-Company-Profile.pdf?download=1" className="cp-btn cp-btn-ghost">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 19h16"
-                    stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 Download the PDF
               </a>
@@ -113,60 +129,49 @@ export default function CompanyProfilePage() {
         </div>
       </section>
 
-      {/* ── about & purpose ── */}
-      <section className="px-6 py-20 md:py-24">
-        <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-2">
-          <div>
-            <Eyebrow>About us</Eyebrow>
-            <p className="cp-serif mt-5 text-[28px] leading-[1.16] md:text-[34px]">{ABOUT.pull}</p>
-            <p className="cp-lead mt-5 text-[16px]">{ABOUT.lead}</p>
-            <div className="mt-8 flex flex-col gap-4">
-              {ABOUT.halves.map((h) => (
-                <div key={h.k} className="cp-card">
-                  <div className="text-[15px] font-bold">{h.k}</div>
-                  <p className="cp-lead mt-2 text-[14.5px]">{h.v}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <Eyebrow>Our purpose</Eyebrow>
-            <p className="cp-serif mt-5 text-[28px] leading-[1.16] md:text-[34px]">{PURPOSE.pull}</p>
-            <p className="cp-lead mt-5 text-[16px]">{PURPOSE.body}</p>
-            <div className="mt-10"><AnalyticsMockup /></div>
+      {/* ── about ── */}
+      <section className="px-6 py-20 md:py-28">
+        <div className="mx-auto max-w-7xl">
+          <Head label="About us" title={ABOUT.pull} note={ABOUT.lead} />
+          <div className="cp-list mt-14">
+            {ABOUT.halves.map((h, i) => <Row key={h.k} n={i + 1} k={h.k} v={h.v} />)}
           </div>
         </div>
       </section>
 
-      {/* ── what the solutions support ── */}
-      <section className="px-6 py-20 md:py-24">
+      {/* ── purpose ── */}
+      <section className="px-6 py-20 md:py-28">
         <div className="mx-auto max-w-7xl">
-          <Eyebrow>Our solutions are designed to support</Eyebrow>
-          <ul className="mt-10 grid list-none gap-x-14 gap-y-0 p-0 md:grid-cols-2">
-            {SUPPORTS.map((s, i) => (
-              <li key={s} className="cp-row mt-5 first:mt-0 md:mt-5">
-                <span className="n">{String(i + 1).padStart(2, '0')}</span>
-                <span className="text-[18px] font-semibold leading-snug">{s}</span>
-              </li>
-            ))}
-          </ul>
+          <Head label="Our purpose" title={PURPOSE.pull} note={PURPOSE.body} />
+          <div className="cp-screen mt-14"><AnalyticsMockup /></div>
+        </div>
+      </section>
+
+      {/* ── what we improve ── */}
+      <section className="px-6 py-20 md:py-28">
+        <div className="mx-auto max-w-7xl">
+          <Head label="Our solutions" title="What we improve"
+            note="Our solutions are designed to support" />
+          <div className="cp-list mt-14">
+            {SUPPORTS.map((s, i) => <Row key={s} n={i + 1} k={s} />)}
+          </div>
         </div>
       </section>
 
       {/* ── vision, mission, values ── */}
-      <section className="px-6 py-20 md:py-24">
+      <section className="px-6 py-20 md:py-28">
         <div className="mx-auto max-w-7xl">
-          <div className="grid gap-14 lg:grid-cols-2">
+          <Head label="Vision, mission and values" title="What we are aiming at" />
+          <div className="mt-14 grid gap-12 lg:grid-cols-2">
             {[['Vision', VISION], ['Mission', MISSION]].map(([k, v]) => (
-              <div key={k}>
-                <Eyebrow>{k}</Eyebrow>
-                <p className="mt-5 text-[19px] leading-[1.55]">{v}</p>
+              <div key={k} className="border-t pt-6" style={{ borderColor: 'var(--rule)' }}>
+                <div className="text-[13px]" style={{ color: 'var(--accent)' }}>{k}</div>
+                <p className="lead mt-4 text-[18px]">{v}</p>
               </div>
             ))}
           </div>
-          <div className="mt-14">
-            <Eyebrow>Values</Eyebrow>
+          <div className="mt-14 border-t pt-8" style={{ borderColor: 'var(--rule)' }}>
+            <div className="text-[13px]" style={{ color: 'var(--accent)' }}>Values</div>
             <div className="mt-5 flex flex-wrap gap-2.5">
               {VALUES.map((v) => <span key={v} className="cp-chip">{v}</span>)}
             </div>
@@ -174,165 +179,130 @@ export default function CompanyProfilePage() {
         </div>
       </section>
 
-      {/* ── the five services, each with a screen ── */}
+      {/* ── five lines of work ── */}
       <section id="services" className="px-6 py-20 md:py-28">
         <div className="mx-auto max-w-7xl">
           <Head label="What we do" title="Five lines of work" />
-
-          <div className="mt-16 flex flex-col gap-24">
-            {SERVICES.map((s, i) => {
-              const Mockup = MOCKUPS[s.mockup]
-              const flip = i % 2 === 1
-              return (
-                <div key={s.n} className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-                  <div className={flip ? 'lg:order-2' : ''}>
-                    <div className="cp-row">
-                      <span className="n">{s.n}</span>
-                      <h3 className="text-[26px] leading-tight md:text-[31px]">{s.title}</h3>
-                    </div>
-                    <p className="cp-lead mt-5 text-[16px]">{s.proposition}</p>
-
-                    {s.approach && (
-                      <ol className="mt-6 flex list-none flex-col gap-3 p-0">
-                        {s.approach.map((a, ai) => (
-                          <li key={a} className="flex items-start gap-3">
-                            <span className="cp-serif mt-[2px] shrink-0 text-[17px]"
-                              style={{ color: 'var(--cp-violet)' }}>{String(ai + 1).padStart(2, '0')}</span>
-                            <span className="text-[15px] leading-snug">{a}</span>
-                          </li>
-                        ))}
-                      </ol>
-                    )}
-
-                    <p className="cp-eyebrow mt-8 block">{s.listLabel}</p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {s.list.map((c) => <span key={c} className="cp-chip">{c}</span>)}
-                    </div>
-
-                    {s.outcome && (
-                      <div className="cp-outcome mt-8">
-                        <span className="cp-eyebrow">Outcome</span>
-                        <p className="mt-2 text-[15px] leading-snug">{s.outcome}</p>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className={flip ? 'lg:order-1' : ''}><Mockup /></div>
-                </div>
-              )
-            })}
+          <div className="cp-list mt-14">
+            {SERVICES.map((s, i) => <Row key={s.n} n={i + 1} k={s.title} v={s.summary} />)}
           </div>
         </div>
       </section>
 
+      {/* ── a section per service ── */}
+      {SERVICES.map((s, i) => {
+        const Mockup = MOCKUPS[s.mockup]
+        const flip = i % 2 === 1
+        return (
+          <section key={s.n} className="px-6 py-20 md:py-28">
+            <div className="mx-auto max-w-7xl">
+              <Head label={`Service ${s.n}`} title={s.title} note={s.proposition} />
+
+              <div className="mt-14 grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+                <div className={flip ? 'lg:order-2' : ''}>
+                  <div className="cp-caps">
+                    {s.list.map((c) => (
+                      <div key={c} className="cp-cap">
+                        <span className="i"><CapIcon name={iconFor(c)} /></span>
+                        <span>{c}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {s.approach && (
+                    <ol className="mt-8 flex list-none flex-col gap-3 p-0">
+                      {s.approach.map((a, ai) => (
+                        <li key={a} className="flex items-start gap-4">
+                          <span className="mt-[3px] text-[12px]" style={{ color: 'var(--dim)' }}>
+                            {String(ai + 1).padStart(2, '0')}
+                          </span>
+                          <span className="text-[15px]" style={{ fontWeight: 400 }}>{a}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                  {s.outcome && (
+                    <div className="cp-outcome mt-10">
+                      <div className="k">Outcome</div>
+                      <div className="v">{s.outcome}</div>
+                    </div>
+                  )}
+                </div>
+
+                <div className={flip ? 'lg:order-1' : ''}>
+                  <div className="cp-screen"><Mockup /></div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )
+      })}
+
       {/* ── the systems clients ask for by name ── */}
       <section className="px-6 py-20 md:py-28">
         <div className="mx-auto max-w-7xl">
-          <Head label="Systems we build" title="The two clients ask for by name, built to fit how they already work." />
-          <div className="mt-14 grid gap-12 lg:grid-cols-2">
-            <div>
-              <CrmMockup />
-              <p className="cp-lead mt-5 text-[15px]">
-                Pipeline, activity and follow-ups in one place, so nothing waits on a memory.
-              </p>
-            </div>
-            <div>
-              <ErpMockup />
-              <p className="cp-lead mt-5 text-[15px]">
-                Finance, procurement, inventory and assets on one ledger, closing in days rather than weeks.
-              </p>
-            </div>
+          <Head label="Systems we build" title="CRM and ERP"
+            note="The two clients ask for by name, built to fit how they already work." />
+          <div className="mt-14 grid gap-10 lg:grid-cols-2">
+            <div className="cp-screen"><CrmMockup /></div>
+            <div className="cp-screen"><ErpMockup /></div>
           </div>
         </div>
       </section>
 
       {/* ── why ── */}
-      <section className="px-6 py-20 md:py-24">
+      <section className="px-6 py-20 md:py-28">
         <div className="mx-auto max-w-7xl">
-          <Eyebrow>Why WeThink</Eyebrow>
-          <div className="mt-10 grid gap-x-14 gap-y-0 md:grid-cols-2 lg:grid-cols-3">
-            {WHY.map(([k, v], i) => (
-              <div key={k} className="cp-row mt-5 flex-col !items-start gap-3 lg:mt-5">
-                <span className="cp-serif text-[24px] leading-none" style={{ color: 'var(--cp-violet)' }}>
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <div>
-                  <div className="text-[17px] font-bold leading-tight">{k}</div>
-                  <p className="cp-lead mt-2 text-[14.5px]">{v}</p>
-                </div>
-              </div>
-            ))}
+          <Head label="Why WeThink" title="How we are different" />
+          <div className="cp-list mt-14">
+            {WHY.map(([k, v], i) => <Row key={k} n={i + 1} k={k} v={v} />)}
           </div>
-          <p className="mt-12 text-[16px] font-semibold">{WHY_NOTE}</p>
+          <p className="lead mt-10 text-[17px]">{WHY_NOTE}</p>
         </div>
       </section>
 
       {/* ── how we work ── */}
-      <section className="px-6 py-20 md:py-24">
+      <section className="px-6 py-20 md:py-28">
         <div className="mx-auto max-w-7xl">
           <Head label="How we work" title="Six steps, start to running" />
-          <ol className="mt-14 grid list-none gap-x-14 gap-y-0 p-0 md:grid-cols-2 lg:grid-cols-3">
-            {HOW.map(([k, v], i) => (
-              <li key={k} className="cp-row mt-5 flex-col !items-start gap-3 lg:mt-5">
-                <span className="cp-serif text-[24px] leading-none" style={{ color: 'var(--cp-violet)' }}>
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <div>
-                  <div className="text-[17px] font-bold leading-tight">{k}</div>
-                  <p className="cp-lead mt-2 text-[14.5px]">{v}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <div className="cp-list mt-14">
+            {HOW.map(([k, v], i) => <Row key={k} n={i + 1} k={k} v={v} />)}
+          </div>
         </div>
       </section>
 
       {/* ── core areas ── */}
-      <section className="px-6 py-20 md:py-24">
-        <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.85fr_1.15fr]">
-          <div>
-            <Eyebrow>Our core areas</Eyebrow>
-            <p className="cp-serif mt-5 text-[26px] leading-[1.18] md:text-[32px]">{CORE_NOTE}</p>
-          </div>
-          <div className="flex flex-col">
-            {CORE.map(([k, v], i) => (
-              <div key={k} className="cp-row mt-5 first:mt-0">
-                <span className="n">{String(i + 1).padStart(2, '0')}</span>
-                <div>
-                  <div className="text-[17px] font-bold">{k}</div>
-                  <p className="cp-lead mt-1 text-[14.5px]">{v}</p>
-                </div>
-              </div>
-            ))}
+      <section className="px-6 py-20 md:py-28">
+        <div className="mx-auto max-w-7xl">
+          <Head label="Our core areas" title="Five areas, one operating model" note={CORE_NOTE} />
+          <div className="cp-list mt-14">
+            {CORE.map(([k, v], i) => <Row key={k} n={i + 1} k={k} v={v} />)}
           </div>
         </div>
       </section>
 
       {/* ── closing ── */}
-      <section className="cp-dark px-6 py-24 md:py-32">
-        <div className="mx-auto max-w-7xl">
-          <Lockup dark />
-          <h2 className="mt-12 text-[42px] leading-[1.02] md:text-[66px]">{CLOSING.title}</h2>
-          <p className="cp-lead mt-5 text-[19px]">{CLOSING.sub}</p>
+      <section className="px-6 pb-28 pt-20 md:pb-36 md:pt-28">
+        <div className="relative mx-auto max-w-7xl">
+          <Rings className="pointer-events-none absolute left-1/2 top-1/2 w-[720px] max-w-[120%] -translate-x-1/2 -translate-y-1/2 opacity-50" />
+          <div className="relative flex flex-col items-center text-center">
+            <Lockup />
+            <h2 className="mt-12 max-w-[18ch]">{CLOSING.title}</h2>
+            <p className="lead mt-6 text-[18px]">{CLOSING.sub}</p>
 
-          <div className="mt-12 flex flex-wrap gap-3">
-            <a href={COMPANY.whatsapp} target="_blank" rel="noopener noreferrer"
-              className="cp-btn" style={{ background: '#FBFAF7', color: '#14121C' }}>
-              WhatsApp {COMPANY.phone}
-            </a>
-            <a href={`mailto:${COMPANY.email}`} className="cp-btn"
-              style={{ border: '1px solid rgba(251,250,247,0.32)', color: '#FBFAF7' }}>
-              {COMPANY.email}
-            </a>
-            <a href="/WeThink-Company-Profile.pdf?download=1" className="cp-btn"
-              style={{ border: '1px solid rgba(251,250,247,0.32)', color: '#FBFAF7' }}>
-              Download the PDF
-            </a>
+            <div className="mt-12 flex flex-wrap justify-center gap-3">
+              <a href={COMPANY.whatsapp} target="_blank" rel="noopener noreferrer" className="cp-btn cp-btn-solid">
+                WhatsApp {COMPANY.phone}
+              </a>
+              <a href={`mailto:${COMPANY.email}`} className="cp-btn cp-btn-ghost">{COMPANY.email}</a>
+              <a href="/WeThink-Company-Profile.pdf?download=1" className="cp-btn cp-btn-ghost">
+                Download the PDF
+              </a>
+            </div>
+
+            <p className="dim mt-12 text-[13px]">
+              {COMPANY.legal} &middot; {COMPANY.base} &middot; {COMPANY.site}
+            </p>
           </div>
-
-          <p className="mt-12 text-[14px]" style={{ color: 'rgba(251,250,247,0.55)' }}>
-            {COMPANY.legal} &middot; {COMPANY.base} &middot; {COMPANY.site}
-          </p>
         </div>
       </section>
     </div>

@@ -19,10 +19,10 @@ export default function Navbar() {
   const [hidden, setHidden] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
-  // The home page opens on a black studio, so the bar has to invert while it
-  // is over it and return to normal once the glass panel appears on scroll.
-  // The home hero is pale, so the bar keeps its normal colours over it.
-  const overDarkHero = false
+  // The bar has to invert while it sits over a dark page and return to normal
+  // once the glass panel appears on scroll. The home hero is pale, so the bar
+  // keeps its normal colours there; the company profile is near-black.
+  const overDarkHero = pathname === '/company-profile' && !scrolled
 
   useEffect(() => {
     let last = 0
