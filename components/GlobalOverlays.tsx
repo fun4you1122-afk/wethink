@@ -8,7 +8,7 @@ import AiChat from '@/components/AiChat'
 // The card and every Marhaba Thailand page carry their own chrome, and the
 // deck is a print stage: a floating chat bubble would be printed into the PDF.
 
-const HIDDEN_PREFIXES = ['/card', '/embassy', '/deck']
+const HIDDEN_PREFIXES = ['/card', '/embassy']
 
 export default function GlobalOverlays() {
   const pathname = usePathname()
